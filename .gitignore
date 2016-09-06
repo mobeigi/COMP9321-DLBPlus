@@ -2,4 +2,7 @@
 RemoteSystemsTempFiles/
 Servers/
 DLBPlus/build/
+DLBPlus/.settings/
+DLBPlus/.classpath
+DLBPlus/.project
 .metadata/
