@@ -1,3 +1,0 @@
-INDEX VERSION 1.126
-C:\Users\Ian\Desktop\16s2\COMP9321\Assignments\Ass2\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1775400545.index
-\DLBPlus\src
