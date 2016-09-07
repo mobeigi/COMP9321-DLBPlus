@@ -7,6 +7,7 @@
 <title>DLB Plus</title>
 </head>
 <body>
+	<h1>This is just a test!</h1>
 	<p>Welcome to DLB Plus!</p>
 
 </body>
