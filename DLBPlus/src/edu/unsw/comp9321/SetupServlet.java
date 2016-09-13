@@ -40,7 +40,7 @@ public class SetupServlet extends HttpServlet {
     	try{
     		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     		DocumentBuilder builder = factory.newDocumentBuilder();
-    		Document document = builder.parse(new File("C:\\Users\\Erik-z3462813\\workspace\\ass1\\WebContent\\WEB-INF\\dblp.xml"));
+    		Document document = builder.parse(new File("C:/Users/Ian/Desktop/16s2/COMP9321/Assignments/Ass2/DLBPlus/WebContent/WEB-INF/dblp.xml"));
     		document.getDocumentElement().normalize();
     		
     		Integer index = new Integer(0);
@@ -202,7 +202,7 @@ public class SetupServlet extends HttpServlet {
 			String type = request.getParameter("pubType");
 			LinkedList<Publication> result = search(query, type, request);
 			SearchPageBean SPBean = new SearchPageBean(result);
-			request.setAttribute("searchFound",SPBean);
+			request.getSession().setAttribute("searchFound",SPBean);
 			link = "result.jsp";
 		} else if(req.equals("aSearch")){
 			String title = request.getParameter("searchTitle");
@@ -214,7 +214,8 @@ public class SetupServlet extends HttpServlet {
 			String year = request.getParameter("searchYear");
 			String type = request.getParameter("searchPubType");
 			LinkedList<Publication> result = aSearch(title, author, editor, volume, publisher, isbn, year, type);
-			request.setAttribute("searchFound",result);
+			SearchPageBean searchPageBean = new SearchPageBean(result);
+			request.getSession().setAttribute("searchFound", searchPageBean);
 			link = "result.jsp";
 			
 		} else if(req.equals("remove")) {
@@ -248,10 +249,15 @@ public class SetupServlet extends HttpServlet {
 	private void navigateSearchPage(HttpServletRequest request) {
 		String action = request.getParameter("action");
 		SearchPageBean searchPageBean = (SearchPageBean) request.getSession().getAttribute("searchFound");
-		if(action.equals("viewPreviousSearchPage")){
-			searchPageBean.currPage = searchPageBean.currPage - 1;
-		} else if(action.equals("viewNextSearchPage")){
-			searchPageBean.currPage = searchPageBean.currPage + 1;
+		if (searchPageBean == null) {
+			System.out.println("What the fck");
+		} else {
+			if(action.equals("viewPreviousSearchPage")){
+				searchPageBean.currPage = searchPageBean.currPage - 1;
+			} else if(action.equals("viewNextSearchPage")){
+				searchPageBean.currPage = searchPageBean.currPage + 1;
+			}
+			request.getSession().setAttribute("searchFound", searchPageBean);
 		}
 	}
 

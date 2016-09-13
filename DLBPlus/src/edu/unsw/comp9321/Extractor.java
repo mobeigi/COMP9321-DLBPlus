@@ -11,9 +11,9 @@ import java.util.regex.Pattern;
 
 public class Extractor {
 	private static int limit = 20000;
-	private static String path = "C:/Users/Erik-z3462813/workspace/Ass1/WebContent/WEB-INF/dblp.xml";
+	private static String path = "C:/Users/Ian/Desktop/16s2/COMP9321/Assignments/Ass2/DLBPlus/WebContent/WEB-INF/dblp.xml";
 	private static Pattern reg = Pattern.compile("</article>|</inproceedings>|</proceedings>|</book>|</incollection>|</phdthesis>|</mastersthesis>|</www>");
-	private static File file = new File("C:/Users/Erik-z3462813/workspace/Ass1/WebContent/WEB-INF/sample.xml");
+	private static File file = new File("C:/Users/Ian/Desktop/16s2/COMP9321/Assignments/Ass2/DLBPlus/WebContent/WEB-INF/sample.xml");
 	
 	public static void main(String[] args) throws IOException {
 		runExtract();
