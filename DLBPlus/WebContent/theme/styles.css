@@ -1,0 +1,304 @@
+*{
+	margin:0;
+	padding:0;
+}
+
+body{
+	font-size:13px;
+	color:#eee;
+	font-family:Corbel,'Myriad Pro',Arial, Helvetica, sans-serif;
+	background:url('img/bg.jpg') repeat-x #718693;
+}
+
+#page1{
+	/* The main container div */
+	width:725px;
+	margin:50px auto 0;
+	height: 280px;
+}
+
+#page2{
+	/* The main container div */
+	width:725px;
+	margin:50px auto 0;
+}
+
+#page3{
+	/* The main container div */
+	width:725px;
+	margin:50px auto 0;
+}
+
+
+#searchHeading{
+	font-family:Corbel,'Myriad Pro',Arial, Helvetica, sans-serif;
+	text-indent: 290px;
+	font-size: 1.5em;
+}
+
+h1{
+	font-family:Corbel,'Myriad Pro',Arial, Helvetica, sans-serif;
+	font-size: 3em;
+	height:90px;
+}
+
+h2{
+	font-family:Corbel,'Myriad Pro',Arial, Helvetica, sans-serif;
+	font-size: 1.5em;
+}
+
+#dropdown{
+	height:36px;
+	margin-right:5px;
+}
+
+table,tr,th,td{
+    width: 100%;
+    font-size: 1em;
+    text-align: center;
+    cellspacing: 5px;
+    padding: 15px;
+    border-collapse: collapse;
+    
+}
+
+#tdleft{
+	text-align:left;
+}
+
+tr:hover {background-color: #3b5998}
+
+#searchForm{
+	/* The search form. */
+	background-color:#4C5A65;
+	padding:50px 50px 30px;
+	margin:30px 0;
+	position:relative;
+
+	-moz-border-radius:16px;
+	-webkit-border-radius:16px;
+	border-radius:16px;
+}
+
+#aSearchForm{
+	/* The search form. */
+	background-color:#4C5A65;
+	padding:50px 50px 30px;
+	margin:30px 0;
+	position:relative;
+	-moz-border-radius:16px;
+	-webkit-border-radius:16px;
+	border-radius:16px;
+}
+
+#sampleTable{
+	background-color:#4C5A65;
+	padding:50px 50px 30px;
+	margin:30px 0;
+	position:relative;
+
+	-moz-border-radius:16px;
+	-webkit-border-radius:16px;
+	border-radius:16px;
+}
+
+#sampleTable2{
+	border: 1px solid black;
+	background-color:#4C5A65;
+	padding:50px 50px 30px;
+	margin:5px 0;
+	position:relative;
+
+	-moz-border-radius:16px;
+	-webkit-border-radius:16px;
+	border-radius:16px;
+}
+
+fieldset{
+	border:none;
+}
+
+#searchInputContainer{
+	/* This div contains the transparent search box */
+	width:420px;
+	height:36px;
+	background:url("img/searchBox.png") no-repeat;
+	float:left;
+	margin-right:12px;
+}
+
+#s{
+	/* The search text box. */
+	
+	border:none;
+	color:#888888;
+	background:url("img/searchBox.png") no-repeat;
+	
+	float:left;
+	font-family:Corbel,'Myriad Pro',Arial, Helvetica, sans-serif;
+	font-size:15px;
+	height:36px;
+	line-height:36px;
+	margin-right:5px;
+	outline:medium none;
+	padding:0 0 0 35px;
+	text-shadow:1px 1px 0 white;
+	width:385px;
+}
+
+#textbox{
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+	width:385px;
+}
+
+/* The submit button */
+
+#sButton{
+	font-family:Corbel,'Myriad Pro',Arial, Helvetica, sans-serif;
+	
+	width:83px;
+	height:36px;
+    background-color: #cdcdc1;
+    color: black;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    line-height: 5px;
+    text-align: center;
+}
+
+#sButton:hover{
+    background-color: #f8f8ff;
+}
+
+#cButton{
+	font-family:Corbel,'Myriad Pro',Arial, Helvetica, sans-serif;
+	
+	width:150px;
+	height:36px;
+    background-color: #cdcdc1;
+    color: black;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    line-height: 5px;
+    text-align: center;
+    align:right;
+}
+
+#cButton:hover{
+    background-color: #f8f8ff;
+}
+
+
+#button{
+	font-family:Corbel,'Myriad Pro',Arial, Helvetica, sans-serif;
+	
+	width:83px;
+	height:36px;
+    background-color: #cdcdc1;
+    color: black;
+    padding: 14px 20px;
+    margin-left:8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    line-height: 5px;
+    text-align: center;
+}
+
+#button:hover{
+    background-color: #f8f8ff;
+}
+
+#button2{
+	font-family:Corbel,'Myriad Pro',Arial, Helvetica, sans-serif;
+	
+	width:180px;
+	height:36px;
+    background-color: #cdcdc1;
+    color: black;
+    padding: 14px 20px;
+    margin-left:8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    line-height: 5px;
+    text-align: center;
+}
+
+#button2:hover{
+    background-color: #f8f8ff;
+}
+/* The Search tutorialzine.com / Search the Web radio buttons */
+
+
+#searchLeftContainer{
+	float:left;
+	margin-top:12px;
+	width:200px;
+}
+
+#searchRightContainer{
+	float:right;
+	margin-top:12px;
+	width:290px;
+}
+
+label{
+	color:#DDDDDD;
+	cursor:pointer;
+	font-size:11px;
+	position:relative;
+	right:-2px;
+	top:-2px;
+	margin-right:10px;
+	white-space:nowrap;
+	/*float:left;*/
+}
+
+input[type=radio]{
+	cursor:pointer;
+	/*float:left;*/
+}
+
+
+/* Styling the search results */
+
+
+.pageContainer{
+	/* Holds each page with search results. Has an inset bottom border. */
+	border-bottom:1px solid #5e7481;
+	margin-bottom:50px;
+	
+	/* Adding a dark bottom border with box shadow */
+	
+	-moz-box-shadow:0 1px 0 #798e9c;
+	-webkit-box-shadow:0 1px 0 #798e9c;
+	box-shadow:0 1px 0 #798e9c;
+}
+
+
+p.notFound{
+	text-align:center;
+	padding:0 0 40px;
+}
+
+a, a:visited { 
+	text-decoration:none;
+	outline:none;
+	border-bottom:1px dotted #97cae6;
+	color:#97cae6;
+}
+
+
+a:hover{
+	border-bottom:1px dashed transparent;
+}
+
