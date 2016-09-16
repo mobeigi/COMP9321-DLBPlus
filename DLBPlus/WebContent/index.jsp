@@ -10,12 +10,16 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Bibliographic Library | Home</title>
-
-    <link rel="stylesheet" type="text/css" href="theme/styles.css" />
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 </head>
 
 <body>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
 	<form action = 'setup' method = 'GET'>
 	
 	</form>
