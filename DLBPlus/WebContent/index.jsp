@@ -25,6 +25,8 @@
 	      $('select').material_select();
 	  });
 	</script>
+	
+	<!-- Header -->
 	<nav class="light-blue lighten-1" role="navigation">
 	   <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
 	     <ul class="right hide-on-med-and-down">
@@ -96,7 +98,8 @@
 			</div>
 		</div>
  	</div>
-
+	
+	<!-- Random Bibliographies -->
 	<div class="section no-pad-bot" id="index-banner">
     	<div class="container">
     		<br><br>
@@ -133,7 +136,7 @@
 	</div>
     
     
-    
+    <!-- Footer -->
     <footer class="page-footer orange">
     <div class="container">
       <div class="row">
