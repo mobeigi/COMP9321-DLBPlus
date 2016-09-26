@@ -112,7 +112,7 @@
 		<div class="row valign-wrapper">
 			<div class="col s10 offset-s1">
      			<div class="card valign grey lighten-1" >
-			        <table class="centered highlighted striped responsive-table">
+			        <table class="left highlighted striped responsive-table">
 			        	<thead>
 							<tr>
 								<th> Title </th>

@@ -58,7 +58,7 @@
 								<p class="flow-text">There are ${fn:length(searchFound.results)} results!</p>
 				
 		<%-- Display 10 results from current page --%>
-		<div class="card valign grey lighten-1" >
+		<div class="card valign grey lighten-2" >
 	        <table class="centered highlighted striped responsive-table">
 				<tr>
 					<th>Title</th>
