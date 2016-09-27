@@ -1,5 +1,7 @@
 <%@ page import="edu.unsw.comp9321.DBHelper" %>
-<%@ page import="edu.unsw.comp9321.Publication" %><%--
+<%@ page import="edu.unsw.comp9321.Publication" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="edu.unsw.comp9321.User" %><%--
   Created by IntelliJ IDEA.
   User: Mohammad
   Date: 27/09/2016
@@ -15,6 +17,11 @@
 <%
 	DBHelper db = new DBHelper();	//Note this should be called once per server, not per page load or multiple times
 	db.init();
+
+	Date date = new Date();
+	User u = db.CreateUser("joe1", "bobby", "Joe", "Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
+
+	/*
 	Publication p = db.GetRandomPublication();
 
 	if (p != null) {
@@ -68,7 +75,7 @@
 		out.println("<br />");
 		out.println("<hr />");
 	}
-
+	*/
 %>
 </body>
 </html>

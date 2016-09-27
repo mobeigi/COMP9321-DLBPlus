@@ -1,9 +1,11 @@
 package edu.unsw.comp9321;
 
+import java.security.SecureRandom;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+
+import com.sun.org.apache.xml.internal.security.utils.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * Database helper class which abstracts database calls.
@@ -174,5 +176,68 @@ public class DBHelper {
 		}
 
 		return p;
+	}
+
+
+	public User CreateUser(String username, String plainTextPassword, String fname, String lname, String email,
+												 String address, java.util.Date dob, String creditcard, String dp) {
+		if (!dbConnStatus)
+			return null;
+
+		try {
+			if (!doesUserExist(username)) {
+				System.out.println("User does not exist, creating new user");
+
+
+				//Generate random salt and hashed password
+				final Random r = new SecureRandom();
+				byte[] salt = new byte[32];
+				r.nextBytes(salt);
+				String encodedSalt = Base64.encode(salt);
+				String passwordHash = DigestUtils.sha1Hex(encodedSalt + plainTextPassword);
+
+				Statement stmt;
+				dbConn.setAutoCommit(false);
+				stmt = dbConn.createStatement();
+				String q = "INSERT INTO users (username, salt, password, fname, lname, email, address, dob, creditcard, cartid, dp, acctstatus)" +
+								"VALUES ('" + username + "', '" + encodedSalt + "', '" + passwordHash + "', '" + fname + "', '" + lname + "', '" + email + "', '" + address + "', '" + dob.toString() + "', '" + creditcard + "', '" + dp + "', true);";
+				System.out.println(q);
+				stmt.executeUpdate(q);
+				dbConn.commit();
+				return null; //todo: change to return user GetUser
+			} else { //User already exists
+				System.out.println("User already exists");
+				return null;
+			}
+		}
+		catch (SQLException e) {
+			return null;
+		}
+	}
+
+	private boolean doesUserExist(String username) {
+		if (!dbConnStatus)
+			return true; //this should never be returned
+
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM users where username = '" + username + "';" );
+
+			if (rs.next()) {
+				int count = rs.getInt("count");
+				if (count == 0)
+					return false;
+				else
+					return true;
+			}
+
+			return true; //this should never be returned
+		}
+		catch (SQLException e) {
+			return true; //this should never be returned
+		}
+
 	}
 }
