@@ -63,14 +63,14 @@
 	    </div>
 	    <br>
 	    <div class="row">
-	    	<div class="col s10">
+	    	<div class="col s9">
 			    <form action="setup" method="POST">
 			   		<input type="hidden" name="action" value="back"/>
 					<button type="submit" value="Back To Search" class="btn waves-effect waves-light">Back</button>
 					<br>
 			    </form>
 		    </div>
-		    <div class="col s2">
+		    <div class="col s3">
 				<form action="setup" method = "POST">
 					<div>
 						<input type="hidden" name="action" value="add"/>
