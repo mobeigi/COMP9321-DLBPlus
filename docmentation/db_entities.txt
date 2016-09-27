@@ -62,4 +62,11 @@
 	Boolean				paused
 	
 = CartItem
-	List<CartItem>
+	Integer				cartid
+	Integer				itemid
+	Integer				sellerid
+	String				sellerusername
+	Double				itemprice
+	DateTime			addedts
+	DateTime			removedts
+	
