@@ -155,4 +155,9 @@ public class DBHelper {
 			return null;
 		}
 	}
+
+	public Publication get(Integer intId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

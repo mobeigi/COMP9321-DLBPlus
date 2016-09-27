@@ -1,6 +1,7 @@
 package edu.unsw.comp9321;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Publication {
@@ -299,4 +300,10 @@ public class Publication {
 	public void setRating(String rating) {
 		this.rating = rating;
 	}
+
+	public LinkedList<String> getPubDetails() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

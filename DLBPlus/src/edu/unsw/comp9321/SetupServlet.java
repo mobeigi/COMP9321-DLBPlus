@@ -172,82 +172,82 @@ public class SetupServlet extends HttpServlet {
 		LinkedList<Publication> result = new LinkedList<Publication>();
 		boolean flag = true;
 		publicationType = type;
-		if(type.toLowerCase().equals("any")){
-			for (Publication p : this.db) {
-				flag = true;
-				if(title != "" && flag == true){
-					if(!p.getTitle().toLowerCase().contains(title.toLowerCase())){
-						flag = false;
-					}
-				}
-				if(author != "" && flag == true){
-					if(p.getAuthor()== null || !p.getAuthor().toLowerCase().contains(author.toLowerCase())){
-						flag = false;
-					}
-				}
-				if(editor != "" && flag == true){
-					if(p.getEditor()== null || !p.getEditor().toLowerCase().contains(editor.toLowerCase())){
-						flag = false;
-					}
-				}
-				if(volume != "" && flag == true){
-					if(p.getVolume()== null || !p.getVolume().toLowerCase().contains(volume.toLowerCase())){
-						flag = false;
-					}
-				}
-				if(publisher != null && flag == true){
-					if(p.getPublisher()== null || !p.getPublisher().toLowerCase().contains(publisher.toLowerCase())){
-						flag = false;
-					}
-				}
-				if(isbn != "" && flag == true){
-					if(p.getISBN()== null || !p.getISBN().toLowerCase().contains(isbn.toLowerCase())){
-						flag = false;
-					}
-				}
-				if(year != "" && flag == true){
-					if(p.getYear()== null || !p.getYear().toLowerCase().contains(year.toLowerCase())){
-						flag = false;
-					}
-				}
-				if(flag == true){
-					result.add(p);
-				}
-			}
-		}
-		if(type.toLowerCase().equals("article")){
-			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-		}
-		
-		if(type.toLowerCase().equals("inproceedings")){
-			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-		}
-		
-		if(type.toLowerCase().equals("proceedings")){
-			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-		}
-		
-		if(type.toLowerCase().equals("book")){
-			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-		}
-		
-		if(type.toLowerCase().equals("incollection")){
-			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-		}
-		
-		if(type.toLowerCase().equals("phdthesis")){
-			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-		}
-		
-		if(type.toLowerCase().equals("phdthesis")){
-			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-		}
-		
-		if(type.toLowerCase().equals("phdthesis")){
-			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-		}
-		
-		return result;
+//		if(type.toLowerCase().equals("any")){
+//			for (Publication p : this.db) {
+//				flag = true;
+//				if(title != "" && flag == true){
+//					if(!p.getTitle().toLowerCase().contains(title.toLowerCase())){
+//						flag = false;
+//					}
+//				}
+//				if(author != "" && flag == true){
+//					if(p.getAuthor()== null || !p.getAuthor().toLowerCase().contains(author.toLowerCase())){
+//						flag = false;
+//					}
+//				}
+//				if(editor != "" && flag == true){
+//					if(p.getEditor()== null || !p.getEditor().toLowerCase().contains(editor.toLowerCase())){
+//						flag = false;
+//					}
+//				}
+//				if(volume != "" && flag == true){
+//					if(p.getVolume()== null || !p.getVolume().toLowerCase().contains(volume.toLowerCase())){
+//						flag = false;
+//					}
+//				}
+//				if(publisher != null && flag == true){
+//					if(p.getPublisher()== null || !p.getPublisher().toLowerCase().contains(publisher.toLowerCase())){
+//						flag = false;
+//					}
+//				}
+//				if(isbn != "" && flag == true){
+//					if(p.getISBN()== null || !p.getISBN().toLowerCase().contains(isbn.toLowerCase())){
+//						flag = false;
+//					}
+//				}
+//				if(year != "" && flag == true){
+//					if(p.getYear()== null || !p.getYear().toLowerCase().contains(year.toLowerCase())){
+//						flag = false;
+//					}
+//				}
+//				if(flag == true){
+//					result.add(p);
+//				}
+//			}
+//		}
+//		if(type.toLowerCase().equals("article")){
+//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
+//		}
+//		
+//		if(type.toLowerCase().equals("inproceedings")){
+//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
+//		}
+//		
+//		if(type.toLowerCase().equals("proceedings")){
+//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
+//		}
+//		
+//		if(type.toLowerCase().equals("book")){
+//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
+//		}
+//		
+//		if(type.toLowerCase().equals("incollection")){
+//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
+//		}
+//		
+//		if(type.toLowerCase().equals("phdthesis")){
+//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
+//		}
+//		
+//		if(type.toLowerCase().equals("phdthesis")){
+//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
+//		}
+//		
+//		if(type.toLowerCase().equals("phdthesis")){
+//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
+//		}
+//		
+		return null;
 	}
 	
 	private LinkedList<Publication> advSearchHelper(String title, String author, String editor, String volume, String publisher, String isbn, String year, LinkedList<Publication> results) {
