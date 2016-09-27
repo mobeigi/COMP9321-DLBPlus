@@ -40,7 +40,7 @@ public class SetupServlet extends HttpServlet {
     	try{
     		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     		DocumentBuilder builder = factory.newDocumentBuilder();
-    		Document document = builder.parse(new File("C:/Users/Ian/Desktop/16s2/COMP9321/Assignments/Ass2/DLBPlus/WebContent/WEB-INF/dblp.xml"));
+    		Document document = builder.parse(new File("C:/Users/Muhammed/workspace2/DLBPlus/WebContent/WEB-INF/dblp.xml"));
     		document.getDocumentElement().normalize();
     		
     		Integer index = new Integer(0);
@@ -241,6 +241,20 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("viewNextSearchPage")){
 			navigateSearchPage(request);
 			link = "result.jsp";
+		} else if(req.equals("viewNextSearchPage")){
+			navigateSearchPage(request);
+			link = "result.jsp";
+		} else if(req.equals("register")){
+			link = "confirmation.jsp";
+		} else if(req.equals("regSuccess")){
+			link = "registerSuccess.jsp";
+		} else if(req.equals("login")){
+			link = "userAccount.jsp";
+		} else if(req.equals("confirmPurchase")){
+			link = "transactionSuccessful.jsp";
+		}
+		else if(req.equals("modified")){
+			link = "userAccount.jsp";
 		}
 		
 		 RequestDispatcher rd = request.getRequestDispatcher("/"+link);
