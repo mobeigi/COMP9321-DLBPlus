@@ -19,8 +19,8 @@ public class Publication {
 	//Fields
 	private Integer id;
 	private Type type;
-	private List<String> authors = new ArrayList<>();
-	private List<String> editors = new ArrayList<>();
+	private List<String> authors = new ArrayList<String>();
+	private List<String> editors = new ArrayList<String>();
 	private String title;
 	private String pages;
 	private Integer year;
@@ -28,16 +28,16 @@ public class Publication {
 	private String volume; //can be number or string
 	private String number;
 	private String month; //eg april
-	private List<String> urls = new ArrayList<>();
-	private List<String> ees = new ArrayList<>();
+	private List<String> urls = new ArrayList<String>();
+	private List<String> ees = new ArrayList<String>();
 	private String cdrom;
-	private List<String> cites = new ArrayList<>();
+	private List<String> cites = new ArrayList<String>();
 	private String publisher;
 	private String note;
 	private String crossref;
-	private List<String> isbns = new ArrayList<>();
+	private List<String> isbns = new ArrayList<String>();
 	private String series;
-	private List<String> venues = new ArrayList<>();  //school, booktitle and journal
+	private List<String> venues = new ArrayList<String>();  //school, booktitle and journal
 	private String chapter;
 	private Double recprice;
 	private String rating;

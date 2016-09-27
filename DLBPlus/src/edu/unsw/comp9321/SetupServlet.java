@@ -24,9 +24,9 @@ import org.w3c.dom.NodeList;
  */
 public class SetupServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       private LinkedList<Publication> db;
        private int noElements = 0;
        private String publicationType;
+       private DBHelper db = null;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -34,137 +34,17 @@ public class SetupServlet extends HttpServlet {
         super();
     }
 
-    public LinkedList<Publication> loadPubs(){
-    	db = new LinkedList<Publication>();
-    	
-    	try{
-    		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    		DocumentBuilder builder = factory.newDocumentBuilder();
-    		Document document = builder.parse(new File("C:/Users/Muhammed/workspace2/DLBPlus/WebContent/WEB-INF/dblp.xml"));
-    		document.getDocumentElement().normalize();
-    		
-    		Integer index = new Integer(0);
-    		
-    		NodeList article = document.getElementsByTagName("article");
-    		for(int x = 0; x < article.getLength(); ++x){
-    			Node node = article.item(x);
-    			
-    			if(node.getNodeType() == Node.ELEMENT_NODE){
-    				Element element = (Element) node;
-					addToDB(element, index, "article");
-					index++;
-    			}
-    		}
-    		
-    		NodeList inproc = document.getElementsByTagName("inproceedings");
-    		for(int x = 0; x < inproc.getLength(); ++x){
-    			Node node = inproc.item(x);
-    			
-    			if(node.getNodeType() == Node.ELEMENT_NODE){
-    				Element element = (Element) node;
-					addToDB(element, index, "inproceedings");
-					index++;
-    			}
-    		}
-    		
-    		NodeList proc = document.getElementsByTagName("proceedings");
-    		for(int x = 0; x < proc.getLength(); ++x){
-    			Node node = proc.item(x);
-    			
-    			if(node.getNodeType() == Node.ELEMENT_NODE){
-    				Element element = (Element) node;
-					addToDB(element, index, "proceedings");
-					index++;
-    			}
-    		}
-    		
-    		NodeList book = document.getElementsByTagName("book");
-    		for(int x = 0; x < book.getLength(); ++x){
-    			Node node = book.item(x);
-    			
-    			if(node.getNodeType() == Node.ELEMENT_NODE){
-    				Element element = (Element) node;
-					addToDB(element, index, "book");
-					index++;
-    			}
-    		}
-    		
-    		NodeList incollection = document.getElementsByTagName("incollection");
-    		for(int x = 0; x < incollection.getLength(); ++x){
-    			Node node = incollection.item(x);
-    			
-    			if(node.getNodeType() == Node.ELEMENT_NODE){
-    				Element element = (Element) node;
-					addToDB(element, index, "incollection");
-					index++;
-    			}
-    		}	
-    		
-    		NodeList phdthesis = document.getElementsByTagName("phdthesis");
-    		for(int x = 0; x < phdthesis.getLength(); ++x){
-    			Node node = phdthesis.item(x);
-    			
-    			if(node.getNodeType() == Node.ELEMENT_NODE){
-    				Element element = (Element) node;
-					addToDB(element, index, "phdthesis");
-					index++;
-    			}
-    		}
-    		
-    		NodeList mastersthesis = document.getElementsByTagName("mastersthesis");
-    		for(int x = 0; x < mastersthesis.getLength(); ++x){
-    			Node node = mastersthesis.item(x);
-    			
-    			if(node.getNodeType() == Node.ELEMENT_NODE){
-    				Element element = (Element) node;
-					addToDB(element, index, "mastersthesis");
-					index++;
-    			}
-    		}
-    		
-    		NodeList www = document.getElementsByTagName("www");
-    		for(int x = 0; x < www.getLength(); ++x){
-    			Node node = www.item(x);
-    			
-    			if(node.getNodeType() == Node.ELEMENT_NODE){
-    				Element element = (Element) node;
-					addToDB(element, index, "www");
-					index++;
-    			}
-    		}
-    		
-    		this.noElements = index;
-    	} catch(Exception e) {
-    		e.printStackTrace();
-    	}
-    	
-    	return db;
-    }
-    
-    
-	private void addToDB(Element elem, int index, String pubType) {
-		int i = 0;
-		String tag = null;
-		HashMap<String, String> hMap = new HashMap<String, String>();
-		Publication pub = new Publication(pubType, index);
-		NodeList list = elem.getElementsByTagName("*");
-		
-		while(i < list.getLength()){
-			tag = list.item(i).getNodeName();
-			hMap.put(tag, elem.getElementsByTagName(tag).item(0).getTextContent());
-			i++;
-		}
-		
-		pub.setPubDetails(hMap);
-		this.db.add(pub);
-	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String stringId = request.getParameter("id");
-
+		if(this.db == null){
+			this.db = new DBHelper();
+			this.db.init();
+		}
+		
 		if (stringId != null) {
 			Integer intId = Integer.parseInt(request.getParameter("id"));
 			LinkedList<String> entry = getEntryDeets(intId);
@@ -173,7 +53,6 @@ public class SetupServlet extends HttpServlet {
 		    RequestDispatcher rd = request.getRequestDispatcher("/publication.jsp");
 		    rd.forward(request, response);
 		} else {
-			this.db = loadPubs();
 			getRandomPub(request);
 			request.getSession().invalidate();
 		    RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
