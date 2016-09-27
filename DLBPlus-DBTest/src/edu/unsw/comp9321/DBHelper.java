@@ -41,32 +41,14 @@ public class DBHelper {
 		return dbConnStatus;
 	}
 
-	public void test() {
-		if (!dbConnStatus)
-			return;
-
-		try {
-			Statement stmt;
-			dbConn.setAutoCommit(false);
-			stmt = dbConn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT authors FROM publications;" );
-			while ( rs.next() ) {
-				String authors = rs.getString("authors");
-				System.out.println( "Author = " + authors );
-			}
-			rs.close();
-			stmt.close();
-		}
-		 catch (SQLException e) {
-			return;
-		}
-	}
-
+	/**
+	 * Get a random publication
+	 *
+	 * @return Random publication or null if no publications exist (0 publications in db)
+	 */
 	public Publication GetRandomPublication() {
 		if (!dbConnStatus)
 			return null;
-
-		Publication p  = new Publication();
 
 		try {
 			Statement stmt;
@@ -74,7 +56,47 @@ public class DBHelper {
 			stmt = dbConn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM publications OFFSET floor(random()*(SELECT COUNT(*) FROM publications)) LIMIT 1;" );
 
-			while ( rs.next() ) {
+			return processResultSet(rs);
+		}
+		catch (SQLException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Get publication using ID
+	 *
+	 * @param pubID Publication identifier
+	 * @return publication with matching publication identifier
+	 */
+	public Publication GetPublication(int pubID) {
+		if (!dbConnStatus)
+			return null;
+
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM publications where id = " + pubID + ";" );
+
+			return processResultSet(rs);
+		}
+		catch (SQLException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Given a result set, parse next row of values into Publication
+	 *
+	 * @param rs result set for a query on the publications table
+	 * @return null if no match found/rows exhausted, publication of next row otherwise
+	 */
+	private Publication processResultSet(ResultSet rs) {
+		Publication p = new Publication();
+
+		try {
+			if (rs.next()) {
 				Integer id = rs.getInt("id");
 				String type = rs.getString("type");
 				List<String> authors = Arrays.asList(rs.getString("authors").split("\\|"));
@@ -144,15 +166,13 @@ public class DBHelper {
 				p.setChapter(chapter);
 				p.setRecprice(recprice);
 				p.setRating(rating);
+			} else { //No result found
+				p = null;
 			}
-
-			rs.close();
-			stmt.close();
-
-			return p;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			return null;
 		}
+
+		return p;
 	}
 }
