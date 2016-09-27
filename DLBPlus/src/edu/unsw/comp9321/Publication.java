@@ -1,7 +1,6 @@
 package edu.unsw.comp9321;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Publication {
@@ -20,8 +19,8 @@ public class Publication {
 	//Fields
 	private Integer id;
 	private Type type;
-	private List<String> authors = new ArrayList<String>();
-	private List<String> editors = new ArrayList<String>();
+	private List<String> authors = new ArrayList<>();
+	private List<String> editors = new ArrayList<>();
 	private String title;
 	private String pages;
 	private Integer year;
@@ -29,16 +28,16 @@ public class Publication {
 	private String volume; //can be number or string
 	private String number;
 	private String month; //eg april
-	private List<String> urls = new ArrayList<String>();
-	private List<String> ees = new ArrayList<String>();
+	private List<String> urls = new ArrayList<>();
+	private List<String> ees = new ArrayList<>();
 	private String cdrom;
-	private List<String> cites = new ArrayList<String>();
+	private List<String> cites = new ArrayList<>();
 	private String publisher;
 	private String note;
 	private String crossref;
-	private List<String> isbns = new ArrayList<String>();
+	private List<String> isbns = new ArrayList<>();
 	private String series;
-	private List<String> venues = new ArrayList<String>();  //school, booktitle and journal
+	private List<String> venues = new ArrayList<>();  //school, booktitle and journal
 	private String chapter;
 	private Double recprice;
 	private String rating;
@@ -300,10 +299,8 @@ public class Publication {
 	public void setRating(String rating) {
 		this.rating = rating;
 	}
-
-	public LinkedList<String> getPubDetails() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
+	/**
+	 * Print out details of this publication
+	 */
 }

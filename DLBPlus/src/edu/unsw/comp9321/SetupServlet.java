@@ -11,22 +11,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Servlet implementation class SetupServlet
  */
 public class SetupServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       private int noElements = 0;
-       private String publicationType;
-       private DBHelper db = null;
+
+		// Maintains connection with database
+		private DBHelper db = null;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -53,15 +45,17 @@ public class SetupServlet extends HttpServlet {
 		    RequestDispatcher rd = request.getRequestDispatcher("/publication.jsp");
 		    rd.forward(request, response);
 		} else {
-			getRandomPub(request);
+			Publication pub = this.db.GetRandomPublication();
+			pub.showDetails();
+			
 			request.getSession().invalidate();
 		    RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
 		    rd.forward(request, response);
 		}
 	}
 
-	private LinkedList<String> getEntryDeets(Integer intId) {
-		Publication pub = this.db.get(intId);
+	private LinkedList<String> getEntryDeets(Integer pubID) {
+		Publication pub = this.db.GetPublication(pubID);
 		LinkedList<String> entryDetails = pub.getPubDetails();
 		return entryDetails;	
 	}
@@ -251,6 +245,7 @@ public class SetupServlet extends HttpServlet {
 	}
 	
 	private LinkedList<Publication> advSearchHelper(String title, String author, String editor, String volume, String publisher, String isbn, String year, LinkedList<Publication> results) {
+		/*
 		for (Publication p : this.db) {
 			boolean flag = true;
 			if(publicationType != "" && flag == true){
@@ -301,11 +296,13 @@ public class SetupServlet extends HttpServlet {
 				results.add(p);
 			}	
 		}
+		*/
 		return results;
 	}
 	private LinkedList<Publication> search(String searchQuery, String pubType, HttpServletRequest request){
 		LinkedList<Publication> result = new LinkedList<Publication>();
 		
+		/*
 		if(pubType.toLowerCase().equals("any")){
 			for (Publication p : this.db) {
 				if (p.getTitle().toLowerCase().contains(searchQuery.toLowerCase())|| (p.getAuthor() != null && p.getAuthor().toLowerCase().contains(searchQuery.toLowerCase()))){
@@ -345,27 +342,20 @@ public class SetupServlet extends HttpServlet {
 		if(pubType.toLowerCase().equals("phdthesis")){
 			basicSearchHelper(searchQuery, pubType, result);
 		}
+		*/
 		return result;
 		
 	}	
 	private LinkedList<Publication> basicSearchHelper(String query, String pubType, LinkedList<Publication> results){
+		/*
 		for (Publication p : this.db) {
 			if (p.getTitle().toLowerCase().contains(query.toLowerCase()) || (p.getAuthor() != null && p.getAuthor().toLowerCase().contains(query.toLowerCase()) && p.getPubType().toLowerCase().equals(pubType))){
 				System.out.println(p.getAuthor());
 				results.add(p);
 			}
 		}
+		*/
 		return results;
-	}
-	private void getRandomPub(HttpServletRequest request) {
-		LinkedList<Publication> random = new LinkedList<Publication>();
-		Random rnd = new Random();
-		for(int i = 0; i < 10; i++){
-			int rndNum = rnd.nextInt((this.noElements) + 1);
-			random.add(this.db.get(rndNum));
-		}
-		
-		request.setAttribute("found",random);
 	}
 	
 }

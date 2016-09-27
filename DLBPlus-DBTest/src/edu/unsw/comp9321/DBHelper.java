@@ -178,7 +178,13 @@ public class DBHelper {
 		return p;
 	}
 
-
+	/**
+	 * Create a user by inserting provideduser details into database
+	 *
+	 * @param username Provided username
+	 * @param plainTextPassword Unsalted Password
+	 * @return User corresponding to successful insertion (null otherwise)
+	 */
 	public User CreateUser(String username, String plainTextPassword, String fname, String lname, String email,
 												 String address, java.util.Date dob, String creditcard, String dp) {
 		if (!dbConnStatus)
@@ -215,6 +221,12 @@ public class DBHelper {
 		}
 	}
 
+	/**
+	 * Checks whether a username is already associated with a user  
+	 *
+	 * @param username Username to check
+	 * @return boolean True for exists, False otherwise
+	 */
 	private boolean doesUserExist(String username) {
 		if (!dbConnStatus)
 			return true; //this should never be returned
@@ -239,5 +251,115 @@ public class DBHelper {
 			return true; //this should never be returned
 		}
 
+	}
+	
+	/**
+	 * Validate a user
+	 *
+	 * @param inputUsername 
+	 * @param inputPwd
+	 * @return boolean True when user is verifed, False otherwise
+	 */
+	public boolean VerifyUser(String inputUsername, String inputPwd) {
+		// TODO
+		return false;
+	}
+	
+	/**
+	 * Validate an admin
+	 *
+	 * @param inputUsername 
+	 * @param inputPwd
+	 * @return boolean True when admin is verifed, False otherwise
+	 */
+	public boolean VerifyAdmin(String inputUsername, String inputPwd) {
+		// TODO
+		return false;
+	}
+	
+	/**
+	 * Create a listing (item for sale)
+	 *
+	 * @param newListing The new listing to be added\
+	 * @return boolean True when listing was successfully created; false otherwise
+	 */
+	 public boolean CreateListing(Listing newListing) {
+		// TODO
+		return true;
+	 }
+	 
+	/**
+	 * Set the listing's paused status to be true or false
+	 *
+	 * @param listing the listing to modify paused status
+	 * @return boolean True when paused was succesfully set. False otherwise
+	 */
+	 public void SetPausedStatus(Listing listing, boolean paused) {
+		 // TODO
+	 }
+	 
+	/**
+	 * Obtain a list of publications (FOR SALE) that match the search queries
+	 *
+	 * @param queries contains key-value pair of query and value
+	 * @return List of publications (empty if no results found)
+	 */	 
+	public List<Publication> SearchPublications(HashMap<String, String> queries) {
+		List<Publication> results = new ArrayList<Publication>();
+		// TODO
+		return results;
+	}
+
+	/**
+	 * Add a listing to a user's cart
+	 *
+	 * @param user contains the cartid of the user
+	 * @param listingToAdd contains the listing to add into the user's cart
+	 * @return boolean whether the update was successful
+	 */	
+	public boolean AddToCart(User user, Listing listingToAdd) {
+		return true;
+	}
+	
+	/**
+	 * Remove a particular listing from a user's cart
+	 *
+	 * @param user contains the cartid of the user
+	 * @param listingID	the ID of the listing to remove
+	 * @return boolean True when removal was successful
+	 */		
+	public boolean RemoveFromCart(User user, int listingID) {
+		//TODO
+		return true;
+	}
+	
+	public User GetUser(int userID) {
+		// TODO
+		return null;
+	}
+	
+	public List<Listings> GetAllListings() {
+		//TODO
+		return null;
+	}
+	
+	public List<User> GetAllUsers() {
+		//TODO
+		return null;
+	}
+	
+	public List<CartItem> GetActiveCartItems(int cartID) {
+		//TODO
+		return null;
+	}
+	
+	public List<CartItem> GetRemovedCartItems(int cartID) {
+		//TODO
+		return null;
+	}
+	
+	public List<Order> GetOrderHistory(int userID) {
+		//TODO
+		return null
 	}
 }

@@ -1,0 +1,7 @@
+== CONTAINS DETAILS ON SCHEMA / ENTITY REPRESENTATION UPDATE
+
+27/09/2016 @ 11:30pm
+Added 'validated' as a boolean field to user account
+
+28/09/2016 @ 7:00am
+Added 'listingid' as a field in 'listing'
