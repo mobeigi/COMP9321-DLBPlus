@@ -4,4 +4,8 @@
 Added 'validated' as a boolean field to user account
 
 28/09/2016 @ 7:00am
-Added 'listingid' as a field in 'listing'
+Added 'listingid' as an attribute in 'listing', for faster retrieval
+
+28/09/2016 @ 7:40am
+Added 'acctconfrm' as an attribute in 'user', to facilitate checking whether the account is confirmed / verified through their email
+Added 'acctcreated'as an attribute in 'user', to preserve when accout was created

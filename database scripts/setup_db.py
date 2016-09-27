@@ -78,29 +78,13 @@ def setup_db():
 				address		TEXT	NOT NULL,
 				dob			DATE	NOT NULL,
 				creditcard	TEXT	NOT NULL,
-				cartid		TEXT	NOT NULL,
-				dp			TEXT	NOT NULL,
-				creditcard	TEXT	NOT NULL,
 				cartid		SERIAL	UNIQUE NOT NULL,
 				dp			TEXT,
-				
+				acctstatus	BOOLEAN	DEFAULT TRUE,
+				acctconfrm	BOOLEAN DEFAULT	FALSE,
+				acctcreated	DATE 	NOT NULL
 			);
 			"""
-	query = "CREATE TABLE users (" \
-			"	id 			SERIAL	PRIMARY KEY," \
-			"	username	TEXT	UNIQUE NOT NULL," \
-			"	salt		TEXT	NOT NULL," \
-			"	password	TEXT	NOT NULL," \
-			"	fname 		TEXT	NOT NULL," \
-			"	lname		TEXT	NOT NULL," \
-			"	email		TEXT	NOT NULL," \
-			"	address		TEXT	NOT NULL," \
-			"	dob			DATE	NOT NULL," \
-			"	creditcard	TEXT	NOT NULL, " \
-			"	cartid		SERIAL	UNIQUE NOT NULL," \
-			"	dp			TEXT," \
-			"	acctstatus	BOOLEAN	DEFAULT TRUE" \
-			");"
 	cursor.execute(query)
 	
 	print "Creating orders table..."
