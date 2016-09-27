@@ -85,7 +85,7 @@
 									</table>
 								</div>
 							</div>
-							<div class="content-right">
+							<div class="">
 								<input type="hidden" name="action" value="remove">
 								<button class="btn waves-effect waves-light" type="submit" value="Remove from Cart">Remove from Cart
 								<i class="material-icons right"></i>
