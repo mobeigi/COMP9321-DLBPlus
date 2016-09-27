@@ -1,0 +1,70 @@
+== ENTITY REPRESENTATION
+
+= Publication
+	Integer 		id
+	List<String> 	authors
+	List<String> 	editors
+	String 			title
+	List<String> 	venues
+	String 			pages
+	Integer 		year
+	String 			address
+	String 			volume
+	String			number
+	String 			month
+	List<String>	urls
+	List<String>	ees
+	String			cdrom
+	List<String>	cites
+	String			publisher
+	String			note
+	String			crossref
+	List<String>	isbns
+	String			series
+	String			chapter
+	Double			recprice
+	String			rating
+	
+= Admin
+	Integer				id
+	String				username
+
+= User
+	Integer				id
+	String				username
+	String				fname
+	String				lname
+	String				email
+	String				address
+	Date				dob
+	String				creditcard
+	Integer				cartid
+	String				dp
+	Boolean				acctstatus				// can either be: "active", or "suspended"
+
+= Order
+	Integer				id
+	Integer				buyerid
+	Integer				sellerid
+	Integer				itemid
+	DateTime			orderdate
+	Double				price
+
+= Listing
+	Integer				sellerid
+	Integer				itemid
+	DateTime			listdate
+	DateTime			enddate
+	Double				price
+	String				image
+	Boolean				paused
+	
+= CartItem
+	Integer				cartid
+	Integer				itemid
+	Integer				sellerid
+	String				sellerusername
+	Double				itemprice
+	DateTime			addedts
+	DateTime			removedts
+	

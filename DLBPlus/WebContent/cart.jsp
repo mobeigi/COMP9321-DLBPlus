@@ -53,43 +53,62 @@
  	<br><br>
  	<div class="container">
 		<div class="col s10 offset-s1">
-   			<div class="card valign grey lighten-4" >
 	        		
 
-					<c:choose>
+				<c:choose>
 					
-						<c:when test="${cartSize eq 0}">
-							<p class="flow-text">Cart is empty!</p>
-						</c:when>
-						<c:when test="${cartSize ne 0}">
+					<c:when test="${cartSize eq 0}">
+						<div class="card valign grey lighten-4" >
+							<br>
+							<p class="flow-text center">Cart is empty!</p>
+							<br>
+						</div>
+					</c:when>
+					<c:when test="${cartSize ne 0}">
 						<form action="setup" method="POST">
-							<table class="centered highlighted responsive-table">							
-							<thead>
-								<th>Title</th>
-								<th> </th>
-							</thead>
-							<tbody>
-								<c:forEach var="publication" items="${ShoppingCart.elements}">
-									<tr>
-									<td><c:out value="${publication.title}" /></td>
-									<td><input type="checkbox" name="removeFromCart" value="<c:out value="${publication.id}" />"></td>
-									</tr>
-								</c:forEach>
-							</tbody>
-							</table>
-							<input type="hidden" name="action" value="remove"/>
-							<input id="cButton" type='submit' value='Remove from Cart'/> 
+							<div class="card valign grey lighten-4" >
+								<div class="col s10">
+									<table class="centered highlighted responsive-table">							
+									<thead>
+										<th>Title</th>
+										<th> </th>
+									</thead>
+									<tbody>
+										<c:forEach var="publication" items="${ShoppingCart.elements}">
+											<tr>
+											<td><c:out value="${publication.title}" /></td>
+											<td><input type="checkbox" name="removeFromCart" value="<c:out value="${publication.id}" />" id="${publication.id}">
+											<label for="${publication.id}"></label></td>
+											</tr>
+										</c:forEach>
+									</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="">
+								<input type="hidden" name="action" value="remove">
+								<button class="btn waves-effect waves-light" type="submit" value="Remove from Cart">Remove from Cart
+								<i class="material-icons right"></i>
+								</button> 
+							</div>
 						</form>
-						</c:when>
-					</c:choose>
-				</div>
+					</c:when>
+				</c:choose>
 			</div>
 		</div>
 	</div>
-		<form action="setup" method = 'POST'>
-		<input type="hidden" name="action" value="back"/>
-		<input id="cButton" type='submit' value='Back to Search'/> 
-		</form>
-</div>
+		
+	<div class="container">
+		<div class="col s10 offset-1">
+			<div class="col s6">
+				<form action="setup" method="POST">
+					<input type="hidden" name="action" value="back">
+					<button class="btn waves-effect waves-light" type="submit" value="Back to Search">Back to Search
+					<i class="material-icons right"></i>
+					</button> 
+				</form>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
