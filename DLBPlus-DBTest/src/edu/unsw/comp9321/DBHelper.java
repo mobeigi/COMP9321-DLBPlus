@@ -333,33 +333,72 @@ public class DBHelper {
 		return true;
 	}
 	
+	/**
+	 * Obtain a user
+	 *
+	 * @param userid the id of the user
+	 * @return returns a user when successful, null otherwise
+	 */	
 	public User GetUser(int userID) {
 		// TODO
 		return null;
 	}
 	
+	/**
+	 * Obtain a list of all existing listings
+	 *
+	 * @return returns a list of listings
+	 */		
 	public List<Listings> GetAllListings() {
+		List<Listings> allListings = new ArrayList<Listing>();
 		//TODO
-		return null;
+		return allListings;
 	}
 	
+	/**
+	 * Obtain a list of all users
+	 *
+	 * @return returns a list of all existing users, regardless of account status
+	 */		
 	public List<User> GetAllUsers() {
+		List<User> allUsers = new ArrayList<User>();
 		//TODO
-		return null;
+		return allUsers;
 	}
 	
+	/**
+	 * Obtain all active cart items in a given cart
+	 *
+	 * @param cartid the id of the cart
+	 * @return returns a list of Cart Items
+	 */	
 	public List<CartItem> GetActiveCartItems(int cartID) {
+		List<CartItem> cartItems = new ArrayList<CartItem>();
 		//TODO
-		return null;
+		return cartItems;
 	}
-	
+
+	/**
+	 * Obtain all removed cart items in a given cart
+	 *
+	 * @param cart id the cart of id
+	 * @return returns a list of cart items that have been removed
+	 */	
 	public List<CartItem> GetRemovedCartItems(int cartID) {
+		List<CartItem> removedCartItems = new ArrayList<CartItem>();
 		//TODO
-		return null;
+		return removedCartItems;
 	}
 	
+	/**
+	 * Obtain the order history of a particular user
+	 *
+	 * @param userid the id of the user
+	 * @return returns a list of orders that the user has made
+	 */	
 	public List<Order> GetOrderHistory(int userID) {
+		List<Order> orderHistory = new ArrayList<Order>();
 		//TODO
-		return null
+		return orderHistory;
 	}
 }
