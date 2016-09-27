@@ -9,6 +9,6 @@ DLBPlus/.project
 DLBPlus/.idea
 DLBPlus/out/
 DLBPlus/DLBPlus.iml
+DLBPlus/WebContent/WEB-INF/lib/postgresql-9.4.1211.jre6.jar
 /build/
-
 .classpath
