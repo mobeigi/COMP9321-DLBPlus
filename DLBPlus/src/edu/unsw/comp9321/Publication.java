@@ -1,265 +1,302 @@
 package edu.unsw.comp9321;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Publication {
-		private String pubType = null;
-		private String author = null;
-		private String editor = null;
-		private String title = null;
-		private String booktitle = null;
-		private String pages = null;
-		private String year = null;
-		private String address = null;
-		private String journal = null;
-		private String volume = null;
-		private String number = null;
-		private String month = null;
-		private String url = null;
-		private String ee = null;
-		private String cdrom = null;
-		private String cite = null;
-		private String publisher = null;
-		private String note = null;
-		private String crossref = null;
-		private String isbn = null;
-		private String series = null;
-		private String school = null;
-		private String chapter = null;
-		private String id = null;
-	
-	
-	public Publication(String type, Integer id){
-		this.pubType = type;
-		this.id = id.toString();
+	//Enums
+	public enum Type {
+		ARTICLE,
+		INPROCEEDINGS,
+		PROCEEDINGS,
+		BOOK,
+		INCOLLECTION,
+		PHDTHESIS,
+		MASTERSTHESIS,
+		WWW
 	}
-	
-	public Publication(Publication p) {
-		this.pubType = p.getPubType();
-		this.author = p.getAuthor();
-		this.editor = p.getEditor();
+
+	//Fields
+	private Integer id;
+	private Type type;
+	private List<String> authors = new ArrayList<>();
+	private List<String> editors = new ArrayList<>();
+	private String title;
+	private String pages;
+	private Integer year;
+	private String address;
+	private String volume; //can be number or string
+	private String number;
+	private String month; //eg april
+	private List<String> urls = new ArrayList<>();
+	private List<String> ees = new ArrayList<>();
+	private String cdrom;
+	private List<String> cites = new ArrayList<>();
+	private String publisher;
+	private String note;
+	private String crossref;
+	private List<String> isbns = new ArrayList<>();
+	private String series;
+	private List<String> venues = new ArrayList<>();  //school, booktitle and journal
+	private String chapter;
+	private Double recprice;
+	private String rating;
+
+	/**
+	 * Default constructor
+	 */
+	public Publication(){}
+
+	/**
+	 * Alternative constructor
+	 *
+	 * @param p Publication
+	 */
+	public Publication(Publication p){
+		this.id = p.getId();
+		this.type = p.getType();
+		this.authors = p.getAuthors();
+		this.editors = p.getEditors();
 		this.title = p.getTitle();
-		this.booktitle = p.getBookTitle();
 		this.pages = p.getPages();
 		this.year = p.getYear();
 		this.address = p.getAddress();
-		this.journal = p.getJournal();
 		this.volume = p.getVolume();
 		this.number = p.getNumber();
 		this.month = p.getMonth();
-		this.url = p.getUrl();
-		this.ee = p.getEE();
-		this.cdrom = p.getCDRom();
-		this.cite = p.getCite();
+		this.urls = p.getUrls();
+		this.ees = p.getEes();
+		this.cdrom = p.getCdrom();
+		this.cites = p.getCites();
 		this.publisher = p.getPublisher();
 		this.note = p.getNote();
-		this.crossref = p.getCrossRef();
-		this.isbn = p.getISBN();
+		this.crossref = p.getCrossref();
+		this.isbns = p.getIsbns();
 		this.series = p.getSeries();
-		this.school = p.getSchool();
+		this.venues = p.getVenues();
 		this.chapter = p.getChapter();
-		this.id = p.getID();
+		this.recprice = p.getRecprice();
+		this.rating = p.getRating();
 	}
 
-	private String getID() {
-		return this.id;
+	//Getters and Setters for all fields
+	public Integer getId() {
+			return id;
 	}
 
-	private String getChapter() {
-		return this.chapter;
+	public void setId(Integer id) {
+			this.id = id;
 	}
 
-	private String getSchool() {
-		return this.school;
+	public Type getType() {
+			return type;
 	}
 
-	private String getSeries() {
-		return this.series;
+	public void setType(String type) {
+			//Match type
+			switch (type) {
+					case "article":
+							this.type = Type.ARTICLE;
+							break;
+					case "proceedings":
+							this.type = Type.PROCEEDINGS;
+							break;
+					case "inproceedings":
+							this.type = Type.INPROCEEDINGS;
+							break;
+					case "book":
+							this.type = Type.BOOK;
+							break;
+					case "incollection":
+							this.type = Type.INCOLLECTION;
+							break;
+					case "phdthesis":
+							this.type = Type.PHDTHESIS;
+							break;
+					case "mastersthesis":
+							this.type = Type.MASTERSTHESIS;
+							break;
+					case "www":
+							this.type = Type.WWW;
+							break;
+					default:
+							this.type = null;
+			}
 	}
 
-	private String getCrossRef() {
-		return this.crossref;
+	public List<String> getAuthors() {
+			return this.authors;
 	}
 
-	private String getNote() {
-		return this.note;
+	public void setAuthor(String author) {
+			this.authors.add(author);
 	}
 
-	private String getCite() {
-		return this.cite;
+	public List<String> getEditors() {
+			return this.editors;
 	}
 
-	private String getCDRom() {
-		return this.cdrom;
+	public void setEditor(String editor) {
+			this.editors.add(editor);
 	}
 
-	private String getEE() {
-		return this.ee;
+	public String getTitle() {
+			return title;
 	}
 
-	private String getUrl() {
-		return this.url;
+	public void setTitle(String title) {
+			this.title = title;
 	}
 
-	private String getMonth() {
-		return this.month;
+	public String getPages() {
+			return pages;
 	}
 
-	private String getNumber() {
-		return this.number;
+	public void setPages(String pages) {
+			this.pages = pages;
 	}
 
-	private String getJournal() {
-		return this.journal;
+	public Integer getYear() {
+			return year;
 	}
 
-	private String getAddress() {
-		return this.address;
+	public void setYear(Integer year) {
+			this.year = year;
 	}
 
-	private String getPages() {
-		return this.pages;
+	public String getAddress() {
+			return address;
 	}
 
-	private String getBookTitle() {
-		return this.booktitle;
+	public void setAddress(String address) {
+			this.address = address;
 	}
 
-	public String getPubType(){
-		return this.pubType;
-	}
-	
-	public String getAuthor(){
-		return this.author;
-	}
-	
-	public String getTitle(){
-		return this.title;
-	}
-	
-	public String getId(){
-		return this.id;
-	}
-	
 	public String getVolume() {
-		return this.volume;
+			return volume;
 	}
-	
+
+	public void setVolume(String volume) {
+			this.volume = volume;
+	}
+
+	public String getNumber() {
+			return number;
+	}
+
+	public void setNumber(String number) {
+			this.number = number;
+	}
+
+	public String getMonth() {
+			return month;
+	}
+
+	public void setMonth(String month) {
+			this.month = month;
+	}
+
+	public List<String> getUrls() {
+			return this.urls;
+	}
+
+	public void setUrl(String url) {
+			this.urls.add(url);
+	}
+
+	public List<String> getEes() {
+			return this.ees;
+	}
+
+	public void setEe(String ee) {
+			this.ees.add(ee);
+	}
+
+	public String getCdrom() {
+			return cdrom;
+	}
+
+	public void setCdrom(String cdrom) {
+			this.cdrom = cdrom;
+	}
+
+	public List<String> getCites() {
+			return this.cites;
+	}
+
+	public void setCite(String cite) {
+			this.cites.add(cite);
+	}
+
 	public String getPublisher() {
-		return this.publisher;
-	}
-	public String getISBN() {
-		return this.isbn;
-	}
-	public String getYear() {
-		return this.year;
-	}	
-	
-	public String getEditor() {
-		return this.editor;
+			return publisher;
 	}
 
-	public LinkedList<String> getPubDetails(){
-		LinkedList<String> pubDetails = new LinkedList<String>();
-		pubDetails.add("Publication type : " + this.pubType);
-    	pubDetails.add("Author : " + this.author);
-    	pubDetails.add("Title : " + this.title);
-    	if (this.address != null)
-    		pubDetails.add("Address : " + this.address);
-    	if (this.booktitle != null)
-    		pubDetails.add("Book Title : " + this.booktitle);
-    	if (this.cdrom != null)
-    		pubDetails.add("CD ROM : " + this.cdrom);
-    	if (this.chapter != null)
-    		pubDetails.add("Chapter : " + this.chapter);
-    	if (this.cite != null)
-    		pubDetails.add("Cite : " + this.cite);
-    	if (this.crossref != null)
-    		pubDetails.add("Cross Reference : " + this.crossref);
-    	if (this.editor != null)
-    		pubDetails.add("Editor : " + this.editor);
-    	if (this.ee != null)
-    		pubDetails.add("EE : " + this.ee);
-    	if (this.isbn != null)
-    		pubDetails.add("ISBN : " + this.isbn);
-    	if (this.journal != null)
-    		pubDetails.add("Journal : " + this.journal);
-    	if (this.month != null)
-    		pubDetails.add("Month : " + this.month);
-    	if (this.year != null)
-    		pubDetails.add("Year : " + this.year);
-    	if (this.note != null)
-    		pubDetails.add("Note : " + this.note);
-    	if (this.number != null)
-    		pubDetails.add("Number : " + this.number);
-    	if (this.pages != null)
-    		pubDetails.add("Pages : " + this.pages);
-    	if (this.publisher != null)
-    		pubDetails.add("Publisher : " + this.publisher);
-    	if (this.school != null)
-    		pubDetails.add("School : " + this.school);
-    	if (this.series != null)
-    		pubDetails.add("Series : " + this.series);
-    	if (this.url != null)
-    		pubDetails.add("URL : " + this.url);
-    	if (this.volume != null)
-    		pubDetails.add("Volume : " + this.volume);
-    	return pubDetails;
-	}
-	
-	public void setPubDetails(HashMap<String, String> input){
-		int numberFields = input.size();
-		int counter = 0;
-		for (counter = 0; counter < numberFields; counter ++) {
-			if (input.get("author") != null)
-				this.author = input.get("author");
-			if (input.get("dblp") != null)
-				this.pubType = input.get("pubtype");
-			if (input.get("title") != null)
-				this.title = input.get("title");
-	    	if (input.get("address") != null)
-	    		this.address = input.get("address");
-	    	if (input.get("booktitle") != null)
-	    		this.booktitle = input.get("booktitle");
-	    	if (input.get("cdrom") != null)
-	    		this.cdrom = input.get("cdrom");
-	    	if (input.get("chapter") != null)
-	    		this.chapter = input.get("chapter");
-	    	if (input.get("cite") != null)
-	    		this.cite = input.get("cite");
-	    	if (input.get("crossref") != null)
-	    		this.crossref = input.get("crossref");
-	    	if (input.get("editor") != null)
-	    		this.editor = input.get("editor");
-	    	if (input.get("ee") != null)
-	    		this.ee = input.get("ee");
-	    	if (input.get("isbn") != null)
-	    		this.isbn = input.get("isbn");
-	    	if (input.get("journal") != null)
-	    		this.journal = input.get("journal");
-	    	if (input.get("month") != null)
-	    		this.month = input.get("month");
-	    	if (input.get("year") != null)
-	    		this.year = input.get("year");
-	    	if (input.get("note") != null)
-	    		this.note = input.get("note");
-	    	if (input.get("number") != null)
-	    		this.number = input.get("number");
-	    	if (input.get("pages") != null)
-	    		this.pages = input.get("pages");
-	    	if (input.get("publisher") != null)
-	    		this.publisher = input.get("publisher");
-	    	if (input.get("school") != null)
-	    		this.school = input.get("school");
-	    	if (input.get("series") != null)
-	    		this.series = input.get("series");
-	    	if (input.get("url") != null)
-	    		this.url = input.get("url");
-	    	if (input.get("volume") != null)
-	    		this.volume = input.get("volume");
-		}
+	public void setPublisher(String publisher) {
+			this.publisher = publisher;
 	}
 
+	public String getNote() {
+			return note;
+	}
 
+	public void setNote(String note) {
+			this.note = note;
+	}
+
+	public String getCrossref() {
+			return crossref;
+	}
+
+	public void setCrossref(String crossref) {
+			this.crossref = crossref;
+	}
+
+	public List<String> getIsbns() {
+			return this.isbns;
+	}
+
+	public void setIsbn(String isbn) {
+			this.isbns.add(isbn);
+	}
+
+	public String getSeries() {
+			return series;
+	}
+
+	public void setSeries(String series) {
+			this.series = series;
+	}
+
+	public List<String> getVenues() {
+			return this.venues;
+	}
+
+	public void setVenue(String school) {
+			this.venues.add(school);
+	}
+
+	public String getChapter() {
+			return chapter;
+	}
+
+	public void setChapter(String chapter) {
+			this.chapter = chapter;
+	}
+
+	public Double getRecprice() {
+		return recprice;
+	}
+
+	public void setRecprice(Double recprice) {
+		this.recprice = recprice;
+	}
+
+	public String getRating() {
+		return rating;
+	}
+
+	public void setRating(String rating) {
+		this.rating = rating;
+	}
 }
