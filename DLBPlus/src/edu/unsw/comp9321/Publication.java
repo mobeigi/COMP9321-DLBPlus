@@ -303,4 +303,7 @@ public class Publication {
 	/**
 	 * Print out details of this publication
 	 */
+	public void showDetails() {
+		System.out.println("id: " + this.id);
+	}
 }

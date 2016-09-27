@@ -165,7 +165,7 @@ public class SetupServlet extends HttpServlet {
 	private LinkedList<Publication> aSearch(String title, String author, String editor, String volume, String publisher, String isbn, String year, String type) {
 		LinkedList<Publication> result = new LinkedList<Publication>();
 		boolean flag = true;
-		publicationType = type;
+		String publicationType = type;
 //		if(type.toLowerCase().equals("any")){
 //			for (Publication p : this.db) {
 //				flag = true;
