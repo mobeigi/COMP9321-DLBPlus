@@ -46,7 +46,14 @@ public interface DLBPlusDBInterface {
 	public User CreateUser(String username, String plainTextPassword, 
 						String fname, String lname, String email, String address, 
 						Date dob, String creditcard, String dp);
-
+	/**
+	 * Checks whether a username is already associated with a user  
+	 *
+	 * @param username Username to check
+	 * @return boolean True for exists, False otherwise
+	 */	
+	public boolean doesUserExist(String username);
+	
 	/**
 	 * Validate a user
 	 *

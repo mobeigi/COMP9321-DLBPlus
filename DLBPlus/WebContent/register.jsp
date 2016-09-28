@@ -41,6 +41,18 @@ WE REGISTERING BOIS
                         <td><input type="password" name="pass" value="" /></td>
                     </tr>
                     <tr>
+                        <td>Address</td>
+                        <td><input type="text" name="address" value="" /></td>
+                    </tr>
+                     <tr>
+                        <td>Date of Birth</td>
+                        <td><input type="text" name="dob" value="" /></td>
+                    </tr>
+                     <tr>
+                        <td>Credit Card Number</td>
+                        <td><input type="text" name="ccn" value="" /></td>
+                    </tr>
+                    <tr>
                         <td><input type="submit" value="Submit" />
                         <input type="hidden" name="action" value="register" /></td>
                         <td><input type="reset" value="Reset" /></td>

@@ -259,7 +259,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @param username Username to check
 	 * @return boolean True for exists, False otherwise
 	 */
-	private boolean doesUserExist(String username) {
+	public boolean doesUserExist(String username) {
 		if (!dbConnStatus)
 			return true; //this should never be returned
 
