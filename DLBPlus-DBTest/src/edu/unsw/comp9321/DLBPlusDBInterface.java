@@ -160,7 +160,7 @@ public interface DLBPlusDBInterface {
 	* @param username the username of potential user
 	* @return User: returns true when user found in db; false otherwise
 	*/
-	public User doesUserExist(int userID);
+	public boolean DoesUserExist(String username);
 	
 	/**
 	 * Obtain a list of all users
@@ -203,6 +203,24 @@ public interface DLBPlusDBInterface {
 	public boolean SetUserStatus(int userID, boolean newStatus);
 
 	/**
+	 * Validate an admin
+	 *
+	 * @param inputUsername the username of admin
+	 * @param inputPwd plaintext password for admin
+	 * @return boolean True when admin is verified, False otherwise
+	 */
+	public boolean VerifyAdmin(String inputUsername, String inputPwd);
+	
+	/**
+	 * Create an admin
+	 *
+	 * @param username the username of the new admin
+	 * @param plainTextPassword plaintext password for new admin
+	 * @return boolean True when admin is verified, False otherwise
+	 */	
+	public boolean CreateAdmin(String username, String plainTextPassword);
+	
+	/**
 	 * Obtain a list of all existing listings
 	 *
 	 * @return returns a list of listings
@@ -240,23 +258,4 @@ public interface DLBPlusDBInterface {
 	 * @return returns a list of orders that the user has made
 	 */	
 	public List<Order> GetOrderHistory(int userID);
-	
-	/**
-	 * Validate an admin
-	 *
-	 * @param inputUsername the username of admin
-	 * @param inputPwd plaintext password for admin
-	 * @return boolean True when admin is verified, False otherwise
-	 */
-	public boolean VerifyAdmin(String inputUsername, String inputPwd);
-	
-	/**
-	 * Create an admin
-	 *
-	 * @param username the username of the new admin
-	 * @param plainTextPassword plaintext password for new admin
-	 * @return boolean True when admin is verified, False otherwise
-	 */	
-	public boolean CreateAdmin(String username, String plainTextPassword);
-	
 }

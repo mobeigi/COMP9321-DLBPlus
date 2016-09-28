@@ -211,7 +211,7 @@ public class DBHelper implements DLBPlusDBInterface {
 		return p;
 	}
 
-  /**
+	/**
 	 * Create a user by inserting provideduser details into database
 	 *
 	 * @param username Provided username
@@ -224,7 +224,7 @@ public class DBHelper implements DLBPlusDBInterface {
 			return null;
 
 		try {
-			if (!doesUserExist(username)) {
+			if (!DoesUserExist(username)) {
         PrintDebugMessage("CreateUser", "User does not exist, creating new user with username: " + username);
         
 				//Generate random salt and hashed password
@@ -262,7 +262,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @param username Username to check
 	 * @return boolean True for exists, False otherwise
 	 */
-	public boolean doesUserExist(String username) {
+	public boolean DoesUserExist(String username) {
 		if (!dbConnStatus)
 			return true;
 
@@ -300,7 +300,7 @@ public class DBHelper implements DLBPlusDBInterface {
       return false;
     
     try {
-      if (doesUserExist(inputUsername)) { //user exists
+      if (DoesUserExist(inputUsername)) { //user exists
         
         //Get salt + hash from database
         Statement stmt;
@@ -330,18 +330,6 @@ public class DBHelper implements DLBPlusDBInterface {
     catch (SQLException e) {
       return false;
     }
-	}
-  
-  /**
-   * Validate an admin
-   *
-   * @param inputUsername the username of admin
-   * @param inputPwd plaintext password for admin
-   * @return boolean True when admin is verifed, False otherwise
-   */
-	public boolean VerifyAdmin(String inputUsername, String inputPwd) {
-		// TODO
-		return false;
 	}
 	
 	/**
@@ -697,5 +685,71 @@ public class DBHelper implements DLBPlusDBInterface {
 	private void PrintDebugMessage(String function, String message) {
     System.out.println(function + ": " + message);
   }
+	
+	@Override
+	public int GetNumUsers() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public List<User> GetUsers(int startIndex, int endIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public boolean RemoveUser(int userID) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public boolean SetUserStatus(int userID, boolean newStatus) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public boolean RemoveListing(int listingID) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public int GetNumListings() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public List<Listing> GetListings(int startIndex, int endIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * Create an admin
+	 *
+	 * @param username the username of the new admin
+	 * @param plainTextPassword plaintext password for new admin
+	 * @return boolean True when admin is verified, False otherwise
+	 */	
+	public boolean CreateAdmin(String username, String plainTextPassword) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	/**
+	* Validate an admin
+	*
+	* @param inputUsername the username of admin
+	* @param inputPwd plaintext password for admin
+	* @return boolean True when admin is verifed, False otherwise
+	*/
+	public boolean VerifyAdmin(String inputUsername, String inputPwd) {
+		// TODO
+		return false;
+	}
 
 }
