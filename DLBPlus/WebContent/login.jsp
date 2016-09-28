@@ -7,8 +7,8 @@
 <title>Bibliographic Library | Register</title>
 <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 
 <body>
@@ -46,12 +46,12 @@
 					<form action="setup" method="post">
 		              	<div class="row">
 		              		<div class="col s12">
-			           			<input placeholder="Username"      id="textbox" name="newUserName" type="text" />
+			           			<input placeholder="Username"      id="textbox" name="userName" type="text" />
 			           		</div>
 			           	</div>
 			           	<div class="row">
 			           		<div class="col s12">
-			     		    	<input placeholder="Password"      id="textbox" name="newPassword" type="text" />
+			     		    	<input placeholder="Password"      id="textbox" name="password" type="text" />
 		     		    	</div>
 			     		</div>
 			     		
@@ -79,7 +79,7 @@
    	<div class="center-align">
 	    <form action="setup" method="POST">
 			<input type="hidden" name="action" value="back"/>
-			<button class="btn waves-effect waves-light" type="submit" value="Search">Back</button>
+			<button class="btn waves-effect waves-light" type="submit" value="back">Back</button>
 			<br>    
 	    </form>
     </div><br>
