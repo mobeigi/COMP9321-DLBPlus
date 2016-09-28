@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class User {
 	private Integer id;
-	private String user;
+	private String username;
 	private String fname;
 	private String lname;
 	private String email;
@@ -29,12 +29,12 @@ public class User {
 		this.id = id;
 	}
 
-	public String getUser() {
-		return user;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getFname() {
@@ -107,5 +107,21 @@ public class User {
   
   public void setAcctconfrm(Boolean acctconfrm) {
     this.acctconfrm = acctconfrm;
+  }
+  
+  public Date getDob() {
+    return dob;
+  }
+  
+  public void setDob(Date dob) {
+    this.dob = dob;
+  }
+  
+  public Date getAcctcreated() {
+    return acctcreated;
+  }
+  
+  public void setAcctcreated(Date acctcreated) {
+    this.acctcreated = acctcreated;
   }
 }

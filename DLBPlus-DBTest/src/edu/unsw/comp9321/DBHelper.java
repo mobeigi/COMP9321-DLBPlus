@@ -245,7 +245,7 @@ public class DBHelper implements DLBPlusDBInterface {
         PrintDebugMessage("CreateUser", "Running query: " + q);
 				stmt.executeUpdate(q);
 				dbConn.commit();
-				return null; //todo: change to return user GetUser
+				return GetUser(username);
 			} else { //User already exists
         PrintDebugMessage("CreateUser", "Error! User already exists with username: " + username);
 				return null;
@@ -326,7 +326,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Set the listing's paused status to be true or false
 	 *
-	 * @param listing the listing to modify paused status
+	 * @param listingID the listing to modify paused status
    * @param paused TODO
 	 * @return boolean True when paused was succesfully set. False otherwise
 	 */
@@ -376,9 +376,122 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return returns a user when successful, null otherwise
 	 */	
 	public User GetUser(int userID) {
-		// TODO
-		return null;
+    if (!dbConnStatus)
+      return null;
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM users where id = " + userID + ";" );
+      
+      return processResultSetIntoUser(rs);
+    }
+    catch (SQLException e) {
+      return null;
+    }
 	}
+  
+  /**
+   * Obtain a user
+   *
+   * @param username the username of the user
+   * @return returns a user when successful, null otherwise
+   */
+  public User GetUser(String username) {
+    if (!dbConnStatus)
+      return null;
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM users where username = '" + username + "';" );
+      
+      return processResultSetIntoUser(rs);
+    }
+    catch (SQLException e) {
+      return null;
+    }
+  }
+  
+  /**
+   * Given a result set, parse next row of values into User
+   *
+   * @param rs result set for a query on the user table
+   * @return null if no match found/rows exhausted, user of next row otherwise
+   */
+  private User processResultSetIntoUser(ResultSet rs) {
+    User u = new User();
+    
+    try {
+      if (rs.next()) {
+        Integer id = rs.getInt("id");
+        String username = rs.getString("username");
+        String fname = rs.getString("fname");
+        String lname = rs.getString("lname");
+        String email = rs.getString("email");
+        String address = rs.getString("address");
+        Date dob = rs.getDate("dob");
+        String creditcard = rs.getString("creditcard");
+        Integer cartid = rs.getInt("cartid");
+        String dp = rs.getString("dp");
+        Boolean acctstatus = rs.getBoolean("acctstatus");
+        Boolean acctconfrm = rs.getBoolean("acctconfrm");
+        Date acctcreated = rs.getDate("acctcreated");
+        
+        //Set User fields
+        u.setId(id);
+        u.setUsername(username);
+        u.setFname(fname);
+        u.setLname(lname);
+        u.setEmail(email);
+        u.setAddress(address);
+        u.setDob(dob);
+        u.setCreditcard(creditcard);
+        u.setCartid(cartid);
+        u.setDp(dp);
+        u.setAcctstatus(acctstatus);
+        u.setAcctconfrm(acctconfrm);
+        u.setAcctcreated(acctcreated);
+      } else { //No result found
+        u = null;
+      }
+    } catch (SQLException e) {
+      return null;
+    }
+    
+    return u;
+  }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * Obtain a list of all existing listings
