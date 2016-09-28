@@ -156,7 +156,7 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Obtain a list of all users
 	 *
-	 * @return returns a list of all existing users, regardless of account status
+	 * @return @return returns a list of all existing users, regardless of account status, empty list otherwise
 	 */		
 	public List<User> GetAllUsers();
 

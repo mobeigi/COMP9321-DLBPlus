@@ -463,36 +463,7 @@ public class DBHelper implements DLBPlusDBInterface {
     
     return u;
   }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+  
 	/**
 	 * Obtain a list of all existing listings
 	 *
@@ -507,11 +478,31 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Obtain a list of all users
 	 *
-	 * @return returns a list of all existing users, regardless of account status
+	 * @return returns a list of all existing users, regardless of account status, empty list otherwise
 	 */		
 	public List<User> GetAllUsers() {
-		List<User> allUsers = new ArrayList<User>();
-		//TODO
+    List<User> allUsers = new ArrayList<User>();
+    
+    if (!dbConnStatus)
+      return allUsers;
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM users");
+  
+      User u = processResultSetIntoUser(rs);
+      
+      while (u != null) {
+        allUsers.add(u);
+        u = processResultSetIntoUser(rs);
+      }
+    }
+    catch (SQLException e) {
+      return allUsers;
+    }
+    
 		return allUsers;
 	}
 	
