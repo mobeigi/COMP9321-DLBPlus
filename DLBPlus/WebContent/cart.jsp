@@ -85,7 +85,7 @@
 									</table>
 								</div>
 							</div>
-							<div class="">
+							<div class="right-align">
 								<input type="hidden" name="action" value="remove">
 								<button class="btn waves-effect waves-light" type="submit" value="Remove from Cart">Remove from Cart
 								<i class="material-icons right"></i>
@@ -99,15 +99,15 @@
 	</div>
 		
 	<div class="container">
-		<div class="col s10 offset-1">
-			<div class="col s6">
+		<div class="center-align">
+
 				<form action="setup" method="POST">
 					<input type="hidden" name="action" value="back">
 					<button class="btn waves-effect waves-light" type="submit" value="Back to Search">Back to Search
 					<i class="material-icons right"></i>
 					</button> 
 				</form>
-			</div>
+
 		</div>
 	</div>
 </body>
