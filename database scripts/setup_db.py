@@ -93,7 +93,7 @@ def setup_db():
 			"	buyerid		SERIAL	REFERENCES users (id)," \
 			"	sellerid	SERIAL	REFERENCES users (id)," \
 			"	itemid		SERIAL	REFERENCES publications (id)," \
-			"	order_date	DATE	NOT NULL," \
+			"	order_date	TIMESTAMP WITH TIME ZONE	NOT NULL," \
 			"	price		MONEY	NOT NULL" \
 			");"
 	cursor.execute(query)
