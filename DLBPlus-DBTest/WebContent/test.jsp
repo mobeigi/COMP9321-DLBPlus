@@ -3,7 +3,8 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="edu.unsw.comp9321.User" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.sql.Timestamp" %><%--
+<%@ page import="java.sql.Timestamp" %>
+<%@ page import="edu.unsw.comp9321.Listing" %><%--
   Created by IntelliJ IDEA.
   User: Mohammad
   Date: 27/09/2016
@@ -40,7 +41,12 @@
   Timestamp start = new Timestamp(date.getTime());
   Timestamp end = new Timestamp(date.getTime() + 10000);
 
-  db.CreateListing(u1, p, 100, start, end, 10.50, "image");
+  Listing l = db.CreateListing(u1, p, 100, start, end, 22.50, "image");
+  System.out.println("Listing id: " + l.getListingid() + " " + l.getSellprice());
+
+  Listing l2 = db.GetListing(5);
+  System.out.println("Listing id: " + l2.getListingid() + " " + l2.getSellprice());
+
 
 %>
 </body>
