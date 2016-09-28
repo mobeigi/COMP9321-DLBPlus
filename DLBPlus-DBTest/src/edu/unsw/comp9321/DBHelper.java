@@ -19,7 +19,7 @@ public class DBHelper {
 	private static final String dbPass = "password";
 
 	private Connection dbConn = null;
-	private boolean dbConnStatus = false;
+	public boolean dbConnStatus = false;
 
 	/**
 	 * Initiate connection to DB
@@ -37,6 +37,7 @@ public class DBHelper {
 
 			//Get total number of publications
 		} catch (Exception e) {
+			System.out.println(e);
 			dbConnStatus = false;
 		}
 
@@ -277,6 +278,7 @@ public class DBHelper {
 		return false;
 	}
 	
+
 	/**
 	 * Create a listing (item for sale)
 	 *
@@ -349,8 +351,8 @@ public class DBHelper {
 	 *
 	 * @return returns a list of listings
 	 */		
-	public List<Listings> GetAllListings() {
-		List<Listings> allListings = new ArrayList<Listing>();
+	public List<Listing> GetAllListings() {
+		List<Listing> allListings = new ArrayList<Listing>();
 		//TODO
 		return allListings;
 	}
@@ -389,16 +391,17 @@ public class DBHelper {
 		//TODO
 		return removedCartItems;
 	}
-	
+
 	/**
 	 * Obtain the order history of a particular user
 	 *
 	 * @param userid the id of the user
 	 * @return returns a list of orders that the user has made
-	 */	
+	 **/	
 	public List<Order> GetOrderHistory(int userID) {
 		List<Order> orderHistory = new ArrayList<Order>();
 		//TODO
 		return orderHistory;
 	}
+
 }
