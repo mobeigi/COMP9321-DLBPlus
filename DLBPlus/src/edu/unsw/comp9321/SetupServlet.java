@@ -94,6 +94,8 @@ public class SetupServlet extends HttpServlet {
 		if(req.equals("back")){
 			// getRandomPub(request);
 			link = "index.jsp";
+		} else if(req.equals("home")){
+			link = "index.jsp";
 		} else if(req.equals("search")){
 			String query = request.getParameter("searchQuery");
 			String type = request.getParameter("pubType");

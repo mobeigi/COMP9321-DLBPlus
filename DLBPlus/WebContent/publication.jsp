@@ -27,12 +27,12 @@
    	
     <!-- Header -->
 	<nav class="light-blue lighten-1" role="navigation">
-	   <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+	   <div class="nav-wrapper container"><a id="logo-container" href="?action=home" class="brand-logo"><img src="images/logo_white.png" alt="logo"></a>
 	     <ul class="right hide-on-med-and-down">
-	       <li><a href="#">Advanced Search</a></li>
-	       <li><a href="#">Shopping Cart</a></li>
-	       <li><a href="#">Sign Up</a></li>
-	       <li><a href="#">Login</a></li>
+	       <li><a href="search.jsp">Advanced Search</a></li>
+	       <li><a href="cart.jsp">Shopping Cart</a></li>
+	       <li><a href="register.jsp">Sign Up</a></li>
+	       <li><a href="login.jsp">Login</a></li>
 	     </ul>
 	   </div>
 	</nav>
