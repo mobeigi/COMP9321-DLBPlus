@@ -7,10 +7,9 @@
 <title>Bibliographic Library | Register</title>
 <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
-
 <body>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script type="text/javascript" src="js/materialize.min.js"></script>
@@ -101,9 +100,9 @@
    	</div>
    	<div class="center-align">
 	    <form action="setup" method="POST">
-			<input type="hidden" name="action" value="back"/>
+	    		<input type="hidden" name="action" value="back"/>
 			<button class="btn waves-effect waves-light" type="submit" value="back">Back</button>
-			<br>    
+			<br>
 	    </form>
     </div><br>
     
@@ -112,7 +111,7 @@
     <div class="container">
       <div class="row">
         <div class="col l6 s12">
-          <h5 class="white-text">Company Bio</h5>
+          <h5 class="white-text">Cobacky Bio</h5>
           <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
 
 
