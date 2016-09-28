@@ -1,7 +1,10 @@
 <%@ page import="edu.unsw.comp9321.DBHelper" %>
 <%@ page import="edu.unsw.comp9321.Publication" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="edu.unsw.comp9321.User" %><%--
+<%@ page import="edu.unsw.comp9321.User" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.sql.Timestamp" %>
+<%@ page import="edu.unsw.comp9321.Listing" %><%--
   Created by IntelliJ IDEA.
   User: Mohammad
   Date: 27/09/2016
@@ -18,64 +21,33 @@
 	DBHelper db = new DBHelper();	//Note this should be called once per server, not per page load or multiple times
 	db.init();
 
-	Date date = new Date();
-	User u = db.CreateUser("joe1", "bobby", "Joe", "Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
+  //Make some users
+  Date date = new Date();
+  User u1 = db.CreateUser("joe1", "bobby", "Joe", "Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
+  User u2 = db.CreateUser("joe2", "teddy23", "Joe", "Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
+  User u3 = db.CreateUser("joe3", "@@879@@KAPPA", "Joe", "Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
 
-	/*
-	Publication p = db.GetRandomPublication();
+  if (u1 == null)
+    u1 = db.GetUser("joe1");
+  if (u2 == null)
+    u2 = db.GetUser("joe2");
+  if (u3 == null)
+    u3 = db.GetUser("joe3");
 
-	if (p != null) {
-		out.println("ID: " + p.getId());
-		out.println("<br />");
-		out.println("Type: " + p.getType());
-		out.println("<br />");
-		out.println("Authors: " + p.getAuthors());
-		out.println("<br />");
-		out.println("Editors: " + p.getEditors());
-		out.println("<br />");
-		out.println("Title: " + p.getTitle());
-		out.println("<br />");
-		out.println("Pages: " + p.getPages());
-		out.println("<br />");
-		out.println("Year: " + p.getYear());
-		out.println("<br />");
-		out.println("Address: " + p.getAddress());
-		out.println("<br />");
-		out.println("Volume: " + p.getVolume());
-		out.println("<br />");
-		out.println("Number: " + p.getNumber());
-		out.println("<br />");
-		out.println("Month: " + p.getMonth());
-		out.println("<br />");
-		out.println("URLS: " + p.getUrls());
-		out.println("<br />");
-		out.println("EES: " + p.getEes());
-		out.println("<br />");
-		out.println("Cdrom: " + p.getCdrom());
-		out.println("<br />");
-		out.println("Cite: " + p.getCites());
-		out.println("<br />");
-		out.println("Publisher: " + p.getPublisher());
-		out.println("<br />");
-		out.println("Note: " + p.getNote());
-		out.println("<br />");
-		out.println("Crossref: " + p.getCrossref());
-		out.println("<br />");
-		out.println("Isbn: " + p.getIsbns());
-		out.println("<br />");
-		out.println("Series: " + p.getSeries());
-		out.println("<br />");
-		out.println("Venue: " + p.getVenues());
-		out.println("<br />");
-		out.println("Chapter: " + p.getChapter());
-		out.println("<br />");
-		out.println("Recprice: " + p.getRecprice());
-		out.println("<br />");
-		out.println("Rating: " + p.getRating());
-		out.println("<br />");
-		out.println("<hr />");
-	}
-	*/
+  //Get item with id 10
+  Publication p = db.GetPublication(10);
+
+  //Create a listing
+  Timestamp start = new Timestamp(date.getTime());
+  Timestamp end = new Timestamp(date.getTime() + 10000);
+
+  Listing l = db.CreateListing(u1, p, 100, start, end, 22.50, "image");
+  System.out.println("Listing id: " + l.getListingid() + " " + l.getSellprice());
+
+  Listing l2 = db.GetListing(5);
+  System.out.println("Listing id: " + l2.getListingid() + " " + l2.getSellprice());
+
+
 %>
 </body>
 </html>

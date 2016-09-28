@@ -3,6 +3,7 @@ package edu.unsw.comp9321;
 import java.security.SecureRandom;
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -210,7 +211,7 @@ public class DBHelper implements DLBPlusDBInterface {
 		return p;
 	}
 
-	/**
+  /**
 	 * Create a user by inserting provideduser details into database
 	 *
 	 * @param username Provided username
@@ -224,9 +225,8 @@ public class DBHelper implements DLBPlusDBInterface {
 
 		try {
 			if (!doesUserExist(username)) {
-				System.out.println("User does not exist, creating new user");
-
-
+        PrintDebugMessage("CreateUser", "User does not exist, creating new user with username: " + username);
+        
 				//Generate random salt and hashed password
 				final Random r = new SecureRandom();
 				byte[] salt = new byte[32];
@@ -234,17 +234,20 @@ public class DBHelper implements DLBPlusDBInterface {
 				String encodedSalt = Base64.encode(salt);
 				String passwordHash = DigestUtils.sha1Hex(encodedSalt + plainTextPassword);
 
+        //Current date for acctcreated
+        Date now = new Date();
+        
 				Statement stmt;
 				dbConn.setAutoCommit(false);
 				stmt = dbConn.createStatement();
-				String q = "INSERT INTO users (username, salt, password, fname, lname, email, address, dob, creditcard, cartid, dp, acctstatus)" +
-								"VALUES ('" + username + "', '" + encodedSalt + "', '" + passwordHash + "', '" + fname + "', '" + lname + "', '" + email + "', '" + address + "', '" + dob.toString() + "', '" + creditcard + "', '" + dp + "', true);";
-				System.out.println(q);
+				String q = "INSERT INTO users (username, salt, password, fname, lname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) " +
+								"VALUES ('" + username + "', '" + encodedSalt + "', '" + passwordHash + "', '" + fname + "', '" + lname + "', '" + email + "', '" + address + "', '" + dob.toString() + "', '" + creditcard + "', '" + dp + "', true, false, '" + now.toString() + "');";
+        PrintDebugMessage("CreateUser", "Running query: " + q);
 				stmt.executeUpdate(q);
 				dbConn.commit();
-				return null; //todo: change to return user GetUser
+				return GetUser(username);
 			} else { //User already exists
-				System.out.println("User already exists");
+        PrintDebugMessage("CreateUser", "Error! User already exists with username: " + username);
 				return null;
 			}
 		}
@@ -261,7 +264,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	 */
 	public boolean doesUserExist(String username) {
 		if (!dbConnStatus)
-			return true; //this should never be returned
+			return true;
 
 		try {
 			Statement stmt;
@@ -284,26 +287,58 @@ public class DBHelper implements DLBPlusDBInterface {
 		}
 
 	}
-	
-	/**
-	 * Validate a user
-	 *
-	 * @param inputUsername 
-	 * @param inputPwd
-	 * @return boolean True when user is verifed, False otherwise
-	 */
+  
+  /**
+   * Validate a user
+   *
+   * @param inputUsername the username of user
+   * @param inputPwd plaintext password for user
+   * @return boolean True when user is verifed, False otherwise
+   */
 	public boolean VerifyUser(String inputUsername, String inputPwd) {
-		// TODO
-		return false;
+    if (!dbConnStatus)
+      return false;
+    
+    try {
+      if (doesUserExist(inputUsername)) { //user exists
+        
+        //Get salt + hash from database
+        Statement stmt;
+        dbConn.setAutoCommit(false);
+        stmt = dbConn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT salt, password FROM users where username = '" + inputUsername + "';" );
+        
+        if (rs.next()) {
+          String salt = rs.getString("salt");
+          String storePasswordHash = rs.getString("password");
+          
+          //Create testHash to compare
+          String testHash = DigestUtils.sha1Hex(salt + inputPwd);
+          
+          //Perform comparison
+          //Valid input password
+          return testHash.equals(storePasswordHash);
+        } else {
+          //Should never happen
+          return false;
+        }
+      } else {
+        PrintDebugMessage("VerifyUser", "Error! No user exists with username: " + inputUsername);
+        return false;
+      }
+    }
+    catch (SQLException e) {
+      return false;
+    }
 	}
-	
-	/**
-	 * Validate an admin
-	 *
-	 * @param inputUsername 
-	 * @param inputPwd
-	 * @return boolean True when admin is verifed, False otherwise
-	 */
+  
+  /**
+   * Validate an admin
+   *
+   * @param inputUsername the username of admin
+   * @param inputPwd plaintext password for admin
+   * @return boolean True when admin is verifed, False otherwise
+   */
 	public boolean VerifyAdmin(String inputUsername, String inputPwd) {
 		// TODO
 		return false;
@@ -323,7 +358,8 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Set the listing's paused status to be true or false
 	 *
-	 * @param listing the listing to modify paused status
+	 * @param listingID the listing to modify paused status
+   * @param paused TODO
 	 * @return boolean True when paused was succesfully set. False otherwise
 	 */
 	 public boolean SetPausedStatus(int listingID, boolean paused) {
@@ -368,14 +404,98 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Obtain a user
 	 *
-	 * @param userid the id of the user
+	 * @param userID the id of the user
 	 * @return returns a user when successful, null otherwise
 	 */	
 	public User GetUser(int userID) {
-		// TODO
-		return null;
+    if (!dbConnStatus)
+      return null;
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM users where id = " + userID + ";" );
+      
+      return processResultSetIntoUser(rs);
+    }
+    catch (SQLException e) {
+      return null;
+    }
 	}
-	
+  
+  /**
+   * Obtain a user
+   *
+   * @param username the username of the user
+   * @return returns a user when successful, null otherwise
+   */
+  public User GetUser(String username) {
+    if (!dbConnStatus)
+      return null;
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM users where username = '" + username + "';" );
+      
+      return processResultSetIntoUser(rs);
+    }
+    catch (SQLException e) {
+      return null;
+    }
+  }
+  
+  /**
+   * Given a result set, parse next row of values into User
+   *
+   * @param rs result set for a query on the user table
+   * @return null if no match found/rows exhausted, user of next row otherwise
+   */
+  private User processResultSetIntoUser(ResultSet rs) {
+    User u = new User();
+    
+    try {
+      if (rs.next()) {
+        Integer id = rs.getInt("id");
+        String username = rs.getString("username");
+        String fname = rs.getString("fname");
+        String lname = rs.getString("lname");
+        String email = rs.getString("email");
+        String address = rs.getString("address");
+        Date dob = rs.getDate("dob");
+        String creditcard = rs.getString("creditcard");
+        Integer cartid = rs.getInt("cartid");
+        String dp = rs.getString("dp");
+        Boolean acctstatus = rs.getBoolean("acctstatus");
+        Boolean acctconfrm = rs.getBoolean("acctconfrm");
+        Date acctcreated = rs.getDate("acctcreated");
+        
+        //Set User fields
+        u.setId(id);
+        u.setUsername(username);
+        u.setFname(fname);
+        u.setLname(lname);
+        u.setEmail(email);
+        u.setAddress(address);
+        u.setDob(dob);
+        u.setCreditcard(creditcard);
+        u.setCartid(cartid);
+        u.setDp(dp);
+        u.setAcctstatus(acctstatus);
+        u.setAcctconfrm(acctconfrm);
+        u.setAcctcreated(acctcreated);
+      } else { //No result found
+        u = null;
+      }
+    } catch (SQLException e) {
+      return null;
+    }
+    
+    return u;
+  }
+  
 	/**
 	 * Obtain a list of all existing listings
 	 *
@@ -390,18 +510,38 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Obtain a list of all users
 	 *
-	 * @return returns a list of all existing users, regardless of account status
+	 * @return returns a list of all existing users, regardless of account status, empty list otherwise
 	 */		
 	public List<User> GetAllUsers() {
-		List<User> allUsers = new ArrayList<User>();
-		//TODO
+    List<User> allUsers = new ArrayList<User>();
+    
+    if (!dbConnStatus)
+      return allUsers;
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM users");
+  
+      User u = processResultSetIntoUser(rs);
+      
+      while (u != null) {
+        allUsers.add(u);
+        u = processResultSetIntoUser(rs);
+      }
+    }
+    catch (SQLException e) {
+      return allUsers;
+    }
+    
 		return allUsers;
 	}
 	
 	/**
 	 * Obtain all active cart items in a given cart
 	 *
-	 * @param cartid the id of the cart
+	 * @param cartID the id of the cart
 	 * @return returns a list of Cart Items
 	 */	
 	public List<CartItem> GetActiveCartItems(int cartID) {
@@ -413,7 +553,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Obtain all removed cart items in a given cart
 	 *
-	 * @param cart id the cart of id
+	 * @param cartID the cart of id
 	 * @return returns a list of cart items that have been removed
 	 */	
 	public List<CartItem> GetRemovedCartItems(int cartID) {
@@ -425,7 +565,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Obtain the order history of a particular user
 	 *
-	 * @param userid the id of the user
+	 * @param userID the id of the user
 	 * @return returns a list of orders that the user has made
 	 **/	
 	public List<Order> GetOrderHistory(int userID) {
@@ -464,5 +604,15 @@ public class DBHelper implements DLBPlusDBInterface {
 		// TODO Auto-generated method stub
 		
 	}
+  
+  /**
+   * Helper function used to print out debug messages
+   *
+   * @param function name of function in which message originates from
+   * @param message the message (error, information etc)
+   */
+	private void PrintDebugMessage(String function, String message) {
+    System.out.println(function + ": " + message);
+  }
 
 }

@@ -114,7 +114,7 @@
    	<div class="center-align">
 	    <form action="setup" method="POST">
 			<input type="hidden" name="action" value="back"/>
-			<button class="btn waves-effect waves-light" type="submit" value="Search">Back</button>
+			<button class="btn waves-effect waves-light" type="submit" value="back">Back</button>
 			<br>    
 	    </form>
     </div><br>

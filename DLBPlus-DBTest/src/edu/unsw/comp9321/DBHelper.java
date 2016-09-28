@@ -347,12 +347,39 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Create a listing (item for sale)
 	 *
-	 * @param newListing The new listing to be added\
-	 * @return boolean True when listing was successfully created; false otherwise
+	 * @return Listing Null if listing unsuccessful, Listing of newly created listing otherwise
 	 */
-	 public boolean CreateListing(Listing newListing) {
-		// TODO
-		return true;
+	 public Listing CreateListing(User seller, Publication item, Integer quantity, Timestamp listdate, Timestamp enddate,
+                                Double sellprice, String image) {
+     if (!dbConnStatus)
+       return null;
+    
+     if (seller == null || item == null) {
+       PrintDebugMessage("CreateListing", "Error! Seller or item is null");
+       return null;
+     }
+     
+     try {
+       Statement stmt;
+       dbConn.setAutoCommit(false);
+       stmt = dbConn.createStatement();
+       String q = "INSERT INTO listings (sellerid, itemid, quantity, listdate, enddate, sellprice, image) " +
+         "VALUES (" + seller.getId() + ", " + item.getId() + ", " + quantity + ", to_timestamp(" + listdate.getTime() + "), to_timestamp(" + enddate.getTime() + "), " + sellprice + ", '" + image + "')" +
+         "RETURNING listingid;";
+       PrintDebugMessage("CreateListing", "Running query: " + q);
+       ResultSet rs = stmt.executeQuery(q);
+       
+       if (rs.next()) {
+         Integer listingid = rs.getInt("listingid");
+         dbConn.commit();
+         return GetListing(listingid);
+       } else {
+         return null;
+       }
+     }
+     catch (SQLException e) {
+       return null;
+     }
 	 }
 	 
 	/**
@@ -591,9 +618,65 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return the listing corresponding to given ID; null if such a listing doesn't exist
 	 */
 	public Listing GetListing(int listingID) {
-		// TODO Auto-generated method stub
-		return null;
+    if (!dbConnStatus)
+      return null;
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings where listingid = " + listingID + ";" );
+      
+      return processResultSetIntoListing(rs);
+    }
+    catch (SQLException e) {
+      return null;
+    }
 	}
+  
+  /**
+   * Given a result set, parse next row of values into Listing
+   *
+   * @param rs result set for a query on the listing table
+   * @return null if no match found/rows exhausted, listing of next row otherwise
+   */
+  private Listing processResultSetIntoListing(ResultSet rs) {
+    Listing l = new Listing();
+    
+    try {
+      if (rs.next()) {
+        Integer listingid = rs.getInt("listingid");
+        Integer sellerid = rs.getInt("sellerid");
+        Integer itemid = rs.getInt("itemid");
+        Integer quantity = rs.getInt("quantity");
+        Timestamp listdate = rs.getTimestamp("listdate");
+        Timestamp enddate = rs.getTimestamp("enddate");
+        Double sellprice = rs.getDouble("sellprice");
+        String image = rs.getString("image");
+        Boolean paused = rs.getBoolean("paused");
+        Integer numviews = rs.getInt("numviews");
+        
+        //Set User fields
+        l.setListingid(listingid);
+        l.setSellerid(sellerid);
+        l.setItemid(itemid);
+        l.setQuantity(quantity);
+        l.setListdate(listdate);
+        l.setEnddate(enddate);
+        l.setSellprice(sellprice);
+        l.setImage(image);
+        l.setPaused(paused);
+        l.setNumviews(numviews);
+        
+      } else { //No result found
+        l = null;
+      }
+    } catch (SQLException e) {
+      return null;
+    }
+    
+    return l;
+  }
 
 	 /**
 	 * Incremements the number of views on a particular listing

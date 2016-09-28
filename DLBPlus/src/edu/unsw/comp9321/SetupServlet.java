@@ -31,6 +31,8 @@ public class SetupServlet extends HttpServlet {
 		boolean initSuccess = this.db.init();
 		if (!initSuccess) {
 			System.out.println("LOL there was an error.");
+		} else {
+			System.out.println("Successfully connected");
 		}
     }
 
@@ -169,9 +171,14 @@ public class SetupServlet extends HttpServlet {
 			}
 			if (db.doesUserExist(userName)){
 				errorMessage = "User already exists!";
+				link = "register.jsp";
 			} else {
 				User newUser = new User();
 				newUser = db.CreateUser(userName, password, firstName, lastName, email, address, dob, creditCard, dp);
+				Random random = new Random();
+				int rand = random.nextInt();
+				request.getSession().setAttribute("confirmationNumber", rand);
+				link = "confirmation.jsp";
 			}
 			link = "confirmation.jsp";
 		} else if(req.equals("regSuccess")){
@@ -181,6 +188,8 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("confirmPurchase")){
 			link = "transactionSuccessful.jsp";
 		} else if(req.equals("modified")){
+			link = "userAccount.jsp";
+		} else if(req.equals("toAccount")){
 			link = "userAccount.jsp";
 		}
 		

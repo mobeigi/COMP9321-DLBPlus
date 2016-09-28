@@ -10,7 +10,7 @@
 WE USERACCOUNTING BOIS
 
            <div id="searchRightContainer">
-                    <a href ="modifyDetails.jsp">Modify Details</a>
+                    <a href ="modifyDetails.jsp">Modify Details and life</a>
                 </div>
                   <div id="searchRightContainer">
                     <a href ="userSellListings.jsp">User Sell Listings</a>
