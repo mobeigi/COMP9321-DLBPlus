@@ -210,7 +210,7 @@ public class DBHelper implements DLBPlusDBInterface {
 		return p;
 	}
 
-	/**
+  /**
 	 * Create a user by inserting provideduser details into database
 	 *
 	 * @param username Provided username
@@ -224,9 +224,8 @@ public class DBHelper implements DLBPlusDBInterface {
 
 		try {
 			if (!doesUserExist(username)) {
-				System.out.println("User does not exist, creating new user");
-
-
+        PrintDebugMessage("CreateUser", "User does not exist, creating new user with username: " + username);
+        
 				//Generate random salt and hashed password
 				final Random r = new SecureRandom();
 				byte[] salt = new byte[32];
@@ -234,17 +233,20 @@ public class DBHelper implements DLBPlusDBInterface {
 				String encodedSalt = Base64.encode(salt);
 				String passwordHash = DigestUtils.sha1Hex(encodedSalt + plainTextPassword);
 
+        //Current date for acctcreated
+        Date now = new Date();
+        
 				Statement stmt;
 				dbConn.setAutoCommit(false);
 				stmt = dbConn.createStatement();
-				String q = "INSERT INTO users (username, salt, password, fname, lname, email, address, dob, creditcard, cartid, dp, acctstatus)" +
-								"VALUES ('" + username + "', '" + encodedSalt + "', '" + passwordHash + "', '" + fname + "', '" + lname + "', '" + email + "', '" + address + "', '" + dob.toString() + "', '" + creditcard + "', '" + dp + "', true);";
-				System.out.println(q);
+				String q = "INSERT INTO users (username, salt, password, fname, lname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) " +
+								"VALUES ('" + username + "', '" + encodedSalt + "', '" + passwordHash + "', '" + fname + "', '" + lname + "', '" + email + "', '" + address + "', '" + dob.toString() + "', '" + creditcard + "', '" + dp + "', true, false, '" + now.toString() + "');";
+        PrintDebugMessage("CreateUser", "Running query: " + q);
 				stmt.executeUpdate(q);
 				dbConn.commit();
 				return null; //todo: change to return user GetUser
 			} else { //User already exists
-				System.out.println("User already exists");
+        PrintDebugMessage("CreateUser", "Error! User already exists with username: " + username);
 				return null;
 			}
 		}
@@ -259,9 +261,9 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @param username Username to check
 	 * @return boolean True for exists, False otherwise
 	 */
-	private boolean doesUserExist(String username) {
+	public boolean doesUserExist(String username) {
 		if (!dbConnStatus)
-			return true; //this should never be returned
+			return true;
 
 		try {
 			Statement stmt;
@@ -324,6 +326,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * Set the listing's paused status to be true or false
 	 *
 	 * @param listing the listing to modify paused status
+   * @param paused TODO
 	 * @return boolean True when paused was succesfully set. False otherwise
 	 */
 	 public boolean SetPausedStatus(int listingID, boolean paused) {
@@ -368,7 +371,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Obtain a user
 	 *
-	 * @param userid the id of the user
+	 * @param userID the id of the user
 	 * @return returns a user when successful, null otherwise
 	 */	
 	public User GetUser(int userID) {
@@ -401,7 +404,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Obtain all active cart items in a given cart
 	 *
-	 * @param cartid the id of the cart
+	 * @param cartID the id of the cart
 	 * @return returns a list of Cart Items
 	 */	
 	public List<CartItem> GetActiveCartItems(int cartID) {
@@ -413,7 +416,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Obtain all removed cart items in a given cart
 	 *
-	 * @param cart id the cart of id
+	 * @param cartID the cart of id
 	 * @return returns a list of cart items that have been removed
 	 */	
 	public List<CartItem> GetRemovedCartItems(int cartID) {
@@ -425,7 +428,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Obtain the order history of a particular user
 	 *
-	 * @param userid the id of the user
+	 * @param userID the id of the user
 	 * @return returns a list of orders that the user has made
 	 **/	
 	public List<Order> GetOrderHistory(int userID) {
@@ -464,5 +467,15 @@ public class DBHelper implements DLBPlusDBInterface {
 		// TODO Auto-generated method stub
 		
 	}
+  
+  /**
+   * Helper function used to print out debug messages
+   *
+   * @param function name of function in which message originates from
+   * @param message the message (error, information etc)
+   */
+	private void PrintDebugMessage(String function, String message) {
+    System.out.println(function + ": " + message);
+  }
 
 }

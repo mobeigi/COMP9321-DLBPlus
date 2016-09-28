@@ -14,7 +14,10 @@ public class User {
 	private Integer cartid;
 	private String dp;
 	private Boolean acctstatus; // true = "active", false = "suspended";
-
+  private Boolean acctconfrm; //true = confirmed, false = unconfirmed
+  private Date acctcreated;
+  
+  
 	public User() {}
 
 	//Getters and setters
@@ -97,5 +100,12 @@ public class User {
 	public void setAcctstatus(Boolean acctstatus) {
 		this.acctstatus = acctstatus;
 	}
-
+  
+  public Boolean getAcctconfrm() {
+    return acctconfrm;
+  }
+  
+  public void setAcctconfrm(Boolean acctconfrm) {
+    this.acctconfrm = acctconfrm;
+  }
 }
