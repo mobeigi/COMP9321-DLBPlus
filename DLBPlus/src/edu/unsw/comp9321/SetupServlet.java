@@ -2,6 +2,9 @@ package edu.unsw.comp9321;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.servlet.RequestDispatcher;
@@ -28,6 +31,8 @@ public class SetupServlet extends HttpServlet {
 		boolean initSuccess = this.db.init();
 		if (!initSuccess) {
 			System.out.println("LOL there was an error.");
+		} else {
+			System.out.println("Successfully connected");
 		}
     }
 
@@ -147,6 +152,34 @@ public class SetupServlet extends HttpServlet {
 			navigateSearchPage(request);
 			link = "result.jsp";
 		} else if(req.equals("register")){
+			String errorMessage = "";
+			String firstName = request.getParameter("fname");
+			String lastName = request.getParameter("lname");
+			String userName = request.getParameter("uname");
+			String email = request.getParameter("email");
+			String password = request.getParameter("pass");
+			String address = request.getParameter("address");
+			String creditCard = request.getParameter("ccn");
+			String stringDob = request.getParameter("dob");
+			DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 
+			Date dob = null;
+			String dp = "";
+			try {
+				dob = df.parse(stringDob);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			if (db.doesUserExist(userName)){
+				errorMessage = "User already exists!";
+				link = "register.jsp";
+			} else {
+				User newUser = new User();
+				newUser = db.CreateUser(userName, password, firstName, lastName, email, address, dob, creditCard, dp);
+				Random random = new Random();
+				int rand = random.nextInt();
+				request.getSession().setAttribute("confirmationNumber", rand);
+				link = "confirmation.jsp";
+			}
 			link = "confirmation.jsp";
 		} else if(req.equals("regSuccess")){
 			link = "registerSuccess.jsp";
@@ -154,8 +187,9 @@ public class SetupServlet extends HttpServlet {
 			link = "userAccount.jsp";
 		} else if(req.equals("confirmPurchase")){
 			link = "transactionSuccessful.jsp";
-		}
-		else if(req.equals("modified")){
+		} else if(req.equals("modified")){
+			link = "userAccount.jsp";
+		} else if(req.equals("toAccount")){
 			link = "userAccount.jsp";
 		}
 		
