@@ -109,7 +109,8 @@ def setup_db():
 				enddate		DATE	NOT NULL,
 				sellprice	MONEY	NOT NULL,
 				image		TEXT,
-				paused		BOOLEAN	DEFAULT FALSE
+				paused		BOOLEAN	DEFAULT FALSE,
+				numviews	INT		DEFAULT 0
 			);
 			"""
 	cursor.execute(query)	

@@ -11,7 +11,8 @@ import org.apache.commons.codec.digest.DigestUtils;
  * Database helper class which abstracts database calls.
  */
 
-public class DBHelper {
+public class DBHelper implements DLBPlusDBInterface {
+	
 	private static final String HOST = "localhost";
 	private static final Integer PORT = 5432;
 	private static final String dbName = "dlbplus";
@@ -278,7 +279,6 @@ public class DBHelper {
 		return false;
 	}
 	
-
 	/**
 	 * Create a listing (item for sale)
 	 *
@@ -296,7 +296,7 @@ public class DBHelper {
 	 * @param listing the listing to modify paused status
 	 * @return boolean True when paused was succesfully set. False otherwise
 	 */
-	 public void SetPausedStatus(Listing listing, boolean paused) {
+	 public boolean SetPausedStatus(int listingID, boolean paused) {
 		 // TODO
 	 }
 	 
@@ -402,6 +402,37 @@ public class DBHelper {
 		List<Order> orderHistory = new ArrayList<Order>();
 		//TODO
 		return orderHistory;
+	}
+
+	 /**
+	 * Obtain a random listing
+	 *
+	 * @return returns a listing if there is at least one in DB; null otherwise
+	 */
+	public Listing GetRandomListing() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	 /**
+	 * Obtain a particular listing
+	 *
+	 * @param listingID the id of the listing to obtain
+	 * @return the listing corresponding to given ID; null if such a listing doesn't exist
+	 */
+	public Listing GetListing(int listingID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	 /**
+	 * Incremements the number of views on a particular listing
+	 *
+	 * @param listingID the id of the listing to edit
+	 */
+	public void IncrementListingViews(int listingID) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

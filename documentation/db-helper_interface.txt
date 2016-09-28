@@ -87,10 +87,11 @@ public boolean VerifyAdmin(String inputUsername, String inputPwd);
 /**
  * Set the listing's paused status to be true or false
  *
- * @param listing the listing to modify paused status
+ * @param listingID the id to change status
+ * @param paused the status to be changed to
  * @return boolean True when paused was succesfully set. False otherwise
  */
- public void SetPausedStatus(Listing listing, boolean paused);
+ public boolean SetPausedStatus(int listingID, boolean paused);
  
 /**
  * Obtain a list of publications (FOR SALE) that match the search queries
