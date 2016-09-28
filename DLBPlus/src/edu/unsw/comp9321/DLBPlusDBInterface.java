@@ -4,6 +4,7 @@
  */
 package edu.unsw.comp9321;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 public interface DLBPlusDBInterface {
@@ -35,82 +36,7 @@ public interface DLBPlusDBInterface {
 	 * @return publication with matching publication identifier
 	 */
 	public Publication GetPublication(int pubID);
-
-	/**
-	 * Create a user by inserting provideduser details into database
-	 *
-	 * @param username Provided username
-	 * @param plainTextPassword Unsalted Password
-	 * @return User corresponding to successful insertion (null otherwise)
-	 */
-	public User CreateUser(String username, String plainTextPassword, 
-						String fname, String lname, String email, String address, 
-						Date dob, String creditcard, String dp);
-	/**
-	 * Checks whether a username is already associated with a user  
-	 *
-	 * @param username Username to check
-	 * @return boolean True for exists, False otherwise
-	 */	
-	public boolean doesUserExist(String username);
 	
-	/**
-	 * Validate a user
-	 *
-	 * @param inputUsername 
-	 * @param inputPwd
-	 * @return boolean True when user is verifed, False otherwise
-	 */
-	public boolean VerifyUser(String inputUsername, String inputPwd);
-
-	/**
-	 * Validate an admin
-	 *
-	 * @param inputUsername 
-	 * @param inputPwd
-	 * @return boolean True when admin is verifed, False otherwise
-	 */
-	public boolean VerifyAdmin(String inputUsername, String inputPwd);
-
-	/**
-	 * Create a listing (item for sale)
-	 *
-	 * @param newListing The new listing to be added
-	 * @return boolean True when listing was successfully created; false otherwise
-	 */
-	 public boolean CreateListing(Listing newListing);
-	 
-	 /**
-	 * Obtain a random listing
-	 *
-	 * @return returns a listing if there is at least one in DB; null otherwise
-	 */
-	 public Listing GetRandomListing();
-	 
-	 /**
-	 * Obtain a particular listing
-	 *
-	 * @param listingID the id of the listing to obtain
-	 * @return the listing corresponding to given ID; null if such a listing doesn't exist
-	 */
-	 public Listing GetListing(int listingID);
-	 
-	 /**
-	 * Incremements the number of views on a particular listing
-	 *
-	 * @param listingID the id of the listing to edit
-	 */
-	 public void IncrementListingViews(int listingID);
-	 
-	 /**
-	  * Set the listing's paused status to be true or false
-	  *
-	  * @param listingID the id to change status
-	  * @param paused the status to be changed to
-	  * @return boolean True when paused was succesfully set. False otherwise
-	  */
-	public boolean SetPausedStatus(int listingID, boolean paused);
-	 
 	/**
 	 * Obtain a list of publications (FOR SALE) that match the search queries
 	 *
@@ -118,6 +44,45 @@ public interface DLBPlusDBInterface {
 	 * @return List of publications (empty if no results found)
 	 */	 
 	public List<Publication> SearchPublications(HashMap<String, String> queries);
+
+	/**
+	* Create a listing (item for sale)
+	*
+	* @return Listing Null if listing unsuccessful, Listing of newly created listing otherwise
+	*/
+	public Listing CreateListing(User seller, Publication item, Integer quantity, Timestamp listdate, Timestamp enddate,
+							   Double sellprice, String image);
+	 
+	/**
+	 * Obtain a random listing
+	 *
+	 * @return returns a listing if there is at least one in DB; null otherwise
+	 */
+	 public Listing GetRandomListing();
+	 
+	/**
+	 * Obtain a particular listing
+	 *
+	 * @param listingID the id of the listing to obtain
+	 * @return the listing corresponding to given ID; null if such a listing doesn't exist
+	 */
+	 public Listing GetListing(int listingID);
+	 
+	/**
+	 * Incremements the number of views on a particular listing
+	 *
+	 * @param listingID the id of the listing to edit
+	 */
+	 public void IncrementListingViews(int listingID);
+	 
+	/**
+	  * Set the listing's paused status to be true or false
+	  *
+	  * @param listingID the id to change status
+	  * @param paused the status to be changed to
+	  * @return boolean True when paused was succesfully set. False otherwise
+	  */
+	public boolean SetPausedStatus(int listingID, boolean paused);
 
 	/**
 	 * Add a listing to a user's cart
@@ -138,31 +103,9 @@ public interface DLBPlusDBInterface {
 	public boolean RemoveFromCart(User user, int listingID);
 
 	/**
-	 * Obtain a user
-	 *
-	 * @param userid the id of the user
-	 * @return returns a user when successful, null otherwise
-	 */	
-	public User GetUser(int userID);
-
-	/**
-	 * Obtain a list of all existing listings
-	 *
-	 * @return returns a list of listings
-	 */		
-	public List<Listing> GetAllListings();
-
-	/**
-	 * Obtain a list of all users
-	 *
-	 * @return returns a list of all existing users, regardless of account status
-	 */		
-	public List<User> GetAllUsers();
-
-	/**
 	 * Obtain all active cart items in a given cart
 	 *
-	 * @param cartid the id of the cart
+	 * @param cartID the id of the cart
 	 * @return returns a list of Cart Items
 	 */	
 	public List<CartItem> GetActiveCartItems(int cartID);
@@ -170,16 +113,158 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Obtain all removed cart items in a given cart
 	 *
-	 * @param cart id the cart of id
+	 * @param cartID the cart of id
 	 * @return returns a list of cart items that have been removed
 	 */	
 	public List<CartItem> GetRemovedCartItems(int cartID);
+	
+	/**
+	 * Obtain a user
+	 *
+	 * @param userID the id of the user
+	 * @return returns a user when successful, null otherwise
+	 */	
+	public User GetUser(int userID);
+	
+	/**
+	 * Create a user by inserting provideduser details into database
+	 *
+	 * @param username Provided username
+	 * @param plainTextPassword Unsalted Password
+	 * @return User corresponding to successful insertion (null otherwise)
+	 */
+	public User CreateUser(String username, String plainTextPassword, 
+						String fname, String lname, String email, String address, 
+						Date dob, String creditcard, String dp);
+
+	/**
+	 * Validate a user
+	 *
+	 * @param inputUsername the username of user
+	 * @param inputPwd plaintext password for user
+	 * @return boolean True when user is verified, False otherwise
+	 */
+	public boolean VerifyUser(String inputUsername, String inputPwd);
+
+	/**
+	* Obtain a user
+	*
+	* @param username the username of the user
+	* @return returns a user when successful, null otherwise
+	*/
+	public User GetUser(String username);
+	
+	/**
+	* Checks whether a user with a particular username exists
+	*
+	* @param username the username of potential user
+	* @return User: returns true when user found in db; false otherwise
+	*/
+	public User doesUserExist(int userID);
+	
+	/**
+	 * Obtain a list of all users
+	 *
+	 * @return @return returns a list of all existing users, regardless of account status, empty list otherwise
+	 */		
+	public List<User> GetAllUsers();
+	
+	/**
+	 * Return the total number of users
+	 *
+	 * @return the total number of users
+	 */	
+	public int GetNumUsers();
+	
+	/**
+	 * Obtain a specific range of users (inclusive)
+	 *
+	 * @param startIndex the starting index
+	 * @param endIndex the ending index
+	 * @return returns a list of users in specified range
+	 */	
+	 public List<User> GetUsers(int startIndex, int endIndex);
+	 
+	/**
+	 * Obtain a specific user
+	 *
+	 * @param userID the id of the user to obtain
+	 * @return returns User object, null if doesn't exist
+	 */	
+	public User GetUser(int userID);
+	
+	/**
+	 * Remove a particular user
+	 *
+	 * @param userID the id of the user to remove
+	 * @return boolean True when successfully removed, False otherwise
+	 */
+	public boolean RemoveUser(int userID);
+	
+	/**
+	 * Change the account status of a user
+	 *
+	 * @param userID the id of the user to change\\
+	 * @param newStatus the new status to change to
+	 * @return boolean True when admin is verified, False otherwise
+	 */
+	public boolean ChangeUserStatus(int userID, boolean newStatus);
+
+	/**
+	 * Obtain a list of all existing listings
+	 *
+	 * @return returns a list of listings
+	 */		
+	public List<Listing> GetAllListings();
+	
+	/**
+	 * Remove a specified listing
+	 *
+	 * @param listingID the id of the listing to remove
+	 * @return returns True if successfully removed; false otherwise
+	 */	
+	public boolean RemoveListing(int listingID);
+	
+	/**
+	 * Return the total number of listings
+	 *
+	 * @return the total number of listings
+	 */	
+	public int GetNumListings();
+	
+	/**
+	 * Obtain a specific range of listings (inclusive)
+	 *
+	 * @param startIndex the starting index
+	 * @param endIndex the ending index
+	 * @return returns a list of listings in specified range
+	 */	
+	 public List<Listing> GetListings(int startIndex, int endIndex);
 
 	/**
 	 * Obtain the order history of a particular user
 	 *
-	 * @param userid the id of the user
+	 * @param userID the id of the user
 	 * @return returns a list of orders that the user has made
 	 */	
 	public List<Order> GetOrderHistory(int userID);
+	
+	/**
+	 * Validate an admin
+	 *
+	 * @param inputUsername the username of admin
+	 * @param inputPwd plaintext password for admin
+	 * @return boolean True when admin is verified, False otherwise
+	 */
+	public boolean VerifyAdmin(String inputUsername, String inputPwd);
+	
+	/**
+	 * Create an admin
+	 *
+	 * @param username the username of the new admin
+	 * @param plainTextPassword plaintext password for new admin
+	 * @return boolean True when admin is verified, False otherwise
+	 */	
+	public boolean CreateAdmin(String username, String plainTextPassword);
+	
 }
