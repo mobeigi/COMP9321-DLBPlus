@@ -9,3 +9,6 @@ Added 'listingid' as an attribute in 'listing', for faster retrieval
 28/09/2016 @ 7:40am
 Added 'acctconfrm' as an attribute in 'user', to facilitate checking whether the account is confirmed / verified through their email
 Added 'acctcreated'as an attribute in 'user', to preserve when accout was created
+
+28/09/2016 @ 11:23am
+Added 'numviews' as an attribute to listings

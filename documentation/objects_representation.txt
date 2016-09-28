@@ -41,6 +41,8 @@
 	Integer				cartid
 	String				dp
 	Boolean				acctstatus				// can either be: "active", or "suspended"
+	Boolean				acctconfrm				// whether this account was confirmed through email
+	Date				acctcreated				// when the account was created
 
 = Order
 	Integer				id
@@ -60,6 +62,7 @@
 	Double				price
 	String				image
 	Boolean				paused
+	Integer				numviews
 	
 = CartItem
 	Integer				cartid

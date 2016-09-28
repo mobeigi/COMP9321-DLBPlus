@@ -57,10 +57,32 @@ public boolean VerifyAdmin(String inputUsername, String inputPwd);
 /**
  * Create a listing (item for sale)
  *
- * @param newListing The new listing to be added\
+ * @param newListing The new listing to be added
  * @return boolean True when listing was successfully created; false otherwise
  */
  public boolean CreateListing(Listing newListing);
+ 
+ /**
+ * Obtain a random listing
+ *
+ * @return returns a listing if there is at least one in DB; null otherwise
+ */
+ public Listing GetRandomListing();
+ 
+ /**
+ * Obtain a particular listing
+ *
+ * @param listingID the id of the listing to obtain
+ * @return the listing corresponding to given ID; null if such a listing doesn't exist
+ */
+ public Listing GetListing(int listingID);
+ 
+ /**
+ * Incremements the number of views on a particular listing
+ *
+ * @param listingID the id of the listing to edit
+ */
+ public void IncrementListingViews(int listingID);
  
 /**
  * Set the listing's paused status to be true or false
