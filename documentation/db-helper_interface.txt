@@ -131,7 +131,7 @@ public User GetUser(int userID);
  *
  * @return returns a list of listings
  */		
-public List<Listings> GetAllListings();
+public List<Listing> GetAllListings();
 
 /**
  * Obtain a list of all users
