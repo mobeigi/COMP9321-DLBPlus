@@ -17,13 +17,20 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SetupServlet extends HttpServlet {
 
-		// Maintains connection with database
-		private DBHelper db = null;
+	// Maintains connection with database
+	private DBHelper db = null;
     /**
      * @see HttpServlet#HttpServlet()
      */
     public SetupServlet() {
         super();
+        
+        // Instantiate database connection
+		this.db = new DBHelper();
+		boolean initSuccess = this.db.init();
+		if (!initSuccess) {
+			System.out.println("LOL there was an error.");
+		}
     }
 
 
@@ -31,12 +38,8 @@ public class SetupServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String stringId = request.getParameter("id");
-		if(this.db == null){
-			this.db = new DBHelper();
-			this.db.init();
-		}
 		
+		String stringId = request.getParameter("id");
 		if (stringId != null) {
 			Integer intId = Integer.parseInt(request.getParameter("id"));
 			LinkedList<String> entry = getEntryDeets(intId);
@@ -45,8 +48,12 @@ public class SetupServlet extends HttpServlet {
 		    RequestDispatcher rd = request.getRequestDispatcher("/publication.jsp");
 		    rd.forward(request, response);
 		} else {
-			Publication pub = this.db.GetRandomPublication();
-			pub.showDetails();
+			if (this.db.dbConnStatus) {
+				Publication pub = this.db.GetRandomPublication();
+				pub.showDetails();
+			} else {
+				System.out.println("Could not get random publication. Connection doesn't exist.");
+			}
 			
 			request.getSession().invalidate();
 		    RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
@@ -56,8 +63,9 @@ public class SetupServlet extends HttpServlet {
 
 	private LinkedList<String> getEntryDeets(Integer pubID) {
 		Publication pub = this.db.GetPublication(pubID);
-		LinkedList<String> entryDetails = pub.getPubDetails();
-		return entryDetails;	
+		//LinkedList<String> entryDetails = pub.getPubDetails();
+		//return entryDetails;	
+		return null;
 	}
 
 	/**
@@ -68,7 +76,7 @@ public class SetupServlet extends HttpServlet {
 		String link = "result.jsp";
 			
 		if(req.equals("back")){
-			getRandomPub(request);
+			// getRandomPub(request);
 			link = "index.jsp";
 		} else if(req.equals("search")){
 			String query = request.getParameter("searchQuery");
@@ -94,9 +102,11 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("remove")) {
 			link = remove(request);
 		} else if(req.equals("add")){
+			
 			Integer id = Integer.parseInt(request.getParameter("publicationID"));
 			 ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("ShoppingCart");
 			 LinkedList<Publication> shoppingCartItems = shoppingCart.getElements();
+			 /*
 			 if (shoppingCartItems.contains(this.db.get(id))) {
 				 request.setAttribute("isAlreadySelected", true);
 			 }
@@ -105,6 +115,7 @@ public class SetupServlet extends HttpServlet {
 	    	 		shoppingCartItems.add(this.db.get(id));
 	    	 		shoppingCart.setElements(shoppingCartItems);
 			 }
+			 */
 			 request.setAttribute("cartSize", shoppingCartItems.size());
 			 link = "cart.jsp";
 					
@@ -157,7 +168,7 @@ public class SetupServlet extends HttpServlet {
 			return "cart.jsp";
 		}
 		for (String item : itemsToRemove) {
-			itemsInCart.remove(this.db.get(Integer.parseInt(item)));
+			//itemsInCart.remove(this.db.get(Integer.parseInt(item)));
 		}
 		request.setAttribute("cartSize", itemsInCart.size());
 		return "cart.jsp";

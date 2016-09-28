@@ -19,7 +19,7 @@ public class DBHelper {
 	private static final String dbPass = "password";
 
 	private Connection dbConn = null;
-	private boolean dbConnStatus = false;
+	public boolean dbConnStatus = false;
 
 	/**
 	 * Initiate connection to DB
@@ -35,8 +35,9 @@ public class DBHelper {
 											dbUser, dbPass);
 			dbConnStatus = true;
 
-			//Get total number of publications
+			System.out.println("Connected to database!");
 		} catch (Exception e) {
+			System.out.println(e);
 			dbConnStatus = false;
 		}
 
