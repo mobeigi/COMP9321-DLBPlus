@@ -72,7 +72,7 @@
 								        <option>WWW</option>
 				    				</select>
 				  				</div>
-				  				<div class="col s3">
+								<div class="input-field col s3" style="vertical-align: middle">
 				  					<button class="btn waves-effect waves-light" type="submit" value="Search">Search
 				  						<i class="material-icons right">send</i>
 				  					</button>

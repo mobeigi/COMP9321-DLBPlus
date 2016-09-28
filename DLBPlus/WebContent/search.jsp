@@ -12,51 +12,149 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Bibliographic Library | Advanced Search</title>
-
-    <link rel="stylesheet" type="text/css" href="theme/styles.css" />
-
-</head>
-<body>
-	<form action = 'setup' method = 'GET'>
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	
-	</form>
-    <div id="page3">
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
 
-        <center><h1>Bibliographic Library</h1></center>
-        
-        <form id="aSearchForm" action="setup" method="post">
-    		<fieldset>
-               	<h2>Title:</h2><input id="textbox" name="searchTitle" type="text" /><br><br><br>
-           		<h2>Author:</h2><input id="textbox" name="searchAuthor" type="text" /><br><br><br>
-     		    <h2>Editor:</h2><input id="textbox" name="searchEditor" type="text" /><br><br><br>
-     		    <h2>Volume:</h2><input id="textbox" name="searchVolume" type="text" /><br><br><br>
-     		    <h2>Publisher:</h2><input id="textbox" name="searchPubber" type="text" /><br><br><br>
-     		    <h2>ISBN:</h2><input id="textbox" name="searchISBN" type="text" /><br><br><br>
-           		<h2>Year:</h2><input id="textbox" name="searchYear" type="text" maxlength="4" pattern="\d{4}"/><br><br><br>
-                <h2>Publication Type: </h2><select id="dropdown" name="searchPubType" >
-                	<option>Any</option>
-                    <option>Article</option>
-                    <option>Inproceedings</option>
-                    <option>Proceedings</option>
-                    <option>Book</option>
-                    <option>Incollection</option>
-                    <option>Phdthesis</option>
-                    <option>Masterthesis</option>
-                    <option>WWW</option>
-                </select><br><br><br>
-            </fieldset>
-			<div align='right'>
-	            <input type="hidden" name="action" value="aSearch"/>
-				<a href ="cart.jsp">Shopping Cart</a>
-	            <input type="submit" value="Search" id="button" />
-  			</div>
-        </form>
+<body>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/materialize.min.js"></script>
+	 <script>
+	   $(document).ready(function() {
+	      $('select').material_select();
+	  });
+	</script>
+	
+	<!-- Header -->
+	<nav class="light-blue lighten-1" role="navigation">
+	   <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+	     <ul class="right hide-on-med-and-down">
+	       <li><a href="#">Advanced Search</a></li>
+	       <li><a href="#">Shopping Cart</a></li>
+	       <li><a href="#">Sign Up</a></li>
+	       <li><a href="#">Login</a></li>
+	     </ul>
+	   </div>
+	</nav>
+	<div class="section no-pad-bot" id="index-banner">
+    	<div class="container">
+    		<br><br>
+    		<h1 class="header center orange-text">Bibliographic Library</h1>
+    		<br><br>
+        </div>
+ 	</div>
+ 	
+ 	<!-- Body -->
+ 	<div class="row">
+ 		<div class="col s8 offset-s2">
+ 			<div class="card white">
+        		<div class="card-content black-text">
+					<form action="setup" method="post">
+        				<div class="row">
+        					<div class="col s12">
+			              		<input placeholder="Title"     id="textbox" name="searchTitle" type="text" />
+		              		</div>
+		              	</div>
+		              	<div class="row">
+		              		<div class="col s6">
+			           			<input placeholder="Author"    id="textbox" name="searchAuthor" type="text" />
+			           		</div>
+			           		<div class="col s6">
+			     		    	<input placeholder="Editor"    id="textbox" name="searchEditor" type="text" />
+		     		    	</div>
+			     		</div>
+			     		<div class="row">
+			     			<div class="col s6">
+			     		    	<input placeholder="Volume"    id="textbox" name="searchVolume" type="text" />
+			     		    </div>
+			     		    <div class="col s6">
+			     		    	<input placeholder="Publisher" id="textbox" name="searchPubber" type="text" />
+			     		    </div>
+			     		</div>
+			     		<div class="row">
+			     			<div class="col s6">
+			     		    	<input placeholder="ISBN"      id="textbox" name="searchISBN" type="text" />
+			     		    </div>
+			     		    <div class="col s6">
+			           			<input placeholder="YYYY"      id="textbox" name="searchYear" type="text" maxlength="4" pattern="\d{4}"/>
+			           		</div>
+			           	</div>
+			           	<div class="row">
+				           	<div class="col s6">
+				           		<label>Publication Type</label>
+				                <select name="pubType">
+							    	<option selected>Any</option>
+						        	<option>Article</option>
+							        <option>Inproceedings</option>
+							        <option>Proceedings</option>
+							        <option>Book</option>
+							        <option>Incollection</option>
+							        <option>Phdthesis</option>
+							        <option>Masterthesis</option>
+							        <option>WWW</option>
+		    					</select>		    					
+		    				</div>
+	    				
+							<div class="col s6 center">
+								<br>
+					            <input type="hidden" name="action" value="aSearch"/>
+					            <button class="btn waves-effect waves-light" type="submit" value="Search">Search
+			  						<i class="material-icons right">send</i>
+			  					</button>
+			  					<br><br>
+				  			</div>
+				  		</div>
+					</form>        
+	        	</div>
+      		</div>
+      	</div>
+   	</div>
+   	<div class="center-align">
+	    <form action="setup" method="POST">
+			<input type="hidden" name="action" value="back"/>
+			<button class="btn waves-effect waves-light" type="submit" value="Search">Back</button>
+			<br>    
+	    </form>
+    </div><br>
+    
+     <!-- Footer -->
+    <footer class="page-footer orange">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Company Bio</h5>
+          <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+
+
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Settings</h5>
+          <ul>
+            <li><a class="white-text" href="#!">Link 1</a></li>
+            <li><a class="white-text" href="#!">Link 2</a></li>
+            <li><a class="white-text" href="#!">Link 3</a></li>
+            <li><a class="white-text" href="#!">Link 4</a></li>
+          </ul>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Connect</h5>
+          <ul>
+            <li><a class="white-text" href="#!">Link 1</a></li>
+            <li><a class="white-text" href="#!">Link 2</a></li>
+            <li><a class="white-text" href="#!">Link 3</a></li>
+            <li><a class="white-text" href="#!">Link 4</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <form action="setup" method="POST">
-		<input type="hidden" name="action" value="back"/>
-		<center><input type="submit" value="Back" id="button"/></center>
-		<br>    
-    </form>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
 
