@@ -133,10 +133,18 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Obtain a user
 	 *
-	 * @param userid the id of the user
+	 * @param userID the id of the user
 	 * @return returns a user when successful, null otherwise
 	 */	
 	public User GetUser(int userID);
+  
+  /**
+   * Obtain a user
+   *
+   * @param username the username of the user
+   * @return returns a user when successful, null otherwise
+   */
+  public User GetUser(String username);
 
 	/**
 	 * Obtain a list of all existing listings
@@ -155,7 +163,7 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Obtain all active cart items in a given cart
 	 *
-	 * @param cartid the id of the cart
+	 * @param cartID the id of the cart
 	 * @return returns a list of Cart Items
 	 */	
 	public List<CartItem> GetActiveCartItems(int cartID);
@@ -163,7 +171,7 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Obtain all removed cart items in a given cart
 	 *
-	 * @param cart id the cart of id
+	 * @param cartID the cart of id
 	 * @return returns a list of cart items that have been removed
 	 */	
 	public List<CartItem> GetRemovedCartItems(int cartID);
@@ -171,7 +179,7 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Obtain the order history of a particular user
 	 *
-	 * @param userid the id of the user
+	 * @param userID the id of the user
 	 * @return returns a list of orders that the user has made
 	 */	
 	public List<Order> GetOrderHistory(int userID);
