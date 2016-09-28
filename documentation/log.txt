@@ -12,3 +12,6 @@ Added 'acctcreated'as an attribute in 'user', to preserve when accout was create
 
 28/09/2016 @ 11:23am
 Added 'numviews' as an attribute to listings
+
+28/09/2016 @ 4:00pm
+Changed listing fields as timestamp
