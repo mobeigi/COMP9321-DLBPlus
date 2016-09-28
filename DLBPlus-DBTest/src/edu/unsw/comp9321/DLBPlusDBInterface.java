@@ -119,14 +119,6 @@ public interface DLBPlusDBInterface {
 	public List<CartItem> GetRemovedCartItems(int cartID);
 	
 	/**
-	 * Obtain a user
-	 *
-	 * @param userID the id of the user
-	 * @return returns a user when successful, null otherwise
-	 */	
-	public User GetUser(int userID);
-	
-	/**
 	 * Create a user by inserting provideduser details into database
 	 *
 	 * @param username Provided username
@@ -153,6 +145,14 @@ public interface DLBPlusDBInterface {
 	* @return returns a user when successful, null otherwise
 	*/
 	public User GetUser(String username);
+	
+	/**
+	 * Obtain a specific user
+	 *
+	 * @param userID the id of the user to obtain
+	 * @return returns User object, null if doesn't exist
+	 */	
+	public User GetUser(int userID);
 	
 	/**
 	* Checks whether a user with a particular username exists
@@ -184,14 +184,6 @@ public interface DLBPlusDBInterface {
 	 * @return returns a list of users in specified range
 	 */	
 	 public List<User> GetUsers(int startIndex, int endIndex);
-	 
-	/**
-	 * Obtain a specific user
-	 *
-	 * @param userID the id of the user to obtain
-	 * @return returns User object, null if doesn't exist
-	 */	
-	public User GetUser(int userID);
 	
 	/**
 	 * Remove a particular user
@@ -206,9 +198,9 @@ public interface DLBPlusDBInterface {
 	 *
 	 * @param userID the id of the user to change\\
 	 * @param newStatus the new status to change to
-	 * @return boolean True when admin is verified, False otherwise
+	 * @return boolean True when status is changed, False otherwise
 	 */
-	public boolean ChangeUserStatus(int userID, boolean newStatus);
+	public boolean SetUserStatus(int userID, boolean newStatus);
 
 	/**
 	 * Obtain a list of all existing listings
