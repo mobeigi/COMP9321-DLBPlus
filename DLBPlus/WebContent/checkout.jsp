@@ -11,5 +11,8 @@ WE CHECKOUTING BOIS
  <div id="searchRightContainer">
                     <a href ="confirmPurchase.jsp">Confirm Purchase</a>
                 </div>
+                
+                
+<jsp:include page="footer.jsp" />
 </body>
 </html>

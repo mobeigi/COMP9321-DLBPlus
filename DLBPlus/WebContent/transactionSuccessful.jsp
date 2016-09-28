@@ -8,5 +8,8 @@
 </head>
 <body>
 WE TRANSACTIONSUCCESSFULING BOIS
+
+
+	<jsp:include page="footer.jsp" />
 </body>
 </html>

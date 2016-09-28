@@ -8,5 +8,7 @@
 </head>
 <body>
 WE USERSELLISTINGSING BOIS
+
+	<jsp:include page="footer.jsp" />
 </body>
 </html>
