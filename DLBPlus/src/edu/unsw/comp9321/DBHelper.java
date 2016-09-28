@@ -169,6 +169,10 @@ public class DBHelper {
 				p.setChapter(chapter);
 				p.setRecprice(recprice);
 				p.setRating(rating);
+				
+				// Finalise publication
+				p.finalise();
+				
 			} else { //No result found
 				p = null;
 			}

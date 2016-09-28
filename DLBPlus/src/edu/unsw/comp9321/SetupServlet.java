@@ -2,9 +2,7 @@ package edu.unsw.comp9321;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -49,8 +47,26 @@ public class SetupServlet extends HttpServlet {
 		    rd.forward(request, response);
 		} else {
 			if (this.db.dbConnStatus) {
-				Publication pub = this.db.GetRandomPublication();
-				pub.showDetails();
+				List<Publication> randPublications = new ArrayList<Publication>();
+				List<Integer> randPubIDs = new ArrayList<Integer>();
+				
+				// Obtain a unique list of random publications
+				while (randPublications.size() < 10) {
+					Publication pubToAdd = this.db.GetRandomPublication();
+					while (randPubIDs.contains(pubToAdd.getId())) {
+						pubToAdd = this.db.GetRandomPublication();
+					}
+					randPublications.add(pubToAdd);
+					randPubIDs.add(pubToAdd.getId());
+				}
+				
+				for (Publication pub : randPublications) {
+					pub.showDetails();
+				}
+				
+				// Set random publication list to session
+				request.setAttribute("found", randPublications);
+				
 			} else {
 				System.out.println("Could not get random publication. Connection doesn't exist.");
 			}

@@ -3,6 +3,7 @@
 <%@ page import="edu.unsw.comp9321.*, java.util.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <jsp:useBean id="ShoppingCart" class="edu.unsw.comp9321.ShoppingCart"
 	scope="session" />
@@ -121,11 +122,12 @@
 							</tr>
 						</thead>
 						<tbody>
+							<p>There are ${fn:length(found)} random publications!</p>
 							<c:forEach var="pub" items="${found}">
 								<tr>
 									<td><c:out value="${pub.title}" /></td>
-									<td><c:out value="${pub.author}" /></td>
-									<td><c:out value="${pub.pubType}" /></td>
+									<td><c:out value="${pub.formattedAuthors}" /></td>
+									<td><c:out value="${pub.type}" /></td>
 								</tr>
 							</c:forEach>
 						</tbody>	
