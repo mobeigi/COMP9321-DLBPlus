@@ -41,6 +41,8 @@ public class Publication {
 	private String chapter;
 	private Double recprice;
 	private String rating;
+	
+	private String formattedAuthors = "";
 
 	/**
 	 * Default constructor
@@ -298,5 +300,29 @@ public class Publication {
 
 	public void setRating(String rating) {
 		this.rating = rating;
+	}
+	
+	public String getFormattedAuthors() {
+		return this.formattedAuthors;
+	}
+	
+	/**
+	 * Finalise the publication class
+	 */
+	public void finalise() {
+		// Set formattedAuthors
+		for (String author : this.authors) {
+			this.formattedAuthors += author + "; ";
+		}
+		this.formattedAuthors.trim();
+	}
+	
+	/**
+	 * Print out details of this publication
+	 */
+	public void showDetails() {
+		System.out.println("id: " + this.id);
+		System.out.println("Number of authors: " + this.authors.size());
+
 	}
 }

@@ -323,13 +323,6 @@ public class Publication {
 	public void showDetails() {
 		System.out.println("id: " + this.id);
 		System.out.println("Number of authors: " + this.authors.size());
-		
-		// Join lists
-		System.out.println("Number of authors: " + this.authors.size());
-		for (String author : this.authors) {
-			this.formattedAuthors += author + "; ";
-		}
-		this.formattedAuthors.trim();
 		System.out.println(this.formattedAuthors);
 	}
 }

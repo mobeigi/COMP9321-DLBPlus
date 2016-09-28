@@ -103,8 +103,15 @@ public class DBHelper implements DLBPlusDBInterface {
 			if (rs.next()) {
 				Integer id = rs.getInt("id");
 				String type = rs.getString("type");
-				List<String> authors = Arrays.asList(rs.getString("authors").split("\\|"));
-				List<String> editors = Arrays.asList(rs.getString("editors").split("\\|"));
+				
+				List<String> authors = (rs.getString("authors").equals("")) ? 
+										new LinkedList<String>() 
+										: new LinkedList<String>(Arrays.asList(rs.getString("authors").split("\\|")));
+
+				List<String> editors = (rs.getString("editors").equals("")) ? 
+						new LinkedList<String>() 
+						: new LinkedList<String>(Arrays.asList(rs.getString("editors").split("\\|")));
+				
 				String title = rs.getString("title");
 				String pages = rs.getString("pages");
 				Integer year = rs.getInt("year");
@@ -112,16 +119,35 @@ public class DBHelper implements DLBPlusDBInterface {
 				String volume = rs.getString("volume");
 				String number = rs.getString("number");
 				String month = rs.getString("month");
-				List<String> urls = Arrays.asList(rs.getString("urls").split("\\|"));
-				List<String> ees = Arrays.asList(rs.getString("ees").split("\\|"));
+				
+				List<String> urls = (rs.getString("urls").contains("")) ? 
+						new LinkedList<String>() 
+						: new LinkedList<String>(Arrays.asList(rs.getString("urls").split("\\|")));
+				
+				List<String> ees = (rs.getString("ees").equals("")) ? 
+						new LinkedList<String>() 
+						: new LinkedList<String>(Arrays.asList(rs.getString("ees").split("\\|")));
+				
 				String cdrom = rs.getString("cdrom");
-				List<String> cites = Arrays.asList(rs.getString("cites").split("\\|"));
+				
+				List<String> cites = (rs.getString("cites") == null) ? 
+						new LinkedList<String>() 
+						: new LinkedList<String>(Arrays.asList(rs.getString("cites").split("\\|")));
+				
 				String publisher = rs.getString("publisher");
 				String note = rs.getString("note");
 				String crossref = rs.getString("crossref");
-				List<String> isbns = Arrays.asList(rs.getString("isbns").split("\\|"));
+				
+				List<String> isbns = (rs.getString("isbns") == null) ? 
+						new LinkedList<String>() 
+						: new LinkedList<String>(Arrays.asList(rs.getString("isbns").split("\\|")));
+				
 				String series = rs.getString("series");
-				List<String> venues = Arrays.asList(rs.getString("venues").split("\\|"));  //school, booktitle and journal
+				
+				List<String> venues = (rs.getString("venues") == null) ? 
+						new LinkedList<String>() 
+						: new LinkedList<String>(Arrays.asList(rs.getString("venues").split("\\|")));
+						
 				String chapter = rs.getString("chapter");
 				Double recprice = rs.getDouble("recPrice");
 				String rating = rs.getString("rating");
@@ -170,6 +196,10 @@ public class DBHelper implements DLBPlusDBInterface {
 				p.setChapter(chapter);
 				p.setRecprice(recprice);
 				p.setRating(rating);
+				
+				// Finalise publication
+				p.finalise();
+				
 			} else { //No result found
 				p = null;
 			}
@@ -297,7 +327,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return boolean True when paused was succesfully set. False otherwise
 	 */
 	 public boolean SetPausedStatus(int listingID, boolean paused) {
-		 // TODO
+		 return true;
 	 }
 	 
 	/**
