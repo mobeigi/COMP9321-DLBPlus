@@ -287,26 +287,58 @@ public class DBHelper implements DLBPlusDBInterface {
 		}
 
 	}
-	
-	/**
-	 * Validate a user
-	 *
-	 * @param inputUsername 
-	 * @param inputPwd
-	 * @return boolean True when user is verifed, False otherwise
-	 */
+  
+  /**
+   * Validate a user
+   *
+   * @param inputUsername the username of user
+   * @param inputPwd plaintext password for user
+   * @return boolean True when user is verifed, False otherwise
+   */
 	public boolean VerifyUser(String inputUsername, String inputPwd) {
-		// TODO
-		return false;
+    if (!dbConnStatus)
+      return false;
+    
+    try {
+      if (doesUserExist(inputUsername)) { //user exists
+        
+        //Get salt + hash from database
+        Statement stmt;
+        dbConn.setAutoCommit(false);
+        stmt = dbConn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT salt, password FROM users where username = '" + inputUsername + "';" );
+        
+        if (rs.next()) {
+          String salt = rs.getString("salt");
+          String storePasswordHash = rs.getString("password");
+          
+          //Create testHash to compare
+          String testHash = DigestUtils.sha1Hex(salt + inputPwd);
+          
+          //Perform comparison
+          //Valid input password
+          return testHash.equals(storePasswordHash);
+        } else {
+          //Should never happen
+          return false;
+        }
+      } else {
+        PrintDebugMessage("VerifyUser", "Error! No user exists with username: " + inputUsername);
+        return false;
+      }
+    }
+    catch (SQLException e) {
+      return false;
+    }
 	}
-	
-	/**
-	 * Validate an admin
-	 *
-	 * @param inputUsername 
-	 * @param inputPwd
-	 * @return boolean True when admin is verifed, False otherwise
-	 */
+  
+  /**
+   * Validate an admin
+   *
+   * @param inputUsername the username of admin
+   * @param inputPwd plaintext password for admin
+   * @return boolean True when admin is verifed, False otherwise
+   */
 	public boolean VerifyAdmin(String inputUsername, String inputPwd) {
 		// TODO
 		return false;

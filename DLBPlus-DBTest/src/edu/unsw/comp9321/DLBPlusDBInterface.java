@@ -50,18 +50,18 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Validate a user
 	 *
-	 * @param inputUsername 
-	 * @param inputPwd
-	 * @return boolean True when user is verifed, False otherwise
+	 * @param inputUsername the username of user
+	 * @param inputPwd plaintext password for user
+	 * @return boolean True when user is verified, False otherwise
 	 */
 	public boolean VerifyUser(String inputUsername, String inputPwd);
 
 	/**
 	 * Validate an admin
 	 *
-	 * @param inputUsername 
-	 * @param inputPwd
-	 * @return boolean True when admin is verifed, False otherwise
+	 * @param inputUsername the username of admin
+	 * @param inputPwd plaintext password for admin
+	 * @return boolean True when admin is verified, False otherwise
 	 */
 	public boolean VerifyAdmin(String inputUsername, String inputPwd);
 
