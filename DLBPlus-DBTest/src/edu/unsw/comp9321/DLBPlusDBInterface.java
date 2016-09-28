@@ -4,6 +4,7 @@
  */
 package edu.unsw.comp9321;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 public interface DLBPlusDBInterface {
@@ -64,14 +65,14 @@ public interface DLBPlusDBInterface {
 	 * @return boolean True when admin is verified, False otherwise
 	 */
 	public boolean VerifyAdmin(String inputUsername, String inputPwd);
-
-	/**
-	 * Create a listing (item for sale)
-	 *
-	 * @param newListing The new listing to be added
-	 * @return boolean True when listing was successfully created; false otherwise
-	 */
-	 public boolean CreateListing(Listing newListing);
+  
+  /**
+   * Create a listing (item for sale)
+   *
+   * @return Listing Null if listing unsuccessful, Listing of newly created listing otherwise
+   */
+  public Listing CreateListing(User seller, Publication item, Integer quantity, Timestamp listdate, Timestamp enddate,
+                               Double sellprice, String image);
 	 
 	 /**
 	 * Obtain a random listing

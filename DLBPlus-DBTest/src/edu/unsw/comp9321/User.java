@@ -17,7 +17,6 @@ public class User {
   private Boolean acctconfrm; //true = confirmed, false = unconfirmed
   private Date acctcreated;
   
-  
 	public User() {}
 
 	//Getters and setters

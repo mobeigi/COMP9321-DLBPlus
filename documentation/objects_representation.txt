@@ -49,7 +49,7 @@
 	Integer				buyerid
 	Integer				sellerid
 	Integer				itemid
-	DateTime			orderdate
+	Date				orderdate
 	Double				price
 
 = Listing
@@ -57,8 +57,8 @@
 	Integer				sellerid
 	Integer				itemid
 	Integer				quantity
-	DateTime			listdate
-	DateTime			enddate
+	Date				listdate
+	Date				enddate
 	Double				price
 	String				image
 	Boolean				paused

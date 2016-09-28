@@ -93,7 +93,7 @@ def setup_db():
 			"	buyerid		SERIAL	REFERENCES users (id)," \
 			"	sellerid	SERIAL	REFERENCES users (id)," \
 			"	itemid		SERIAL	REFERENCES publications (id)," \
-			"	order_date	DATE	NOT NULL," \
+			"	order_date	TIMESTAMP WITH TIME ZONE	NOT NULL," \
 			"	price		MONEY	NOT NULL" \
 			");"
 	cursor.execute(query)
@@ -105,8 +105,8 @@ def setup_db():
 				sellerid	SERIAL	REFERENCES users (id),
 				itemid		SERIAL	REFERENCES publications (id),
 				quantity	INT		NOT NULL,
-				listdate	DATE	NOT NULL,
-				enddate		DATE	NOT NULL,
+				listdate	TIMESTAMP WITH TIME ZONE	NOT NULL,
+				enddate		TIMESTAMP WITH TIME ZONE	NOT NULL,
 				sellprice	MONEY	NOT NULL,
 				image		TEXT,
 				paused		BOOLEAN	DEFAULT FALSE,
