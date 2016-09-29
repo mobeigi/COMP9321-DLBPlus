@@ -57,7 +57,7 @@
 			     		</div>
         				<div class="row">
         					<div class="col s12">
-			              		<input class="validate" placeholder="Email" required="" aria-required="" name="email" type="text" />
+			              		<input class="validate" placeholder="Email" required="" aria-required="" name="email" type="text" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"/>
 		              		</div>
 		              	</div>
         				<div class="row">
@@ -67,7 +67,7 @@
 		              	</div>			     		
 		              	<div class="row">
 			     			<div class="col s6">
-			     		    	<input class="datepicker" placeholder="Date of Birth" required="" aria-required="" name="dob" type="date" />
+			     		    	<input class="datepicker validate" placeholder="Date of Birth" required="" aria-required="" name="dob" type="date" pattern="(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d"/>
 			     		    </div>
 			     		    <div class="col s6">
 			     		    	<input class="validate" placeholder="Credit Card Number" required="" aria-required="" name="ccn" type="text" />
