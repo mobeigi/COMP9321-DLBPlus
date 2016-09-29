@@ -67,22 +67,23 @@ public interface DLBPlusDBInterface {
 	 * @return the listing corresponding to given ID; null if such a listing doesn't exist
 	 */
 	 public Listing GetListing(int listingID);
-	 
-	/**
-	 * Incremements the number of views on a particular listing
-	 *
-	 * @param listingID the id of the listing to edit
-	 */
-	 public void IncrementListingViews(int listingID);
-	 
-	/**
-	  * Set the listing's paused status to be true or false
-	  *
-	  * @param listingID the id to change status
-	  * @param paused the status to be changed to
-	  * @return boolean True when paused was succesfully set. False otherwise
-	  */
-	public boolean SetPausedStatus(int listingID, boolean paused);
+  
+  /**
+   * Increments the number of views on a particular listing
+   *
+   * @param listing the listing being changed
+   * @return true if successful, false otherwise
+   */
+  public boolean IncrementListingViews(Listing listing);
+  
+  /**
+   * Set the listing's paused status to be true or false
+   *
+   * @param listing the listing to modify paused status
+   * @param paused the new value for paused
+   * @return boolean True when paused was successfully set. False otherwise
+   */
+	public boolean SetPausedStatus(Listing listing, boolean paused);
 
 	/**
 	 * Add a listing to a user's cart

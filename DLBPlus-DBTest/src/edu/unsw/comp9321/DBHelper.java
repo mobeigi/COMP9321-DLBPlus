@@ -393,12 +393,26 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Set the listing's paused status to be true or false
 	 *
-	 * @param listingID the listing to modify paused status
-   * @param paused TODO
-	 * @return boolean True when paused was succesfully set. False otherwise
+	 * @param listing the listing to modify paused status
+   * @param paused the new value for paused
+	 * @return boolean True when paused was successfully set. False otherwise
 	 */
-	 public boolean SetPausedStatus(int listingID, boolean paused) {
-		 return true;
+	 public boolean SetPausedStatus(Listing listing, boolean paused) {
+     if (!dbConnStatus)
+       return false;
+    
+     try {
+       Statement stmt;
+       dbConn.setAutoCommit(false);
+       stmt = dbConn.createStatement();
+       stmt.executeUpdate("UPDATE listings SET paused = " + paused + " WHERE listingid = " + listing.getListingid() + ";" );
+       dbConn.commit();
+       listing.setPaused(paused); //update local object
+       return true;
+     }
+     catch (SQLException e) {
+       return false;
+     }
 	 }
 	 
 	/**
@@ -709,13 +723,27 @@ public class DBHelper implements DLBPlusDBInterface {
   }
 
 	 /**
-	 * Incremements the number of views on a particular listing
+	 * Increments the number of views on a particular listing
 	 *
-	 * @param listingID the id of the listing to edit
+	 * @param listing the listing being changed
+   * @return true if successful, false otherwise
 	 */
-	public void IncrementListingViews(int listingID) {
-		// TODO Auto-generated method stub
-		
+	public boolean IncrementListingViews(Listing listing) {
+    if (!dbConnStatus)
+      return false;
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      stmt.executeUpdate("UPDATE listings SET numviews = numviews + 1 WHERE listingid = " + listing.getListingid() + ";" );
+      dbConn.commit();
+      listing.setNumviews(listing.getNumviews() + 1); //update local object
+      return true;
+    }
+    catch (SQLException e) {
+      return false;
+    }
 	}
   
   /**

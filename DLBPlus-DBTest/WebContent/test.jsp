@@ -37,37 +37,20 @@
   if (u3 == null)
     u3 = db.GetUser("joe3");
 
-  //Get item with id 10
-  Publication p = db.GetPublication(10);
+  //Get Listing 5
+  Listing l = db.GetListing(5);
+  System.out.println(l.getListingid() + " " + l.getNumviews()); //cur views
+  db.IncrementListingViews(l); //view increased now
+	System.out.println(l.getListingid() + " " + l.getNumviews()); //new views
 
-  //Create a listing
-  Timestamp start = new Timestamp(date.getTime());
-  Timestamp end = new Timestamp(date.getTime() + 10000);
+  //Set paused status
+  db.SetPausedStatus(l, true);
+  System.out.println("Paused: " + l.getPaused());
+  db.SetPausedStatus(l, false);
+  System.out.println("Paused: " + l.getPaused());
 
-  Listing l = db.CreateListing(u1, p, 100, start, end, 22.50, "image");
-  System.out.println("Listing id: " + l.getListingid() + " " + l.getSellprice());
 
-  //Listing l2 = db.GetListing(5);
-  //System.out.println("Listing id: " + l2.getListingid() + " " + l2.getSellprice());
 
-  // ====== ADMIN TESTING
-  // Create some admins
-  System.out.println("Inserting some admins...");
-  Admin admin1 = db.CreateAdmin("root", "password");
-  if (admin1 == null) {
-	  admin1 = db.GetAdmin("root");
-	  admin1.showDetails();
-  }
-  
-  // Test admin verify
-  boolean admin1_verfied = db.VerifyAdmin("root", "password");
-  if (admin1_verfied) {
-	  System.out.println("Admin 'root' is succesfully verified!");
-  } else {
-	  System.out.println("Whoops, something wrong with verification function...");
-  }
-	  
-	
 %>
 </body>
 </html>
