@@ -67,7 +67,7 @@
 		              	</div>			     		
 		              	<div class="row">
 			     			<div class="col s6">
-			     		    	<input class="datepicker validate" placeholder="Date of Birth" required="" aria-required="" name="dob" type="date" pattern="(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d"/>
+			     		    	<input class="datepicker validate" placeholder="Date of Birth" required="" aria-required="" name="dob" type="date"/>
 			     		    </div>
 			     		    <div class="col s6">
 			     		    	<input class="validate" placeholder="Credit Card Number" required="" aria-required="" name="ccn" type="text" />
@@ -94,13 +94,7 @@
       		</div>
       	</div>
    	</div>
-   	<div class="center-align">
-	    <form action="setup" method="POST">
-	    		<input type="hidden" name="action" value="back"/>
-			<button class="btn waves-effect waves-light" type="submit" value="back">Back</button>
-			<br>
-	    </form>
-    </div><br>
+	<br>
     
 
     <jsp:include page="footer.jsp" />

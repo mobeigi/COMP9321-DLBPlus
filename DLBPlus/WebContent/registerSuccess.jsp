@@ -46,8 +46,8 @@
 			  		</div>
 					<div class="center-align">
 					    <form action="setup" method="POST">
-							<input type="hidden" name="action" value="back"/>
-							<button class="btn waves-effect waves-light" type="submit" value="back">Back</button>
+							<input type="hidden" name="action" value="home"/>
+							<button class="btn waves-effect waves-light" type="submit" value="home">Home</button>
 							<br>    
 					    </form>
 				    </div>     
