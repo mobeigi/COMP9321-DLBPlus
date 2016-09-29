@@ -278,7 +278,7 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Return the total number of listings
 	 *
-	 * @return the total number of listings
+	 * @return the total number of listings, or -1 on error
 	 */	
 	public int GetNumListings();
 	

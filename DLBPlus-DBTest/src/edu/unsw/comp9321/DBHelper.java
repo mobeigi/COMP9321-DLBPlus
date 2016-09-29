@@ -551,9 +551,29 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return returns a list of listings
 	 */		
 	public List<Listing> GetAllListings() {
-		List<Listing> allListings = new ArrayList<Listing>();
-		//TODO
-		return allListings;
+    List<Listing> allListings = new ArrayList<Listing>();
+    
+    if (!dbConnStatus)
+      return allListings;
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings;");
+      
+      Listing u = processResultSetIntoListing(rs);
+      
+      while (u != null) {
+        allListings.add(u);
+        u = processResultSetIntoListing(rs);
+      }
+    }
+    catch (SQLException e) {
+      return allListings;
+    }
+    
+    return allListings;
 	}
 	
 	/**
@@ -571,7 +591,7 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT * FROM users");
+      ResultSet rs = stmt.executeQuery("SELECT * FROM users;");
   
       User u = processResultSetIntoUser(rs);
       
@@ -718,8 +738,29 @@ public class DBHelper implements DLBPlusDBInterface {
    * @return returns a list of listings
    */
   public List<Listing> GetUserListings(int userID) {
-    List<Listing> l = new ArrayList<>();
-    return l;
+    List<Listing> userListings = new ArrayList<Listing>();
+  
+    if (!dbConnStatus)
+      return userListings;
+  
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings WHERE sellerid =" + userID + ";");
+    
+      Listing u = processResultSetIntoListing(rs);
+    
+      while (u != null) {
+        userListings.add(u);
+        u = processResultSetIntoListing(rs);
+      }
+    }
+    catch (SQLException e) {
+      return userListings;
+    }
+  
+    return userListings;
   }
 
 	 /**
@@ -785,11 +826,34 @@ public class DBHelper implements DLBPlusDBInterface {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	@Override
+  
+  /**
+   * Return the total number of listings
+   *
+   * @return the total number of listings, or -1 on error
+   */
 	public int GetNumListings() {
-		// TODO Auto-generated method stub
-		return 0;
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetNumListings", "No connection with database");
+      return -1;
+    }
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM listings;" );
+  
+      if (rs.next()) {
+        int count = rs.getInt("count");
+        return count;
+      }
+      
+      return -1; //This should never be returned
+      
+    } catch (SQLException e) {
+      return -1;
+    }
 	}
 	
 	@Override
@@ -839,7 +903,6 @@ public class DBHelper implements DLBPlusDBInterface {
 				return null;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
 			return null;
 		}
 	}

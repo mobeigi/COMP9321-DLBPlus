@@ -37,19 +37,21 @@
   if (u3 == null)
     u3 = db.GetUser("joe3");
 
-  //Get Listing 5
-  Listing l = db.GetListing(5);
-  System.out.println(l.getListingid() + " " + l.getNumviews()); //cur views
-  db.IncrementListingViews(l); //view increased now
-	System.out.println(l.getListingid() + " " + l.getNumviews()); //new views
+  //Get Listing
+  List<Listing> all = db.GetAllListings();
 
-  //Set paused status
-  db.SetPausedStatus(l, true);
-  System.out.println("Paused: " + l.getPaused());
-  db.SetPausedStatus(l, false);
-  System.out.println("Paused: " + l.getPaused());
+  for (Listing l : all)
+    System.out.println("ID: " + l.getListingid() + ", Price: " + l.getSellprice());
 
+  System.out.println();
 
+  List<Listing> userlistings = db.GetUserListings(u1.getId());
+
+  for (Listing l : userlistings)
+    System.out.println("ID: " + l.getListingid() + ", Price: " + l.getSellprice());
+
+  //Get total num of listings
+  System.out.println(db.GetNumListings());
 
 %>
 </body>
