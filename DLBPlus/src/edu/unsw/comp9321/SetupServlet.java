@@ -220,11 +220,15 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("confirmPurchase")){
 			link = "transactionSuccessful.jsp";
 		} else if(req.equals("modified")){
-			link = "userAccount.jsp";
+			link = "modifyDetails.jsp";
 		} else if(req.equals("toAccount")){
 			link = "userAccount.jsp";
-		} else if(req.equals("history")){
-			link = "orderhist.jsp";
+		} else if(req.equals("viewHist")){
+			//View past orders
+			link = "userSoldListings.jsp";
+		} else if(req.equals("viewListings")){
+			//View sales
+			link = "userSellListings.jsp";
 		}
 		
 		 RequestDispatcher rd = request.getRequestDispatcher("/"+link);

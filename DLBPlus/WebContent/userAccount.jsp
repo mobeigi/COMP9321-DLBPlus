@@ -47,16 +47,22 @@
         				<div class="col s6">
         					<h5 class="Header center flow-text">Orders</h5>
         					<br>
-       						<center><a href="?action=history&method=post">
-       							View Order History
-       						</a></center>			
+        					<div class="container center">
+	        					<form method="post" action="setup">
+		        					<input type="hidden" name="action" value="viewHist"/>
+		        					<button class="btn waves-effect waves-light" type="submit" value="viewHist">View Order History</button>			
+	       						</form>
+       						</div>
         				</div>
         				<div class="col s6">
-        					<h5 class="Header center flow-text">Your Listings</h5>
+        					<h5 class="Header center flow-text">Sales</h5>
         					<br>
-       						<center><a href="?action=history&method=post">
-       							View Listings
-       						</a></center>		
+        					<div class="container center">
+	        					<form method="post" action="setup">
+		        					<input type="hidden" name="action" value="viewListings"/>
+		        					<button class="btn waves-effect waves-light" type="submit" value="viewListings">View Listings</button>			
+	       						</form>
+       						</div>
         				</div>
         			</div>
         		</div>
@@ -73,9 +79,12 @@
         				<div class="col s12">
         					<h5 class="Header center flow-text">Account Management</h5>
         					<br>
-       						<center><a href="?action=history&method=post">
-       							Edit details
-       						</a></center>		
+        					<div class="container center">
+	        					<form method="post" action="setup">
+		        					<input type="hidden" name="action" value="modified"/>
+		        					<button class="btn waves-effect waves-light" type="submit" value="modified">Edit Details</button>			
+	       						</form>
+       						</div>
         				</div>
         			</div>
         		</div>
