@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<jsp:include page="navbar.jsp" />
 WE CONFIRMPURCHASING BOIS
  <form method="post" action="setup">
             <center>

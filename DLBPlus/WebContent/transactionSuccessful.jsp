@@ -8,7 +8,7 @@
 </head>
 <body>
 WE TRANSACTIONSUCCESSFULING BOIS
-
+	<jsp:include page="navbar.jsp" />
 
 	<jsp:include page="footer.jsp" />
 </body>

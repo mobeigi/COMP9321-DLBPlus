@@ -46,8 +46,8 @@ public class SetupServlet extends HttpServlet {
 		if (stringId != null) {
 			Integer intId = Integer.parseInt(request.getParameter("id"));
 			LinkedList<String> entry = getEntryDeets(intId);
-			request.setAttribute("pubEntry", entry);
-			request.setAttribute("publicationID", intId);
+			request.getSession().setAttribute("pubEntry", entry);
+			request.getSession().setAttribute("publicationID", intId);
 		    RequestDispatcher rd = request.getRequestDispatcher("/publication.jsp");
 		    rd.forward(request, response);
 		} else {
@@ -70,7 +70,7 @@ public class SetupServlet extends HttpServlet {
 				}
 				
 				// Set random publication list to session
-				request.setAttribute("found", randPublications);
+				request.getSession().setAttribute("found", randPublications);
 				
 			} else {
 				System.out.println("Could not get random publication. Connection doesn't exist.");
@@ -97,7 +97,6 @@ public class SetupServlet extends HttpServlet {
 		String link = "result.jsp";
 			
 		if(req.equals("back")){
-			// getRandomPub(request);
 			link = "index.jsp";
 		} else if(req.equals("home")){
 			link = "index.jsp";
@@ -131,15 +130,15 @@ public class SetupServlet extends HttpServlet {
 			 LinkedList<Publication> shoppingCartItems = shoppingCart.getElements();
 			 /*
 			 if (shoppingCartItems.contains(this.db.get(id))) {
-				 request.setAttribute("isAlreadySelected", true);
+				 request.getSession().setAttribute("isAlreadySelected", true);
 			 }
 			 else {
-	    	 		request.setAttribute("isAlreadySelected", false);
+	    	 		request.getSession().setAttribute("isAlreadySelected", false);
 	    	 		shoppingCartItems.add(this.db.get(id));
 	    	 		shoppingCart.setElements(shoppingCartItems);
 			 }
 			 */
-			 request.setAttribute("cartSize", shoppingCartItems.size());
+			 request.getSession().setAttribute("cartSize", shoppingCartItems.size());
 			 link = "cart.jsp";
 					
 		} else if(req.equals("viewPreviousSearchPage")){
@@ -216,7 +215,9 @@ public class SetupServlet extends HttpServlet {
 				errorMessage = "Incorrect Username or Password";
 				link = "login.jsp";
 			}
-			
+		} else if(req.equals("logout")){
+			request.getSession().setAttribute("user",null);
+			link = "index.jsp";
 		} else if(req.equals("confirmPurchase")){
 			link = "transactionSuccessful.jsp";
 		} else if(req.equals("modified")){
@@ -260,7 +261,7 @@ public class SetupServlet extends HttpServlet {
 		for (String item : itemsToRemove) {
 			//itemsInCart.remove(this.db.get(Integer.parseInt(item)));
 		}
-		request.setAttribute("cartSize", itemsInCart.size());
+		request.getSession().setAttribute("cartSize", itemsInCart.size());
 		return "cart.jsp";
 	}
 	private LinkedList<Publication> aSearch(String title, String author, String editor, String volume, String publisher, String isbn, String year, String type) {
