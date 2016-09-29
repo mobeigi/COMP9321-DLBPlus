@@ -97,7 +97,7 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Remove a particular listing from a user's cart
 	 *
-	 * @param user contains the id of the user
+	 * @param userID contains the id of the user
 	 * @param listingID	the ID of the listing to remove
 	 * @return boolean True when removal was successful
 	 */		
@@ -296,12 +296,20 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Creates an order, after the purchase has been made
 	 * 
-	 * @param buyer the User object of the buyer
+	 * @param userID the User object of the buyer
 	 * @param soldListing the Listing object that is bought
 	 * @return the Order if successfully created, null otherwise
 	 */
 	public Order CreateOrder(int userID, Listing soldListing);
-
+  
+  /**
+   * Get an order
+   *
+   * @param orderID the id of the order
+   * @return returns an order if it exists, null otherwise
+   **/
+  public Order GetOrder(int orderID);
+  
 	/**
 	 * Obtain the order history of a particular user
 	 *

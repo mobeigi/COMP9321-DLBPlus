@@ -1,11 +1,7 @@
-<%@ page import="edu.unsw.comp9321.DBHelper" %>
-<%@ page import="edu.unsw.comp9321.Publication" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="edu.unsw.comp9321.User" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.Timestamp" %>
-<%@ page import="edu.unsw.comp9321.Listing" %>
-<%@ page import="edu.unsw.comp9321.Admin" %>
+<%@ page import="edu.unsw.comp9321.*" %>
 
 <%--
   Created by IntelliJ IDEA.
@@ -50,13 +46,12 @@
   p = db.GetPublication(70);
   Listing l3 = db.CreateListing(u1, p, 78, now, later, 1000.00, "temp image");
 
-  if (l3 == null)
-    System.out.println("yep its null");
+  //Make some orders
+  db.CreateOrder(u3.getId(), l1);
+  db.CreateOrder(u3.getId(), l2);
+  Order o = db.CreateOrder(u1.getId(), l3);
 
-  //Lets add some shit to u3's cart
-  db.AddToCart(u3, l1);
-  db.AddToCart(u3, l2);
-  db.AddToCart(u3, l3);
+  System.out.println("ID: " + o.getId() + ", sellprice: " + o.getPrice());
 
 %>
 </body>

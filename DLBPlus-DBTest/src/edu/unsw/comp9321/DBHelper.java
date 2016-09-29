@@ -580,7 +580,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Remove a particular listing from a user's cart
 	 *
-	 * @param user contains the id of the user
+	 * @param userID contains the id of the user
 	 * @param listingID	the ID of the listing to remove
 	 * @return boolean True when removal was successful
 	 */		
@@ -781,14 +781,65 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Creates an order, after the purchase has been made
 	 * 
-	 * @param buyer the User object of the buyer
+	 * @param userID the User object of the buyer
 	 * @param soldListing the Listing object that is bought
 	 * @return the Order if successfully created, null otherwise
 	 */
 	public Order CreateOrder(int userID, Listing soldListing) {
-		// TODO Auto-generated method stub
-		return null;
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("CreateOrder", "No connection with database");
+      return null;
+    }
+    
+    try {
+      Timestamp now = new Timestamp(new Date().getTime());
+      
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      String q = "INSERT INTO orders (buyerid, sellerid, itemid, order_date, price) " +
+        "VALUES (" + userID + ", " + soldListing.getSellerid() + ", " + soldListing.getItemid() + ", to_timestamp(" + now.getTime() + ")," + soldListing.getSellprice() + ")" +
+        "RETURNING id;";
+      PrintDebugMessage("CreateOrder", "Running query: " + q);
+      ResultSet rs = stmt.executeQuery(q);
+      
+      if (rs.next()) {
+        Integer orderid = rs.getInt("id");
+        dbConn.commit();
+        return GetOrder(orderid);
+      } else {
+        return null;
+      }
+    }
+    catch (SQLException e) {
+      return null;
+    }
 	}
+  
+  /**
+   * Get an order
+   *
+   * @param orderID the id of the order
+   * @return returns an order if it exists, null otherwise
+   **/
+  public Order GetOrder(int orderID) {
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetOrder", "No connection with database");
+      return null;
+    }
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM orders WHERE id = '" + orderID + "';");
+      
+      return processResultSetIntoOrder(rs);
+    }
+    catch (SQLException e) {
+      return null;
+    }
+  }
 
 	/**
 	 * Obtain the order history of a particular user
