@@ -51,7 +51,15 @@
     System.out.println("ID: " + l.getListingid() + ", Price: " + l.getSellprice());
 
   //Get total num of listings
-  System.out.println(db.GetNumListings());
+  int numListings = db.GetNumListings();
+  System.out.println(numListings);
+
+  //Get range of listings
+  List<Listing> rangeListings = db.GetListings(0, numListings-1);
+
+  for (Listing l : rangeListings)
+    System.out.println("ID: " + l.getListingid() + ", Price: " + l.getSellprice());
+
 
 %>
 </body>

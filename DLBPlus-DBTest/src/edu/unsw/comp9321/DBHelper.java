@@ -562,11 +562,11 @@ public class DBHelper implements DLBPlusDBInterface {
       stmt = dbConn.createStatement();
       ResultSet rs = stmt.executeQuery("SELECT * FROM listings;");
       
-      Listing u = processResultSetIntoListing(rs);
+      Listing l = processResultSetIntoListing(rs);
       
-      while (u != null) {
-        allListings.add(u);
-        u = processResultSetIntoListing(rs);
+      while (l != null) {
+        allListings.add(l);
+        l = processResultSetIntoListing(rs);
       }
     }
     catch (SQLException e) {
@@ -749,11 +749,11 @@ public class DBHelper implements DLBPlusDBInterface {
       stmt = dbConn.createStatement();
       ResultSet rs = stmt.executeQuery("SELECT * FROM listings WHERE sellerid =" + userID + ";");
     
-      Listing u = processResultSetIntoListing(rs);
+      Listing l = processResultSetIntoListing(rs);
     
-      while (u != null) {
-        userListings.add(u);
-        u = processResultSetIntoListing(rs);
+      while (l != null) {
+        userListings.add(l);
+        l = processResultSetIntoListing(rs);
       }
     }
     catch (SQLException e) {
@@ -855,11 +855,40 @@ public class DBHelper implements DLBPlusDBInterface {
       return -1;
     }
 	}
-	
-	@Override
-	public List<Listing> GetListings(int startIndex, int endIndex) {
-		// TODO Auto-generated method stub
-		return null;
+  
+  /**
+   * Obtain a specific range of listings (inclusive)
+   *
+   * @param startIndex the starting index (must be 0 - (numlistings - 1))
+   * @param endIndex the ending index (must be 0-numlistings and >= startIndex)
+   * @return returns a list of listings in specified range or empty list
+   */
+  public List<Listing> GetListings(int startIndex, int endIndex) {
+    List<Listing> listings = new ArrayList<Listing>();
+    int offset = startIndex;
+    int limit = endIndex - startIndex + 1; //number of results (if enough exist)
+    
+    if (!dbConnStatus)
+      return listings;
+  
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings ORDER BY listingid ASC OFFSET " + offset + " LIMIT " + limit + ";");
+    
+      Listing l = processResultSetIntoListing(rs);
+    
+      while (l != null) {
+        listings.add(l);
+        l = processResultSetIntoListing(rs);
+      }
+    }
+    catch (SQLException e) {
+      return listings;
+    }
+  
+    return listings;
 	}
 	
 	/**

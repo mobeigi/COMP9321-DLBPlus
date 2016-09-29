@@ -281,14 +281,14 @@ public interface DLBPlusDBInterface {
 	 * @return the total number of listings, or -1 on error
 	 */	
 	public int GetNumListings();
-	
-	/**
-	 * Obtain a specific range of listings (inclusive)
-	 *
-	 * @param startIndex the starting index
-	 * @param endIndex the ending index
-	 * @return returns a list of listings in specified range
-	 */	
+  
+  /**
+   * Obtain a specific range of listings (inclusive)
+   *
+   * @param startIndex the starting index (must be 0 - (numlistings - 1))
+   * @param endIndex the ending index (must be 0-numlistings and >= startIndex)
+   * @return returns a list of listings in specified range or empty list
+   */
 	 public List<Listing> GetListings(int startIndex, int endIndex);
 
 	/**
