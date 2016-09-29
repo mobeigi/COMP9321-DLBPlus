@@ -615,8 +615,20 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return returns a listing if there is at least one in DB; null otherwise
 	 */
 	public Listing GetRandomListing() {
-		// TODO Auto-generated method stub
-		return null;
+    if (!dbConnStatus)
+      return null;
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings OFFSET floor(random()*(SELECT COUNT(*) FROM listings)) LIMIT 1;" );
+      
+      return processResultSetIntoListing(rs);
+    }
+    catch (SQLException e) {
+      return null;
+    }
 	}
 
 	 /**
