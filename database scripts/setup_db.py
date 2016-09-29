@@ -88,14 +88,16 @@ def setup_db():
 	cursor.execute(query)
 	
 	print "Creating orders table..."
-	query = "CREATE TABLE orders (" \
-			"	id 			SERIAL	PRIMARY KEY," \
-			"	buyerid		SERIAL	REFERENCES users (id)," \
-			"	sellerid	SERIAL	REFERENCES users (id)," \
-			"	itemid		SERIAL	REFERENCES publications (id)," \
-			"	order_date	TIMESTAMP WITH TIME ZONE	NOT NULL," \
-			"	price		MONEY	NOT NULL" \
-			");"
+	query = """
+			CREATE TABLE orders (
+				id 			SERIAL	PRIMARY KEY,
+				buyerid		SERIAL	REFERENCES users (id),
+				sellerid	SERIAL	REFERENCES users (id),
+				itemid		SERIAL	REFERENCES publications (id),
+				order_date	TIMESTAMP WITH TIME ZONE	NOT NULL,
+				price		DOUBLE PRECISION	NOT NULL
+			);
+			"""
 	cursor.execute(query)
 	
 	print "Creating listings table..."
@@ -107,7 +109,7 @@ def setup_db():
 				quantity	INT		NOT NULL,
 				listdate	TIMESTAMP WITH TIME ZONE	NOT NULL,
 				enddate		TIMESTAMP WITH TIME ZONE	NOT NULL,
-				sellprice	MONEY	NOT NULL,
+				sellprice	DOUBLE PRECISION	NOT NULL,
 				image		TEXT,
 				paused		BOOLEAN	DEFAULT FALSE,
 				numviews	INT		DEFAULT 0
@@ -116,13 +118,15 @@ def setup_db():
 	cursor.execute(query)	
 
 	print "Creating activecartitems table..."
-	query = "CREATE TABLE activecartitems (" \
-			"	cartid		SERIAL	REFERENCES users (cartid)," \
-			"	itemid		SERIAL	REFERENCES publications (id)," \
-			"	sellerid	SERIAL	REFERENCES users (id)," \
-			"	itemprice	MONEY	NOT NULL," \
-			"	addedts		TIMESTAMP WITH TIME ZONE NOT NULL" \
-			");"
+	query = """
+			CREATE TABLE activecartitems (
+				cartid		SERIAL	REFERENCES users (cartid),
+				itemid		SERIAL	REFERENCES publications (id),
+				sellerid	SERIAL	REFERENCES users (id),
+				itemprice	DOUBLE PRECISION	NOT NULL,
+				addedts		TIMESTAMP WITH TIME ZONE NOT NULL
+			);
+			"""
 	cursor.execute(query)
 	
 	print "Creating removedcartitems table..."

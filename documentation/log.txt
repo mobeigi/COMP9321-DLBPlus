@@ -18,3 +18,6 @@ Changed most date fields into timestamps
 
 29/09/2016 @ 12:30pm
 Updated dump (for consistency)
+
+29/09/2016 @ 6:40pm
+Changed schema - MONEY to DOUBLE PRECISION
