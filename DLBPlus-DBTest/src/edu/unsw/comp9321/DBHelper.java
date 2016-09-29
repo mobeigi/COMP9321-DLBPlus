@@ -545,6 +545,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return boolean whether the update was successful
 	 */	
 	public boolean AddToCart(User user, Listing listingToAdd) {
+    // TODO
 		return true;
 	}
 	
@@ -756,10 +757,67 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return returns a list of orders that the user has made
 	 **/	
 	public List<Order> GetOrderHistory(int userID) {
-		List<Order> orderHistory = new ArrayList<Order>();
-		//TODO
-		return orderHistory;
+    List<Order> orderHistory = new ArrayList<Order>();
+    
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetOrderHistory", "No connection with database");
+      return orderHistory;
+    }
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM orders WHERE buyerid = '" + userID + "';");
+      
+      Order o = processResultSetIntoOrder(rs);
+      
+      while (o != null) {
+        orderHistory.add(o);
+        o = processResultSetIntoOrder(rs);
+      }
+    }
+    catch (SQLException e) {
+      return orderHistory;
+    }
+    
+    return orderHistory;
 	}
+  
+  /**
+   * Given a result set, parse next row of values into Order
+   *
+   * @param rs result set for a query on the order table
+   * @return null if no match found/rows exhausted, order of next row otherwise
+   */
+  private Order processResultSetIntoOrder(ResultSet rs) {
+    Order o = new Order();
+    
+    try {
+      if (rs.next()) {
+        Integer id = rs.getInt("id");
+        Integer buyerid = rs.getInt("buyerid");
+        Integer sellerid = rs.getInt("sellerid");
+        Integer itemid = rs.getInt("itemid");
+        Timestamp order_date = rs.getTimestamp("order_date");
+        Double price = rs.getDouble("price");
+        
+        //Set Order fields
+        o.setId(id);
+        o.setBuyerid(buyerid);
+        o.setSellerid(sellerid);
+        o.setItemid(itemid);
+        o.setOrder_date(order_date);
+        o.setPrice(price);
+      } else { //No result found
+        o = null;
+      }
+    } catch (SQLException e) {
+      return null;
+    }
+    
+    return o;
+  }
 
 	 /**
 	 * Obtain a random listing
