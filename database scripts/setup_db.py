@@ -103,7 +103,7 @@ def setup_db():
 	print "Creating listings table..."
 	query = """
 			CREATE TABLE listings (
-				listingid	SERIAL	PRIMARY KEY,
+				id	SERIAL	PRIMARY KEY,
 				sellerid	SERIAL	REFERENCES users (id),
 				itemid		SERIAL	REFERENCES publications (id),
 				quantity	INT		NOT NULL,
@@ -121,9 +121,7 @@ def setup_db():
 	query = """
 			CREATE TABLE activecartitems (
 				cartid		SERIAL	REFERENCES users (cartid),
-				itemid		SERIAL	REFERENCES publications (id),
-				sellerid	SERIAL	REFERENCES users (id),
-				itemprice	DOUBLE PRECISION	NOT NULL,
+				listingid	SERIAL	REFERENCES listings (id),
 				addedts		TIMESTAMP WITH TIME ZONE NOT NULL
 			);
 			"""
@@ -133,13 +131,12 @@ def setup_db():
 	query = """
 			CREATE TABLE removedcartitems (
 				cartid		SERIAL	REFERENCES users (cartid),
-				itemid		SERIAL	REFERENCES publications (id),
-				sellerid	SERIAL	REFERENCES users (id)
-				itemprice	MONEY	NOT NULL,
+				listingid	SERIAL	REFERENCES listings (id),
 				addedts		TIMESTAMP WITH TIME ZONE NOT NULL,
 				removedts	TIMESTAMP WITH TIME ZONE
 			);	
 			"""
+	cursor.execute(query)
 			
 	# Persist the changes to database
 	print "Persisting changes..."
