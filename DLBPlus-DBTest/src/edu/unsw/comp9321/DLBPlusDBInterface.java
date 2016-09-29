@@ -120,7 +120,7 @@ public interface DLBPlusDBInterface {
 	public List<CartItem> GetRemovedCartItems(int cartID);
 	
 	/**
-	 * Create a user by inserting provideduser details into database
+	 * Create a user by inserting provided user details into database
 	 *
 	 * @param username Provided username
 	 * @param plainTextPassword Unsalted Password
@@ -172,12 +172,12 @@ public interface DLBPlusDBInterface {
 	 */
   public boolean SetAcctConfirmed(User user, boolean confirmedStatus);
   
-	/**
-	 * Changes the deets of a user
-	 * @param changedUser The User object that contains all the information to change
-	 * @return True whether user was changed successfully, false otherwise
-	 */
-	public boolean ChangeUserDetails(User changedUser);
+  /**
+   * Changes the details of a user
+   * @param changedUser The User object that contains all the information to change
+   * @return True whether user was changed successfully, false otherwise
+   */
+  public boolean ChangeUserDetails(User changedUser);
 	
 	/**
 	 * Obtain a list of all users
@@ -233,7 +233,7 @@ public interface DLBPlusDBInterface {
 	 *
 	 * @param username the username of the new admin
 	 * @param plainTextPassword plaintext password for new admin
-	 * @return returns an Admin object when succesfully created, null otherwise
+	 * @return returns an Admin object when successfully created, null otherwise
 	 */	
 	public Admin CreateAdmin(String username, String plainTextPassword);
 	
@@ -241,7 +241,7 @@ public interface DLBPlusDBInterface {
 	 * Get an admin
 	 * 
 	 * @param username the username of the admin
-	 * @return returns an Admin object if succesfully retrieved, null otherwise
+	 * @return returns an Admin object if successfully retrieved, null otherwise
 	 */
 	public Admin GetAdmin(String username);
 	

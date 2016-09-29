@@ -37,11 +37,11 @@
   if (u3 == null)
     u3 = db.GetUser("joe3");
 
-  //Test SetUserStatus
-  db.SetUserStatus(u1, true);
-  System.out.println("ID: " + u1.getId() + ", Status: " + u1.getAcctstatus());
-  db.SetUserStatus(u1, false);
-  System.out.println("ID: " + u1.getId() + ", Status: " + u1.getAcctstatus());
+  //Change user 2
+  u2.setUsername("joe2new");
+  u2.setAddress("22 other st");
+  u2.setEmail("mynewmail@gmail.com");
+  db.ChangeUserDetails(u2);
 
 
 %>

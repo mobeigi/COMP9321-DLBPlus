@@ -216,7 +216,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	}
 
 	/**
-	 * Create a user by inserting provideduser details into database
+	 * Create a user by inserting provided user details into database
 	 *
 	 * @param username Provided username
 	 * @param plainTextPassword Unsalted Password
@@ -296,13 +296,83 @@ public class DBHelper implements DLBPlusDBInterface {
 
 	}
   
+  
   /**
-   * Changes the deets of a user
+   * Checks whether a username is already associated with a user
+   *
+   * @param userID user id of user
+   * @return boolean True for exists, False otherwise
+   */
+  public boolean DoesUserExist(int userID) {
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("DoesUserExist", "No connection with database");
+      return true;
+    }
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM users where id = '" + userID + "';" );
+      
+      if (rs.next()) {
+        int count = rs.getInt("count");
+        if (count == 0)
+          return false;
+        else
+          return true;
+      }
+      
+      return true; //this should never be returned
+    }
+    catch (SQLException e) {
+      return true; //this should never be returned
+    }
+  }
+  
+  /**
+   * Changes the details of a user
    * @param changedUser The User object that contains all the information to change
    * @return True whether user was changed successfully, false otherwise
    */
   public boolean ChangeUserDetails(User changedUser) {
-    return false;
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("ChangeUserDetails", "No connection with database");
+      return false;
+    }
+    
+    try {
+      if (DoesUserExist(changedUser.getId())) { //user exists
+        Statement stmt;
+        dbConn.setAutoCommit(false);
+        stmt = dbConn.createStatement();
+        String q =  "UPDATE users" +
+                    " SET username = '" + changedUser.getUsername() + //change username
+                    "', fname = '" + changedUser.getFname() +
+                    "', lname = '" + changedUser.getLname() +
+                    "', email = '" + changedUser.getEmail() +
+                    "', address = '" + changedUser.getAddress() +
+                    "', dob = '" + changedUser.getDob() +
+                    "', creditcard = '" + changedUser.getCreditcard() +
+                    "', cartid = " + changedUser.getCartid() +
+                    ", dp = '" + changedUser.getDp() +
+                    "', acctstatus = " + changedUser.getAcctstatus() +
+                    ", acctconfrm = " + changedUser.getAcctconfrm() +
+                    ", acctcreated = '" + changedUser.getAcctcreated() +
+                    "' WHERE id = " + changedUser.getId() + ";";
+        this.PrintDebugMessage("ChangeUserDetails", "Running query: " + q);
+        stmt.executeUpdate(q);
+        dbConn.commit();
+        return true;
+      }
+      else {
+        PrintDebugMessage("ChangeUserDetails", "Error! No user exists with username: " + changedUser.getUsername());
+        return false;
+      }
+    }
+    catch (SQLException e) {
+      return false;
+    }
   }
   
   /**
@@ -1039,7 +1109,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	 *
 	 * @param username the username of the new admin
 	 * @param plainTextPassword plaintext password for new admin
-	 * @return returns an Admin object when succesfully created, otherwise
+	 * @return returns an Admin object when successfully created, otherwise
 	 */		
 	public Admin CreateAdmin(String username, String plainTextPassword) {
 		if (!this.dbConnStatus) {
