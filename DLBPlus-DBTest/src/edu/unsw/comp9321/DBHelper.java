@@ -289,6 +289,15 @@ public class DBHelper implements DLBPlusDBInterface {
 	}
   
   /**
+   * Changes the deets of a user
+   * @param changedUser The User object that contains all the information to change
+   * @return True whether user was changed successfully, false otherwise
+   */
+  public boolean ChangeUserDetails(User changedUser) {
+    return false;
+  }
+  
+  /**
    * Validate a user
    *
    * @param inputUsername the username of user
@@ -331,6 +340,17 @@ public class DBHelper implements DLBPlusDBInterface {
       return false;
     }
 	}
+  
+  /**
+   * Sets the account confirmed status to a new value
+   *
+   * @param userID the id of the user account
+   * @param confirmedStatus the new status to change to
+   * @return True when successfully changed, False otherwise
+   */
+  public boolean SetAcctConfirmed(int userID, boolean confirmedStatus) {
+    return false;
+  }
 	
 	/**
 	 * Create a listing (item for sale)
@@ -663,6 +683,16 @@ public class DBHelper implements DLBPlusDBInterface {
       return null;
     }
     
+    return l;
+  }
+  
+  /**
+   * Obtain a list of listings by a particular user
+   *
+   * @return returns a list of listings
+   */
+  public List<Listing> GetUserListings(int userID) {
+    List<Listing> l = new ArrayList<>();
     return l;
   }
 
