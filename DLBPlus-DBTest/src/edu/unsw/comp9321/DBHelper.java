@@ -578,15 +578,45 @@ public class DBHelper implements DLBPlusDBInterface {
   }
 	
 	/**
-	 * Remove a particular listing from a user's cart
+	 * Remove a particular cartItem from a user's cart
 	 *
-	 * @param userID contains the id of the user
-	 * @param listingID	the ID of the listing to remove
+	 * @param cartItem cart item to be removed
 	 * @return boolean True when removal was successful
 	 */		
-	public boolean RemoveFromCart(int userID, int listingID) {
-		//TODO
-		return true;
+	public boolean RemoveFromCart(CartItem cartItem) {
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("RemoveFromCart", "No connection with database");
+      return false;
+    }
+    
+    if (!cartItem.isActive()) {
+      this.PrintDebugMessage("RemoveFromCart", "CartItem is not active, cannot remove this item.");
+      return false;
+    }
+    
+    try {
+      //Get current time
+      Timestamp now = new Timestamp(new Date().getTime());
+      
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      stmt.executeUpdate("INSERT INTO removedcartitems (cartid, listingid, addedts, removedts) " +
+                         "VALUES (" + cartItem.getCartid() + ", " + cartItem.getListingid() + ", to_timestamp(" + cartItem.getAddedts().getTime() + "), to_timestamp(" +  now.getTime() + "));");
+      dbConn.commit();
+      
+      //Remove previous item
+      stmt.executeUpdate("DELETE FROM activecartitems " +
+                         "WHERE cartid=" + cartItem.getCartid() + " AND listingid=" + cartItem.getListingid() + " AND addedts=to_timestamp(" + cartItem.getAddedts().getTime() + ");");
+      dbConn.commit();
+      
+      cartItem.setActive(false); //change local object
+      return true;
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+      return false;
+    }
 	}
 	
 	/**

@@ -46,12 +46,15 @@
   p = db.GetPublication(70);
   Listing l3 = db.CreateListing(u1, p, 78, now, later, 1000.00, "temp image");
 
-  //Make some orders
-  db.CreateOrder(u3.getId(), l1);
-  db.CreateOrder(u3.getId(), l2);
-  Order o = db.CreateOrder(u1.getId(), l3);
+  //Add some items to cart
+  CartItem c1 = db.AddToCart(u3, l1);
+  CartItem c2 = db.AddToCart(u3, l1);
+  CartItem c3 = db.AddToCart(u3, l2);
+  CartItem c4 = db.AddToCart(u1, l3);
 
-  System.out.println("ID: " + o.getId() + ", sellprice: " + o.getPrice());
+  //Remove from cart
+  db.RemoveFromCart(c1);
+  db.RemoveFromCart(c4);
 
 %>
 </body>

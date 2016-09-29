@@ -81,7 +81,7 @@ public class CartItem {
     this.removedts = removedts;
   }
   
-  public Boolean getActive() {
+  public Boolean isActive() {
     return isActive;
   }
   
