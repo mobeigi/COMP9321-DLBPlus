@@ -15,3 +15,6 @@ Added 'numviews' as an attribute to listings
 
 28/09/2016 @ 4:00pm
 Changed most date fields into timestamps
+
+29/09/2016 @ 12:30pm
+Updated dump (for consistency)
