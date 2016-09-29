@@ -49,6 +49,11 @@
         					<h5 class="Header center flow-text">Sales</h5>
         					<br>
         					<div class="container center">
+        						<form method="post" action="setup">
+        							<input type="hidden" name="action" value="createListing"/>
+        							<button class="btn waves-effect waves-light" type="submit" value="createListing">Create Listing</button>
+        						</form>
+        						<br>
 	        					<form method="post" action="setup">
 		        					<input type="hidden" name="action" value="viewListings"/>
 		        					<button class="btn waves-effect waves-light" type="submit" value="viewListings">View Listings</button>			

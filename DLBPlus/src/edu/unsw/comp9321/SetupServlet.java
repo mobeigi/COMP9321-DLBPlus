@@ -184,20 +184,22 @@ public class SetupServlet extends HttpServlet {
 				int rand = random.nextInt(99999);
 				System.out.println("generating " + rand);
 				request.getSession().setAttribute("confirmationNumber", rand);
-				
 				link = "confirmation.jsp";
 			}
-			link = "confirmation.jsp";
 		} else if(req.equals("regSuccess")){
 			String code = request.getParameter("code");
-			
 			String emailCode = request.getSession().getAttribute("confirmationNumber").toString();
 			System.out.println("code is" + emailCode);
-			if(code.equals(emailCode)){
-				link = "userAccount.jsp";
-			} else {
+			if(code == null){
 				link = "confirmation.jsp";
+			} else {
+				if(code.equals(emailCode)){
+					link = "userAccount.jsp";
+				} else {
+					link = "confirmation.jsp";
+				}
 			}
+			
 			
 		} else if(req.equals("login")){
 			String errorMessage = "";
@@ -230,6 +232,9 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("viewListings")){
 			//View sales
 			link = "userSellListings.jsp";
+		} else if(req.equals("createListing")){
+			//Create new listing
+			link = "createListing.jsp";
 		}
 		
 		 RequestDispatcher rd = request.getRequestDispatcher("/"+link);
