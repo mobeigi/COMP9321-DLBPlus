@@ -166,12 +166,12 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Sets the account confirmed status to a new value
 	 * 
-	 * @param userID the id of the user account
+	 * @param user the user account
 	 * @param confirmedStatus the new status to change to
 	 * @return True when successfully changed, False otherwise
 	 */
-	public boolean SetAcctConfirmed(int userID, boolean confirmedStatus);
-	
+  public boolean SetAcctConfirmed(User user, boolean confirmedStatus);
+  
 	/**
 	 * Changes the deets of a user
 	 * @param changedUser The User object that contains all the information to change

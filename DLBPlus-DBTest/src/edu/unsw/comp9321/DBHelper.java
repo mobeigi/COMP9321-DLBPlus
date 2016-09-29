@@ -354,12 +354,28 @@ public class DBHelper implements DLBPlusDBInterface {
   /**
    * Sets the account confirmed status to a new value
    *
-   * @param userID the id of the user account
+   * @param user the user account
    * @param confirmedStatus the new status to change to
    * @return True when successfully changed, False otherwise
    */
-  public boolean SetAcctConfirmed(int userID, boolean confirmedStatus) {
-    return false;
+  public boolean SetAcctConfirmed(User user, boolean confirmedStatus) {
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("SetAcctConfirmed", "No connection with database");
+      return false;
+    }
+  
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      stmt.executeUpdate("UPDATE users SET acctconfrm = " + confirmedStatus + " WHERE id = " + user.getId() + ";" );
+      dbConn.commit();
+      user.setAcctconfrm(confirmedStatus); //update local object
+      return true;
+    }
+    catch (SQLException e) {
+      return false;
+    }
   }
 	
 	/**
