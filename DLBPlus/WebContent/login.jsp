@@ -46,12 +46,12 @@
 					<form action="setup" method="post">
 		              	<div class="row">
 		              		<div class="col s12">
-			           			<input placeholder="Username"      id="textbox" name="userName" type="text" />
+			           			<input placeholder="Username" required="" aria-required="" id="textbox" name="uname" type="text" />
 			           		</div>
 			           	</div>
 			           	<div class="row">
 			           		<div class="col s12">
-			     		    	<input placeholder="Password"      id="textbox" name="password" type="text" />
+			     		    	<input placeholder="Password" required="" aria-required="" id="textbox" name="pass" type="text" />
 		     		    	</div>
 			     		</div>
 			     		

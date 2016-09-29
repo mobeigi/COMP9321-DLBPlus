@@ -191,8 +191,22 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("regSuccess")){
 			link = "registerSuccess.jsp";
 		} else if(req.equals("login")){
-			String userName = request.getParameter("userName");
-			link = "userAccount.jsp";
+			String errorMessage = "";
+			String userName = request.getParameter("uname");
+			String password = request.getParameter("pass");
+			
+			boolean success = db.VerifyUser(userName, password);
+			System.out.println(success);
+			if(success == true){
+				User user = db.GetUser(userName);
+				request.getSession().setAttribute("user",user);
+				System.out.println(user.getUsername());
+				link = "userAccount.jsp";
+			} else {
+				errorMessage = "Incorrect Username or Password";
+				link = "login.jsp";
+			}
+			
 		} else if(req.equals("confirmPurchase")){
 			link = "transactionSuccessful.jsp";
 		} else if(req.equals("modified")){
