@@ -480,7 +480,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	       dbConn.setAutoCommit(false);
 	       stmt = dbConn.createStatement();
 	       String q = "INSERT INTO listings (sellerid, itemid, quantity, listdate, enddate, sellprice, image) " +
-	         "VALUES (" + seller.getId() + ", " + item.getId() + ", " + quantity + ", to_timestamp(" + listdate.getTime() + "), to_timestamp(" + enddate.getTime() + "), " + sellprice + ", '" + image + "')" +
+	         "VALUES (" + seller.getId() + ", " + item.getId() + ", " + quantity + ", to_timestamp(" + listdate.getTime()/1000 + "), to_timestamp(" + enddate.getTime()/1000 + "), " + sellprice + ", '" + image + "')" +
 	         "RETURNING id;";
 	       PrintDebugMessage("CreateListing", "Running query: " + q);
 	       ResultSet rs = stmt.executeQuery(q);
@@ -559,7 +559,7 @@ public class DBHelper implements DLBPlusDBInterface {
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
       String q = "INSERT INTO activecartitems (cartid, listingid, addedts) " +
-        "VALUES (" + user.getCartid() + ", " + listingToAdd.getListingid() + ", to_timestamp(" + tNow.getTime()  + "));";
+        "VALUES (" + user.getCartid() + ", " + listingToAdd.getListingid() + ", to_timestamp(" + tNow.getTime()/1000  + "));";
       PrintDebugMessage("AddToCart", "Running query: " + q);
       stmt.executeUpdate(q);
       dbConn.commit();
@@ -602,12 +602,13 @@ public class DBHelper implements DLBPlusDBInterface {
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
       stmt.executeUpdate("INSERT INTO removedcartitems (cartid, listingid, addedts, removedts) " +
-                         "VALUES (" + cartItem.getCartid() + ", " + cartItem.getListingid() + ", to_timestamp(" + cartItem.getAddedts().getTime() + "), to_timestamp(" +  now.getTime() + "));");
+                         "VALUES (" + cartItem.getCartid() + ", " + cartItem.getListingid() + ", to_timestamp(" + cartItem.getAddedts().getTime()/1000 + "), to_timestamp(" +  now.getTime()/1000 + "));");
       dbConn.commit();
       
       //Remove previous item
-      stmt.executeUpdate("DELETE FROM activecartitems " +
-                         "WHERE cartid=" + cartItem.getCartid() + " AND listingid=" + cartItem.getListingid() + " AND addedts=to_timestamp(" + cartItem.getAddedts().getTime() + ");");
+      stmt.executeUpdate("DELETE FROM activecartitems WHERE ctid IN ( SELECT ctid FROM activecartitems " +
+                         "WHERE cartid=" + cartItem.getCartid() + " AND listingid=" + cartItem.getListingid() + " AND addedts=to_timestamp(" + cartItem.getAddedts().getTime()/1000 + ") " +
+                         "ORDER BY addedts ASC LIMIT 1 );");
       dbConn.commit();
       
       cartItem.setActive(false); //change local object
@@ -828,7 +829,7 @@ public class DBHelper implements DLBPlusDBInterface {
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
       String q = "INSERT INTO orders (buyerid, sellerid, itemid, order_date, price) " +
-        "VALUES (" + userID + ", " + soldListing.getSellerid() + ", " + soldListing.getItemid() + ", to_timestamp(" + now.getTime() + ")," + soldListing.getSellprice() + ")" +
+        "VALUES (" + userID + ", " + soldListing.getSellerid() + ", " + soldListing.getItemid() + ", to_timestamp(" + now.getTime()/1000 + ")," + soldListing.getSellprice() + ")" +
         "RETURNING id;";
       PrintDebugMessage("CreateOrder", "Running query: " + q);
       ResultSet rs = stmt.executeQuery(q);
