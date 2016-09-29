@@ -216,9 +216,25 @@ public interface DLBPlusDBInterface {
 	 *
 	 * @param username the username of the new admin
 	 * @param plainTextPassword plaintext password for new admin
-	 * @return boolean True when admin is verified, False otherwise
+	 * @return returns an Admin object when succesfully created, null otherwise
 	 */	
-	public boolean CreateAdmin(String username, String plainTextPassword);
+	public Admin CreateAdmin(String username, String plainTextPassword);
+	
+	/**
+	 * Get an admin
+	 * 
+	 * @param username the username of the admin
+	 * @return returns an Admin object if succesfully retrieved, null otherwise
+	 */
+	public Admin GetAdmin(String username);
+	
+	/**
+	 * Checks whether an admin with given username exists
+	 *
+	 * @param username Username to check
+	 * @return boolean True for exists, False otherwise
+	 */
+	public boolean DoesAdminExist(String username);
 	
 	/**
 	 * Obtain a list of all existing listings

@@ -4,7 +4,10 @@
 <%@ page import="edu.unsw.comp9321.User" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.Timestamp" %>
-<%@ page import="edu.unsw.comp9321.Listing" %><%--
+<%@ page import="edu.unsw.comp9321.Listing" %>
+<%@ page import="edu.unsw.comp9321.Admin" %>
+
+<%--
   Created by IntelliJ IDEA.
   User: Mohammad
   Date: 27/09/2016
@@ -20,7 +23,7 @@
 <%
 	DBHelper db = new DBHelper();	//Note this should be called once per server, not per page load or multiple times
 	db.init();
-
+	
   //Make some users
   Date date = new Date();
   User u1 = db.CreateUser("joe1", "bobby", "Joe", "Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
@@ -44,10 +47,27 @@
   Listing l = db.CreateListing(u1, p, 100, start, end, 22.50, "image");
   System.out.println("Listing id: " + l.getListingid() + " " + l.getSellprice());
 
-  Listing l2 = db.GetListing(5);
-  System.out.println("Listing id: " + l2.getListingid() + " " + l2.getSellprice());
+  //Listing l2 = db.GetListing(5);
+  //System.out.println("Listing id: " + l2.getListingid() + " " + l2.getSellprice());
 
-
+  // ====== ADMIN TESTING
+  // Create some admins
+  System.out.println("Inserting some admins...");
+  Admin admin1 = db.CreateAdmin("root", "password");
+  if (admin1 == null) {
+	  admin1 = db.GetAdmin("root");
+	  admin1.showDetails();
+  }
+  
+  // Test admin verify
+  boolean admin1_verfied = db.VerifyAdmin("root", "password");
+  if (admin1_verfied) {
+	  System.out.println("Admin 'root' is succesfully verified!");
+  } else {
+	  System.out.println("Whoops, something wrong with verification function...");
+  }
+	  
+	
 %>
 </body>
 </html>

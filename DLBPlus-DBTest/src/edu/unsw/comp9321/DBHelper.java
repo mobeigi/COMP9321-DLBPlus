@@ -733,11 +733,70 @@ public class DBHelper implements DLBPlusDBInterface {
 	 *
 	 * @param username the username of the new admin
 	 * @param plainTextPassword plaintext password for new admin
-	 * @return boolean True when admin is verified, False otherwise
-	 */	
-	public boolean CreateAdmin(String username, String plainTextPassword) {
-		// TODO Auto-generated method stub
-		return false;
+	 * @return returns an Admin object when succesfully created, otherwise
+	 */		
+	public Admin CreateAdmin(String username, String plainTextPassword) {
+		if (!this.dbConnStatus) {
+			this.PrintDebugMessage("CreateAdmin", "No connection with database");
+			return null;
+		}
+		
+		try {
+			if (!DoesAdminExist(username)) {
+				
+				//Generate random salt and hashed password
+				final Random r = new SecureRandom();
+				byte[] salt = new byte[32];
+				r.nextBytes(salt);
+				String encodedSalt = Base64.encode(salt);
+				String passwordHash = DigestUtils.sha1Hex(encodedSalt + plainTextPassword);
+	    
+				// Prepare insert statement
+				Statement stmt;
+				dbConn.setAutoCommit(false);
+				stmt = dbConn.createStatement();
+				String q = "INSERT INTO admins (username, salt, password) " +
+						"VALUES ('" + username + "', '" + encodedSalt + "', '" + passwordHash + "')";
+				PrintDebugMessage("CreateAdmin", "Running query: " + q);
+				stmt.executeUpdate(q);
+				dbConn.commit();
+				
+				// Return the newly created admin
+				return this.GetAdmin(username);
+				
+			} else {
+				this.PrintDebugMessage("CreateAdmin", "Error: Admin with username " + username + " already exists.");
+				return null;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	/**
+	 * Get an admin
+	 * 
+	 * @param username the username of the admin
+	 * @return returns an Admin object if succesfully retrieved, null otherwise
+	 */
+	public Admin GetAdmin(String username) {
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("GetAdmin", "No connection with database");
+			return null;
+		}
+		  
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM admins where username = '" + username + "';" );
+    
+			return processResultSetIntoAdmin(rs);
+			
+		} catch (SQLException e) {
+			return null;
+		}
 	}
 	
 	/**
@@ -748,8 +807,101 @@ public class DBHelper implements DLBPlusDBInterface {
 	* @return boolean True when admin is verifed, False otherwise
 	*/
 	public boolean VerifyAdmin(String inputUsername, String inputPwd) {
-		// TODO
-		return false;
+
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("VerifyAdmin", "No connection with database");
+			return false;
+		}
+	      
+		try {
+			if (DoesAdminExist(inputUsername)) { //admin exists
+      
+				//Get salt + hash from database
+				Statement stmt;
+				dbConn.setAutoCommit(false);
+				stmt = dbConn.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT salt, password FROM admins where username = '" + inputUsername + "';" );
+      
+				if (rs.next()) {
+					String salt = rs.getString("salt");
+					String storePasswordHash = rs.getString("password");
+        
+					//Create testHash to compare
+					String testHash = DigestUtils.sha1Hex(salt + inputPwd);
+        
+					//Perform comparison
+					//Valid input password
+					return testHash.equals(storePasswordHash);
+				} else {
+					//Should never happen
+					return false;
+				}
+			} else {
+				PrintDebugMessage("VerifyAdmin", "Error! No admin exists with username: " + inputUsername);
+				return false;
+			}
+		} catch (SQLException e) {
+			return false;
+		}
 	}
+	
+	/**
+	 * Checks whether an admin with given username exists
+	 *
+	 * @param username Username to check
+	 * @return boolean True for exists, False otherwise
+	 */
+	public boolean DoesAdminExist(String username) {
+		if (!dbConnStatus)
+			return true;
+
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM admins where username = '" + username + "';" );
+
+			if (rs.next()) {
+				int count = rs.getInt("count");
+				if (count == 0)
+					return false;
+				else
+					return true;
+			}
+
+			return true; //this should never be returned
+		}
+		catch (SQLException e) {
+			return true; //this should never be returned
+		}
+	}
+	
+	/**
+	* Given a result set, parse next row of values into User
+	*
+	* @param rs result set for a query on the user table
+	* @return null if no match found/rows exhausted, user of next row otherwise
+	*/
+	private Admin processResultSetIntoAdmin(ResultSet rs) {
+		Admin a = new Admin();
+    
+	    try {
+	    	if (rs.next()) {
+	    		Integer id = rs.getInt("id");
+	    		String username = rs.getString("username");
+        
+	    		//Set User fields
+	    		a.setId(id);
+	    		a.setUsername(username);
+
+	    	} else { //No result found
+	    		a = null;
+	    	}
+	    } catch (SQLException e) {
+	    	return null;
+	    }
+    
+	    return a;
+  }
 
 }
