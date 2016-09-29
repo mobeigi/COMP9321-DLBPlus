@@ -52,8 +52,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return Random publication or null if no publications exist (0 publications in db)
 	 */
 	public Publication GetRandomPublication() {
-		if (!dbConnStatus)
-			return null;
+		if (!dbConnStatus) {
+      this.PrintDebugMessage("GetRandomPublication", "No connection with database");
+      return null;
+    }
 
 		try {
 			Statement stmt;
@@ -75,8 +77,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return publication with matching publication identifier
 	 */
 	public Publication GetPublication(int pubID) {
-		if (!dbConnStatus)
-			return null;
+		if (!dbConnStatus) {
+      this.PrintDebugMessage("GetPublication", "No connection with database");
+      return null;
+    }
 
 		try {
 			Statement stmt;
@@ -220,8 +224,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	 */
 	public User CreateUser(String username, String plainTextPassword, String fname, String lname, String email,
 												 String address, java.util.Date dob, String creditcard, String dp) {
-		if (!dbConnStatus)
-			return null;
+		if (!dbConnStatus) {
+      this.PrintDebugMessage("CreateUser", "No connection with database");
+      return null;
+    }
 
 		try {
 			if (!DoesUserExist(username)) {
@@ -263,8 +269,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return boolean True for exists, False otherwise
 	 */
 	public boolean DoesUserExist(String username) {
-		if (!dbConnStatus)
-			return true;
+		if (!dbConnStatus) {
+      this.PrintDebugMessage("DoesUserExist", "No connection with database");
+      return true;
+    }
 
 		try {
 			Statement stmt;
@@ -305,8 +313,10 @@ public class DBHelper implements DLBPlusDBInterface {
    * @return boolean True when user is verifed, False otherwise
    */
 	public boolean VerifyUser(String inputUsername, String inputPwd) {
-    if (!dbConnStatus)
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("VerifyUser", "No connection with database");
       return false;
+    }
     
     try {
       if (DoesUserExist(inputUsername)) { //user exists
@@ -359,8 +369,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	 */
 	 public Listing CreateListing(User seller, Publication item, Integer quantity, Timestamp listdate, Timestamp enddate,
                                 Double sellprice, String image) {
-     if (!dbConnStatus)
+     if (!dbConnStatus) {
+       this.PrintDebugMessage("CreateListing", "No connection with database");
        return null;
+     }
     
      if (seller == null || item == null) {
        PrintDebugMessage("CreateListing", "Error! Seller or item is null");
@@ -398,8 +410,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return boolean True when paused was successfully set. False otherwise
 	 */
 	 public boolean SetPausedStatus(Listing listing, boolean paused) {
-     if (!dbConnStatus)
+     if (!dbConnStatus) {
+       this.PrintDebugMessage("SetPausedStatus", "No connection with database");
        return false;
+     }
     
      try {
        Statement stmt;
@@ -457,8 +471,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return returns a user when successful, null otherwise
 	 */	
 	public User GetUser(int userID) {
-    if (!dbConnStatus)
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetUser", "No connection with database");
       return null;
+    }
     
     try {
       Statement stmt;
@@ -480,8 +496,10 @@ public class DBHelper implements DLBPlusDBInterface {
    * @return returns a user when successful, null otherwise
    */
   public User GetUser(String username) {
-    if (!dbConnStatus)
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetUser", "No connection with database");
       return null;
+    }
     
     try {
       Statement stmt;
@@ -553,8 +571,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	public List<Listing> GetAllListings() {
     List<Listing> allListings = new ArrayList<Listing>();
     
-    if (!dbConnStatus)
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetAllListings", "No connection with database");
       return allListings;
+    }
     
     try {
       Statement stmt;
@@ -584,8 +604,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	public List<User> GetAllUsers() {
     List<User> allUsers = new ArrayList<User>();
     
-    if (!dbConnStatus)
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetAllUsers", "No connection with database");
       return allUsers;
+    }
     
     try {
       Statement stmt;
@@ -649,8 +671,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return returns a listing if there is at least one in DB; null otherwise
 	 */
 	public Listing GetRandomListing() {
-    if (!dbConnStatus)
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetRandomListing", "No connection with database");
       return null;
+    }
     
     try {
       Statement stmt;
@@ -672,8 +696,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return the listing corresponding to given ID; null if such a listing doesn't exist
 	 */
 	public Listing GetListing(int listingID) {
-    if (!dbConnStatus)
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetListing", "No connection with database");
       return null;
+    }
     
     try {
       Statement stmt;
@@ -740,8 +766,10 @@ public class DBHelper implements DLBPlusDBInterface {
   public List<Listing> GetUserListings(int userID) {
     List<Listing> userListings = new ArrayList<Listing>();
   
-    if (!dbConnStatus)
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetUserListings", "No connection with database");
       return userListings;
+    }
   
     try {
       Statement stmt;
@@ -770,8 +798,10 @@ public class DBHelper implements DLBPlusDBInterface {
    * @return true if successful, false otherwise
 	 */
 	public boolean IncrementListingViews(Listing listing) {
-    if (!dbConnStatus)
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("IncrementListingViews", "No connection with database");
       return false;
+    }
     
     try {
       Statement stmt;
@@ -868,8 +898,20 @@ public class DBHelper implements DLBPlusDBInterface {
     int offset = startIndex;
     int limit = endIndex - startIndex + 1; //number of results (if enough exist)
     
-    if (!dbConnStatus)
+    if (startIndex > endIndex) {
+      PrintDebugMessage("GetListings", "End index is smaller than start index.");
       return listings;
+    }
+    
+    if (startIndex < 0 || endIndex < 0) {
+      PrintDebugMessage("GetListings", "Start or End indexes cannot be negative.");
+      return listings;
+    }
+    
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetListings", "No connection with database");
+      return listings;
+    }
   
     try {
       Statement stmt;
@@ -1014,8 +1056,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return boolean True for exists, False otherwise
 	 */
 	public boolean DoesAdminExist(String username) {
-		if (!dbConnStatus)
-			return true;
+		if (!dbConnStatus) {
+      this.PrintDebugMessage("DoesAdminExist", "No connection with database");
+      return true;
+    }
 
 		try {
 			Statement stmt;
