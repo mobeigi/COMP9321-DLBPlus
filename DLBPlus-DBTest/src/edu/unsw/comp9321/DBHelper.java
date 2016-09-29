@@ -842,18 +842,82 @@ public class DBHelper implements DLBPlusDBInterface {
 	private void PrintDebugMessage(String function, String message) {
     System.out.println(function + ": " + message);
   }
-	
-	@Override
-	public int GetNumUsers() {
-		// TODO Auto-generated method stub
-		return 0;
+  
+  /**
+   * Return the total number of users
+   *
+   * @return the total number of users, -1 on error
+   */
+  public int GetNumUsers() {
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetNumUsers", "No connection with database");
+      return -1;
+    }
+  
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM users;" );
+    
+      if (rs.next()) {
+        int count = rs.getInt("count");
+        return count;
+      }
+    
+      return -1; //This should never be returned
+    
+    } catch (SQLException e) {
+      return -1;
+    }
 	}
-	
-	@Override
-	public List<User> GetUsers(int startIndex, int endIndex) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  
+  /**
+   * Obtain a specific range of users (inclusive)
+   *
+   * @param startIndex the starting index (must be 0 - (numusers - 1))
+   * @param endIndex the ending index (must be 0-numusers and >= startIndex)
+   * @return returns a list of users in specified range
+   */
+  public List<User> GetUsers(int startIndex, int endIndex) {
+    List<User> users = new ArrayList<User>();
+    int offset = startIndex;
+    int limit = endIndex - startIndex + 1; //number of results (if enough exist)
+  
+    if (startIndex > endIndex) {
+      PrintDebugMessage("GetUsers", "End index is smaller than start index.");
+      return users;
+    }
+  
+    if (startIndex < 0 || endIndex < 0) {
+      PrintDebugMessage("GetUsers", "Start or End indexes cannot be negative.");
+      return users;
+    }
+  
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("GetUsers", "No connection with database");
+      return users;
+    }
+  
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM users ORDER BY id ASC OFFSET " + offset + " LIMIT " + limit + ";");
+    
+      User u = processResultSetIntoUser(rs);
+    
+      while (u != null) {
+        users.add(u);
+        u = processResultSetIntoUser(rs);
+      }
+    }
+    catch (SQLException e) {
+      return users;
+    }
+  
+    return users;
+  }
 	
 	@Override
 	public boolean RemoveUser(int userID) {

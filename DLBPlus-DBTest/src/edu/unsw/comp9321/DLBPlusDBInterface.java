@@ -189,15 +189,15 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Return the total number of users
 	 *
-	 * @return the total number of users
+	 * @return the total number of users, -1 on error
 	 */	
 	public int GetNumUsers();
 	
 	/**
 	 * Obtain a specific range of users (inclusive)
 	 *
-	 * @param startIndex the starting index
-	 * @param endIndex the ending index
+   * @param startIndex the starting index (must be 0 - (numusers - 1))
+   * @param endIndex the ending index (must be 0-numusers and >= startIndex)
 	 * @return returns a list of users in specified range
 	 */	
 	 public List<User> GetUsers(int startIndex, int endIndex);

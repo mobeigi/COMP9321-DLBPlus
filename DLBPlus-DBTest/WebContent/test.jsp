@@ -37,28 +37,13 @@
   if (u3 == null)
     u3 = db.GetUser("joe3");
 
-  //Get Listing
-  List<Listing> all = db.GetAllListings();
+  //Test GetUsers()
+  int numUsers = db.GetNumUsers();
+  List<User> userlist = db.GetUsers(0, numUsers - 1);
 
-  for (Listing l : all)
-    System.out.println("ID: " + l.getListingid() + ", Price: " + l.getSellprice());
-
-  System.out.println();
-
-  List<Listing> userlistings = db.GetUserListings(u1.getId());
-
-  for (Listing l : userlistings)
-    System.out.println("ID: " + l.getListingid() + ", Price: " + l.getSellprice());
-
-  //Get total num of listings
-  int numListings = db.GetNumListings();
-  System.out.println(numListings);
-
-  //Get range of listings
-  List<Listing> rangeListings = db.GetListings(0, numListings-1);
-
-  for (Listing l : rangeListings)
-    System.out.println("ID: " + l.getListingid() + ", Price: " + l.getSellprice());
+  for (User u : userlist) {
+    System.out.println("ID: " + u.getId() + ", " + "Username: " + u.getUsername());
+  }
 
 
 %>
