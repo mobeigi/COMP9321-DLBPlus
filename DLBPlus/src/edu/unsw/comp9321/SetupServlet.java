@@ -184,20 +184,23 @@ public class SetupServlet extends HttpServlet {
 				int rand = random.nextInt(99999);
 				System.out.println("generating " + rand);
 				request.getSession().setAttribute("confirmationNumber", rand);
-				request.getSession().setAttribute("user",newUser);
+				request.getSession().setAttribute("newUser",newUser);
 				link = "confirmation.jsp";
 			}
 		} else if(req.equals("regSuccess")){
 			String code = request.getParameter("code");
 			String emailCode = request.getSession().getAttribute("confirmationNumber").toString();
+			User newUser = new User(); 
+			newUser = (User) request.getSession().getAttribute("newUser");
 			System.out.println("code is" + emailCode);
+			System.out.println(newUser.getId());
 			if(code == null){
 				link = "confirmation.jsp";
 			} else {
 				if(code.equals(emailCode)){
+					request.getSession().setAttribute("user",newUser);
 					link = "userAccount.jsp";
 				} else {
-					request.getSession().setAttribute("user",null);
 					link = "confirmation.jsp";
 				}
 			}
