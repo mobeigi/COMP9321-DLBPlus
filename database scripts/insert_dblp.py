@@ -5,6 +5,7 @@ import os
 import sys
 import xml.sax as SAX
 import psycopg2
+import random
 
 # ----------------------------
 # This class represents a publication and its information
@@ -144,7 +145,7 @@ class SaxPublicationHandler(SAX.ContentHandler):
 			if tagname in self.publication_types:
 
 				# Set a random price for publication
-				self.currPublication.price = generateRandomPrice()
+				self.currPublication.price = str(generateRandomPrice())
 				
 				# Finalise publication object
 				self.currPublication.finalise()
@@ -325,7 +326,10 @@ def insertPublications(xmlFilename):
 	
 # This function returns a random price for a publication
 def generateRandomPrice():
-	return 0.0
+	minPrice = 499.0
+	maxPrice = 99999.0
+	randPrice = random.randint(minPrice, maxPrice) / 100.0
+	return randPrice
 
 # ----------------------------
 if (__name__ == '__main__'):
