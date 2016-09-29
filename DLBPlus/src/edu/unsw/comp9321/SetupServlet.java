@@ -161,7 +161,12 @@ public class SetupServlet extends HttpServlet {
 			String address = request.getParameter("address");
 			String creditCard = request.getParameter("ccn");
 			String stringDob = request.getParameter("dob");
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 
+			System.out.println(stringDob);
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd"); 
+			if(address == null){
+				address="";
+			}
+			System.out.println(firstName + " " + lastName + " " + userName+ " " + email + " " + password + " " + address + " " + creditCard + " " + stringDob);
 			Date dob = null;
 			String dp = "";
 			try {
@@ -169,12 +174,14 @@ public class SetupServlet extends HttpServlet {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			if (db.doesUserExist(userName)){
-				errorMessage = "User already exists!";
+			System.out.println(dob);
+			if (db.DoesUserExist(userName)){
+				errorMessage = "Username already exists!";
 				link = "register.jsp";
 			} else {
 				User newUser = new User();
 				newUser = db.CreateUser(userName, password, firstName, lastName, email, address, dob, creditCard, dp);
+				System.out.println(newUser.getId());
 				Random random = new Random();
 				int rand = random.nextInt();
 				request.getSession().setAttribute("confirmationNumber", rand);
@@ -184,6 +191,7 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("regSuccess")){
 			link = "registerSuccess.jsp";
 		} else if(req.equals("login")){
+			String userName = request.getParameter("userName");
 			link = "userAccount.jsp";
 		} else if(req.equals("confirmPurchase")){
 			link = "transactionSuccessful.jsp";

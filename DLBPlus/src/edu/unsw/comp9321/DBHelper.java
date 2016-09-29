@@ -211,7 +211,7 @@ public class DBHelper implements DLBPlusDBInterface {
 		return p;
 	}
 
-  /**
+	/**
 	 * Create a user by inserting provideduser details into database
 	 *
 	 * @param username Provided username
@@ -224,7 +224,7 @@ public class DBHelper implements DLBPlusDBInterface {
 			return null;
 
 		try {
-			if (!doesUserExist(username)) {
+			if (!DoesUserExist(username)) {
         PrintDebugMessage("CreateUser", "User does not exist, creating new user with username: " + username);
         
 				//Generate random salt and hashed password
@@ -262,7 +262,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @param username Username to check
 	 * @return boolean True for exists, False otherwise
 	 */
-	public boolean doesUserExist(String username) {
+	public boolean DoesUserExist(String username) {
 		if (!dbConnStatus)
 			return true;
 
@@ -300,7 +300,7 @@ public class DBHelper implements DLBPlusDBInterface {
       return false;
     
     try {
-      if (doesUserExist(inputUsername)) { //user exists
+      if (DoesUserExist(inputUsername)) { //user exists
         
         //Get salt + hash from database
         Statement stmt;
@@ -331,28 +331,43 @@ public class DBHelper implements DLBPlusDBInterface {
       return false;
     }
 	}
-  
-  /**
-   * Validate an admin
-   *
-   * @param inputUsername the username of admin
-   * @param inputPwd plaintext password for admin
-   * @return boolean True when admin is verifed, False otherwise
-   */
-	public boolean VerifyAdmin(String inputUsername, String inputPwd) {
-		// TODO
-		return false;
-	}
 	
 	/**
 	 * Create a listing (item for sale)
 	 *
-	 * @param newListing The new listing to be added\
-	 * @return boolean True when listing was successfully created; false otherwise
+	 * @return Listing Null if listing unsuccessful, Listing of newly created listing otherwise
 	 */
-	 public boolean CreateListing(Listing newListing) {
-		// TODO
-		return true;
+	 public Listing CreateListing(User seller, Publication item, Integer quantity, Timestamp listdate, Timestamp enddate,
+                                Double sellprice, String image) {
+     if (!dbConnStatus)
+       return null;
+    
+     if (seller == null || item == null) {
+       PrintDebugMessage("CreateListing", "Error! Seller or item is null");
+       return null;
+     }
+     
+     try {
+       Statement stmt;
+       dbConn.setAutoCommit(false);
+       stmt = dbConn.createStatement();
+       String q = "INSERT INTO listings (sellerid, itemid, quantity, listdate, enddate, sellprice, image) " +
+         "VALUES (" + seller.getId() + ", " + item.getId() + ", " + quantity + ", to_timestamp(" + listdate.getTime() + "), to_timestamp(" + enddate.getTime() + "), " + sellprice + ", '" + image + "')" +
+         "RETURNING listingid;";
+       PrintDebugMessage("CreateListing", "Running query: " + q);
+       ResultSet rs = stmt.executeQuery(q);
+       
+       if (rs.next()) {
+         Integer listingid = rs.getInt("listingid");
+         dbConn.commit();
+         return GetListing(listingid);
+       } else {
+         return null;
+       }
+     }
+     catch (SQLException e) {
+       return null;
+     }
 	 }
 	 
 	/**
@@ -591,9 +606,65 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return the listing corresponding to given ID; null if such a listing doesn't exist
 	 */
 	public Listing GetListing(int listingID) {
-		// TODO Auto-generated method stub
-		return null;
+    if (!dbConnStatus)
+      return null;
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings where listingid = " + listingID + ";" );
+      
+      return processResultSetIntoListing(rs);
+    }
+    catch (SQLException e) {
+      return null;
+    }
 	}
+  
+  /**
+   * Given a result set, parse next row of values into Listing
+   *
+   * @param rs result set for a query on the listing table
+   * @return null if no match found/rows exhausted, listing of next row otherwise
+   */
+  private Listing processResultSetIntoListing(ResultSet rs) {
+    Listing l = new Listing();
+    
+    try {
+      if (rs.next()) {
+        Integer listingid = rs.getInt("listingid");
+        Integer sellerid = rs.getInt("sellerid");
+        Integer itemid = rs.getInt("itemid");
+        Integer quantity = rs.getInt("quantity");
+        Timestamp listdate = rs.getTimestamp("listdate");
+        Timestamp enddate = rs.getTimestamp("enddate");
+        Double sellprice = rs.getDouble("sellprice");
+        String image = rs.getString("image");
+        Boolean paused = rs.getBoolean("paused");
+        Integer numviews = rs.getInt("numviews");
+        
+        //Set User fields
+        l.setListingid(listingid);
+        l.setSellerid(sellerid);
+        l.setItemid(itemid);
+        l.setQuantity(quantity);
+        l.setListdate(listdate);
+        l.setEnddate(enddate);
+        l.setSellprice(sellprice);
+        l.setImage(image);
+        l.setPaused(paused);
+        l.setNumviews(numviews);
+        
+      } else { //No result found
+        l = null;
+      }
+    } catch (SQLException e) {
+      return null;
+    }
+    
+    return l;
+  }
 
 	 /**
 	 * Incremements the number of views on a particular listing
@@ -614,5 +685,241 @@ public class DBHelper implements DLBPlusDBInterface {
 	private void PrintDebugMessage(String function, String message) {
     System.out.println(function + ": " + message);
   }
+	
+	@Override
+	public int GetNumUsers() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public List<User> GetUsers(int startIndex, int endIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public boolean RemoveUser(int userID) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public boolean SetUserStatus(int userID, boolean newStatus) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public boolean RemoveListing(int listingID) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public int GetNumListings() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public List<Listing> GetListings(int startIndex, int endIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * Create an admin
+	 *
+	 * @param username the username of the new admin
+	 * @param plainTextPassword plaintext password for new admin
+	 * @return returns an Admin object when succesfully created, otherwise
+	 */		
+	public Admin CreateAdmin(String username, String plainTextPassword) {
+		if (!this.dbConnStatus) {
+			this.PrintDebugMessage("CreateAdmin", "No connection with database");
+			return null;
+		}
+		
+		try {
+			if (!DoesAdminExist(username)) {
+				
+				//Generate random salt and hashed password
+				final Random r = new SecureRandom();
+				byte[] salt = new byte[32];
+				r.nextBytes(salt);
+				String encodedSalt = Base64.encode(salt);
+				String passwordHash = DigestUtils.sha1Hex(encodedSalt + plainTextPassword);
+	    
+				// Prepare insert statement
+				Statement stmt;
+				dbConn.setAutoCommit(false);
+				stmt = dbConn.createStatement();
+				String q = "INSERT INTO admins (username, salt, password) " +
+						"VALUES ('" + username + "', '" + encodedSalt + "', '" + passwordHash + "')";
+				PrintDebugMessage("CreateAdmin", "Running query: " + q);
+				stmt.executeUpdate(q);
+				dbConn.commit();
+				
+				// Return the newly created admin
+				return this.GetAdmin(username);
+				
+			} else {
+				this.PrintDebugMessage("CreateAdmin", "Error: Admin with username " + username + " already exists.");
+				return null;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	/**
+	 * Get an admin
+	 * 
+	 * @param username the username of the admin
+	 * @return returns an Admin object if succesfully retrieved, null otherwise
+	 */
+	public Admin GetAdmin(String username) {
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("GetAdmin", "No connection with database");
+			return null;
+		}
+		  
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM admins where username = '" + username + "';" );
+    
+			return processResultSetIntoAdmin(rs);
+			
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
+	/**
+	* Validate an admin
+	*
+	* @param inputUsername the username of admin
+	* @param inputPwd plaintext password for admin
+	* @return boolean True when admin is verifed, False otherwise
+	*/
+	public boolean VerifyAdmin(String inputUsername, String inputPwd) {
+
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("VerifyAdmin", "No connection with database");
+			return false;
+		}
+	      
+		try {
+			if (DoesAdminExist(inputUsername)) { //admin exists
+      
+				//Get salt + hash from database
+				Statement stmt;
+				dbConn.setAutoCommit(false);
+				stmt = dbConn.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT salt, password FROM admins where username = '" + inputUsername + "';" );
+      
+				if (rs.next()) {
+					String salt = rs.getString("salt");
+					String storePasswordHash = rs.getString("password");
+        
+					//Create testHash to compare
+					String testHash = DigestUtils.sha1Hex(salt + inputPwd);
+        
+					//Perform comparison
+					//Valid input password
+					return testHash.equals(storePasswordHash);
+				} else {
+					//Should never happen
+					return false;
+				}
+			} else {
+				PrintDebugMessage("VerifyAdmin", "Error! No admin exists with username: " + inputUsername);
+				return false;
+			}
+		} catch (SQLException e) {
+			return false;
+		}
+	}
+	
+	/**
+	 * Checks whether an admin with given username exists
+	 *
+	 * @param username Username to check
+	 * @return boolean True for exists, False otherwise
+	 */
+	public boolean DoesAdminExist(String username) {
+		if (!dbConnStatus)
+			return true;
+
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM admins where username = '" + username + "';" );
+
+			if (rs.next()) {
+				int count = rs.getInt("count");
+				if (count == 0)
+					return false;
+				else
+					return true;
+			}
+
+			return true; //this should never be returned
+		}
+		catch (SQLException e) {
+			return true; //this should never be returned
+		}
+	}
+	
+	/**
+	* Given a result set, parse next row of values into User
+	*
+	* @param rs result set for a query on the user table
+	* @return null if no match found/rows exhausted, user of next row otherwise
+	*/
+	private Admin processResultSetIntoAdmin(ResultSet rs) {
+		Admin a = new Admin();
+    
+	    try {
+	    	if (rs.next()) {
+	    		Integer id = rs.getInt("id");
+	    		String username = rs.getString("username");
+        
+	    		//Set User fields
+	    		a.setId(id);
+	    		a.setUsername(username);
+
+	    	} else { //No result found
+	    		a = null;
+	    	}
+	    } catch (SQLException e) {
+	    	return null;
+	    }
+    
+	    return a;
+  }
+
+	@Override
+	public boolean SetAcctConfirmed(int userID, boolean confirmedStatus) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean ChangeUserDetails(User changedUser) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Listing> GetUserListings(int userID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

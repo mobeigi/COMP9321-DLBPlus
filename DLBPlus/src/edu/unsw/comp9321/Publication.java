@@ -323,6 +323,6 @@ public class Publication {
 	public void showDetails() {
 		System.out.println("id: " + this.id);
 		System.out.println("Number of authors: " + this.authors.size());
-		System.out.println(this.formattedAuthors);
+
 	}
 }

@@ -17,6 +17,11 @@
 	   $(document).ready(function() {
 	      $('select').material_select();
 	  });
+	   
+	   $('.datepicker').pickadate({
+		    selectMonths: true, // Creates a dropdown to control month
+		    selectYears: 15 // Creates a dropdown of 15 years to control year
+	  });
 	</script>
 	<nav class="light-blue lighten-1" role="navigation">
 	   <div class="nav-wrapper container"><a id="logo-container" href="?action=home" class="brand-logo"><img src="images/logo_white.png" alt="logo"></a>
@@ -45,36 +50,36 @@
 					<form action="setup" method="post">
 		              	<div class="row">
 		              		<div class="col s6">
-			           			<input placeholder="Username"      id="textbox" name="newUserName" type="text" />
+			           			<input class="validate" placeholder="Username" required="" aria-required="" name="uname" type="text" />
 			           		</div>
 			           		<div class="col s6">
-			     		    	<input placeholder="Password"      id="textbox" name="newPassword" type="text" />
+			     		    	<input placeholder="Password" required="" aria-required="" name="pass" type="text" />
 		     		    	</div>
 			     		</div>
 			     		<div class="row">
 			     			<div class="col s6">
-			     		    	<input placeholder="First Name"    id="textbox" name="newFirstName" type="text" />
+			     		    	<input placeholder="First Name" required="" aria-required="" name="fname" type="text" />
 			     		    </div>
 			     		    <div class="col s6">
-			     		    	<input placeholder="Last Name"     id="textbox" name="newLastName" type="text" />
+			     		    	<input placeholder="Last Name" required="" aria-required="" name="lname" type="text" />
 			     		    </div>
 			     		</div>
         				<div class="row">
         					<div class="col s12">
-			              		<input placeholder="Email"         id="textbox" name="newEmail" type="text" />
+			              		<input class="validate" placeholder="Email" required="" aria-required="" name="email" type="text" />
 		              		</div>
 		              	</div>
         				<div class="row">
         					<div class="col s12">
-			              		<input placeholder="Address"       id="textbox" name="newAddress" type="text" />
+			              		<input placeholder="Address" name="address" type="text" />
 		              		</div>
 		              	</div>			     		
 		              	<div class="row">
 			     			<div class="col s6">
-			     		    	<input placeholder="Date of Birth" id="textbox" name="newDOB" type="text" />
+			     		    	<input class="datepicker" placeholder="Date of Birth" required="" aria-required="" name="dob" type="date" />
 			     		    </div>
 			     		    <div class="col s6">
-			     		    	<input placeholder="Credit Card Number"     id="textbox" name="newCCNo" type="text" />
+			     		    	<input class="validate" placeholder="Credit Card Number" required="" aria-required="" name="ccn" type="text" />
 			     		    </div>
 			     		</div>
 			           	<div class="row">
