@@ -181,15 +181,25 @@ public class SetupServlet extends HttpServlet {
 			} else {
 				User newUser = new User();
 				newUser = db.CreateUser(userName, password, firstName, lastName, email, address, dob, creditCard, dp);
-				System.out.println(newUser.getId());
 				Random random = new Random();
-				int rand = random.nextInt();
+				int rand = random.nextInt(99999);
+				System.out.println("generating " + rand);
 				request.getSession().setAttribute("confirmationNumber", rand);
+				
 				link = "confirmation.jsp";
 			}
 			link = "confirmation.jsp";
 		} else if(req.equals("regSuccess")){
-			link = "registerSuccess.jsp";
+			String code = request.getParameter("code");
+			
+			String emailCode = request.getSession().getAttribute("confirmationNumber").toString();
+			System.out.println("code is" + emailCode);
+			if(code.equals(emailCode)){
+				link = "userAccount.jsp";
+			} else {
+				link = "confirmation.jsp";
+			}
+			
 		} else if(req.equals("login")){
 			String errorMessage = "";
 			String userName = request.getParameter("uname");
@@ -213,6 +223,8 @@ public class SetupServlet extends HttpServlet {
 			link = "userAccount.jsp";
 		} else if(req.equals("toAccount")){
 			link = "userAccount.jsp";
+		} else if(req.equals("history")){
+			link = "orderhist.jsp";
 		}
 		
 		 RequestDispatcher rd = request.getRequestDispatcher("/"+link);

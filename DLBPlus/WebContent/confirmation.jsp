@@ -47,7 +47,7 @@
 		              	<div class="row">
 		              		<div class="col s12">
 		              			<label>Please enter your confirmation code:</label>
-			           			<input placeholder="Confirmation Code" id="textbox" name="code" type="text" />
+			           			<input placeholder="Confirmation Code" name="code" type="text" />
 			           		</div>
 			           	</div>
 			     		
