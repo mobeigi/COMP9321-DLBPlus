@@ -290,7 +290,17 @@ public interface DLBPlusDBInterface {
    * @param endIndex the ending index (must be 0-numlistings and >= startIndex)
    * @return returns a list of listings in specified range or empty list
    */
-	 public List<Listing> GetListings(int startIndex, int endIndex);
+	public List<Listing> GetListings(int startIndex, int endIndex);
+	 
+	
+	/**
+	 * Creates an order, after the purchase has been made
+	 * 
+	 * @param buyer the User object of the buyer
+	 * @param soldListing the Listing object that is bought
+	 * @return the Order if successfully created, null otherwise
+	 */
+	public Order CreateOrder(User buyer, Listing soldListing);
 
 	/**
 	 * Obtain the order history of a particular user

@@ -53,9 +53,9 @@ public class DBHelper implements DLBPlusDBInterface {
 	 */
 	public Publication GetRandomPublication() {
 		if (!dbConnStatus) {
-      this.PrintDebugMessage("GetRandomPublication", "No connection with database");
-      return null;
-    }
+	      this.PrintDebugMessage("GetRandomPublication", "No connection with database");
+	      return null;
+	    }
 
 		try {
 			Statement stmt;
@@ -78,9 +78,9 @@ public class DBHelper implements DLBPlusDBInterface {
 	 */
 	public Publication GetPublication(int pubID) {
 		if (!dbConnStatus) {
-      this.PrintDebugMessage("GetPublication", "No connection with database");
-      return null;
-    }
+	      this.PrintDebugMessage("GetPublication", "No connection with database");
+	      return null;
+	    }
 
 		try {
 			Statement stmt;
@@ -225,9 +225,9 @@ public class DBHelper implements DLBPlusDBInterface {
 	public User CreateUser(String username, String plainTextPassword, String fname, String lname, String email,
 												 String address, java.util.Date dob, String creditcard, String dp) {
 		if (!dbConnStatus) {
-      this.PrintDebugMessage("CreateUser", "No connection with database");
-      return null;
-    }
+			this.PrintDebugMessage("CreateUser", "No connection with database");
+			return null;
+		}
 
 		try {
 			if (!DoesUserExist(username)) {
@@ -393,42 +393,42 @@ public class DBHelper implements DLBPlusDBInterface {
    * @return boolean True when user is verifed, False otherwise
    */
 	public boolean VerifyUser(String inputUsername, String inputPwd) {
-    if (!dbConnStatus) {
-      this.PrintDebugMessage("VerifyUser", "No connection with database");
-      return false;
-    }
-    
-    try {
-      if (DoesUserExist(inputUsername)) { //user exists
-        
-        //Get salt + hash from database
-        Statement stmt;
-        dbConn.setAutoCommit(false);
-        stmt = dbConn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT salt, password FROM users where username = '" + inputUsername + "';" );
-        
-        if (rs.next()) {
-          String salt = rs.getString("salt");
-          String storePasswordHash = rs.getString("password");
-          
-          //Create testHash to compare
-          String testHash = DigestUtils.sha1Hex(salt + inputPwd);
-          
-          //Perform comparison
-          //Valid input password
-          return testHash.equals(storePasswordHash);
-        } else {
-          //Should never happen
-          return false;
-        }
-      } else {
-        PrintDebugMessage("VerifyUser", "Error! No user exists with username: " + inputUsername);
-        return false;
-      }
-    }
-    catch (SQLException e) {
-      return false;
-    }
+	    if (!dbConnStatus) {
+	      this.PrintDebugMessage("VerifyUser", "No connection with database");
+	      return false;
+	    }
+	    
+	    try {
+	      if (DoesUserExist(inputUsername)) { //user exists
+	        
+	        //Get salt + hash from database
+	        Statement stmt;
+	        dbConn.setAutoCommit(false);
+	        stmt = dbConn.createStatement();
+	        ResultSet rs = stmt.executeQuery("SELECT salt, password FROM users where username = '" + inputUsername + "';" );
+	        
+	        if (rs.next()) {
+	          String salt = rs.getString("salt");
+	          String storePasswordHash = rs.getString("password");
+	          
+	          //Create testHash to compare
+	          String testHash = DigestUtils.sha1Hex(salt + inputPwd);
+	          
+	          //Perform comparison
+	          //Valid input password
+	          return testHash.equals(storePasswordHash);
+	        } else {
+	          //Should never happen
+	          return false;
+	        }
+	      } else {
+	        PrintDebugMessage("VerifyUser", "Error! No user exists with username: " + inputUsername);
+	        return false;
+	      }
+	    }
+	    catch (SQLException e) {
+	      return false;
+	    }
 	}
   
   /**
@@ -465,37 +465,37 @@ public class DBHelper implements DLBPlusDBInterface {
 	 */
 	 public Listing CreateListing(User seller, Publication item, Integer quantity, Timestamp listdate, Timestamp enddate,
                                 Double sellprice, String image) {
-     if (!dbConnStatus) {
-       this.PrintDebugMessage("CreateListing", "No connection with database");
-       return null;
-     }
-    
-     if (seller == null || item == null) {
-       PrintDebugMessage("CreateListing", "Error! Seller or item is null");
-       return null;
-     }
-     
-     try {
-       Statement stmt;
-       dbConn.setAutoCommit(false);
-       stmt = dbConn.createStatement();
-       String q = "INSERT INTO listings (sellerid, itemid, quantity, listdate, enddate, sellprice, image) " +
-         "VALUES (" + seller.getId() + ", " + item.getId() + ", " + quantity + ", to_timestamp(" + listdate.getTime() + "), to_timestamp(" + enddate.getTime() + "), " + sellprice + ", '" + image + "')" +
-         "RETURNING listingid;";
-       PrintDebugMessage("CreateListing", "Running query: " + q);
-       ResultSet rs = stmt.executeQuery(q);
-       
-       if (rs.next()) {
-         Integer listingid = rs.getInt("listingid");
-         dbConn.commit();
-         return GetListing(listingid);
-       } else {
-         return null;
-       }
-     }
-     catch (SQLException e) {
-       return null;
-     }
+	     if (!dbConnStatus) {
+	       this.PrintDebugMessage("CreateListing", "No connection with database");
+	       return null;
+	     }
+	    
+	     if (seller == null || item == null) {
+	       PrintDebugMessage("CreateListing", "Error! Seller or item is null");
+	       return null;
+	     }
+	     
+	     try {
+	       Statement stmt;
+	       dbConn.setAutoCommit(false);
+	       stmt = dbConn.createStatement();
+	       String q = "INSERT INTO listings (sellerid, itemid, quantity, listdate, enddate, sellprice, image) " +
+	         "VALUES (" + seller.getId() + ", " + item.getId() + ", " + quantity + ", to_timestamp(" + listdate.getTime() + "), to_timestamp(" + enddate.getTime() + "), " + sellprice + ", '" + image + "')" +
+	         "RETURNING listingid;";
+	       PrintDebugMessage("CreateListing", "Running query: " + q);
+	       ResultSet rs = stmt.executeQuery(q);
+	       
+	       if (rs.next()) {
+	         Integer listingid = rs.getInt("listingid");
+	         dbConn.commit();
+	         return GetListing(listingid);
+	       } else {
+	         return null;
+	       }
+	     }
+	     catch (SQLException e) {
+	       return null;
+	     }
 	 }
 	 
 	/**
@@ -506,23 +506,23 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return boolean True when paused was successfully set. False otherwise
 	 */
 	 public boolean SetPausedStatus(Listing listing, boolean paused) {
-     if (!dbConnStatus) {
-       this.PrintDebugMessage("SetPausedStatus", "No connection with database");
-       return false;
-     }
-    
-     try {
-       Statement stmt;
-       dbConn.setAutoCommit(false);
-       stmt = dbConn.createStatement();
-       stmt.executeUpdate("UPDATE listings SET paused = " + paused + " WHERE listingid = " + listing.getListingid() + ";" );
-       dbConn.commit();
-       listing.setPaused(paused); //update local object
-       return true;
-     }
-     catch (SQLException e) {
-       return false;
-     }
+	     if (!dbConnStatus) {
+	       this.PrintDebugMessage("SetPausedStatus", "No connection with database");
+	       return false;
+	     }
+	    
+	     try {
+	       Statement stmt;
+	       dbConn.setAutoCommit(false);
+	       stmt = dbConn.createStatement();
+	       stmt.executeUpdate("UPDATE listings SET paused = " + paused + " WHERE listingid = " + listing.getListingid() + ";" );
+	       dbConn.commit();
+	       listing.setPaused(paused); //update local object
+	       return true;
+	     }
+	     catch (SQLException e) {
+	       return false;
+	     }
 	 }
 	 
 	/**
@@ -749,6 +749,18 @@ public class DBHelper implements DLBPlusDBInterface {
 		//TODO
 		return removedCartItems;
 	}
+	
+	/**
+	 * Creates an order, after the purchase has been made
+	 * 
+	 * @param buyer the User object of the buyer
+	 * @param soldListing the Listing object that is bought
+	 * @return the Order if successfully created, null otherwise
+	 */
+	public Order CreateOrder(User buyer, Listing soldListing) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/**
 	 * Obtain the order history of a particular user
@@ -757,31 +769,31 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return returns a list of orders that the user has made
 	 **/	
 	public List<Order> GetOrderHistory(int userID) {
-    List<Order> orderHistory = new ArrayList<Order>();
-    
-    if (!dbConnStatus) {
-      this.PrintDebugMessage("GetOrderHistory", "No connection with database");
-      return orderHistory;
-    }
-    
-    try {
-      Statement stmt;
-      dbConn.setAutoCommit(false);
-      stmt = dbConn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT * FROM orders WHERE buyerid = '" + userID + "';");
-      
-      Order o = processResultSetIntoOrder(rs);
-      
-      while (o != null) {
-        orderHistory.add(o);
-        o = processResultSetIntoOrder(rs);
-      }
-    }
-    catch (SQLException e) {
-      return orderHistory;
-    }
-    
-    return orderHistory;
+	    List<Order> orderHistory = new ArrayList<Order>();
+	    
+	    if (!dbConnStatus) {
+	      this.PrintDebugMessage("GetOrderHistory", "No connection with database");
+	      return orderHistory;
+	    }
+	    
+	    try {
+	      Statement stmt;
+	      dbConn.setAutoCommit(false);
+	      stmt = dbConn.createStatement();
+	      ResultSet rs = stmt.executeQuery("SELECT * FROM orders WHERE buyerid = '" + userID + "';");
+	      
+	      Order o = processResultSetIntoOrder(rs);
+	      
+	      while (o != null) {
+	        orderHistory.add(o);
+	        o = processResultSetIntoOrder(rs);
+	      }
+	    }
+	    catch (SQLException e) {
+	      return orderHistory;
+	    }
+	    
+	    return orderHistory;
 	}
   
   /**
@@ -1399,5 +1411,7 @@ public class DBHelper implements DLBPlusDBInterface {
     
 	    return a;
   }
+
+
 
 }
