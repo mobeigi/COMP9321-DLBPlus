@@ -163,6 +163,22 @@ public interface DLBPlusDBInterface {
 	public boolean DoesUserExist(String username);
 	
 	/**
+	 * Sets the account confirmed status to a new value
+	 * 
+	 * @param userID the id of the user account
+	 * @param confirmedStatus the new status to change to
+	 * @return True when successfully changed, False otherwise
+	 */
+	public boolean SetAcctConfirmed(int userID, boolean confirmedStatus);
+	
+	/**
+	 * Changes the deets of a user
+	 * @param changedUser The User object that contains all the information to change
+	 * @return True whether user was changed successfully, false otherwise
+	 */
+	public boolean ChangeUserDetails(User changedUser);
+	
+	/**
 	 * Obtain a list of all users
 	 *
 	 * @return @return returns a list of all existing users, regardless of account status, empty list otherwise
@@ -242,6 +258,13 @@ public interface DLBPlusDBInterface {
 	 * @return returns a list of listings
 	 */		
 	public List<Listing> GetAllListings();
+	
+	/**
+	 * Obtain a list of listings by a particular user
+	 *
+	 * @return returns a list of listings
+	 */		
+	public List<Listing> GetUserListings(int userID);
 	
 	/**
 	 * Remove a specified listing
