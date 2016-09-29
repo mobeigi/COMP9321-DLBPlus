@@ -481,12 +481,12 @@ public class DBHelper implements DLBPlusDBInterface {
 	       stmt = dbConn.createStatement();
 	       String q = "INSERT INTO listings (sellerid, itemid, quantity, listdate, enddate, sellprice, image) " +
 	         "VALUES (" + seller.getId() + ", " + item.getId() + ", " + quantity + ", to_timestamp(" + listdate.getTime() + "), to_timestamp(" + enddate.getTime() + "), " + sellprice + ", '" + image + "')" +
-	         "RETURNING listingid;";
+	         "RETURNING id;";
 	       PrintDebugMessage("CreateListing", "Running query: " + q);
 	       ResultSet rs = stmt.executeQuery(q);
 	       
 	       if (rs.next()) {
-	         Integer listingid = rs.getInt("listingid");
+	         Integer listingid = rs.getInt("id");
 	         dbConn.commit();
 	         return GetListing(listingid);
 	       } else {
@@ -515,7 +515,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	       Statement stmt;
 	       dbConn.setAutoCommit(false);
 	       stmt = dbConn.createStatement();
-	       stmt.executeUpdate("UPDATE listings SET paused = " + paused + " WHERE listingid = " + listing.getListingid() + ";" );
+	       stmt.executeUpdate("UPDATE listings SET paused = " + paused + " WHERE id = " + listing.getListingid() + ";" );
 	       dbConn.commit();
 	       listing.setPaused(paused); //update local object
 	       return true;
@@ -536,18 +536,46 @@ public class DBHelper implements DLBPlusDBInterface {
 		// TODO
 		return results;
 	}
-
-	/**
-	 * Add a listing to a user's cart
-	 *
-	 * @param user contains the cartid of the user
-	 * @param listingToAdd contains the listing to add into the user's cart
-	 * @return boolean whether the update was successful
-	 */	
-	public boolean AddToCart(User user, Listing listingToAdd) {
-    // TODO
-		return true;
-	}
+  
+  /**
+   * Add a listing to a user's cart
+   *
+   * @param user contains the cartid of the user
+   * @param listingToAdd contains the listing to add into the user's cart
+   * @return CartItem of item that was added if successful, null otherwise
+   */
+  public CartItem AddToCart(User user, Listing listingToAdd) {
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("AddToCart", "No connection with database");
+      return null;
+    }
+    
+    try {
+      //Generate timestamp
+      Date now = new Date();
+      Timestamp tNow = new Timestamp(now.getTime());
+      
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      String q = "INSERT INTO activecartitems (cartid, listingid, addedts) " +
+        "VALUES (" + user.getCartid() + ", " + listingToAdd.getListingid() + ", to_timestamp(" + tNow.getTime()  + "));";
+      PrintDebugMessage("AddToCart", "Running query: " + q);
+      stmt.executeUpdate(q);
+      dbConn.commit();
+      
+      //Create CartItem to return
+      CartItem cartItem = new CartItem();
+      cartItem.setCartid(user.getCartid());
+      cartItem.setListingid(listingToAdd.getListingid());
+      cartItem.setAddedts(tNow);
+      cartItem.setActive(true);
+      return cartItem;
+    }
+    catch (SQLException e) {
+      return null;
+    }
+  }
 	
 	/**
 	 * Remove a particular listing from a user's cart
@@ -871,7 +899,7 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT * FROM listings where listingid = " + listingID + ";" );
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings where id = " + listingID + ";" );
       
       return processResultSetIntoListing(rs);
     }
@@ -891,7 +919,7 @@ public class DBHelper implements DLBPlusDBInterface {
     
     try {
       if (rs.next()) {
-        Integer listingid = rs.getInt("listingid");
+        Integer listingid = rs.getInt("id");
         Integer sellerid = rs.getInt("sellerid");
         Integer itemid = rs.getInt("itemid");
         Integer quantity = rs.getInt("quantity");
@@ -973,7 +1001,7 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      stmt.executeUpdate("UPDATE listings SET numviews = numviews + 1 WHERE listingid = " + listing.getListingid() + ";" );
+      stmt.executeUpdate("UPDATE listings SET numviews = numviews + 1 WHERE id = " + listing.getListingid() + ";" );
       dbConn.commit();
       listing.setNumviews(listing.getNumviews() + 1); //update local object
       return true;
@@ -1123,7 +1151,7 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      stmt.executeUpdate("DELETE FROM listings WHERE listingid = " + listingID + ";");
+      stmt.executeUpdate("DELETE FROM listings WHERE id = " + listingID + ";");
       dbConn.commit();
       return true;
     }
@@ -1219,7 +1247,7 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT * FROM listings ORDER BY listingid ASC OFFSET " + offset + " LIMIT " + limit + ";");
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings ORDER BY id ASC OFFSET " + offset + " LIMIT " + limit + ";");
     
       Listing l = processResultSetIntoListing(rs);
     

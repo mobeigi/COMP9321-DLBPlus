@@ -84,15 +84,15 @@ public interface DLBPlusDBInterface {
    * @return boolean True when paused was successfully set. False otherwise
    */
 	public boolean SetPausedStatus(Listing listing, boolean paused);
-
-	/**
-	 * Add a listing to a user's cart
-	 *
-	 * @param user contains the cartid of the user
-	 * @param listingToAdd contains the listing to add into the user's cart
-	 * @return boolean whether the update was successful
-	 */	
-	public boolean AddToCart(User user, Listing listingToAdd);
+  
+  /**
+   * Add a listing to a user's cart
+   *
+   * @param user contains the cartid of the user
+   * @param listingToAdd contains the listing to add into the user's cart
+   * @return CartItem of item that was added if successful, null otherwise
+   */
+  public CartItem AddToCart(User user, Listing listingToAdd);
 
 	/**
 	 * Remove a particular listing from a user's cart

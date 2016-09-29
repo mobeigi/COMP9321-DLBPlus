@@ -37,11 +37,26 @@
   if (u3 == null)
     u3 = db.GetUser("joe3");
 
-  //Remove this users listings
-  List<Listing> listings = db.GetUserListings(u1.getId());
-  for (Listing l : listings) {
-    db.RemoveListing(l.getListingid());
-  }
+  //Make some listings
+  Timestamp now = new Timestamp(new Date().getTime());
+  Timestamp later = new Timestamp(new Date().getTime() + 10000);
+
+  Publication p = db.GetPublication(10);
+  Listing l1 = db.CreateListing(u2, p, 10, now, later, 50.00, "temp image");
+
+  p = db.GetPublication(20);
+  Listing l2 = db.CreateListing(u2, p, 3, now, later, 22.50, "temp image");
+
+  p = db.GetPublication(70);
+  Listing l3 = db.CreateListing(u1, p, 78, now, later, 1000.00, "temp image");
+
+  if (l3 == null)
+    System.out.println("yep its null");
+
+  //Lets add some shit to u3's cart
+  db.AddToCart(u3, l1);
+  db.AddToCart(u3, l2);
+  db.AddToCart(u3, l3);
 
 %>
 </body>
