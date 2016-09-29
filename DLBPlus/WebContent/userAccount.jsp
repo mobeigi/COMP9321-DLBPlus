@@ -39,21 +39,51 @@
         </div>
  	</div>
 	
-	<div class="center">
-           <div id="searchRightContainer">
-                    <a href ="modifyDetails.jsp">Modify Details and life</a>
-                </div>
-                  <div id="searchRightContainer">
-                    <a href ="userSellListings.jsp">User Sell Listings</a>
-                </div>
-                  <div id="searchRightContainer">
-                    <a href ="userSoldListings.jsp">User Sold Listings</a>
-                </div>
-                  <div id="searchRightContainer">
-                    <a href ="cart.jsp">Cart</a>
-                </div>
-    </div>
-                
+	<div class="row">
+ 		<div class="col s6 offset-s3">
+ 			<div class="card white">
+        		<div class="card-content black-text">
+        			<div class="row">
+        				<div class="col s6">
+        					<h5 class="Header center flow-text">Orders</h5>
+        					<br>
+       						<center><a href="?action=history&method=post">
+       							View Order History
+       						</a></center>			
+        				</div>
+        				<div class="col s6">
+        					<h5 class="Header center flow-text">Your Listings</h5>
+        					<br>
+       						<center><a href="?action=history&method=post">
+       							View Listings
+       						</a></center>		
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        </div>	
+   	</div>
+	<br><br>
+	
+	<div class="row">
+ 		<div class="col s6 offset-s3">
+ 			<div class="card white">
+        		<div class="card-content black-text">
+        			<div class="row">
+        				<div class="col s12">
+        					<h5 class="Header center flow-text">Account Management</h5>
+        					<br>
+       						<center><a href="?action=history&method=post">
+       							Edit details
+       						</a></center>		
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        </div>	
+   	</div>
+    <br><br>
+    
    <jsp:include page="footer.jsp" />
 </body>
 </html>
