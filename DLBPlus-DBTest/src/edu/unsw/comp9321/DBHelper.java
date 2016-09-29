@@ -580,11 +580,11 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Remove a particular listing from a user's cart
 	 *
-	 * @param user contains the cartid of the user
+	 * @param user contains the id of the user
 	 * @param listingID	the ID of the listing to remove
 	 * @return boolean True when removal was successful
 	 */		
-	public boolean RemoveFromCart(User user, int listingID) {
+	public boolean RemoveFromCart(int userID, int listingID) {
 		//TODO
 		return true;
 	}
@@ -785,7 +785,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @param soldListing the Listing object that is bought
 	 * @return the Order if successfully created, null otherwise
 	 */
-	public Order CreateOrder(User buyer, Listing soldListing) {
+	public Order CreateOrder(int userID, Listing soldListing) {
 		// TODO Auto-generated method stub
 		return null;
 	}
