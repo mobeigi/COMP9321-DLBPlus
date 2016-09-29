@@ -37,13 +37,11 @@
   if (u3 == null)
     u3 = db.GetUser("joe3");
 
-  //Test GetUsers()
-  int numUsers = db.GetNumUsers();
-  List<User> userlist = db.GetUsers(0, numUsers - 1);
-
-  for (User u : userlist) {
-    System.out.println("ID: " + u.getId() + ", " + "Username: " + u.getUsername());
-  }
+  //Test SetUserStatus
+  db.SetUserStatus(u1, true);
+  System.out.println("ID: " + u1.getId() + ", Status: " + u1.getAcctstatus());
+  db.SetUserStatus(u1, false);
+  System.out.println("ID: " + u1.getId() + ", Status: " + u1.getAcctstatus());
 
 
 %>

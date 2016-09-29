@@ -924,12 +924,33 @@ public class DBHelper implements DLBPlusDBInterface {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	@Override
-	public boolean SetUserStatus(int userID, boolean newStatus) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+  
+  /**
+   * Change the account status of a user
+   *
+   * @param user the user to change
+   * @param newStatus the new status to change to
+   * @return boolean True when status is changed, False otherwise
+   */
+  public boolean SetUserStatus(User user, boolean newStatus) {
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("SetUserStatus", "No connection with database");
+      return false;
+    }
+  
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      stmt.executeUpdate("UPDATE users SET acctstatus = " + newStatus + " WHERE id = " + user.getId() + ";" );
+      dbConn.commit();
+      user.setAcctstatus(newStatus); //update local object
+      return true;
+    }
+    catch (SQLException e) {
+      return false;
+    }
+  }
 	
 	@Override
 	public boolean RemoveListing(int listingID) {

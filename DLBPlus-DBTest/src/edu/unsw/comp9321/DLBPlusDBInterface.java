@@ -213,11 +213,11 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Change the account status of a user
 	 *
-	 * @param userID the id of the user to change\\
+	 * @param user the user to change
 	 * @param newStatus the new status to change to
 	 * @return boolean True when status is changed, False otherwise
 	 */
-	public boolean SetUserStatus(int userID, boolean newStatus);
+	public boolean SetUserStatus(User user, boolean newStatus);
 
 	/**
 	 * Validate an admin
