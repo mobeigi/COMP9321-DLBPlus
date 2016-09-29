@@ -43,7 +43,7 @@ public interface DLBPlusDBInterface {
 	 * @param queries contains key-value pair of query and value
 	 * @return List of publications (empty if no results found)
 	 */	 
-	public List<Publication> SearchPublications(HashMap<String, String> queries);
+	public List<Listing> SearchListings(HashMap<String, String> queries);
 
 	/**
 	* Create a listing (item for sale)

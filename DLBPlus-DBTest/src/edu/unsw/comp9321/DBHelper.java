@@ -531,8 +531,8 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @param queries contains key-value pair of query and value
 	 * @return List of publications (empty if no results found)
 	 */	 
-	public List<Publication> SearchPublications(HashMap<String, String> queries) {
-		List<Publication> results = new ArrayList<Publication>();
+	public List<Listing> SearchListings(HashMap<String, String> queries) {
+		List<Listing> results = new ArrayList<Listing>();
 		// TODO
 		return results;
 	}
