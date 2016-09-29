@@ -37,12 +37,11 @@
   if (u3 == null)
     u3 = db.GetUser("joe3");
 
-  //Change user 2
-  u2.setUsername("joe2new");
-  u2.setAddress("22 other st");
-  u2.setEmail("mynewmail@gmail.com");
-  db.ChangeUserDetails(u2);
-
+  //Remove this users listings
+  List<Listing> listings = db.GetUserListings(u1.getId());
+  for (Listing l : listings) {
+    db.RemoveListing(l.getListingid());
+  }
 
 %>
 </body>

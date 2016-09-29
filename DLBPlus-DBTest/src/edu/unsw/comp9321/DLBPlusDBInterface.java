@@ -173,7 +173,8 @@ public interface DLBPlusDBInterface {
   public boolean SetAcctConfirmed(User user, boolean confirmedStatus);
   
   /**
-   * Changes the details of a user
+   * Changes the details of a user based on their user id (which cannot be changed).
+   *
    * @param changedUser The User object that contains all the information to change
    * @return True whether user was changed successfully, false otherwise
    */
@@ -217,7 +218,7 @@ public interface DLBPlusDBInterface {
 	 * @param newStatus the new status to change to
 	 * @return boolean True when status is changed, False otherwise
 	 */
-	public boolean SetUserStatus(User user, boolean newStatus);
+	public boolean SetUserAccountStatus(User user, boolean newStatus);
 
 	/**
 	 * Validate an admin

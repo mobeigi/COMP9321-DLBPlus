@@ -331,7 +331,8 @@ public class DBHelper implements DLBPlusDBInterface {
   }
   
   /**
-   * Changes the details of a user
+   * Changes the details of a user based on their user id (which cannot be changed).
+   *
    * @param changedUser The User object that contains all the information to change
    * @return True whether user was changed successfully, false otherwise
    */
@@ -343,6 +344,15 @@ public class DBHelper implements DLBPlusDBInterface {
     
     try {
       if (DoesUserExist(changedUser.getId())) { //user exists
+        User u = GetUser(changedUser.getId());
+        
+        if (!u.getUsername().equals(changedUser.getUsername())) { //If username is being changed
+          if (DoesUserExist(changedUser.getUsername())) { //but username is already taken
+            this.PrintDebugMessage("ChangeUserDetails", "Changed username is already taken.");
+            return false;
+          }
+        }
+        
         Statement stmt;
         dbConn.setAutoCommit(false);
         stmt = dbConn.createStatement();
@@ -988,13 +998,70 @@ public class DBHelper implements DLBPlusDBInterface {
   
     return users;
   }
-	
-	@Override
+  
+  /**
+   * Remove a particular user
+   *
+   * @param userID the id of the user to remove
+   * @return boolean True when successfully removed, False otherwise
+   */
 	public boolean RemoveUser(int userID) {
-		// TODO Auto-generated method stub
-		return false;
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("RemoveUser", "No connection with database");
+      return false;
+    }
+    
+    try {
+      if (DoesUserExist(userID)) {
+        //Remove this users listings first (for constraint reasons)
+        List<Listing> listings = GetUserListings(userID);
+         
+        for (Listing l : listings) {
+          RemoveListing(l.getListingid());
+        }
+        
+        //Finally remove user
+        Statement stmt;
+        dbConn.setAutoCommit(false);
+        stmt = dbConn.createStatement();
+        stmt.executeUpdate("DELETE FROM users WHERE id = " + userID + ";");
+        dbConn.commit();
+        return true;
+      } else {
+        PrintDebugMessage("RemoveUser", "Error! No user exists with user ID: " + userID);
+        return false;
+      }
+    }
+    catch (SQLException e) {
+      return false;
+    }
 	}
   
+  /**
+   * Remove a specified listing
+   *
+   * @param listingID the id of the listing to remove
+   * @return returns True if successfully removed; false otherwise
+   */
+  public boolean RemoveListing(int listingID) {
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("RemoveListing", "No connection with database");
+      return false;
+    }
+  
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      stmt.executeUpdate("DELETE FROM listings WHERE listingid = " + listingID + ";");
+      dbConn.commit();
+      return true;
+    }
+    catch (SQLException e) {
+      return false;
+    }
+  }
+	
   /**
    * Change the account status of a user
    *
@@ -1002,7 +1069,7 @@ public class DBHelper implements DLBPlusDBInterface {
    * @param newStatus the new status to change to
    * @return boolean True when status is changed, False otherwise
    */
-  public boolean SetUserStatus(User user, boolean newStatus) {
+  public boolean SetUserAccountStatus(User user, boolean newStatus) {
     if (!dbConnStatus) {
       this.PrintDebugMessage("SetUserStatus", "No connection with database");
       return false;
@@ -1021,12 +1088,6 @@ public class DBHelper implements DLBPlusDBInterface {
       return false;
     }
   }
-	
-	@Override
-	public boolean RemoveListing(int listingID) {
-		// TODO Auto-generated method stub
-		return false;
-	}
   
   /**
    * Return the total number of listings
