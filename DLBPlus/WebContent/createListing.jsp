@@ -143,7 +143,7 @@
 					     					<th><p class="flow-text">Price: </p></th>
 					     					<th><i style="font-weight:normal">$</i></th>
 					     		    		<th style="padding-top: 40px">
-					     		    		<input style="height:1.5rem;font-weight: normal" pattern="[0-9]+(\\.[0-9][0-9]?)?" name="price" aria-required="" required="" placeholder="" class="validate" type="text">
+					     		    		<input style="height:1.5rem;font-weight: normal" pattern="(0\.((0[1-9]{1})|([1-9]{1}([0-9]{1})?)))|(([1-9]+[0-9]*)(\.([0-9]{1,2}))?)" name="price" aria-required="" required="" placeholder="" class="validate" type="text">
 					     		    		</th>
 				     		    		</tr>
 				     		    	</tbody>
