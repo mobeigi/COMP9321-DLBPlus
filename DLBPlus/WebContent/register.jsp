@@ -36,15 +36,28 @@
 	
 	<div class="row">
  		<div class="col s6 offset-s3">
+ 			<c:choose>
+				<c:when test="${not empty eMessage}">
+ 					<p class="red-text">${eMessage}</p>
+ 				</c:when>
+ 			</c:choose>
  			<div class="card white">
         		<div class="card-content black-text">
 					<form action="setup" method="post">
-		              	<div class="row">
-		              		<div class="col s6">
-			           			<input class="validate" placeholder="Username" required="" aria-required="" name="uname" type="text" />
+						<div class="row">
+			     			<div class="col s6">
+			     		    	<input class="validate" placeholder="Username" required="" aria-required="" name="uname" type="text" />
 			           		</div>
 			           		<div class="col s6">
-			     		    	<input placeholder="Password" required="" aria-required="" name="pass" type="text" />
+			     		    	<input placeholder="Nickname" required="" aria-required="" name="nickname" type="text" />
+		     		    	</div>
+			     		</div>
+			            <div class="row">
+		              		<div class="col s6">
+			     		    	<input placeholder="Password" required="" aria-required="" name="pass" type="password" />
+		     		    	</div>
+			           		<div class="col s6">
+			     		    	<input placeholder="Retype Password" required="" aria-required="" name="passConfirm" type="password" />
 		     		    	</div>
 			     		</div>
 			     		<div class="row">
