@@ -49,7 +49,7 @@ public class AdminServlet extends HttpServlet {
 		
 		RequestDispatcher rd = request.getRequestDispatcher("/admin/" + redir);
 		*/
-		RequestDispatcher rd = request.getRequestDispatcher("/admin/adminindex.html");
+		RequestDispatcher rd = request.getRequestDispatcher("/admin/adminIndex.jsp");
 		rd.forward(request, response);
 	}
 
@@ -60,9 +60,9 @@ public class AdminServlet extends HttpServlet {
 		
 		// Determine redirection page as appropriate to user action
 		String req = request.getParameter("action");
-		String nextPage = "adminindex.html";		// default
+		String nextPage = "adminIndex.jsp";		// default
 		if (req.equals("viewAllUsers")) {
-			nextPage = "users.html";	
+			nextPage = "adminUsers.jsp";	
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher("/admin/" + nextPage);
