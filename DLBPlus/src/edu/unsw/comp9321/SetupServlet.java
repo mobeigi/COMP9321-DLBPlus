@@ -243,6 +243,32 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("createListing")){
 			//Create new listing
 			link = "createListing.jsp";
+		} else if(req.equals("registerItem")){
+			String itemName = request.getParameter("itemName"); //Required
+			String authors = request.getParameter("authors");	//Required
+			String type = request.getParameter("pubType");		//Required
+			String editors = request.getParameter("editors");
+			String venues = request.getParameter("venues");
+			String pages = request.getParameter("pages");
+			String volume = request.getParameter("volume");
+			String year = request.getParameter("year");
+			String month = request.getParameter("month");
+			String address = request.getParameter("address");
+			String number = request.getParameter("number");
+			String urls = request.getParameter("urls");
+			String ees = request.getParameter("ees");
+			String cdrom = request.getParameter("cdrom");
+			String cities = request.getParameter("cities");
+			String publisher = request.getParameter("publisher");
+			String isbns = request.getParameter("isbns");
+			String crossref = request.getParameter("crossref");
+			String series = request.getParameter("series");
+			String chapter = request.getParameter("chapter");
+			String rating = request.getParameter("rating");
+			String note = request.getParameter("note");
+			String price = request.getParameter("price");		//Required
+			
+			
 		}
 		
 		// Case when user wants to view admin

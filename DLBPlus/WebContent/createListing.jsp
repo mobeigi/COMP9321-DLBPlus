@@ -46,7 +46,7 @@
 			     		    	<input placeholder="Authors (please separate authors with '|')" required="" aria-required="" name="authors" type="text" />
 		     		    	</div>
 			     		    <div class="input-field col s6">
-			    				<select name="pubType">
+			    				<select name="pubType" required="" aria-required="">
 						        	<option>Article</option>
 							        <option>Inproceedings</option>
 							        <option>Proceedings</option>
@@ -136,16 +136,26 @@
 			     		    </div>
 			     		</div>
 			     		<div class="row">
-			     			<div class="col s6 offset-s3">
-			     		    	<input class="validate" placeholder="$" name="price" type="text"/>
+			     			<div class="col s4 offset-s4">
+			     				<table style="cell-spacing: 0px">
+				     				<tbody>
+				     					<tr>
+					     					<th><p class="flow-text">Price: </p></th>
+					     					<th><i style="font-weight:normal">$</i></th>
+					     		    		<th style="padding-top: 40px">
+					     		    		<input style="height:1.5rem;font-weight: normal" pattern="[0-9]+(\\.[0-9][0-9]?)?" name="price" aria-required="" required="" placeholder="" class="validate" type="text">
+					     		    		</th>
+				     		    		</tr>
+				     		    	</tbody>
+			     		    	</table>
 			     		    </div>
 			     		</div>
 			           	<div class="row">
 				           	   				
 							<div class="col s12 center">
 								<br>
-					            <input type="hidden" name="action" value="register"/>
-					            <button class="btn waves-effect waves-light" type="submit" value="register">Register
+					            <input type="hidden" name="action" value="registerItem"/>
+					            <button class="btn waves-effect waves-light" type="submit" value="registerItem">Register Item
 			  						<i class="material-icons right">send</i>
 			  					</button>
 			  					<br><br>
