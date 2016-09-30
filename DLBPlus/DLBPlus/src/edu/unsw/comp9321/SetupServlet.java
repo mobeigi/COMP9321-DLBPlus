@@ -210,12 +210,12 @@ public class SetupServlet extends HttpServlet {
 			User newUser = new User(); 
 			newUser = (User) request.getSession().getAttribute("newUser");
 			System.out.println("code is" + emailCode);
-			System.out.println(newUser.getId());
 			if(code == null){
 				link = "confirmation.jsp";
 			} else {
 				if(code.equals(emailCode)){
 					request.getSession().setAttribute("user",newUser);
+					System.out.println("Confirmed");
 					link = "userAccount.jsp";
 				} else {
 					link = "confirmation.jsp";
