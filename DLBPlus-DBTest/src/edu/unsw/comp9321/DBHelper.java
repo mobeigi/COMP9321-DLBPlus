@@ -384,6 +384,18 @@ public class DBHelper implements DLBPlusDBInterface {
       return false;
     }
   }
+
+	/**
+	 * Change users stored password including salt.
+	 *
+	 * @param user the user being changed
+	 * @param plainTextPassword the new password in plain text
+	 * @return true if password successfully changed, false otherwise
+	 */
+	public boolean ChangeUserPassword(User user, String plainTextPassword) {
+		//TODO
+		return false;
+	}
   
   /**
    * Validate a user
@@ -463,8 +475,11 @@ public class DBHelper implements DLBPlusDBInterface {
 	 *
 	 * @return Listing Null if listing unsuccessful, Listing of newly created listing otherwise
 	 */
-	 public Listing CreateListing(User seller, Publication item, Integer quantity, Timestamp listdate, Timestamp enddate,
-                                Double sellprice, String image) {
+	 public Listing CreateListing(User seller, Integer quantity, Timestamp listdate, Timestamp enddate, Double sellprice, String image,
+																Listing.Type type, List<String> authors, List<String> editors, String title, List<String> venues,
+																String pages, Integer year, String address, String volume, String number, String month, List<String> urls,
+																List<String> ees, String cdrom, List<String> cites, String publisher, String note, String crossref,
+																List<String> isbns, String series, String chapter, String rating) {
 	     if (!dbConnStatus) {
 	       this.PrintDebugMessage("CreateListing", "No connection with database");
 	       return null;
@@ -1229,6 +1244,16 @@ public class DBHelper implements DLBPlusDBInterface {
     catch (SQLException e) {
       return false;
     }
+	}
+
+	/**
+	 * Decrements listing quantity.
+	 *
+	 * @param listing Listing that is to be decremented
+	 * @return true if successful, false otherwise
+	 */
+	public boolean DecrementListingQuantity(Listing listing) {
+		return false;
 	}
   
   /**
