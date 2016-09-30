@@ -21,21 +21,6 @@ public interface DLBPlusDBInterface {
 	 * Initiate connection to DB
 	 */
 	public boolean init();
-
-	/**
-	 * Get a random publication
-	 *
-	 * @return Random publication or null if no publications exist (0 publications in db)
-	 */
-	public Publication GetRandomPublication();
-
-	/**
-	 * Get publication using ID
-	 *
-	 * @param pubID Publication identifier
-	 * @return publication with matching publication identifier
-	 */
-	public Publication GetPublication(int pubID);
 	
 	/**
 	 * Obtain a list of publications (FOR SALE) that match the search queries
@@ -50,8 +35,11 @@ public interface DLBPlusDBInterface {
 	*
 	* @return Listing Null if listing unsuccessful, Listing of newly created listing otherwise
 	*/
-	public Listing CreateListing(User seller, Publication item, Integer quantity, Timestamp listdate, Timestamp enddate,
-							   Double sellprice, String image);
+	public Listing CreateListing(User seller, Integer quantity, Timestamp listdate, Timestamp enddate, Double sellprice, String image,
+															 Listing.Type type, List<String> authors, List<String> editors, String title, List<String> venues,
+															 String pages, Integer year, String address, String volume, String number, String month, List<String> urls,
+															 List<String> ees, String cdrom, List<String> cites, String publisher, String note, String crossref,
+															 List<String> isbns, String series, String chapter, String rating);
 	 
 	/**
 	 * Obtain a random listing
@@ -75,7 +63,15 @@ public interface DLBPlusDBInterface {
    * @return true if successful, false otherwise
    */
   public boolean IncrementListingViews(Listing listing);
-  
+
+	/**
+	 * Decrements listing quantity.
+	 *
+	 * @param listing Listing that is to be decremented
+	 * @return true if successful, false otherwise
+	 */
+	public boolean DecrementListingQuantity(Listing listing);
+
   /**
    * Set the listing's paused status to be true or false
    *
@@ -178,6 +174,15 @@ public interface DLBPlusDBInterface {
    * @return True whether user was changed successfully, false otherwise
    */
   public boolean ChangeUserDetails(User changedUser);
+
+	/**
+	 * Change users stored password including salt.
+	 *
+	 * @param user the user being changed
+	 * @param plainTextPassword the new password in plain text
+	 * @return true if password successfully changed, false otherwise
+	 */
+	public boolean ChangeUserPassword(User user, String plainTextPassword);
 	
 	/**
 	 * Obtain a list of all users
@@ -295,11 +300,11 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Creates an order, after the purchase has been made
 	 * 
-	 * @param userID the User object of the buyer
+	 * @param buyerID the id of the buyer
 	 * @param soldListing the Listing object that is bought
 	 * @return the Order if successfully created, null otherwise
 	 */
-	public Order CreateOrder(int userID, Listing soldListing);
+	public Order CreateOrder(int buyerID, Listing soldListing);
   
   /**
    * Get an order
@@ -312,8 +317,8 @@ public interface DLBPlusDBInterface {
 	/**
 	 * Obtain the order history of a particular user
 	 *
-	 * @param userID the id of the user
+	 * @param buyerID the id of the buyer
 	 * @return returns a list of orders that the user has made
 	 */	
-	public List<Order> GetOrderHistory(int userID);
+	public List<Order> GetOrderHistory(int buyerID);
 }
