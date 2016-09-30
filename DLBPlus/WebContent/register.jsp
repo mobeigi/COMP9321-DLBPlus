@@ -50,7 +50,23 @@
 			           			<input class="validate" placeholder="Username" required="" aria-required="" name="uname" type="text" />
 			           		</div>
 			           		<div class="col s6">
-			     		    	<input placeholder="Password" required="" aria-required="" name="pass" type="text" />
+			     		    	<input placeholder="Password" required="" aria-required="" name="pass" type="password" />
+		     		    	</div>
+			     		</div>
+			     		<div class="row">
+			     			<div class="col s6">
+			     		    	<input class="validate" placeholder="Username" required="" aria-required="" name="uname" type="text" />
+			           		</div>
+			           		<div class="col s6">
+			     		    	<input placeholder="Nickname" required="" aria-required="" name="nickname" type="text" />
+		     		    	</div>
+			     		</div>
+			            <div class="row">
+		              		<div class="col s6">
+			     		    	<input placeholder="Password" required="" aria-required="" name="pass" type="password" />
+		     		    	</div>
+			           		<div class="col s6">
+			     		    	<input placeholder="Retype Password" required="" aria-required="" name="passConfirm" type="password" />
 		     		    	</div>
 			     		</div>
 			     		<div class="row">
@@ -60,12 +76,6 @@
 			     		    <div class="col s6">
 			     		    	<input placeholder="Last Name" required="" aria-required="" name="lname" type="text" />
 			     		    </div>
-			     		</div>
-        				<div class="row">
-        					<div class="col s12">
-			              		<input class="validate" placeholder="Email" required="" aria-required="" name="email" type="text" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"/>
-		              		</div>
-		              	</div>
         				<div class="row">
         					<div class="col s12">
 			              		<input placeholder="Address" name="address" type="text" />
