@@ -569,7 +569,7 @@ public class DBHelper implements DLBPlusDBInterface {
       cartItem.setCartid(user.getCartid());
       cartItem.setListingid(listingToAdd.getListingid());
       cartItem.setAddedts(tNow);
-      cartItem.setActive(true);
+      cartItem.setPaused(false);
       return cartItem;
     }
     catch (SQLException e) {
@@ -589,7 +589,7 @@ public class DBHelper implements DLBPlusDBInterface {
       return false;
     }
     
-    if (!cartItem.isActive()) {
+    if (!cartItem.isPaused()) {
       this.PrintDebugMessage("RemoveFromCart", "CartItem is not active, cannot remove this item.");
       return false;
     }
@@ -611,7 +611,7 @@ public class DBHelper implements DLBPlusDBInterface {
                          "ORDER BY addedts ASC LIMIT 1 );");
       dbConn.commit();
       
-      cartItem.setActive(false); //change local object
+      cartItem.setPaused(false); //change local object
       return true;
     }
     catch (SQLException e) {
@@ -804,9 +804,95 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return returns a list of cart items that have been removed
 	 */	
 	public List<CartItem> GetRemovedCartItems(int cartID) {
+		if (!this.dbConnStatus) {
+			this.PrintDebugMessage("GetRemovedCartItems", "No connection to database");
+			return null;
+		}
 		List<CartItem> removedCartItems = new ArrayList<CartItem>();
-		//TODO
+		try {
+
+		      Statement stmt;
+		      dbConn.setAutoCommit(false);
+		      stmt = dbConn.createStatement();
+		      String query = 
+		    		  "SELECT " +
+		    		  "		u.cartid AS cartid," +
+		    		  "		l.id AS listingid," +
+		    		  "		s.username AS sellername," +
+		    		  "		p.type AS pubtype," +
+		    		  "		p.title AS pubname," +
+		    		  "		l.sellprice AS price," +
+		    		  "		rc.addedts AS addedts," +
+		    		  "		rc.removedts AS removedts," +
+		    		  "		l.paused AS ispaused " +
+		    		  "FROM " +
+		    		  "		removedcartitems rc " +
+		    		  "LEFT JOIN " +
+		    		  "		users u ON rc.cartid = u.cartid " +
+		    		  "LEFT JOIN " +
+		    		  "		listings l ON rc.listingid = l.id " +
+		    		  "LEFT JOIN " +
+		    		  "		users s ON l.sellerid = s.id " +
+		    		  "LEFT JOIN " +
+		    		  "		publications p ON l.itemid = p.id " +
+		    		  "WHERE (" +
+		    		  "		rc.cartid = " + cartID +
+		    		  ");";
+		      ResultSet rs = stmt.executeQuery(query);
+		      System.out.println("Executed query: " + query);
+		      
+		      CartItem cartItem = processResultSetIntoCartItem(rs);
+		      while (cartItem != null) {
+		        removedCartItems.add(cartItem);
+		        cartItem = processResultSetIntoCartItem(rs);
+		      }			
+			
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
 		return removedCartItems;
+	}
+	
+	/**
+	 * Parses a result set into a CartItem
+	 * @param rs the result set
+	 * @return a CartItem if successfully parsed, null otherwise
+	 */
+	private CartItem processResultSetIntoCartItem(ResultSet rs) {
+		CartItem cartItem = new CartItem();
+		
+		try {
+			if (rs.next()) {
+				Integer cartid = rs.getInt("cartid");
+				Integer listingid = rs.getInt("listingid");
+				String sellername = rs.getString("sellername");
+				String pubtype = rs.getString("pubtype");
+				String pubname = rs.getString("pubname");
+				Double price = rs.getDouble("price");
+				Timestamp addedts = rs.getTimestamp("addedts");
+				Timestamp removedts = rs.getTimestamp("removedts");
+				Boolean isactive = rs.getBoolean("ispaused");
+				
+				// Set CartItem fields
+				cartItem.setCartid(cartid);
+				cartItem.setListingid(listingid);
+				cartItem.setSellerName(sellername);
+				cartItem.setPublicationType(pubtype);
+				cartItem.setPublicationName(pubname);
+				cartItem.setPrice(price);
+				cartItem.setAddedts(addedts);
+				cartItem.setRemovedts(removedts);
+				cartItem.setPaused(isactive);
+
+			} else { //No result found
+				cartItem = null;
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+		
+		return cartItem;		
 	}
 	
 	/**

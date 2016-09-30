@@ -12,7 +12,7 @@ public class CartItem {
   private Double price;
   private Timestamp addedts;
   private Timestamp removedts; //only used if removed cart item, aka isActive = false
-  private Boolean isActive;
+  private Boolean isPaused;
   
   public CartItem() {}
   
@@ -81,11 +81,24 @@ public class CartItem {
     this.removedts = removedts;
   }
   
-  public Boolean isActive() {
-    return isActive;
+  public Boolean isPaused() {
+    return isPaused;
   }
   
-  public void setActive(Boolean active) {
-    isActive = active;
+  public void setPaused(Boolean paused) {
+    isPaused = paused;
+  }
+  
+  // debugging
+  public void showDetails() {
+	  System.out.println("id: " + this.cartid);
+	  System.out.println("listing id: " + this.listingid);
+	  System.out.println("Seller name: " + this.sellerName);
+	  System.out.println("pub name: " + this.publicationName);
+	  System.out.println("pub type: " + this.publicationType);
+	  System.out.println("listing price: " + this.price);
+	  System.out.println("added ts: " + this.addedts);
+	  System.out.println("removed ts: " + this.removedts);
+	  System.out.println("listing status: " + this.isPaused);
   }
 }
