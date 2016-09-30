@@ -2,7 +2,7 @@
 
 <!-- Header -->
 	<nav class="light-blue lighten-1" role="navigation">
-	   	<div class="nav-wrapper container"><a id="logo-container" href="?action=home" class="brand-logo"><img src="../images/logo_white.png" alt="logo"></a>
+	   	<div class="nav-wrapper container"><a id="logo-container" href="?action=home" class="brand-logo"><img src="images/logo_white.png" alt="logo"></a>
    			<ul class="right hide-on-med-and-down"> 			
 				<c:choose>
 					<c:when test="${not empty user}">
@@ -14,8 +14,8 @@
 					</c:when>
 						
 					<c:otherwise>
-						<li><a href="/DLBPlus/admin/adminUsers.jsp">Manage Users</a></li>
-						<li><a href="/DLBPlus/admin/adminPublications.jsp">Manage Publications</a></li>
+						<li><a href="/DLBPlus/admin?Action=Users">Manage Users</a></li>
+						<li><a href="/DLBPlus/admin?Action=Listings">Manage Publications</a></li>
 						<li><a href="login.jsp">Login</a></li>
 					</c:otherwise>
 				</c:choose>
