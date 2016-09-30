@@ -13,12 +13,13 @@
 						<li><a href="?action=logout">Logout</a>
 					</c:when>
 					
-					<c:otherwise>
-						<li><a href="search.jsp">Advanced Search</a></li>
-						<li><a href="register.jsp">Register</a></li>
-						<li><a href="login.jsp">Login</a></li>
+						<c:otherwise>
+						<li><a href="?action=search">Advanced Search</a></li>
+						<li><a href="?action=registerPage">Register</a></li>
+						<li><a href="?action=loginPage">Login</a></li>
 					</c:otherwise>
 				</c:choose>
+	     </ul>
 	     </ul>
 	   </div>
 	</nav>
