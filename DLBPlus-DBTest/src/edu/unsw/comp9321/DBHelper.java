@@ -792,9 +792,54 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return returns a list of Cart Items
 	 */	
 	public List<CartItem> GetActiveCartItems(int cartID) {
-		List<CartItem> cartItems = new ArrayList<CartItem>();
-		//TODO
-		return cartItems;
+		if (!this.dbConnStatus) {
+			this.PrintDebugMessage("GetActiveCartItems", "No connection to database");
+			return null;
+		}
+		List<CartItem> activeCartItems = new ArrayList<CartItem>();
+		try {
+
+		      Statement stmt;
+		      dbConn.setAutoCommit(false);
+		      stmt = dbConn.createStatement();
+		      String query = 
+		    		  "SELECT " +
+		    		  "		u.cartid AS cartid," +
+		    		  "		l.id AS listingid," +
+		    		  "		s.username AS sellername," +
+		    		  "		p.type AS pubtype," +
+		    		  "		p.title AS pubname," +
+		    		  "		l.sellprice AS price," +
+		    		  "		ac.addedts AS addedts," +
+		    		  "		l.paused AS ispaused " +
+		    		  "FROM " +
+		    		  "		activecartitems ac " +
+		    		  "LEFT JOIN " +
+		    		  "		users u ON ac.cartid = u.cartid " +
+		    		  "LEFT JOIN " +
+		    		  "		listings l ON ac.listingid = l.id " +
+		    		  "LEFT JOIN " +
+		    		  "		users s ON l.sellerid = s.id " +
+		    		  "LEFT JOIN " +
+		    		  "		publications p ON l.itemid = p.id " +
+		    		  "WHERE (" +
+		    		  "		ac.cartid = " + cartID +
+		    		  ");";
+		      ResultSet rs = stmt.executeQuery(query);
+		      System.out.println("Executed query: " + query);
+		      
+		      CartItem cartItem = processResultSetIntoCartItem(rs);
+		      while (cartItem != null) {
+		        activeCartItems.add(cartItem);
+		        cartItem = processResultSetIntoCartItem(rs);
+		      }			
+			
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+		return activeCartItems;
+
 	}
 
 	/**
@@ -871,7 +916,15 @@ public class DBHelper implements DLBPlusDBInterface {
 				String pubname = rs.getString("pubname");
 				Double price = rs.getDouble("price");
 				Timestamp addedts = rs.getTimestamp("addedts");
-				Timestamp removedts = rs.getTimestamp("removedts");
+				
+				// Case when removedts is undefined (eg for activecartitems)
+				Timestamp removedts = null;
+				try {
+					removedts = rs.getTimestamp("removedts");
+				} catch (SQLException e){
+					// do nothing
+				}
+				
 				Boolean isactive = rs.getBoolean("ispaused");
 				
 				// Set CartItem fields
@@ -891,7 +944,6 @@ public class DBHelper implements DLBPlusDBInterface {
 		} catch (SQLException e) {
 			return null;
 		}
-		
 		return cartItem;		
 	}
 	
