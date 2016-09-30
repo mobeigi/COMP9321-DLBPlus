@@ -1,0 +1,23 @@
+== CONTAINS DETAILS ON SCHEMA / ENTITY REPRESENTATION UPDATE
+
+27/09/2016 @ 11:30pm
+Added 'validated' as a boolean field to user account
+
+28/09/2016 @ 7:00am
+Added 'listingid' as an attribute in 'listing', for faster retrieval
+
+28/09/2016 @ 7:40am
+Added 'acctconfrm' as an attribute in 'user', to facilitate checking whether the account is confirmed / verified through their email
+Added 'acctcreated'as an attribute in 'user', to preserve when accout was created
+
+28/09/2016 @ 11:23am
+Added 'numviews' as an attribute to listings
+
+28/09/2016 @ 4:00pm
+Changed most date fields into timestamps
+
+29/09/2016 @ 12:30pm
+Updated dump (for consistency)
+
+29/09/2016 @ 6:40pm
+Changed schema - MONEY to DOUBLE PRECISION
