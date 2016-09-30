@@ -42,7 +42,7 @@
 			           	</div>
 			           	<div class="row">
 			           		<div class="col s12">
-			     		    	<input placeholder="Password" required="" aria-required="" id="textbox" name="pass" type="text" />
+			     		    	<input placeholder="Password" required="" aria-required="" id="textbox" name="pass" type="password" />
 		     		    	</div>
 			     		</div>
 			     		
