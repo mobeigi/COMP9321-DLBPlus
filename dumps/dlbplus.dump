@@ -209,7 +209,8 @@ ALTER SEQUENCE listings_sellerid_seq OWNED BY listings.sellerid;
 CREATE TABLE orders (
     id integer NOT NULL,
     buyerid integer NOT NULL,
-    listingid integer NOT NULL,
+    sellerid integer NOT NULL,
+    pubtitle text,
     order_date timestamp with time zone NOT NULL,
     price double precision NOT NULL
 );
@@ -260,10 +261,10 @@ ALTER SEQUENCE orders_id_seq OWNED BY orders.id;
 
 
 --
--- Name: orders_listingid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: orders_sellerid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE orders_listingid_seq
+CREATE SEQUENCE orders_sellerid_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -271,13 +272,13 @@ CREATE SEQUENCE orders_listingid_seq
     CACHE 1;
 
 
-ALTER TABLE orders_listingid_seq OWNER TO postgres;
+ALTER TABLE orders_sellerid_seq OWNER TO postgres;
 
 --
--- Name: orders_listingid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: orders_sellerid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE orders_listingid_seq OWNED BY orders.listingid;
+ALTER SEQUENCE orders_sellerid_seq OWNED BY orders.sellerid;
 
 
 --
@@ -347,6 +348,7 @@ CREATE TABLE users (
     password text NOT NULL,
     fname text NOT NULL,
     lname text NOT NULL,
+    nickname text,
     email text NOT NULL,
     address text NOT NULL,
     dob date NOT NULL,
@@ -453,10 +455,10 @@ ALTER TABLE ONLY orders ALTER COLUMN buyerid SET DEFAULT nextval('orders_buyerid
 
 
 --
--- Name: listingid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: sellerid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY orders ALTER COLUMN listingid SET DEFAULT nextval('orders_listingid_seq'::regclass);
+ALTER TABLE ONLY orders ALTER COLUMN sellerid SET DEFAULT nextval('orders_sellerid_seq'::regclass);
 
 
 --
@@ -550,7 +552,7 @@ SELECT pg_catalog.setval('listings_sellerid_seq', 1, false);
 -- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY orders (id, buyerid, listingid, order_date, price) FROM stdin;
+COPY orders (id, buyerid, sellerid, pubtitle, order_date, price) FROM stdin;
 \.
 
 
@@ -569,10 +571,10 @@ SELECT pg_catalog.setval('orders_id_seq', 1, false);
 
 
 --
--- Name: orders_listingid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: orders_sellerid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('orders_listingid_seq', 1, false);
+SELECT pg_catalog.setval('orders_sellerid_seq', 1, false);
 
 
 --
@@ -601,7 +603,7 @@ SELECT pg_catalog.setval('removedcartitems_listingid_seq', 1, false);
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY users (id, username, salt, password, fname, lname, email, address, dob, creditcard, cartid, dp, acctstatus, acctconfrm, acctcreated) FROM stdin;
+COPY users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, cartid, dp, acctstatus, acctconfrm, acctcreated) FROM stdin;
 \.
 
 
@@ -708,11 +710,11 @@ ALTER TABLE ONLY orders
 
 
 --
--- Name: orders_listingid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: orders_sellerid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY orders
-    ADD CONSTRAINT orders_listingid_fkey FOREIGN KEY (listingid) REFERENCES listings(id);
+    ADD CONSTRAINT orders_sellerid_fkey FOREIGN KEY (sellerid) REFERENCES users(id);
 
 
 --

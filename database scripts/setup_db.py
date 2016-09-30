@@ -43,6 +43,7 @@ def setup_db():
 				password	TEXT	NOT NULL,
 				fname		TEXT	NOT NULL,
 				lname		TEXT	NOT NULL,
+				nickname	TEXT,
 				email		TEXT	NOT NULL,
 				address		TEXT	NOT NULL,
 				dob			DATE	NOT NULL,
@@ -103,7 +104,8 @@ def setup_db():
 			CREATE TABLE orders (
 				id 			SERIAL	PRIMARY KEY,
 				buyerid		SERIAL	REFERENCES users (id),
-				listingid	SERIAL	REFERENCES listings (id),
+				sellerid	SERIAL 	REFERENCES users (id),
+				pubtitle	TEXT,
 				order_date	TIMESTAMP WITH TIME ZONE	NOT NULL,
 				price		DOUBLE PRECISION	NOT NULL
 			);
