@@ -41,16 +41,32 @@ public class SetupServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String stringId = request.getParameter("id");
-		if (stringId != null) {
-			Integer intId = Integer.parseInt(request.getParameter("id"));
-			LinkedList<String> entry = getEntryDeets(intId);
-			request.getSession().setAttribute("pubEntry", entry);
-			request.getSession().setAttribute("publicationID", intId);
-		    RequestDispatcher rd = request.getRequestDispatcher("/publication.jsp");
-		    rd.forward(request, response);
+		doPost(request,response);
+	}
+
+	private LinkedList<String> getEntryDeets(Integer pubID) {
+		Publication pub = this.db.GetPublication(pubID);
+		//LinkedList<String> entryDetails = pub.getPubDetails();
+		//return entryDetails;	
+		return null;
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			
+		String req;
+		if(request.getParameter("action") != null){
+			req = request.getParameter("action");
 		} else {
+			req = "home";
+		}
+		String link = "home.jsp";
+			
+		if(req.equals("back")){
+			link = "index.jsp";
+		} else if(req.equals("home")){
 			if (this.db.dbConnStatus) {
 				List<Publication> randPublications = new ArrayList<Publication>();
 				List<Integer> randPubIDs = new ArrayList<Integer>();
@@ -79,30 +95,7 @@ public class SetupServlet extends HttpServlet {
 				System.out.println("Could not get random publication. Connection doesn't exist.");
 			}
 			
-			request.getSession().invalidate();
-		    RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
-		    rd.forward(request, response);
-		}
-	}
-
-	private LinkedList<String> getEntryDeets(Integer pubID) {
-		Publication pub = this.db.GetPublication(pubID);
-		//LinkedList<String> entryDetails = pub.getPubDetails();
-		//return entryDetails;	
-		return null;
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String req = request.getParameter("action");
-		String link = "result.jsp";
-			
-		if(req.equals("back")){
-			link = "index.jsp";
-		} else if(req.equals("home")){
-			link = "index.jsp";
+		link = "index.jsp";
 		} else if(req.equals("search")){
 			String query = request.getParameter("searchQuery");
 			String type = request.getParameter("pubType");
@@ -230,12 +223,22 @@ public class SetupServlet extends HttpServlet {
 				link = "login.jsp";
 			}
 		} else if(req.equals("logout")){
+			String errorMessage = "";
+			request.getSession().setAttribute("eMessage",errorMessage);
 			request.getSession().setAttribute("user",null);
 			link = "index.jsp";
 		} else if(req.equals("confirmPurchase")){
 			link = "transactionSuccessful.jsp";
+		} else if(req.equals("registerPage")){
+			String errorMessage = "";
+			request.getSession().setAttribute("eMessage",errorMessage);
+			link = "register.jsp";
 		} else if(req.equals("modified")){
 			link = "modifyDetails.jsp";
+		} else if(req.equals("loginPage")){
+			String errorMessage = "";
+			request.getSession().setAttribute("eMessage",errorMessage);
+			link = "login.jsp";
 		} else if(req.equals("toAccount")){
 			link = "userAccount.jsp";
 		} else if(req.equals("viewHist")){
