@@ -5,19 +5,19 @@ package edu.unsw.comp9321;
 import java.util.*;
 
 public class SearchPageBean {
-	public List<Publication> results = new ArrayList<Publication>();
+	public List<Listing> results = new ArrayList<Listing>();
 	public int currPage = 1;
 	public int totalPages = 0;
 	public int numItemsPerPage = 10;
 	
 	// Constructor given a list of publications
-	public SearchPageBean(List<Publication> searchPublications) {
+	public SearchPageBean(List<Listing> searchListings) {
 		
 		// Convert list of publications into publicationBeans
-		if (searchPublications != null) {
-			for (Publication p : searchPublications) {
-				Publication pb = new Publication(p);
-				this.results.add(pb);
+		if (searchListings != null) {
+			for (Listing listing : searchListings) {
+				Listing newListing = new Listing();
+				this.results.add(newListing);
 			}
 		}
 		
@@ -26,7 +26,7 @@ public class SearchPageBean {
 	}
 	
 	// getters
-	public List<Publication> getResults() { return this.results; }
+	public List<Listing> getResults() { return this.results; }
 	public int getCurrPage() { return this.currPage; }
 	public int getTotalPages() { return this.totalPages; }
 	public int getNumItemsPerPage() { return this.numItemsPerPage; }

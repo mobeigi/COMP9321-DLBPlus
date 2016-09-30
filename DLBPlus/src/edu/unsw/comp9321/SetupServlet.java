@@ -44,8 +44,8 @@ public class SetupServlet extends HttpServlet {
 		doPost(request,response);
 	}
 
-	private LinkedList<String> getEntryDeets(Integer pubID) {
-		Publication pub = this.db.GetPublication(pubID);
+	private LinkedList<String> getEntryDeets(Integer listingID) {
+		Listing listing = this.db.GetListing(listingID);
 		//LinkedList<String> entryDetails = pub.getPubDetails();
 		//return entryDetails;	
 		return null;
@@ -68,28 +68,27 @@ public class SetupServlet extends HttpServlet {
 			link = "index.jsp";
 		} else if(req.equals("home")){
 			if (this.db.dbConnStatus) {
-				List<Publication> randPublications = new ArrayList<Publication>();
-				List<Integer> randPubIDs = new ArrayList<Integer>();
+				List<Listing> randListings = new ArrayList<Listing>();
+				List<Integer> randListingIDs = new ArrayList<Integer>();
 				
 				// Obtain a unique list of random publications
-				while (randPublications.size() < 10) {
-					Publication pubToAdd = this.db.GetRandomPublication();
-					while (randPubIDs.contains(pubToAdd.getId())) {
-						pubToAdd = this.db.GetRandomPublication();
+				Listing listingToAdd = this.db.GetRandomListing();
+				if (listingToAdd == null) {
+					String errorMessage = "No listings can be obtained.";
+					request.getSession().setAttribute("eMessage", errorMessage);
+				}
+				while (listingToAdd != null && randListings.size() < 10) {
+					
+					while (randListingIDs.contains(listingToAdd.getId())) {
+						listingToAdd = this.db.GetRandomListing();
 					}
-					randPublications.add(pubToAdd);
-					randPubIDs.add(pubToAdd.getId());
+					randListings.add(listingToAdd);
+					randListingIDs.add(listingToAdd.getId());
 				}
-				
-				System.out.println(randPublications.size());
-				
-				for (Publication pub : randPublications) {
-					pub.showDetails();
-				}
-				
+
 				// Set random publication list to session
-				request.setAttribute("randomPubs", randPublications);
-				System.out.println(request.getAttribute("randomPubs"));
+				request.setAttribute("randomListings", randListings);
+				System.out.println(request.getAttribute("randomListings"));
 				
 			} else {
 				System.out.println("Could not get random publication. Connection doesn't exist.");
@@ -99,9 +98,10 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("search")){
 			String query = request.getParameter("searchQuery");
 			String type = request.getParameter("pubType");
-			LinkedList<Publication> result = search(query, type, request);
+			LinkedList<Listing> result = search(query, type, request);
 			SearchPageBean SPBean = new SearchPageBean(result);
 			request.getSession().setAttribute("searchFound",SPBean);
+			
 			link = "result.jsp";
 		} else if(req.equals("aSearch")){
 			String title = request.getParameter("searchTitle");
@@ -116,7 +116,7 @@ public class SetupServlet extends HttpServlet {
 			String venues = request.getParameter("searchVenues");
 			String seller = request.getParameter("searchSeller");	
 			String type = request.getParameter("searchPubType");
-			LinkedList<Publication> result = aSearch(title, author, editor, volume, chapter, pages, publisher, isbn, year, venues, seller, type);
+			LinkedList<Listing> result = aSearch(title, author, editor, volume, chapter, pages, publisher, isbn, year, venues, seller, type);
 			SearchPageBean searchPageBean = new SearchPageBean(result);
 			request.getSession().setAttribute("searchFound", searchPageBean);
 			link = "result.jsp";
@@ -124,11 +124,11 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("remove")) {
 			link = remove(request);
 		} else if(req.equals("add")){
-			
+			/*
 			Integer id = Integer.parseInt(request.getParameter("publicationID"));
 			 ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("ShoppingCart");
-			 LinkedList<Publication> shoppingCartItems = shoppingCart.getElements();
-			 /*
+			 LinkedList<Listing> shoppingCartItems = shoppingCart.getElements();
+
 			 if (shoppingCartItems.contains(this.db.get(id))) {
 				 request.getSession().setAttribute("isAlreadySelected", true);
 			 }
@@ -138,7 +138,7 @@ public class SetupServlet extends HttpServlet {
 	    	 		shoppingCart.setElements(shoppingCartItems);
 			 }
 			 */
-			 request.getSession().setAttribute("cartSize", shoppingCartItems.size());
+			 //request.getSession().setAttribute("cartSize", shoppingCartItems.size());
 			 link = "cart.jsp";
 					
 		} else if(req.equals("viewPreviousSearchPage")){
@@ -155,6 +155,7 @@ public class SetupServlet extends HttpServlet {
 			String firstName = request.getParameter("fname");
 			String lastName = request.getParameter("lname");
 			String userName = request.getParameter("uname");
+			String nickName = request.getParameter("nickname");
 			String email = request.getParameter("email");
 			String password = request.getParameter("pass");
 			String address = request.getParameter("address");
@@ -179,7 +180,7 @@ public class SetupServlet extends HttpServlet {
 				link = "register.jsp";
 			} else {
 				User newUser = new User();
-				newUser = db.CreateUser(userName, password, firstName, lastName, email, address, dob, creditCard, dp);
+				newUser = db.CreateUser(userName, password, firstName, lastName, nickName, email, address, dob, creditCard, dp);
 				Random random = new Random();
 				int rand = random.nextInt(99999);
 				System.out.println("generating " + rand);
@@ -303,6 +304,7 @@ public class SetupServlet extends HttpServlet {
 	}
 
 	private String remove(HttpServletRequest request){
+		/*
 		ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("ShoppingCart");
 		LinkedList<Publication> itemsInCart = shoppingCart.getElements();
 		
@@ -314,10 +316,11 @@ public class SetupServlet extends HttpServlet {
 			//itemsInCart.remove(this.db.get(Integer.parseInt(item)));
 		}
 		request.getSession().setAttribute("cartSize", itemsInCart.size());
+		*/
 		return "cart.jsp";
 	}
-	private LinkedList<Publication> aSearch(String title, String author, String editor, String volume, String chapter, String pages, String publisher, String isbn, String year, String venues, String seller, String type) {
-		LinkedList<Publication> result = new LinkedList<Publication>();
+	private LinkedList<Listing> aSearch(String title, String author, String editor, String volume, String chapter, String pages, String publisher, String isbn, String year, String venues, String seller, String type) {
+		LinkedList<Listing> result = new LinkedList<Listing>();
 		boolean flag = true;
 		String publicationType = type;
 //		if(type.toLowerCase().equals("any")){
@@ -398,7 +401,7 @@ public class SetupServlet extends HttpServlet {
 		return null;
 	}
 	
-	private LinkedList<Publication> advSearchHelper(String title, String author, String editor, String volume, String publisher, String isbn, String year, LinkedList<Publication> results) {
+	private LinkedList<Listing> advSearchHelper(String title, String author, String editor, String volume, String publisher, String isbn, String year, LinkedList<Listing> results) {
 		/*
 		for (Publication p : this.db) {
 			boolean flag = true;
@@ -453,8 +456,8 @@ public class SetupServlet extends HttpServlet {
 		*/
 		return results;
 	}
-	private LinkedList<Publication> search(String searchQuery, String pubType, HttpServletRequest request){
-		LinkedList<Publication> result = new LinkedList<Publication>();
+	private LinkedList<Listing> search(String searchQuery, String pubType, HttpServletRequest request){
+		LinkedList<Listing> result = new LinkedList<Listing>();
 		
 		/*
 		if(pubType.toLowerCase().equals("any")){
@@ -500,7 +503,7 @@ public class SetupServlet extends HttpServlet {
 		return result;
 		
 	}	
-	private LinkedList<Publication> basicSearchHelper(String query, String pubType, LinkedList<Publication> results){
+	private LinkedList<Listing> basicSearchHelper(String query, String pubType, LinkedList<Listing> results){
 		/*
 		for (Publication p : this.db) {
 			if (p.getTitle().toLowerCase().contains(query.toLowerCase()) || (p.getAuthor() != null && p.getAuthor().toLowerCase().contains(query.toLowerCase()) && p.getPubType().toLowerCase().equals(pubType))){

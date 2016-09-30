@@ -101,26 +101,33 @@
 	<div class="container">
 		<div class="row valign-wrapper">
 			<div class="col s10 offset-s1">
-     			<div class="card valign grey lighten-1" >
-			        <table class="left highlighted striped responsive-table">
-			        	<thead>
-							<tr>
-								<th> Title </th>
-								<th> Author</th>
-								<th> Publication Type</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="pub" items="${randomPubs}">
-								<tr>
-									<td><c:out value="${pub.title}" /></td>
-									<td><c:out value="${pub.formattedAuthors}" /></td>
-									<td><c:out value="${pub.type}" /></td>
-								</tr>
-							</c:forEach>
-						</tbody>	
-		        	</table>
-				</div>
+	 			<c:choose>
+					<c:when test="${not empty eMessage}">
+ 						<p class="red-text center">${eMessage}</p>
+ 					</c:when>
+	 				<c:otherwise>
+		     			<div class="card valign grey lighten-1" >
+					        <table class="left highlighted striped responsive-table">
+					        	<thead>
+									<tr>
+										<th> Title </th>
+										<th> Author</th>
+										<th> Publication Type</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="pub" items="${randomPubs}">
+										<tr>
+											<td><c:out value="${pub.title}" /></td>
+											<td><c:out value="${pub.formattedAuthors}" /></td>
+											<td><c:out value="${pub.type}" /></td>
+										</tr>
+									</c:forEach>
+								</tbody>	
+				        	</table>
+						</div>
+					</c:otherwise>
+				</c:choose>
   			</div>
 		</div>
 	</div>

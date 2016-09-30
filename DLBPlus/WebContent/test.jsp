@@ -1,5 +1,5 @@
 <%@ page import="edu.unsw.comp9321.DBHelper" %>
-<%@ page import="edu.unsw.comp9321.Publication" %>
+<%@ page import="edu.unsw.comp9321.Listing" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="edu.unsw.comp9321.User" %>
 <%@ page import="java.util.List" %>
@@ -26,9 +26,9 @@
 	
   //Make some users
   Date date = new Date();
-  User u1 = db.CreateUser("joe1", "bobby", "Joe", "Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
-  User u2 = db.CreateUser("joe2", "teddy23", "Joe", "Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
-  User u3 = db.CreateUser("joe3", "@@879@@KAPPA", "Joe", "Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
+  User u1 = db.CreateUser("joe1", "bobby", "Joe", "Joey","Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
+  User u2 = db.CreateUser("joe2", "teddy23", "Joe", "Joey","Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
+  User u3 = db.CreateUser("joe3", "@@879@@KAPPA", "Joe", "Joey","Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
 
   if (u1 == null)
     u1 = db.GetUser("joe1");
