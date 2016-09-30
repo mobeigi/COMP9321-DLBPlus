@@ -65,12 +65,15 @@ public class SetupServlet extends HttpServlet {
 					randPubIDs.add(pubToAdd.getId());
 				}
 				
+				System.out.println(randPublications.size());
+				
 				for (Publication pub : randPublications) {
 					pub.showDetails();
 				}
 				
 				// Set random publication list to session
-				request.getSession().setAttribute("found", randPublications);
+				request.setAttribute("randomPubs", randPublications);
+				System.out.println(request.getAttribute("randomPubs"));
 				
 			} else {
 				System.out.println("Could not get random publication. Connection doesn't exist.");
