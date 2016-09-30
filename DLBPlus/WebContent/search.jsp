@@ -32,7 +32,7 @@
 	<div class="section no-pad-bot" id="index-banner">
     	<div class="container">
     		<br><br>
-    		<h1 class="header center orange-text">Bibliographic Library</h1>
+    		<h1 class="header center orange-text">Search for a Listing</h1>
     		<br><br>
         </div>
  	</div>
@@ -61,6 +61,15 @@
 			     		    	<input placeholder="Volume"    id="textbox" name="searchVolume" type="text" />
 			     		    </div>
 			     		    <div class="col s6">
+			           			<input placeholder="Chapter"    id="textbox" name="searchChapter" type="text" />
+			           		</div>
+			     		</div>
+			     		<div class="row">
+		              		
+			           		<div class="col s6">
+			     		    	<input placeholder="Pages"    id="textbox" name="searchPage" type="text" />
+		     		    	</div>
+		     		    	<div class="col s6">
 			     		    	<input placeholder="Publisher" id="textbox" name="searchPubber" type="text" />
 			     		    </div>
 			     		</div>
@@ -72,6 +81,14 @@
 			           			<input placeholder="YYYY"      id="textbox" name="searchYear" type="text" maxlength="4" pattern="\d{4}"/>
 			           		</div>
 			           	</div>
+			     		<div class="row">
+		              		<div class="col s6">
+			           			<input placeholder="venues"    id="textbox" name="searchVenues" type="text" />
+			           		</div>
+			           		<div class="col s6">
+			     		    	<input placeholder="Seller Username"    id="textbox" name="searchSeller" type="text" />
+		     		    	</div>
+			     		</div>
 			           	<div class="row">
 				           	<div class="col s6">
 				           		<label>Publication Type</label>

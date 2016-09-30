@@ -41,16 +41,32 @@ public class SetupServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String stringId = request.getParameter("id");
-		if (stringId != null) {
-			Integer intId = Integer.parseInt(request.getParameter("id"));
-			LinkedList<String> entry = getEntryDeets(intId);
-			request.getSession().setAttribute("pubEntry", entry);
-			request.getSession().setAttribute("publicationID", intId);
-		    RequestDispatcher rd = request.getRequestDispatcher("/publication.jsp");
-		    rd.forward(request, response);
+		doPost(request,response);
+	}
+
+	private LinkedList<String> getEntryDeets(Integer pubID) {
+		Publication pub = this.db.GetPublication(pubID);
+		//LinkedList<String> entryDetails = pub.getPubDetails();
+		//return entryDetails;	
+		return null;
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			
+		String req;
+		if(request.getParameter("action") != null){
+			req = request.getParameter("action");
 		} else {
+			req = "home";
+		}
+		String link = "home.jsp";
+			
+		if(req.equals("back")){
+			link = "index.jsp";
+		} else if(req.equals("home")){
 			if (this.db.dbConnStatus) {
 				List<Publication> randPublications = new ArrayList<Publication>();
 				List<Integer> randPubIDs = new ArrayList<Integer>();
@@ -65,41 +81,21 @@ public class SetupServlet extends HttpServlet {
 					randPubIDs.add(pubToAdd.getId());
 				}
 				
+				System.out.println(randPublications.size());
+				
 				for (Publication pub : randPublications) {
 					pub.showDetails();
 				}
 				
 				// Set random publication list to session
-				request.getSession().setAttribute("found", randPublications);
+				request.setAttribute("randomPubs", randPublications);
+				System.out.println(request.getAttribute("randomPubs"));
 				
 			} else {
 				System.out.println("Could not get random publication. Connection doesn't exist.");
 			}
 			
-			request.getSession().invalidate();
-		    RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
-		    rd.forward(request, response);
-		}
-	}
-
-	private LinkedList<String> getEntryDeets(Integer pubID) {
-		Publication pub = this.db.GetPublication(pubID);
-		//LinkedList<String> entryDetails = pub.getPubDetails();
-		//return entryDetails;	
-		return null;
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String req = request.getParameter("action");
-		String link = "result.jsp";
-			
-		if(req.equals("back")){
-			link = "index.jsp";
-		} else if(req.equals("home")){
-			link = "index.jsp";
+		link = "index.jsp";
 		} else if(req.equals("search")){
 			String query = request.getParameter("searchQuery");
 			String type = request.getParameter("pubType");
@@ -112,11 +108,15 @@ public class SetupServlet extends HttpServlet {
 			String author = request.getParameter("searchAuthor");
 			String editor = request.getParameter("searchEditor");
 			String volume = request.getParameter("searchVolume");
-			String publisher = request.getParameter("searchPublisher");
+			String chapter = request.getParameter("searchChapter");
+			String pages = request.getParameter("searchPage");
+			String publisher = request.getParameter("searchPubber");
 			String isbn = request.getParameter("searchISBN");
 			String year = request.getParameter("searchYear");
+			String venues = request.getParameter("searchVenues");
+			String seller = request.getParameter("searchSeller");	
 			String type = request.getParameter("searchPubType");
-			LinkedList<Publication> result = aSearch(title, author, editor, volume, publisher, isbn, year, type);
+			LinkedList<Publication> result = aSearch(title, author, editor, volume, chapter, pages, publisher, isbn, year, venues, seller, type);
 			SearchPageBean searchPageBean = new SearchPageBean(result);
 			request.getSession().setAttribute("searchFound", searchPageBean);
 			link = "result.jsp";
@@ -223,12 +223,22 @@ public class SetupServlet extends HttpServlet {
 				link = "login.jsp";
 			}
 		} else if(req.equals("logout")){
+			String errorMessage = "";
+			request.getSession().setAttribute("eMessage",errorMessage);
 			request.getSession().setAttribute("user",null);
 			link = "index.jsp";
 		} else if(req.equals("confirmPurchase")){
 			link = "transactionSuccessful.jsp";
+		} else if(req.equals("registerPage")){
+			String errorMessage = "";
+			request.getSession().setAttribute("eMessage",errorMessage);
+			link = "register.jsp";
 		} else if(req.equals("modified")){
 			link = "modifyDetails.jsp";
+		} else if(req.equals("loginPage")){
+			String errorMessage = "";
+			request.getSession().setAttribute("eMessage",errorMessage);
+			link = "login.jsp";
 		} else if(req.equals("toAccount")){
 			link = "userAccount.jsp";
 		} else if(req.equals("viewHist")){
@@ -240,6 +250,32 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("createListing")){
 			//Create new listing
 			link = "createListing.jsp";
+		} else if(req.equals("registerItem")){
+			String itemName = request.getParameter("itemName"); //Required
+			String authors = request.getParameter("authors");	//Required
+			String type = request.getParameter("pubType");		//Required
+			String editors = request.getParameter("editors");
+			String venues = request.getParameter("venues");
+			String pages = request.getParameter("pages");
+			String volume = request.getParameter("volume");
+			String year = request.getParameter("year");
+			String month = request.getParameter("month");
+			String address = request.getParameter("address");
+			String number = request.getParameter("number");
+			String urls = request.getParameter("urls");
+			String ees = request.getParameter("ees");
+			String cdrom = request.getParameter("cdrom");
+			String cities = request.getParameter("cities");
+			String publisher = request.getParameter("publisher");
+			String isbns = request.getParameter("isbns");
+			String crossref = request.getParameter("crossref");
+			String series = request.getParameter("series");
+			String chapter = request.getParameter("chapter");
+			String rating = request.getParameter("rating");
+			String note = request.getParameter("note");
+			String price = request.getParameter("price");		//Required
+			
+			
 		}
 		
 		// Case when user wants to view admin
@@ -280,7 +316,7 @@ public class SetupServlet extends HttpServlet {
 		request.getSession().setAttribute("cartSize", itemsInCart.size());
 		return "cart.jsp";
 	}
-	private LinkedList<Publication> aSearch(String title, String author, String editor, String volume, String publisher, String isbn, String year, String type) {
+	private LinkedList<Publication> aSearch(String title, String author, String editor, String volume, String chapter, String pages, String publisher, String isbn, String year, String venues, String seller, String type) {
 		LinkedList<Publication> result = new LinkedList<Publication>();
 		boolean flag = true;
 		String publicationType = type;

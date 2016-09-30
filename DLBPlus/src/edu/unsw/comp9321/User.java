@@ -7,6 +7,7 @@ public class User {
 	private String username;
 	private String fname;
 	private String lname;
+	private String nickname;
 	private String email;
 	private String address;
 	private Date dob;
@@ -123,4 +124,12 @@ public class User {
   public void setAcctcreated(Date acctcreated) {
     this.acctcreated = acctcreated;
   }
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 }

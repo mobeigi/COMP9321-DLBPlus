@@ -7,6 +7,7 @@ import java.util.Date;
 
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Database helper class which abstracts database calls.
@@ -47,182 +48,13 @@ public class DBHelper implements DLBPlusDBInterface {
 	}
 
 	/**
-	 * Get a random publication
-	 *
-	 * @return Random publication or null if no publications exist (0 publications in db)
-	 */
-	public Publication GetRandomPublication() {
-		if (!dbConnStatus) {
-	      this.PrintDebugMessage("GetRandomPublication", "No connection with database");
-	      return null;
-	    }
-
-		try {
-			Statement stmt;
-			dbConn.setAutoCommit(false);
-			stmt = dbConn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM publications OFFSET floor(random()*(SELECT COUNT(*) FROM publications)) LIMIT 1;" );
-
-			return processResultSet(rs);
-		}
-		catch (SQLException e) {
-			return null;
-		}
-	}
-
-	/**
-	 * Get publication using ID
-	 *
-	 * @param pubID Publication identifier
-	 * @return publication with matching publication identifier
-	 */
-	public Publication GetPublication(int pubID) {
-		if (!dbConnStatus) {
-	      this.PrintDebugMessage("GetPublication", "No connection with database");
-	      return null;
-	    }
-
-		try {
-			Statement stmt;
-			dbConn.setAutoCommit(false);
-			stmt = dbConn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM publications where id = " + pubID + ";" );
-
-			return processResultSet(rs);
-		}
-		catch (SQLException e) {
-			return null;
-		}
-	}
-
-	/**
-	 * Given a result set, parse next row of values into Publication
-	 *
-	 * @param rs result set for a query on the publications table
-	 * @return null if no match found/rows exhausted, publication of next row otherwise
-	 */
-	private Publication processResultSet(ResultSet rs) {
-		Publication p = new Publication();
-
-		try {
-			if (rs.next()) {
-				Integer id = rs.getInt("id");
-				String type = rs.getString("type");
-				
-				List<String> authors = (rs.getString("authors").equals("")) ? 
-										new LinkedList<String>() 
-										: new LinkedList<String>(Arrays.asList(rs.getString("authors").split("\\|")));
-
-				List<String> editors = (rs.getString("editors").equals("")) ? 
-						new LinkedList<String>() 
-						: new LinkedList<String>(Arrays.asList(rs.getString("editors").split("\\|")));
-				
-				String title = rs.getString("title");
-				String pages = rs.getString("pages");
-				Integer year = rs.getInt("year");
-				String address = rs.getString("address");
-				String volume = rs.getString("volume");
-				String number = rs.getString("number");
-				String month = rs.getString("month");
-				
-				List<String> urls = (rs.getString("urls").contains("")) ? 
-						new LinkedList<String>() 
-						: new LinkedList<String>(Arrays.asList(rs.getString("urls").split("\\|")));
-				
-				List<String> ees = (rs.getString("ees").equals("")) ? 
-						new LinkedList<String>() 
-						: new LinkedList<String>(Arrays.asList(rs.getString("ees").split("\\|")));
-				
-				String cdrom = rs.getString("cdrom");
-				
-				List<String> cites = (rs.getString("cites") == null) ? 
-						new LinkedList<String>() 
-						: new LinkedList<String>(Arrays.asList(rs.getString("cites").split("\\|")));
-				
-				String publisher = rs.getString("publisher");
-				String note = rs.getString("note");
-				String crossref = rs.getString("crossref");
-				
-				List<String> isbns = (rs.getString("isbns") == null) ? 
-						new LinkedList<String>() 
-						: new LinkedList<String>(Arrays.asList(rs.getString("isbns").split("\\|")));
-				
-				String series = rs.getString("series");
-				
-				List<String> venues = (rs.getString("venues") == null) ? 
-						new LinkedList<String>() 
-						: new LinkedList<String>(Arrays.asList(rs.getString("venues").split("\\|")));
-						
-				String chapter = rs.getString("chapter");
-				Double recprice = rs.getDouble("recPrice");
-				String rating = rs.getString("rating");
-
-				//Set publication fields
-				p.setId(id);
-				p.setType(type);
-
-				for (String author : authors)
-					p.setAuthor(author);
-
-				for (String editor : editors)
-					p.setEditor(editor);
-
-				p.setTitle(title);
-				p.setPages(pages);
-				p.setYear(year);
-				p.setAddress(address);
-				p.setVolume(volume);
-				p.setNumber(number);
-				p.setMonth(month);
-
-				for (String url : urls)
-					p.setUrl(url);
-
-				for (String ee : ees)
-					p.setEe(ee);
-
-				p.setCdrom(cdrom);
-
-				for (String cite : cites)
-					p.setCite(cite);
-
-				p.setPublisher(publisher);
-				p.setNote(note);
-				p.setCrossref(crossref);
-
-				for (String isbn : isbns)
-					p.setIsbn(isbn);
-
-				p.setSeries(series);
-
-				for (String venue : venues)
-					p.setVenue(venue);
-
-				p.setChapter(chapter);
-				p.setRecprice(recprice);
-				p.setRating(rating);
-				
-				// Finalise publication
-				p.finalise();
-				
-			} else { //No result found
-				p = null;
-			}
-		} catch (SQLException e) {
-			return null;
-		}
-
-		return p;
-	}
-
-	/**
 	 * Create a user by inserting provided user details into database
 	 *
 	 * @param username Provided username
 	 * @param plainTextPassword Unsalted Password
 	 * @return User corresponding to successful insertion (null otherwise)
 	 */
-	public User CreateUser(String username, String plainTextPassword, String fname, String lname, String email,
+	public User CreateUser(String username, String plainTextPassword, String fname, String lname, String nickname, String email,
 												 String address, java.util.Date dob, String creditcard, String dp) {
 		if (!dbConnStatus) {
 			this.PrintDebugMessage("CreateUser", "No connection with database");
@@ -246,8 +78,8 @@ public class DBHelper implements DLBPlusDBInterface {
 				Statement stmt;
 				dbConn.setAutoCommit(false);
 				stmt = dbConn.createStatement();
-				String q = "INSERT INTO users (username, salt, password, fname, lname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) " +
-								"VALUES ('" + username + "', '" + encodedSalt + "', '" + passwordHash + "', '" + fname + "', '" + lname + "', '" + email + "', '" + address + "', '" + dob.toString() + "', '" + creditcard + "', '" + dp + "', true, false, '" + now.toString() + "');";
+				String q = "INSERT INTO users (username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) " +
+								"VALUES ('" + username + "', '" + encodedSalt + "', '" + passwordHash + "', '" + fname + "', '" + lname + "', '" + nickname + "', '" + email + "', '" + address + "', '" + dob.toString() + "', '" + creditcard + "', '" + dp + "', true, false, '" + now.toString() + "');";
         PrintDebugMessage("CreateUser", "Running query: " + q);
 				stmt.executeUpdate(q);
 				dbConn.commit();
@@ -360,6 +192,7 @@ public class DBHelper implements DLBPlusDBInterface {
                     " SET username = '" + changedUser.getUsername() + //change username
                     "', fname = '" + changedUser.getFname() +
                     "', lname = '" + changedUser.getLname() +
+								    "', nickname = '" + changedUser.getNickname() +
                     "', email = '" + changedUser.getEmail() +
                     "', address = '" + changedUser.getAddress() +
                     "', dob = '" + changedUser.getDob() +
@@ -384,6 +217,50 @@ public class DBHelper implements DLBPlusDBInterface {
       return false;
     }
   }
+
+	/**
+	 * Change users stored password including salt.
+	 *
+	 * @param user the user being changed
+	 * @param plainTextPassword the new password in plain text
+	 * @return true if password successfully changed, false otherwise
+	 */
+	public boolean ChangeUserPassword(User user, String plainTextPassword) {
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("ChangeUserPassword", "No connection with database");
+			return false;
+		}
+
+		try {
+			if (DoesUserExist(user.getId())) {
+
+				//Generate random salt and hashed password
+				final Random r = new SecureRandom();
+				byte[] salt = new byte[32];
+				r.nextBytes(salt);
+				String encodedSalt = Base64.encode(salt);
+				String passwordHash = DigestUtils.sha1Hex(encodedSalt + plainTextPassword);
+
+				Statement stmt;
+				dbConn.setAutoCommit(false);
+				stmt = dbConn.createStatement();
+				String q = "UPDATE users " +
+									 "SET salt='" + encodedSalt + "', " +
+								   "password='" + passwordHash + "' " +
+								   "WHERE id = " + user.getId() + ";";
+				PrintDebugMessage("ChangeUserPassword", "Running query: " + q);
+				stmt.executeUpdate(q);
+				dbConn.commit();
+				return true;
+			} else { //User already exists
+				PrintDebugMessage("ChangeUserPassword", "Error! User does not exist");
+				return false;
+			}
+		}
+		catch (SQLException e) {
+			return false;
+		}
+	}
   
   /**
    * Validate a user
@@ -463,25 +340,32 @@ public class DBHelper implements DLBPlusDBInterface {
 	 *
 	 * @return Listing Null if listing unsuccessful, Listing of newly created listing otherwise
 	 */
-	 public Listing CreateListing(User seller, Publication item, Integer quantity, Timestamp listdate, Timestamp enddate,
-                                Double sellprice, String image) {
+	 public Listing CreateListing(User seller, Integer quantity, Timestamp listdate, Timestamp enddate, Double sellprice, String image,
+																Listing.Type type, List<String> authors, List<String> editors, String title, List<String> venues,
+																String pages, Integer year, String address, String volume, String number, String month, List<String> urls,
+																List<String> ees, String cdrom, List<String> cites, String publisher, String note, String crossref,
+																List<String> isbns, String series, String chapter, String rating) {
 	     if (!dbConnStatus) {
 	       this.PrintDebugMessage("CreateListing", "No connection with database");
 	       return null;
 	     }
 	    
-	     if (seller == null || item == null) {
+	     if (seller == null) {
 	       PrintDebugMessage("CreateListing", "Error! Seller or item is null");
 	       return null;
 	     }
-	     
-	     try {
+
+		 try {
 	       Statement stmt;
 	       dbConn.setAutoCommit(false);
 	       stmt = dbConn.createStatement();
-	       String q = "INSERT INTO listings (sellerid, itemid, quantity, listdate, enddate, sellprice, image) " +
-	         "VALUES (" + seller.getId() + ", " + item.getId() + ", " + quantity + ", to_timestamp(" + listdate.getTime()/1000 + "), to_timestamp(" + enddate.getTime()/1000 + "), " + sellprice + ", '" + image + "')" +
-	         "RETURNING id;";
+
+	       String q = "INSERT INTO listings (sellerid, quantity, listdate, enddate, sellprice, image, type, authors, editors, title, venues, pages, year, address, volume, number, month, urls, ees, cdrom, cites, publisher, note, crossref, isbns, series, chapter, rating) " +
+	         "VALUES (" + seller.getId() + ", " + quantity + ", to_timestamp(" + listdate.getTime()/1000 + "), to_timestamp(" + enddate.getTime()/1000 + "), " + sellprice + ", '" + image + "', " +
+								 		"'" + type.toString().toLowerCase() + "', '" + StringUtils.join(authors , "|") + "', '" + StringUtils.join(editors , "|") + "', '" + title + "', '" + StringUtils.join(venues , "|") + "', '" + pages + "', " + year + ", '" + address +
+								 		"', '" + volume + "', '" + number + "', '" + month + "', '" + StringUtils.join(urls , "|") + "', '" + StringUtils.join(ees , "|") + "', '" + cdrom + "', '" + StringUtils.join(cites , "|") + "', '" + publisher + "', '" + note +
+								 		"', '" + crossref + "', '" + StringUtils.join(isbns , "|") + "', '" + series + "', '" + chapter + "', '" + rating + "') " +
+	         					"RETURNING id;";
 	       PrintDebugMessage("CreateListing", "Running query: " + q);
 	       ResultSet rs = stmt.executeQuery(q);
 	       
@@ -515,7 +399,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	       Statement stmt;
 	       dbConn.setAutoCommit(false);
 	       stmt = dbConn.createStatement();
-	       stmt.executeUpdate("UPDATE listings SET paused = " + paused + " WHERE id = " + listing.getListingid() + ";" );
+	       stmt.executeUpdate("UPDATE listings SET paused = " + paused + " WHERE id = " + listing.getId() + ";" );
 	       dbConn.commit();
 	       listing.setPaused(paused); //update local object
 	       return true;
@@ -559,17 +443,24 @@ public class DBHelper implements DLBPlusDBInterface {
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
       String q = "INSERT INTO activecartitems (cartid, listingid, addedts) " +
-        "VALUES (" + user.getCartid() + ", " + listingToAdd.getListingid() + ", to_timestamp(" + tNow.getTime()/1000  + "));";
+        "VALUES (" + user.getCartid() + ", " + listingToAdd.getId() + ", to_timestamp(" + tNow.getTime()/1000  + "));";
       PrintDebugMessage("AddToCart", "Running query: " + q);
       stmt.executeUpdate(q);
       dbConn.commit();
       
       //Create CartItem to return
       CartItem cartItem = new CartItem();
-      cartItem.setCartid(user.getCartid());
-      cartItem.setListingid(listingToAdd.getListingid());
-      cartItem.setAddedts(tNow);
-      cartItem.setPaused(false);
+			cartItem.setCartid(user.getCartid());
+			cartItem.setListingid(listingToAdd.getId());
+			cartItem.setAddedts(tNow);
+			cartItem.setRemovedts(null);
+
+			User u = GetUser(listingToAdd.getSellerid());
+			cartItem.setSellerName(u.getUsername());
+			cartItem.setPublicationName(listingToAdd.getTitle());
+			cartItem.setPublicationType(listingToAdd.getType());
+			cartItem.setPrice(listingToAdd.getSellprice());
+
       return cartItem;
     }
     catch (SQLException e) {
@@ -588,8 +479,8 @@ public class DBHelper implements DLBPlusDBInterface {
       this.PrintDebugMessage("RemoveFromCart", "No connection with database");
       return false;
     }
-    
-    if (!cartItem.isPaused()) {
+
+    if (!cartItem.isActive()) {
       this.PrintDebugMessage("RemoveFromCart", "CartItem is not active, cannot remove this item.");
       return false;
     }
@@ -597,7 +488,7 @@ public class DBHelper implements DLBPlusDBInterface {
     try {
       //Get current time
       Timestamp now = new Timestamp(new Date().getTime());
-      
+
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
@@ -611,11 +502,10 @@ public class DBHelper implements DLBPlusDBInterface {
                          "ORDER BY addedts ASC LIMIT 1 );");
       dbConn.commit();
       
-      cartItem.setPaused(false); //change local object
+      cartItem.setRemovedts(now);
       return true;
     }
     catch (SQLException e) {
-      System.out.println(e.getMessage());
       return false;
     }
 	}
@@ -685,6 +575,7 @@ public class DBHelper implements DLBPlusDBInterface {
         String username = rs.getString("username");
         String fname = rs.getString("fname");
         String lname = rs.getString("lname");
+        String nickname = rs.getString("nickname");
         String email = rs.getString("email");
         String address = rs.getString("address");
         Date dob = rs.getDate("dob");
@@ -700,6 +591,7 @@ public class DBHelper implements DLBPlusDBInterface {
         u.setUsername(username);
         u.setFname(fname);
         u.setLname(lname);
+        u.setNickname(nickname);
         u.setEmail(email);
         u.setAddress(address);
         u.setDob(dob);
@@ -798,7 +690,6 @@ public class DBHelper implements DLBPlusDBInterface {
 		}
 		List<CartItem> activeCartItems = new ArrayList<CartItem>();
 		try {
-
 		      Statement stmt;
 		      dbConn.setAutoCommit(false);
 		      stmt = dbConn.createStatement();
@@ -807,11 +698,10 @@ public class DBHelper implements DLBPlusDBInterface {
 		    		  "		u.cartid AS cartid," +
 		    		  "		l.id AS listingid," +
 		    		  "		s.username AS sellername," +
-		    		  "		p.type AS pubtype," +
-		    		  "		p.title AS pubname," +
+		    		  "		l.type AS pubtype," +
+		    		  "		l.title AS pubname," +
 		    		  "		l.sellprice AS price," +
-		    		  "		ac.addedts AS addedts," +
-		    		  "		l.paused AS ispaused " +
+		    		  "		ac.addedts AS addedts " +
 		    		  "FROM " +
 		    		  "		activecartitems ac " +
 		    		  "LEFT JOIN " +
@@ -820,8 +710,6 @@ public class DBHelper implements DLBPlusDBInterface {
 		    		  "		listings l ON ac.listingid = l.id " +
 		    		  "LEFT JOIN " +
 		    		  "		users s ON l.sellerid = s.id " +
-		    		  "LEFT JOIN " +
-		    		  "		publications p ON l.itemid = p.id " +
 		    		  "WHERE (" +
 		    		  "		ac.cartid = " + cartID +
 		    		  ");";
@@ -835,11 +723,9 @@ public class DBHelper implements DLBPlusDBInterface {
 		      }			
 			
 		} catch (Exception e) {
-			System.out.println(e);
 			return null;
 		}
 		return activeCartItems;
-
 	}
 
 	/**
@@ -850,50 +736,45 @@ public class DBHelper implements DLBPlusDBInterface {
 	 */	
 	public List<CartItem> GetRemovedCartItems(int cartID) {
 		if (!this.dbConnStatus) {
-			this.PrintDebugMessage("GetRemovedCartItems", "No connection to database");
+			this.PrintDebugMessage("GetActiveCartItems", "No connection to database");
 			return null;
 		}
 		List<CartItem> removedCartItems = new ArrayList<CartItem>();
 		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			String query =
+											"SELECT " +
+											"		u.cartid AS cartid," +
+											"		l.id AS listingid," +
+											"		s.username AS sellername," +
+											"		l.type AS pubtype," +
+											"		l.title AS pubname," +
+											"		l.sellprice AS price," +
+											"		rc.addedts AS addedts," +
+											"		rc.removedts AS removedts " +
+											"FROM " +
+											"		removedcartitems rc " +
+											"LEFT JOIN " +
+											"		users u ON rc.cartid = u.cartid " +
+											"LEFT JOIN " +
+											"		listings l ON rc.listingid = l.id " +
+											"LEFT JOIN " +
+											"		users s ON l.sellerid = s.id " +
+											"WHERE (" +
+											"		rc.cartid = " + cartID +
+											");";
+			ResultSet rs = stmt.executeQuery(query);
+			System.out.println("Executed query: " + query);
 
-		      Statement stmt;
-		      dbConn.setAutoCommit(false);
-		      stmt = dbConn.createStatement();
-		      String query = 
-		    		  "SELECT " +
-		    		  "		u.cartid AS cartid," +
-		    		  "		l.id AS listingid," +
-		    		  "		s.username AS sellername," +
-		    		  "		p.type AS pubtype," +
-		    		  "		p.title AS pubname," +
-		    		  "		l.sellprice AS price," +
-		    		  "		rc.addedts AS addedts," +
-		    		  "		rc.removedts AS removedts," +
-		    		  "		l.paused AS ispaused " +
-		    		  "FROM " +
-		    		  "		removedcartitems rc " +
-		    		  "LEFT JOIN " +
-		    		  "		users u ON rc.cartid = u.cartid " +
-		    		  "LEFT JOIN " +
-		    		  "		listings l ON rc.listingid = l.id " +
-		    		  "LEFT JOIN " +
-		    		  "		users s ON l.sellerid = s.id " +
-		    		  "LEFT JOIN " +
-		    		  "		publications p ON l.itemid = p.id " +
-		    		  "WHERE (" +
-		    		  "		rc.cartid = " + cartID +
-		    		  ");";
-		      ResultSet rs = stmt.executeQuery(query);
-		      System.out.println("Executed query: " + query);
-		      
-		      CartItem cartItem = processResultSetIntoCartItem(rs);
-		      while (cartItem != null) {
-		        removedCartItems.add(cartItem);
-		        cartItem = processResultSetIntoCartItem(rs);
-		      }			
-			
+			CartItem cartItem = processResultSetIntoCartItem(rs);
+			while (cartItem != null) {
+				removedCartItems.add(cartItem);
+				cartItem = processResultSetIntoCartItem(rs);
+			}
+
 		} catch (Exception e) {
-			System.out.println(e);
 			return null;
 		}
 		return removedCartItems;
@@ -924,19 +805,16 @@ public class DBHelper implements DLBPlusDBInterface {
 				} catch (SQLException e){
 					// do nothing
 				}
-				
-				Boolean isactive = rs.getBoolean("ispaused");
-				
+
 				// Set CartItem fields
 				cartItem.setCartid(cartid);
 				cartItem.setListingid(listingid);
 				cartItem.setSellerName(sellername);
-				cartItem.setPublicationType(pubtype);
+				cartItem.setPublicationType(Listing.stringToType(pubtype));
 				cartItem.setPublicationName(pubname);
 				cartItem.setPrice(price);
 				cartItem.setAddedts(addedts);
 				cartItem.setRemovedts(removedts);
-				cartItem.setPaused(isactive);
 
 			} else { //No result found
 				cartItem = null;
@@ -966,8 +844,8 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      String q = "INSERT INTO orders (buyerid, sellerid, itemid, order_date, price) " +
-        "VALUES (" + userID + ", " + soldListing.getSellerid() + ", " + soldListing.getItemid() + ", to_timestamp(" + now.getTime()/1000 + ")," + soldListing.getSellprice() + ")" +
+      String q = "INSERT INTO orders (buyerid, sellerid, pubtitle, order_date, price) " +
+        "VALUES (" + userID + ", " + soldListing.getSellerid() + ", " + soldListing.getTitle() + ", to_timestamp(" + now.getTime()/1000 + ")," + soldListing.getSellprice() + ")" +
         "RETURNING id;";
       PrintDebugMessage("CreateOrder", "Running query: " + q);
       ResultSet rs = stmt.executeQuery(q);
@@ -1013,10 +891,10 @@ public class DBHelper implements DLBPlusDBInterface {
 	/**
 	 * Obtain the order history of a particular user
 	 *
-	 * @param userID the id of the user
+	 * @param buyerID the id of the user
 	 * @return returns a list of orders that the user has made
 	 **/	
-	public List<Order> GetOrderHistory(int userID) {
+	public List<Order> GetOrderHistory(int buyerID) {
 	    List<Order> orderHistory = new ArrayList<Order>();
 	    
 	    if (!dbConnStatus) {
@@ -1028,7 +906,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	      Statement stmt;
 	      dbConn.setAutoCommit(false);
 	      stmt = dbConn.createStatement();
-	      ResultSet rs = stmt.executeQuery("SELECT * FROM orders WHERE buyerid = '" + userID + "';");
+	      ResultSet rs = stmt.executeQuery("SELECT * FROM orders WHERE buyerid = '" + buyerID + "';");
 	      
 	      Order o = processResultSetIntoOrder(rs);
 	      
@@ -1058,7 +936,7 @@ public class DBHelper implements DLBPlusDBInterface {
         Integer id = rs.getInt("id");
         Integer buyerid = rs.getInt("buyerid");
         Integer sellerid = rs.getInt("sellerid");
-        Integer itemid = rs.getInt("itemid");
+				String pubTitle = rs.getString("pubTitle");
         Timestamp order_date = rs.getTimestamp("order_date");
         Double price = rs.getDouble("price");
         
@@ -1066,7 +944,7 @@ public class DBHelper implements DLBPlusDBInterface {
         o.setId(id);
         o.setBuyerid(buyerid);
         o.setSellerid(sellerid);
-        o.setItemid(itemid);
+				o.setPubTitle(pubTitle);
         o.setOrder_date(order_date);
         o.setPrice(price);
       } else { //No result found
@@ -1139,9 +1017,8 @@ public class DBHelper implements DLBPlusDBInterface {
     
     try {
       if (rs.next()) {
-        Integer listingid = rs.getInt("id");
+        Integer id = rs.getInt("id");
         Integer sellerid = rs.getInt("sellerid");
-        Integer itemid = rs.getInt("itemid");
         Integer quantity = rs.getInt("quantity");
         Timestamp listdate = rs.getTimestamp("listdate");
         Timestamp enddate = rs.getTimestamp("enddate");
@@ -1149,18 +1026,90 @@ public class DBHelper implements DLBPlusDBInterface {
         String image = rs.getString("image");
         Boolean paused = rs.getBoolean("paused");
         Integer numviews = rs.getInt("numviews");
+
+
+				String type = rs.getString("type");
+
+				List<String> authors = (rs.getString("authors").equals("")) ?
+								new LinkedList<String>()
+								: new LinkedList<String>(Arrays.asList(rs.getString("authors").split("\\|")));
+
+				List<String> editors = (rs.getString("editors").equals("")) ?
+								new LinkedList<String>()
+								: new LinkedList<String>(Arrays.asList(rs.getString("editors").split("\\|")));
+
+				String title = rs.getString("title");
+				String pages = rs.getString("pages");
+				Integer year = rs.getInt("year");
+				String address = rs.getString("address");
+				String volume = rs.getString("volume");
+				String number = rs.getString("number");
+				String month = rs.getString("month");
+
+				List<String> urls = (rs.getString("urls").contains("")) ?
+								new LinkedList<String>()
+								: new LinkedList<String>(Arrays.asList(rs.getString("urls").split("\\|")));
+
+				List<String> ees = (rs.getString("ees").equals("")) ?
+								new LinkedList<String>()
+								: new LinkedList<String>(Arrays.asList(rs.getString("ees").split("\\|")));
+
+				String cdrom = rs.getString("cdrom");
+
+				List<String> cites = (rs.getString("cites") == null) ?
+								new LinkedList<String>()
+								: new LinkedList<String>(Arrays.asList(rs.getString("cites").split("\\|")));
+
+				String publisher = rs.getString("publisher");
+				String note = rs.getString("note");
+				String crossref = rs.getString("crossref");
+
+				List<String> isbns = (rs.getString("isbns") == null) ?
+								new LinkedList<String>()
+								: new LinkedList<String>(Arrays.asList(rs.getString("isbns").split("\\|")));
+
+				String series = rs.getString("series");
+
+				List<String> venues = (rs.getString("venues") == null) ?
+								new LinkedList<String>()
+								: new LinkedList<String>(Arrays.asList(rs.getString("venues").split("\\|")));
+
+				String chapter = rs.getString("chapter");
+				String rating = rs.getString("rating");
         
-        //Set User fields
-        l.setListingid(listingid);
-        l.setSellerid(sellerid);
-        l.setItemid(itemid);
-        l.setQuantity(quantity);
-        l.setListdate(listdate);
-        l.setEnddate(enddate);
-        l.setSellprice(sellprice);
-        l.setImage(image);
-        l.setPaused(paused);
-        l.setNumviews(numviews);
+        //Set fields
+        l.setId(id);
+				l.setSellerid(sellerid);
+				l.setQuantity(quantity);
+				l.setListdate(listdate);
+				l.setEnddate(enddate);
+				l.setSellprice(sellprice);
+				l.setImage(image);
+				l.setPaused(paused);
+				l.setNumviews(numviews);
+
+				l.setType(type);
+				l.setAuthors(authors);
+				l.setEditors(editors);
+				l.setTitle(title);
+				l.setPages(pages);
+				l.setYear(year);
+				l.setAddress(address);
+				l.setVolume(volume);
+				l.setNumber(number);
+				l.setMonth(month);
+				l.setUrls(urls);
+				l.setEes(ees);
+				l.setCdrom(cdrom);
+				l.setCites(cites);
+				l.setPublisher(publisher);
+				l.setNote(note);
+				l.setCrossref(crossref);
+				l.setIsbns(isbns);
+				l.setSeries(series);
+				l.setVenues(venues);
+				l.setChapter(chapter);
+				l.setRating(rating);
         
       } else { //No result found
         l = null;
@@ -1175,9 +1124,10 @@ public class DBHelper implements DLBPlusDBInterface {
   /**
    * Obtain a list of listings by a particular user
    *
+	 * @param sellerID the seller ID of the seller
    * @return returns a list of listings
    */
-  public List<Listing> GetUserListings(int userID) {
+  public List<Listing> GetUserListings(int sellerID) {
     List<Listing> userListings = new ArrayList<Listing>();
   
     if (!dbConnStatus) {
@@ -1189,7 +1139,7 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT * FROM listings WHERE sellerid =" + userID + ";");
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings WHERE sellerid =" + sellerID + ";");
     
       Listing l = processResultSetIntoListing(rs);
     
@@ -1221,7 +1171,7 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      stmt.executeUpdate("UPDATE listings SET numviews = numviews + 1 WHERE id = " + listing.getListingid() + ";" );
+      stmt.executeUpdate("UPDATE listings SET numviews = numviews + 1 WHERE id = " + listing.getId() + ";" );
       dbConn.commit();
       listing.setNumviews(listing.getNumviews() + 1); //update local object
       return true;
@@ -1229,6 +1179,31 @@ public class DBHelper implements DLBPlusDBInterface {
     catch (SQLException e) {
       return false;
     }
+	}
+
+	/**
+	 * Decrements listing quantity.
+	 *
+	 * @param listing Listing that is to be decremented
+	 * @return true if successful, false otherwise
+	 */
+	public boolean DecrementListingQuantity(Listing listing) {
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("DecrementListingQuantity", "No connection with database");
+			return false;
+		}
+
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			stmt.executeUpdate("UPDATE listings SET quantity = quantity - 1 WHERE id = " + listing.getId() + ";" );
+			dbConn.commit();
+			listing.setQuantity(listing.getQuantity() - 1); //update local object
+			return true;
+		} catch (SQLException e) {
+			return false;
+		}
 	}
   
   /**
@@ -1335,7 +1310,7 @@ public class DBHelper implements DLBPlusDBInterface {
         List<Listing> listings = GetUserListings(userID);
          
         for (Listing l : listings) {
-          RemoveListing(l.getListingid());
+          RemoveListing(l.getId());
         }
         
         //Finally remove user
@@ -1558,7 +1533,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	*
 	* @param inputUsername the username of admin
 	* @param inputPwd plaintext password for admin
-	* @return boolean True when admin is verifed, False otherwise
+	* @return boolean True when admin is verified, False otherwise
 	*/
 	public boolean VerifyAdmin(String inputUsername, String inputPwd) {
 
@@ -1659,7 +1634,5 @@ public class DBHelper implements DLBPlusDBInterface {
     
 	    return a;
   }
-
-
 
 }
