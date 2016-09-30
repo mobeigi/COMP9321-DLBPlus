@@ -242,6 +242,12 @@ public class SetupServlet extends HttpServlet {
 			link = "createListing.jsp";
 		}
 		
+		// Case when user wants to view admin
+		else if (req.equals("loginAdmin")) {
+			response.sendRedirect("/DLBPlus/admin");
+			return;
+		}
+		
 		 RequestDispatcher rd = request.getRequestDispatcher("/"+link);
 		 rd.forward(request, response);
 	}
