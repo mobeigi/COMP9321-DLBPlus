@@ -74,11 +74,11 @@
 						<form id="aSearchForm" action="setup" method="post">
 							<div class="row">
 				                <div class="col s3">
-				                    <a href ="search.jsp" id="search">Advanced Search</a>
+				                    <a href ="?action=viewSearchPage" id="search">Advanced Search</a>
 				    			</div>
 				                
 				                <div class="col s3">
-				                    <a href ="cart.jsp">Shopping Cart</a>
+				                    <a href ="?action=viewCart">Shopping Cart</a>
 				                </div>
 			                </div>
 				        </form>
@@ -116,7 +116,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="pub" items="${randomPubs}">
+									<c:forEach var="pub" items="${randomListings}">
 										<tr>
 											<td><c:out value="${pub.title}" /></td>
 											<td><c:out value="${pub.formattedAuthors}" /></td>

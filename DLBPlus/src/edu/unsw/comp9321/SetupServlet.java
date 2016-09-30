@@ -67,6 +67,7 @@ public class SetupServlet extends HttpServlet {
 		if(req.equals("back")){
 			link = "index.jsp";
 		} else if(req.equals("home")){
+			String errorMessage = "";
 			if (this.db.dbConnStatus) {
 				List<Listing> randListings = new ArrayList<Listing>();
 				List<Integer> randListingIDs = new ArrayList<Integer>();
@@ -74,8 +75,7 @@ public class SetupServlet extends HttpServlet {
 				// Obtain a unique list of random publications
 				Listing listingToAdd = this.db.GetRandomListing();
 				if (listingToAdd == null) {
-					String errorMessage = "No listings can be obtained.";
-					request.getSession().setAttribute("eMessage", errorMessage);
+					errorMessage = "No listings can be obtained.";
 				}
 				while (listingToAdd != null && randListings.size() < 10) {
 					
@@ -87,14 +87,16 @@ public class SetupServlet extends HttpServlet {
 				}
 
 				// Set random publication list to session
+				request.getSession().setAttribute("eMessage", errorMessage);
 				request.setAttribute("randomListings", randListings);
-				System.out.println(request.getAttribute("randomListings"));
 				
 			} else {
 				System.out.println("Could not get random publication. Connection doesn't exist.");
 			}
 			
 		link = "index.jsp";
+		} else if(req.equals("viewSearchPage")){
+			link = "search.jsp";
 		} else if(req.equals("search")){
 			String query = request.getParameter("searchQuery");
 			String type = request.getParameter("pubType");
@@ -121,6 +123,8 @@ public class SetupServlet extends HttpServlet {
 			request.getSession().setAttribute("searchFound", searchPageBean);
 			link = "result.jsp";
 			
+		} else if(req.equals("viewCart")){	
+			link = "cart.jsp";
 		} else if(req.equals("remove")) {
 			link = remove(request);
 		} else if(req.equals("add")){
@@ -231,12 +235,14 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("confirmPurchase")){
 			link = "transactionSuccessful.jsp";
 		} else if(req.equals("registerPage")){
+			System.out.println("Going to register page");
 			String errorMessage = "";
 			request.getSession().setAttribute("eMessage",errorMessage);
 			link = "register.jsp";
 		} else if(req.equals("modified")){
 			link = "modifyDetails.jsp";
 		} else if(req.equals("loginPage")){
+			System.out.println("Going to login page");
 			String errorMessage = "";
 			request.getSession().setAttribute("eMessage",errorMessage);
 			link = "login.jsp";

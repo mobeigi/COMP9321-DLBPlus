@@ -6,7 +6,6 @@
    			<ul class="right hide-on-med-and-down"> 			
 				<c:choose>
 					<c:when test="${not empty user}">
-						<li><a href="search.jsp">Advanced Search</a></li>
 						<li><a href="userAccount.jsp">Account</a></li>
 						<li><a href="?action=viewCart">Cart</a></li>
 						<li><a></a></li>
@@ -14,12 +13,10 @@
 					</c:when>
 					
 						<c:otherwise>
-						<li><a href="search.jsp">Advanced Search</a></li>
 						<li><a href="?action=registerPage">Register</a></li>
 						<li><a href="?action=loginPage">Login</a></li>
 					</c:otherwise>
 				</c:choose>
-	     </ul>
 	     </ul>
 	   </div>
 	</nav>

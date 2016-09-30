@@ -37,11 +37,11 @@
 	
 	<div class="row">
  		<div class="col s6 offset-s3">
- 			<c:choose>
-				<c:when test="${not empty eMessage}">
- 					<p class="red-text">${eMessage}</p>
- 				</c:when>
- 			</c:choose>
+
+			<c:if test="${not empty eMessage}">
+				<p class="red-text">${eMessage}</p>
+			</c:if>
+
  			<div class="card white">
         		<div class="card-content black-text">
 					<form action="setup" method="post">
@@ -68,6 +68,12 @@
 			     		    <div class="col s6">
 			     		    	<input placeholder="Last Name" required="" aria-required="" name="lname" type="text" />
 			     		    </div>
+			     		</div>
+			     		<div class="row">
+         					<div class="col s12">
+ 			              		<input class="validate" placeholder="Email" required="" aria-required="" name="email" type="text" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"/>
+ 		              		</div>
+			     		</div>
         				<div class="row">
         					<div class="col s12">
 			              		<input placeholder="Address" name="address" type="text" />

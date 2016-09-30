@@ -33,11 +33,9 @@
 	
 	<div class="row">
  		<div class="col s4 offset-s4">
- 			<c:choose>
-				<c:when test="${not empty eMessage}">
- 					<p class="red-text">${eMessage}</p>
- 				</c:when>
- 			</c:choose>
+			<c:if test="${not empty eMessage}">
+				<p class="red-text">${eMessage}</p>
+			</c:if>
  			<div class="card white">
         		<div class="card-content black-text">
 					<form action="setup" method="post">
