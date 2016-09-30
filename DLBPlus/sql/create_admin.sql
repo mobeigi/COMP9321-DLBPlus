@@ -1,0 +1,1 @@
+INSERT INTO admins (username,salt,password) VALUES ('admin', 'w5dNhgBbQJtdp8Oprd5yRdhPFaOxd8UwUtTjaQbf7qY=', 'e8951dc256818ba6f8281f6cdebf29926a9a05ff');
