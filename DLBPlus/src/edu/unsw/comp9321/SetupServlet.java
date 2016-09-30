@@ -115,11 +115,15 @@ public class SetupServlet extends HttpServlet {
 			String author = request.getParameter("searchAuthor");
 			String editor = request.getParameter("searchEditor");
 			String volume = request.getParameter("searchVolume");
-			String publisher = request.getParameter("searchPublisher");
+			String chapter = request.getParameter("searchChapter");
+			String pages = request.getParameter("searchPage");
+			String publisher = request.getParameter("searchPubber");
 			String isbn = request.getParameter("searchISBN");
 			String year = request.getParameter("searchYear");
+			String venues = request.getParameter("searchVenues");
+			String seller = request.getParameter("searchSeller");	
 			String type = request.getParameter("searchPubType");
-			LinkedList<Publication> result = aSearch(title, author, editor, volume, publisher, isbn, year, type);
+			LinkedList<Publication> result = aSearch(title, author, editor, volume, chapter, pages, publisher, isbn, year, venues, seller, type);
 			SearchPageBean searchPageBean = new SearchPageBean(result);
 			request.getSession().setAttribute("searchFound", searchPageBean);
 			link = "result.jsp";
@@ -309,7 +313,7 @@ public class SetupServlet extends HttpServlet {
 		request.getSession().setAttribute("cartSize", itemsInCart.size());
 		return "cart.jsp";
 	}
-	private LinkedList<Publication> aSearch(String title, String author, String editor, String volume, String publisher, String isbn, String year, String type) {
+	private LinkedList<Publication> aSearch(String title, String author, String editor, String volume, String chapter, String pages, String publisher, String isbn, String year, String venues, String seller, String type) {
 		LinkedList<Publication> result = new LinkedList<Publication>();
 		boolean flag = true;
 		String publicationType = type;
