@@ -19,7 +19,7 @@ def setup_db():
 	
 	# Drop the following table names, if they exist in the database
 	print "Dropping tables, if they exist..."
-	table_names = ['users', 'admins', 'publications', 'listings', 'activecartitems', 'removedcartitems', 'orders']
+	table_names = ['users', 'admins', 'listings', 'activecartitems', 'removedcartitems', 'orders']
 	for table_name in table_names:
 		query = "DROP TABLE IF EXISTS %s CASCADE" % table_name
 		cursor.execute(query)
@@ -32,37 +32,6 @@ def setup_db():
 			"	salt		TEXT	NOT NULL," \
 			"	password	TEXT	NOT NULL" \
 			");"
-	cursor.execute(query)
-	
-	print "Creating publications table..."
-	query = """
-			CREATE TABLE publications (
-				id			SERIAL	PRIMARY KEY,
-				type		TEXT	NOT NULL,
-				authors		TEXT,
-				editors		TEXT,
-				title		TEXT 	NOT NULL,
-				venues		TEXT,
-				pages		TEXT,
-				year		INT,
-				address		TEXT,
-				volume		TEXT,
-				number		TEXT,
-				month		TEXT,
-				urls		TEXT,
-				ees			TEXT,
-				cdrom		TEXT,
-				cites		TEXT,
-				publisher	TEXT,
-				note		TEXT,
-				crossref	TEXT,
-				isbns		TEXT,
-				series		TEXT,
-				chapter		TEXT,
-				recprice	TEXT,
-				rating		TEXT
-			);
-		"""
 	cursor.execute(query)
 			
 	print "Creating users table..."
@@ -87,35 +56,59 @@ def setup_db():
 			"""
 	cursor.execute(query)
 	
-	print "Creating orders table..."
-	query = """
-			CREATE TABLE orders (
-				id 			SERIAL	PRIMARY KEY,
-				buyerid		SERIAL	REFERENCES users (id),
-				sellerid	SERIAL	REFERENCES users (id),
-				itemid		SERIAL	REFERENCES publications (id),
-				order_date	TIMESTAMP WITH TIME ZONE	NOT NULL,
-				price		DOUBLE PRECISION	NOT NULL
-			);
-			"""
-	cursor.execute(query)
-	
 	print "Creating listings table..."
 	query = """
 			CREATE TABLE listings (
+			
+				-- LISTING OVERHEAD INFORMATION
 				id	SERIAL	PRIMARY KEY,
 				sellerid	SERIAL	REFERENCES users (id),
-				itemid		SERIAL	REFERENCES publications (id),
 				quantity	INT		NOT NULL,
 				listdate	TIMESTAMP WITH TIME ZONE	NOT NULL,
 				enddate		TIMESTAMP WITH TIME ZONE	NOT NULL,
 				sellprice	DOUBLE PRECISION	NOT NULL,
 				image		TEXT,
 				paused		BOOLEAN	DEFAULT FALSE,
-				numviews	INT		DEFAULT 0
+				numviews	INT		DEFAULT 0,
+				
+				-- CONTAINS ITEM INFORMATION
+				type		TEXT	NOT NULL,
+				authors		TEXT,
+				editors		TEXT,
+				title		TEXT 	NOT NULL,
+				venues		TEXT,
+				pages		TEXT,
+				year		INT,
+				address		TEXT,
+				volume		TEXT,
+				number		TEXT,
+				month		TEXT,
+				urls		TEXT,
+				ees			TEXT,
+				cdrom		TEXT,
+				cites		TEXT,
+				publisher	TEXT,
+				note		TEXT,
+				crossref	TEXT,
+				isbns		TEXT,
+				series		TEXT,
+				chapter		TEXT,
+				rating		TEXT	
 			);
 			"""
 	cursor.execute(query)	
+	
+	print "Creating orders table..."
+	query = """
+			CREATE TABLE orders (
+				id 			SERIAL	PRIMARY KEY,
+				buyerid		SERIAL	REFERENCES users (id),
+				listingid	SERIAL	REFERENCES listings (id),
+				order_date	TIMESTAMP WITH TIME ZONE	NOT NULL,
+				price		DOUBLE PRECISION	NOT NULL
+			);
+			"""
+	cursor.execute(query)
 
 	print "Creating activecartitems table..."
 	query = """
