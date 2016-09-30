@@ -242,11 +242,11 @@ public class SetupServlet extends HttpServlet {
 			boolean success = db.VerifyUser(userName, password);
 			System.out.println(success);
 			if(success == true){
-				System.out.println("NOOOOOOOOOOOOOOOOOOOOOO");
 				User user = db.GetUser(userName);
 				request.getSession().setAttribute("user",user);
 				link = "userAccount.jsp";
 			} else {
+				errorMessage = "Invalid username or password!";
 				request.getSession().setAttribute("eMessage",errorMessage);
 				link = "login.jsp";
 			}
