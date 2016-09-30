@@ -14,8 +14,8 @@ public class User {
 	private Integer cartid;
 	private String dp;
 	private Boolean acctstatus; // true = "active", false = "suspended";
-  private Boolean acctconfrm; //true = confirmed, false = unconfirmed
-  private Date acctcreated;
+	private Boolean acctconfrm; //true = confirmed, false = unconfirmed
+  	private Date acctcreated;
   
 	public User() {}
 

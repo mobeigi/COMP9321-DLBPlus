@@ -191,6 +191,7 @@ public class SetupServlet extends HttpServlet {
 			System.out.println(dob);
 			if (db.DoesUserExist(userName)){
 				errorMessage = "Username already exists!";
+				request.getSession().setAttribute("eMessage", errorMessage);
 				link = "register.jsp";
 			} else {
 				User newUser = new User();
@@ -221,8 +222,6 @@ public class SetupServlet extends HttpServlet {
 					link = "confirmation.jsp";
 				}
 			}
-			
-			
 		} else if(req.equals("login")){
 			String errorMessage = "";
 			String userName = request.getParameter("uname");
@@ -231,12 +230,12 @@ public class SetupServlet extends HttpServlet {
 			boolean success = db.VerifyUser(userName, password);
 			System.out.println(success);
 			if(success == true){
+				System.out.println("NOOOOOOOOOOOOOOOOOOOOOO");
 				User user = db.GetUser(userName);
 				request.getSession().setAttribute("user",user);
-				System.out.println(user.getUsername());
 				link = "userAccount.jsp";
 			} else {
-				errorMessage = "Incorrect Username or Password";
+				request.getSession().setAttribute("eMessage",errorMessage);
 				link = "login.jsp";
 			}
 		} else if(req.equals("logout")){
