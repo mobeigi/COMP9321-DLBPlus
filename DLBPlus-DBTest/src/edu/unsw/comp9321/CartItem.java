@@ -5,14 +5,13 @@ import java.sql.Timestamp;
 public class CartItem {
   private Integer cartid;
   private Integer listingid;
-  
+  private Timestamp addedts;
+  private Timestamp removedts; //only used if removed cart item
+
   private String sellerName;
   private String publicationName;
-  private String publicationType;
+  private Listing.Type publicationType;
   private Double price;
-  private Timestamp addedts;
-  private Timestamp removedts; //only used if removed cart item, aka isActive = false
-  private Boolean isPaused;
   
   public CartItem() {}
   
@@ -49,11 +48,11 @@ public class CartItem {
     this.publicationName = publicationName;
   }
   
-  public String getPublicationType() {
+  public Listing.Type getPublicationType() {
     return publicationType;
   }
   
-  public void setPublicationType(String publicationType) {
+  public void setPublicationType(Listing.Type publicationType) {
     this.publicationType = publicationType;
   }
   
@@ -80,14 +79,10 @@ public class CartItem {
   public void setRemovedts(Timestamp removedts) {
     this.removedts = removedts;
   }
-  
-  public Boolean isPaused() {
-    return isPaused;
-  }
-  
-  public void setPaused(Boolean paused) {
-    isPaused = paused;
-  }
+
+  public boolean isActive() {
+		return (removedts == null);
+	}
   
   // debugging
   public void showDetails() {
@@ -99,6 +94,5 @@ public class CartItem {
 	  System.out.println("listing price: " + this.price);
 	  System.out.println("added ts: " + this.addedts);
 	  System.out.println("removed ts: " + this.removedts);
-	  System.out.println("listing status: " + this.isPaused);
   }
 }

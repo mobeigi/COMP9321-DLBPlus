@@ -122,7 +122,7 @@ public interface DLBPlusDBInterface {
 	 * @return User corresponding to successful insertion (null otherwise)
 	 */
 	public User CreateUser(String username, String plainTextPassword, 
-						String fname, String lname, String email, String address, 
+						String fname, String lname, String nickname, String email, String address,
 						Date dob, String creditcard, String dp);
 
 	/**

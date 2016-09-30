@@ -130,35 +130,7 @@ public class Listing {
 	}
 
 	public void setType(String type) {
-		//Match type
-		switch (type) {
-			case "article":
-				this.type = Type.ARTICLE;
-				break;
-			case "proceedings":
-				this.type = Type.PROCEEDINGS;
-				break;
-			case "inproceedings":
-				this.type = Type.INPROCEEDINGS;
-				break;
-			case "book":
-				this.type = Type.BOOK;
-				break;
-			case "incollection":
-				this.type = Type.INCOLLECTION;
-				break;
-			case "phdthesis":
-				this.type = Type.PHDTHESIS;
-				break;
-			case "mastersthesis":
-				this.type = Type.MASTERSTHESIS;
-				break;
-			case "www":
-				this.type = Type.WWW;
-				break;
-			default:
-				this.type = null;
-		}
+		this.type = stringToType(type);
 	}
 
 	public List<String> getAuthors() {
@@ -327,5 +299,41 @@ public class Listing {
 
 	public void setRating(String rating) {
 		this.rating = rating;
+	}
+
+	public static Listing.Type stringToType(String strType) {
+		Listing.Type type;
+
+		//Match type
+		switch (strType.toLowerCase()) {
+			case "article":
+				type = Type.ARTICLE;
+				break;
+			case "proceedings":
+				type = Type.PROCEEDINGS;
+				break;
+			case "inproceedings":
+				type = Type.INPROCEEDINGS;
+				break;
+			case "book":
+				type = Type.BOOK;
+				break;
+			case "incollection":
+				type = Type.INCOLLECTION;
+				break;
+			case "phdthesis":
+				type = Type.PHDTHESIS;
+				break;
+			case "mastersthesis":
+				type = Type.MASTERSTHESIS;
+				break;
+			case "www":
+				type = Type.WWW;
+				break;
+			default:
+				type = null;
+		}
+
+		return type;
 	}
 }
