@@ -4,8 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<jsp:useBean id="ShoppingCart" class="edu.unsw.comp9321.ShoppingCart"
-	scope="session" />
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -103,7 +102,7 @@
 		<div class="row valign-wrapper">
 			<div class="col s10 offset-s1">
      			<div class="card valign grey lighten-1" >
-     				<p>There are ${fn:length(found)}</p>
+     				<p>There are ${fn:length(randomPubs)}</p>
 			        <table class="left highlighted striped responsive-table">
 			        	<thead>
 							<tr>
@@ -113,10 +112,9 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="pub" items="${found}">
+							<c:forEach var="pub" items="${randomPubs}">
 								<tr>
 									<td><c:out value="${pub.title}" /></td>
-									<td>fuck this</td>
 									<td><c:out value="${pub.formattedAuthors}" /></td>
 									<td><c:out value="${pub.type}" /></td>
 								</tr>
