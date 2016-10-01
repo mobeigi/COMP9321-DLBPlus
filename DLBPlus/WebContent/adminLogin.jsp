@@ -19,7 +19,7 @@
 	      $('select').material_select();
 	  });
 	</script>
-	<jsp:include page="navbar.jsp" />
+	<jsp:include page="adminNavbar.jsp" />
 	
 	<div class="section no-pad-bot" id="index-banner">
     	<div class="container">
@@ -46,7 +46,7 @@
 			           	</div>
 			           	<div class="row">
 			           		<div class="col s12">
-			     		    	<input placeholder="Password" required="" aria-required="" id="textbox" name="password" type="text" />
+			     		    	<input placeholder="Password" required="" aria-required="" id="textbox" name="password" type="password" />
 		     		    	</div>
 			     		</div>
 			     		
