@@ -35,7 +35,7 @@
         </div>
  	</div>
  	
- 	<div class="container" style="padding-bottom:50px;">
+ 	<div class="container">
 		<div class="col s10 offset-s1">
 		
 			<%-- Display details of user --%>
@@ -106,7 +106,6 @@
 			</div>
 	    </div>
 	</div>
-	<p>hello</p>
 	
  	<div class="container">
 		<div class="col s10 offset-s1">
@@ -115,8 +114,7 @@
 		        <table class="left highlighted striped responsive-table">
 		        	<thead>
 						<tr>
-							<th>ID</th>
-							<th>Buyer ID</th>
+							<th>Order ID</th>
 							<th>Seller ID</th>
 							<th>Publication Title</th>
 							<th>Order Date</th>
@@ -128,9 +126,8 @@
 						           varStatus="loop">
 							<tr>
 								<td><c:out value="${currOrder.id}" /></td>
-								<td><c:out value="${currOrder.buyerid}" /></td>
 								<td><c:out value="${currOrder.sellerid}" /></td>
-								<td><a href="admin?pubId=${currOrder.id}">${currOrder.pubTitle}</a></td>
+								<td><c:out value="${currOrder.pubTitle}" /></td>
 								<td><c:out value="${currOrder.order_date}" /></td>
 								<td><c:out value="${currOrder.price}" /></td>
 							</tr>
@@ -149,7 +146,6 @@
 		        <table class="left highlighted striped responsive-table">
 		        	<thead>
 						<tr>
-							<th>Cart ID</th>
 							<th>Listing ID</th>
 							<th>Time Added</th>
 							<th>Time Removed</th>
@@ -163,7 +159,6 @@
 						<c:forEach var="currItem" items="${ListOfRemovedCartItems}"
 						           varStatus="loop">
 							<tr>
-								<td><c:out value="${currItem.cartid}" /></td>
 								<td><c:out value="${currItem.listingid}" /></td>
 								<td><c:out value="${currItem.addedts}" /></td>
 								<td><c:out value="${currItem.removedts}" /></td>

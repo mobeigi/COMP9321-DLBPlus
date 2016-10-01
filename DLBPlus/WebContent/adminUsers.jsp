@@ -98,6 +98,12 @@
 	</div>
 	</form>
     
+	<div class="col s2">
+		<form action="admin" method="post">
+			<button type="submit" value="Back" class="btn">Back</button>
+		</form>
+	</div>
+	
 	<jsp:include page="footer.jsp" />
 </body>
 </html>
