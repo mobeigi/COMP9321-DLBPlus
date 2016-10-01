@@ -9,7 +9,16 @@ import random
 
 # ----------------------------
 # This class represents a publication and its information
-class Publication():
+class Listing():
+	# == Listing Attributes
+	sellerid = 0
+	quantity = 0
+	listdate = ""
+	enddate = ""
+	sellprice = 0.0
+	image = ""
+	paused = False
+	numviews = 0
 
 	# == Publication Attributes
 	type = ""
@@ -33,10 +42,19 @@ class Publication():
 	isbns = []
 	series = ""
 	chapter = ""
-	price = 0
 	rating = ""
 	
 	def __init__(self):
+	
+		# Initialise listing attributes
+		self.sellerid = 0
+		self.quantity = 0
+		self.listdate = ""
+		self.enddate = ""
+		self.sellprice = 0.0
+		self.image = ""
+		self.paused = False
+		self.numviews = 0
 	
 		# Initialise publication attributes
 		self.type = ""
@@ -93,13 +111,14 @@ class Publication():
 class SaxPublicationHandler(SAX.ContentHandler):
 
 		db_conn = None				# for manipulating database
-		currPublication = None		# Keep track of current publication being parsed
+		currListing = None			# Keep track of current publication being parsed
 		currString = ""				# Keep track of current string to append into publication list
 		tag_stack = []				# for parsing tags correctly
 		publication_types = []		# Holds the list of valid publication types
 		venue_list = []				# Holds the types of publication venue encoded
 		numPublicationsParsed = 0	# Keep track of how many publications were parsed
 		db_cursor = None			# Cursor used to insert publications into db
+		seller_ids = []
 		
 		# Constructor
 		def __init__(self, cursor):
@@ -117,6 +136,12 @@ class SaxPublicationHandler(SAX.ContentHandler):
 			self.venue_list.append("journal")
 			self.venue_list.append("booktitle")
 			self.venue_list.append("school")
+			
+			# Set list of possible seller ids
+			# Assumes these exist in the database
+			self.seller_ids.append(4)
+			self.seller_ids.append(5)
+			self.seller_ids.append(6)
 			
 			# Set cursor
 			self.db_cursor = cursor
@@ -143,25 +168,38 @@ class SaxPublicationHandler(SAX.ContentHandler):
 		
 			# Add publications if closing tagname is a publication type
 			if tagname in self.publication_types:
+			
+				# By destiny, it has chosen this publication to be created as a listing
+				if (self.insertDestiny()):
+					
+					# Generate listing information
+					(sellerID, quantity, listdate, enddate, sellprice, image, paused, numviews) = self.generateListingInfo()
 
-				# Set a random price for publication
-				self.currPublication.price = str(generateRandomPrice())
-				
-				# Finalise publication object
-				self.currPublication.finalise()
-				
-				# Insert publication into database
-				#self.currPublication.showDetails()
-				query = """
-							INSERT INTO
-								publications(type,title,authors,editors,pages,year,address,volume,number,month,urls,ees,cdrom,cites,publisher,note,crossref,isbns,series,venues,chapter,recprice,rating)
-							VALUES
-								(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);
-						"""
-				publication_fields = (self.currPublication.type,self.currPublication.title,self.currPublication.authors,self.currPublication.editors,self.currPublication.pages,self.currPublication.year,self.currPublication.address,self.currPublication.volume,self.currPublication.number,self.currPublication.month,self.currPublication.urls,self.currPublication.ees,self.currPublication.cdrom,self.currPublication.cites,self.currPublication.publisher,self.currPublication.note,self.currPublication.crossref,self.currPublication.isbns,self.currPublication.series,self.currPublication.venues,self.currPublication.chapter,self.currPublication.price,self.currPublication.rating)
-				self.db_cursor.execute(query, publication_fields)
-				
-				self.numPublicationsParsed += 1
+					# Set listing information
+					self.currListing.sellerid = sellerID
+					self.currListing.quantity = quantity
+					self.currListing.listdate = listdate
+					self.currListing.enddate = enddate
+					self.currListing.sellprice = sellprice
+					self.currListing.image = image
+					self.currListing.paused = paused
+					self.currListing.numviews = numviews
+					
+					# Finalise listing object
+					self.currListing.finalise()
+					
+					# Insert listing into database
+					#self.currPublication.showDetails()
+					query = """
+								INSERT INTO
+									publications(type,title,authors,editors,pages,year,address,volume,number,month,urls,ees,cdrom,cites,publisher,note,crossref,isbns,series,venues,chapter,recprice,rating)
+								VALUES
+									(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);
+							"""
+					publication_fields = (self.currPublication.type,self.currPublication.title,self.currPublication.authors,self.currPublication.editors,self.currPublication.pages,self.currPublication.year,self.currPublication.address,self.currPublication.volume,self.currPublication.number,self.currPublication.month,self.currPublication.urls,self.currPublication.ees,self.currPublication.cdrom,self.currPublication.cites,self.currPublication.publisher,self.currPublication.note,self.currPublication.crossref,self.currPublication.isbns,self.currPublication.series,self.currPublication.venues,self.currPublication.chapter,self.currPublication.price,self.currPublication.rating)
+					self.db_cursor.execute(query, publication_fields)
+					
+					self.numPublicationsParsed += 1
 				
 				# Reset publication to none
 				self.currPublication = None

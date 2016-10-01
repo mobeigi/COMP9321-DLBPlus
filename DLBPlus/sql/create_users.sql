@@ -82,7 +82,7 @@ VALUES (
 );
 
 /*
- * == User 1
+ * == User 3
  * Username: comp9321
  * Inputpwd: comp9321
  */
@@ -106,4 +106,77 @@ VALUES (
 	'Sat Oct 1 10:11:56 AEST 2016'							-- DATE CREATED
 );
 
+/*
+ * == User 4
+ * Username: userX
+ * Inputpwd: userX
+ */
+INSERT INTO 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+VALUES (
+	4,												-- ID
+	'userX',										-- USERNAME
+	'tYgMN8gbgyHSUBcFknbpI5G1wEH94GHj/26Buvtt4i4=',	-- SALT
+	'f28ced829560d4f8ffd87299749771357b9ff72e',		-- ENCRYPTED PASSWORD
+	'John',											-- FIRST NAME
+	'Smith',									-- LAST NAME
+	'Johno',								-- NICKNAME
+	'john@smith.com',						-- EMAIL
+	'9,U st, V',							-- ADDRESS
+	'19/5/1994',							-- DOB
+	'22222222',								-- CREDIT CARD
+	NULL,									-- DP
+	't',	-- DO NOT CHANGE
+	't',	-- DO NOT CHANGE
+	'Sat Oct 1 10:15:00 AEST 2016'							-- DATE CREATED
+);
 
+/*
+ * == User 5
+ * Username: userY
+ * Inputpwd: userY
+ */
+INSERT INTO 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+VALUES (
+	5,												-- ID
+	'userY',										-- USERNAME
+	'KlthVvsHyCBNC3mGWzEytg/kO2cyXEu9Pa5M1Qvnfjk=',	-- SALT
+	'2a15fc0becd79279720c3c458685d43d0407662b',		-- ENCRYPTED PASSWORD
+	'Sam',											-- FIRST NAME
+	'Smith',									-- LAST NAME
+	'Sammo',								-- NICKNAME
+	'sam@smith.com',						-- EMAIL
+	'9,U st, V',							-- ADDRESS
+	'19/5/1994',							-- DOB
+	'33333333',								-- CREDIT CARD
+	NULL,									-- DP
+	't',	-- DO NOT CHANGE
+	't',	-- DO NOT CHANGE
+	'Sat Oct 1 10:18:00 AEST 2016'							-- DATE CREATED
+);
+
+/*
+ * == User 6
+ * Username: isellstuff
+ * Inputpwd: isellstuff
+ */
+INSERT INTO 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+VALUES (
+	6,												-- ID
+	'isellstuff',										-- USERNAME
+	'ofq+FUksns/ScT2go5GHgwdyOxWmdxVp08xktImq4lA=',	-- SALT
+	'8bf3a8133d566feb8bc0cf6d50b0a39bab11e66e',		-- ENCRYPTED PASSWORD
+	'Drug',											-- FIRST NAME
+	'Dealer',									-- LAST NAME
+	'Sello',								-- NICKNAME
+	'drug@drugs.com',						-- EMAIL
+	'99, Suss Ave, Drugsville',				-- ADDRESS
+	'1/1/1100',								-- DOB
+	'12345678',								-- CREDIT CARD
+	NULL,									-- DP
+	't',	-- DO NOT CHANGE
+	't',	-- DO NOT CHANGE
+	'Sat Oct 1 10:21:00 AEST 2016'							-- DATE CREATED
+);
