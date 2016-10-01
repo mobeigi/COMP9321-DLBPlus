@@ -69,30 +69,26 @@
 							</tr>
 						</thead>
 						<tbody>
-							<!-- <c:forEach begin="${0}" 
-									   end="${1}" 
-									   varStatus="loop"> -->
-									   <!-- begin = "${(searchFound.currPage - 1)* searchFound.numItemsPerPage}" -->
-									   <!-- end = "${(searchFound.currPage - 1)* searchFound.numItemsPerPage + searchFound.numItemsPerPage - 1}" -->
-									   <!-- <c:if test="${loop.index < fn:length(searchFound.results)}"> -->
+
 							<c:forEach var="listing" items="${ListOfListings}"
 							           varStatus="loop">
-
-									<tr>
-										<td><a href="setup?id=${searchFound.results[loop.index].id}">${searchFound.results[loop.index].title}</a></td>
-										<td><p><i>${searchFound.results[loop.index].author}</i></p></td>
-										<td>${searchFound.results[loop.index].pubType}</td>
-										<td>${searchFound.results[loop.index].pubType}</td>
-										<td>${searchFound.results[loop.index].pubType}</td>
-										<td>${searchFound.results[loop.index].pubType}</td>
-										<td>
-										    <FORM Action='adminUsers.jsp'> <!-- Link to servlet to perform operation -->
-											<INPUT type='submit' value='Remove listing'>
-											<input type="hidden" name="addToCart" value="no"> <!-- Use page operations -->
-											</FORM>
-										</td>
-									</tr>
-								</c:if>
+								<tr>
+									<td><c:out value="${listing.id}" /></td>
+									<td><c:out value="${listing.sellerid}" /></td>
+									<td><c:out value="${listing.quantity}" /></td>
+									<td><c:out value="${listing.listdate}" /></td>
+									<td><c:out value="${listing.enddate}" /></td>
+									<td><c:out value="${listing.sellprice}" /></td>
+									<td><c:out value="${listing.image}" /></td>
+									<td><c:out value="${listing.paused}" /></td>
+									<td><c:out value="${listing.numviews}" /></td>
+									<td>
+									    <FORM Action='adminUsers.jsp'> <!-- Link to servlet to perform operation -->
+										<INPUT type='submit' value='Remove listing'>
+										<input type="hidden" name="addToCart" value="no"> <!-- Use page operations -->
+										</FORM>
+									</td>
+								</tr>
 							</c:forEach>
 						</tbody>	
 		        	</table>
