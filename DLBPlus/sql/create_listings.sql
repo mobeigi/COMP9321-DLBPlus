@@ -1,8 +1,9 @@
 -- This file will insert some listings
-
+SET datestyle = dmy;
 
 INSERT INTO
 	listings(
+		id,
 		sellerid,
 		quantity,
 		listdate,
@@ -22,6 +23,7 @@ INSERT INTO
 		rating
 	)
 VALUES (
+		1,
 		6,
 		3,
 		'Sat Oct 1 11:00:00 AEST 2016',

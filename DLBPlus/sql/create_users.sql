@@ -9,7 +9,7 @@
  * Inputpwd: inputpwd
  */
 INSERT INTO 
-	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, cartid, dp, acctstatus, acctconfrm, acctcreated) 
 VALUES (
 	id,										-- ID
 	username,								-- USERNAME
@@ -22,6 +22,7 @@ VALUES (
 	address,								-- ADDRESS
 	dob (format: dd/mm/yyyy),				-- DOB
 	credit card,							-- CREDIT CARD
+	cartid,									-- CART ID
 	null,									-- DP
 	't',	-- DO NOT CHANGE
 	't',	-- DO NOT CHANGE
@@ -40,7 +41,7 @@ SET datestyle = dmy;
  * Inputpwd: joe1
  */
 INSERT INTO 
-	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, cartid, dp, acctstatus, acctconfrm, acctcreated) 
 VALUES (
 	1,
 	'joe1',
@@ -53,6 +54,7 @@ VALUES (
 	'10 Joe St, Joetown',
 	'1/1/1990',
 	'00000000',
+	20,
 	null,
 	't',	-- DO NOT CHANGE
 	't',	-- DO NOT CHANGE
@@ -65,7 +67,7 @@ VALUES (
  * Inputpwd: boostedanimal
  */
 INSERT INTO 
-	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, cartid, dp, acctstatus, acctconfrm, acctcreated) 
 VALUES (
 	2,
 	'Intellect',
@@ -78,6 +80,7 @@ VALUES (
 	'69 Boosted St, Animal, Elohell',
 	'27/09/1997',
 	'99999999',
+	21,
 	null,
 	't',	-- DO NOT CHANGE
 	't',	-- DO NOT CHANGE
@@ -90,7 +93,7 @@ VALUES (
  * Inputpwd: comp9321
  */
 INSERT INTO 
-	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, cartid, dp, acctstatus, acctconfrm, acctcreated) 
 VALUES (
 	3,
 	'comp9321',										-- USERNAME
@@ -103,6 +106,7 @@ VALUES (
 	'webapps, UNSW',						-- ADDRESS
 	'1/07/2016',							-- DOB
 	'11111111',								-- CREDIT CARD
+	22,
 	NULL,									-- DP
 	't',	-- DO NOT CHANGE
 	't',	-- DO NOT CHANGE
@@ -115,7 +119,7 @@ VALUES (
  * Inputpwd: userX
  */
 INSERT INTO 
-	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, cartid, dp, acctstatus, acctconfrm, acctcreated) 
 VALUES (
 	4,												-- ID
 	'userX',										-- USERNAME
@@ -128,6 +132,7 @@ VALUES (
 	'9,U st, V',							-- ADDRESS
 	'19/5/1994',							-- DOB
 	'22222222',								-- CREDIT CARD
+	23,										-- CART ID
 	NULL,									-- DP
 	't',	-- DO NOT CHANGE
 	't',	-- DO NOT CHANGE
@@ -140,7 +145,7 @@ VALUES (
  * Inputpwd: userY
  */
 INSERT INTO 
-	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, cartid, dp, acctstatus, acctconfrm, acctcreated) 
 VALUES (
 	5,												-- ID
 	'userY',										-- USERNAME
@@ -153,6 +158,7 @@ VALUES (
 	'9,U st, V',							-- ADDRESS
 	'19/5/1994',							-- DOB
 	'33333333',								-- CREDIT CARD
+	24,										-- CART ID
 	NULL,									-- DP
 	't',	-- DO NOT CHANGE
 	't',	-- DO NOT CHANGE
@@ -165,7 +171,7 @@ VALUES (
  * Inputpwd: isellstuff
  */
 INSERT INTO 
-	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, cartid, dp, acctstatus, acctconfrm, acctcreated) 
 VALUES (
 	6,												-- ID
 	'isellstuff',										-- USERNAME
@@ -178,6 +184,7 @@ VALUES (
 	'99, Suss Ave, Drugsville',				-- ADDRESS
 	'1/1/1100',								-- DOB
 	'12345678',								-- CREDIT CARD
+	25,										-- CART ID
 	NULL,									-- DP
 	't',	-- DO NOT CHANGE
 	't',	-- DO NOT CHANGE

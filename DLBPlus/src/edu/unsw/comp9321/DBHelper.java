@@ -1490,7 +1490,15 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      stmt.executeUpdate("DELETE FROM listings WHERE id = " + listingID + ";");
+      String query = "";
+      
+      // Remove from activecartitems where id corresponds to listing
+      query = "DELETE FROM activecartitems WHERE listingid = " + listingID + ";";
+      stmt.executeUpdate(query);
+      
+      // Remove from listings with the specified id
+      query = "DELETE FROM listings WHERE id = " + listingID + ";";
+      stmt.executeUpdate(query);
       dbConn.commit();
       return true;
     }
