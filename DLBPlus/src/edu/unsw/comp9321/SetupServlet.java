@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
 import edu.unsw.comp9321.Listing.Type;
 
 /**
@@ -280,52 +282,55 @@ public class SetupServlet extends HttpServlet {
 			String authors = request.getParameter("authors");	//Required, split
 			List<String> authorList = null;
 			if(authors != null && !authors.isEmpty()){
-				String[] authorStrings = authors.split("|");
+				String[] authorStrings = StringUtils.split(authors, "|");
 				authorList = new ArrayList<String>(Arrays.asList(authorStrings));
 			}
 			String type = request.getParameter("pubType");		//Required
 			String editors = request.getParameter("editors");	//split
 			List<String> editorList = null;
 			if(editors != null &&!editors.isEmpty() ){
-				String[] editorStrings = editors.split("|");
+				String[] editorStrings = StringUtils.split(editors, "|");
 				editorList = new ArrayList<String>(Arrays.asList(editorStrings));
 			}
 			String venues = request.getParameter("venues");		//split
 			List<String> venueList = null;
 			if(venues != null && !venues.isEmpty()){
-				String[] venueStrings = venues.split("|");
+				String[] venueStrings = StringUtils.split(venues, "|");
 				venueList = new ArrayList<String>(Arrays.asList(venueStrings));
 			}
 			String pages = request.getParameter("pages");
 			String volume = request.getParameter("volume");
 			Integer year = Integer.parseInt(request.getParameter("year"));
+			if (year.equals("")){
+				year = null;
+			}
 			String month = request.getParameter("month");
 			String address = request.getParameter("address");
 			String number = request.getParameter("number");
 			String urls = request.getParameter("urls");			//split
 			List<String> urlList = null;
 			if(urls != null && !urls.isEmpty()){
-				String[] urlStrings = urls.split("|");
+				String[] urlStrings = StringUtils.split(urls, "|");;
 				urlList = new ArrayList<String>(Arrays.asList(urlStrings));
 			}
 			String ees = request.getParameter("ees");			//split
 			List<String> eeList = null;
 			if(ees != null && !ees.isEmpty()){
-				String[] eeStrings = ees.split("|");
+				String[] eeStrings = StringUtils.split(ees, "|");;
 				eeList = new ArrayList<String>(Arrays.asList(eeStrings));
 			}
 			String cdrom = request.getParameter("cdrom");
-			String cities = request.getParameter("cities");		//split
+			String cites = request.getParameter("cites");		//split
 			List<String> citeList = null;
-			if(cities != null && !cities.isEmpty()){
-				String[] citeStrings = cities.split("|");
+			if(cites != null && !cites.isEmpty()){
+				String[] citeStrings = StringUtils.split(cites, "|");;
 				citeList = new ArrayList<String>(Arrays.asList(citeStrings));
 			}
 			String publisher = request.getParameter("publisher");
 			String isbns = request.getParameter("isbns");		//split
 			List<String> isbnList = null;
 			if(isbns != null && !isbns.isEmpty()){
-				String[] isbnStrings = isbns.split("|");
+				String[] isbnStrings = StringUtils.split(isbns, "|");;
 				isbnList = new ArrayList<String>(Arrays.asList(isbnStrings));
 			}
 			String crossref = request.getParameter("crossref");
@@ -335,6 +340,10 @@ public class SetupServlet extends HttpServlet {
 			String note = request.getParameter("note");
 			Double price = Double.parseDouble(request.getParameter("price"));		//Required
 			Integer quantity = Integer.parseInt(request.getParameter("quantity"));
+			if(quantity.equals("")){
+				quantity = null;
+			}
+				
 			String image = request.getParameter("image");
 			int duration = Integer.parseInt(request.getParameter("duration")) * 24 * 60 * 60;
 			Type listType = Listing.stringToType(type);

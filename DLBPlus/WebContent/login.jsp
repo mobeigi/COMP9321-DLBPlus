@@ -63,7 +63,7 @@
 				  		</div>
 				  		<div class="row">
 				  			<div class="col s12">
-				  				<p class="center">Not registered? <a href="register.jsp">Sign Up</a></p>
+				  				<p class="center">Not registered? <a href="?action=registerPage">Sign Up</a></p>
 				  			</div>
 				  		</div>
 					</form>        
