@@ -19,7 +19,7 @@
 	      $('select').material_select();
 	  });
 	</script>
-	<jsp:include page="navbar.jsp" />
+	<jsp:include page="adminNavbar.jsp" />
 	
 	<div class="section no-pad-bot" id="index-banner">
     	<div class="container">
