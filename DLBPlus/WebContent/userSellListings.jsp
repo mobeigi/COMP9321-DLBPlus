@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -30,7 +32,73 @@
         </div>
  	</div>
  	
- 	
+ 	<div class="row">
+ 		<div class="col s10 offset-s1">
+ 			<div class="card white">
+        		<div class="card-content black-text">
+		 			<div class="card-title">
+		 				<c:choose>
+							<c:when test="${not empty eMessage}">
+		 						<p class="red-text center">${eMessage}</p>
+		 					</c:when>
+			 				<c:otherwise>
+			 					
+			 					<form method="Post" action="setup">
+			 						<div class="row">
+								        <table class="centered highlighted striped responsive-table">
+								        	<thead>
+												<tr>
+													<th> Listing ID </th>
+													<th> Title </th>
+													<th> Author(s)</th>
+													<th> Listing Type</th>
+													<th> Quantity </th>
+													<th> Listed Price </th>
+													<th> Number of Views </th>
+													<th> Paused </th>
+												</tr>
+											</thead>
+											<tbody>
+												<c:forEach var="listing" items="${userListings}">
+													<tr>
+														<td><c:out value="${listing.id}"/></td>
+														<td><a href="setup?action=viewListing&&id=${listing.id}">${listing.title}</a></td>
+														<td><c:out value="${listing.arrayAuthors}" /></td>
+														<td><c:out value="${listing.type}" /></td>
+														<td><c:out value="${listing.quantity}" /></td>
+														<td>$<c:out value="${listing.sellprice}" /></td>
+														<td><c:out value="${listing.numviews}" /></td>
+														<c:choose>
+															<c:when test="${listing.paused}">
+																<td><input type="checkbox" checked="checked" name="${listing.id}" value="true" id="${listing.id}">
+																<label for="${listing.id}"></label></td>
+															</c:when>
+															<c:otherwise>
+																<td><input type="checkbox" name="${listing.id}" value="false" id="${listing.id}">
+																<label for="${listing.id}"></label></td>
+															</c:otherwise>
+														</c:choose>
+													</tr>
+												</c:forEach>
+											</tbody>	
+							        	</table>
+						        	</div>
+						        	<div class="row">
+						        		<div class="right-align">
+											<input type="hidden" name="action" value="updateListingStatus">
+											<button class="btn waves-effect waves-light" type="submit" value="updateListingStatus">Apply Changes
+											<i class="material-icons right"></i>
+											</button> 
+										</div>
+						        	</div>
+						        </form>
+							</c:otherwise>
+						</c:choose>
+		 			</div>
+ 				</div>
+			</div>
+		</div>
+	</div>
  	
  	
  	

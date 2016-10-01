@@ -283,6 +283,53 @@ public class SetupServlet extends HttpServlet {
 			link = "userSoldListings.jsp";
 		} else if(req.equals("viewListings")){
 			//View sales
+			String errorMessage = "";
+			User currUser = (User) request.getSession().getAttribute("user");
+			List<Listing> userListings = db.GetUserListings(currUser.getId());
+			if(userListings.isEmpty()){
+				errorMessage = "Looks like you dont have any current listings";
+			}
+			request.getSession().setAttribute("eMessage",errorMessage);
+			request.getSession().setAttribute("userListings", userListings);
+			link = "userSellListings.jsp";
+		} else if(req.equals("updateListingStatus")){	
+			boolean updated = false;
+			User currUser = (User) request.getSession().getAttribute("user");
+			
+//			String[] listingsToUpdate = request.getParameterValues("pauseListing");
+//			if (listingsToUpdate != null) {
+//				for(String id : listingsToUpdate){
+//					updated = db.SetPausedStatus(db.GetListing(Integer.parseInt(id)), paused);
+//				}
+//			}
+			
+			List<Listing> allListings = db.GetUserListings(currUser.getId());
+			for(Listing listing : allListings){
+				int listingId = listing.getId();
+				String currListingStatus = request.getParameter(Integer.toString(listingId));
+				System.out.println(currListingStatus);
+				
+//				Boolean newStatus;
+//				if (currListingStatus.equals("true")) {
+//					newStatus = true;
+//				} else {
+//					newStatus = false;
+//				}
+				
+//				updated = this.db.SetPausedStatus(this.db.GetListing(listingId), newStatus);
+
+			}
+			if(updated){
+				System.out.println("yey updated");
+			}
+			
+			String errorMessage = "";
+			List<Listing> userListings = db.GetUserListings(currUser.getId());
+			if(userListings.isEmpty()){
+				errorMessage = "Looks like you dont have any current listings";
+			}
+			request.getSession().setAttribute("eMessage",errorMessage);
+			request.getSession().setAttribute("userListings", userListings);
 			link = "userSellListings.jsp";
 		} else if(req.equals("createListing")){
 			//Create new listing
@@ -366,12 +413,20 @@ public class SetupServlet extends HttpServlet {
 			
 			Listing newListing = db.CreateListing(seller, quantity, listdate, enddate, price, image, listType, authorList, editorList, title, venueList, pages, year, address, volume, number, month, urlList, eeList, cdrom, citeList, publisher, note, crossref, isbnList, series, chapter, rating);
 			
-		}
-		
+		} 	
 		// Case when user wants to view admin
 		else if (req.equals("loginAdmin")) {
 			response.sendRedirect("/DLBPlus/admin");
 			return;
+		}
+		//View listing
+		else if (req.equals("viewListing")){
+			int listingID = Integer.parseInt(request.getParameter("id"));
+			
+			Listing listing = db.GetListing(listingID);
+			request.getSession().setAttribute("viewListing", listing);
+			
+			link = "listing.jsp";
 		}
 		
 		 RequestDispatcher rd = request.getRequestDispatcher("/"+link);
