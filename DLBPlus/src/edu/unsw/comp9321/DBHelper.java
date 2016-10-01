@@ -696,10 +696,10 @@ public class DBHelper implements DLBPlusDBInterface {
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
       ResultSet rs = stmt.executeQuery("SELECT * FROM users where username = '" + username + "';" );
-      
       return processResultSetIntoUser(rs);
     }
     catch (SQLException e) {
+    	System.out.println(e.getMessage());
       return null;
     }
   }
@@ -1786,5 +1786,13 @@ public class DBHelper implements DLBPlusDBInterface {
     
 	    return a;
   }
+
+	@Override
+	public List<Listing> SearchListings(Listing queryListing,
+			Double minSellPrice, Double maxSellPrice, boolean exactMatch,
+			boolean caseSensitive) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
