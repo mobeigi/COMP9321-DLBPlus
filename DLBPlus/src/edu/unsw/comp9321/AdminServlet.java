@@ -102,8 +102,11 @@ public class AdminServlet extends HttpServlet {
 		String userId = request.getParameter("userId"); //redirect to user details page
 		if(userId != null) {
 			User myUser = this.db.GetUser(Integer.parseInt(userId));
+			List<Order> ListOfOrders = this.db.GetOrderHistory(Integer.parseInt(userId));
+			List<CartItem> ListOfRemovedCartItems = this.db.GetRemovedCartItems(myUser.getCartid());
 			
-			
+			request.getSession().setAttribute("ListOfOrders", ListOfOrders);
+			request.getSession().setAttribute("ListOfRemovedCartItems", ListOfRemovedCartItems);
 			request.getSession().setAttribute("myUser", myUser);
 			nextPage = "adminUserDetails.jsp";
 		} else if (action != null && action.equals("UpdateUsersStatus")) { //update status of users
@@ -131,6 +134,13 @@ public class AdminServlet extends HttpServlet {
 			Collections.sort(listOfUsers);
 			request.setAttribute("ListOfUsers", listOfUsers);
 			nextPage = "adminUsers.jsp";
+		} else if(action != null && action.equals("removeListing")) { //remove a listing
+			String itemId = request.getParameter("itemId");
+			this.db.RemoveListing(Integer.parseInt(itemId));
+			
+			List<Listing> ListOfListings = this.db.GetListings(0, this.db.GetNumListings());
+			request.setAttribute("ListOfListings", ListOfListings);
+			nextPage = "adminListings.jsp";
 		}
 		
 		RequestDispatcher rd = request.getRequestDispatcher(nextPage);

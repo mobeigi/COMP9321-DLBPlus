@@ -1,0 +1,15 @@
+== ADDITIONAL FEATURES
+
+* When listing quantity goes to 0: 
+	=> Move to a separate table "soldlistings"
+	=> Send an email to the seller, saying item is sold out
+
+* When user forgets their password:
+	=> Reset password form:
+		* User enters username, and clicks submit
+		* Server checks whether username exists
+		* Server sends verification code to their email, set username to 'userForgotten'
+		* User enters code
+		* Suppose they're correct:
+			- Get user object based on 'userForgotten', and attach to a form where they can type in a new password
+			- User inputs new password, server generates new salt and password, and logs them in.

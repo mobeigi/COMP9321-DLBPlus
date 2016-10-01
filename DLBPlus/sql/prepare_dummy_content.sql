@@ -1,39 +1,26 @@
--- This script will create some users, whose account status is active, account confirmed
-
--------------------------------------------------------------------------------------------
 /*
-== Template (Make sure to put single quotation marks around each field!)
-/*
- * == User
- * Username: username
- * Inputpwd: inputpwd
+ * THIS SCRIPT PREPARES THE DATABASE BY INPUTTING VALUES
+ * THAT SIMULATE A BASIC SITUATION / STATE OF THE ONLINE STORE.
+ * 
+ * MAKE SURE TO FOLLOW THE ORDER OF WHICH VALUES ARE CREATED, I.E.:
+ * 		ADMINS -> USERS -> LISTINGS -> ORDERS -> ACTIVE CART ITEMS -> REMOVED CART ITEMS
  */
-INSERT INTO 
-	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, cartid, dp, acctstatus, acctconfrm, acctcreated) 
-VALUES (
-	id,										-- ID
-	username,								-- USERNAME
-	salt,									-- SALT
-	password,								-- ENCRYPTED PASSWORD
-	fname,									-- FIRST NAME
-	lname,									-- LAST NAME
-	nickname,								-- NICKNAME
-	email,									-- EMAIL
-	address,								-- ADDRESS
-	dob (format: dd/mm/yyyy),				-- DOB
-	credit card,							-- CREDIT CARD
-	cartid,									-- CART ID
-	null,									-- DP
-	't',	-- DO NOT CHANGE
-	't',	-- DO NOT CHANGE
-	date created							-- DATE CREATED
-);
 
-*/
-------------------------------------------------------------------------------------------
-
--- Set datestyle
+-- Prepare datestyle in format: dd/mm/yyyy
 SET datestyle = dmy;
+
+-- CREATE ADMINS
+--------------------------------------------------
+
+/*
+ * = Admin
+ * Username: 'admin'
+ * Password: 'password'
+ */
+INSERT INTO admins (username,salt,password) VALUES ('admin', 'w5dNhgBbQJtdp8Oprd5yRdhPFaOxd8UwUtTjaQbf7qY=', 'e8951dc256818ba6f8281f6cdebf29926a9a05ff');
+
+-- CREATE USERS
+--------------------------------------------------
 
 /*
  * == User 1
@@ -189,4 +176,146 @@ VALUES (
 	't',	-- DO NOT CHANGE
 	't',	-- DO NOT CHANGE
 	'Sat Oct 1 10:21:00 AEST 2016'							-- DATE CREATED
+);
+
+-- CREATE LISTINGS
+--------------------------------------------------
+
+/*
+ * = Listing 1
+ */
+INSERT INTO
+	listings(
+		id,
+		sellerid,
+		quantity,
+		listdate,
+		enddate,
+		sellprice,
+		paused,
+		numviews,
+		"type",
+		authors,
+		editors,
+		title,
+		venues,
+		year,
+		address,
+		month,
+		publisher,
+		rating
+	)
+VALUES (
+		1,
+		6,
+		3,
+		'Sat Oct 1 11:00:00 AEST 2016',
+		'Tue Oct 3 11:00:00 AEST 2016',
+		'69.00',
+		'f',
+		15,
+		'article',
+		'Matthew Tan',
+		'Ian Wong',
+		'How to get HDs at uni',
+		'UNSW Australia',
+		2016,
+		'Sydney',
+		'April',
+		'CSE',
+		'EXCELLENT'
+);
+
+/*
+ * = Listing 2
+ */
+INSERT INTO
+	listings(
+		id,
+		sellerid,
+		quantity,
+		listdate,
+		enddate,
+		sellprice,
+		paused,
+		numviews,
+		"type",
+		authors,
+		title,
+		year,
+		month
+	)
+VALUES (
+		2,
+		4,				-- user: userX
+		10,
+		'Tue Aug 9 19:00:00 AEST 2016',		
+		'Thu Nov 17 19:00:00 AEST 2016',
+		'99.99',
+		'f',
+		103,
+		'www',
+		'Amin Behesti|Erik Zhong',
+		'Web applications for Beginners',
+		2009,
+		'June'
+);
+
+-- CREATE ORDERS
+--------------------------------------------------
+
+/*
+ * = Order 1
+*/
+INSERT INTO 
+	orders(id, buyerid, sellerid, pubtitle, order_date, price)
+VALUES (
+	1,	
+	1,		-- buyer: joe1
+	4,		-- seller: userX
+	'How to get HDs at uni',
+	'Friday Sep 30 11:00:00 AEST 2016',
+	'69.00'
+);
+
+/*
+ * = Order 2
+*/
+INSERT INTO 
+	orders(id, buyerid, sellerid, pubtitle, order_date, price)
+VALUES (
+	2,	
+	2,		-- buyer: intellect
+	4,		-- seller: userX
+	'How to get HDs at uni',
+	'Sat Oct 1 20:15:38 AEST 2016',
+	'69.00'
+);
+
+-- CREATE ACTIVE CART ITEMS
+--------------------------------------------------
+
+/*
+ * = activecartitem 1
+*/
+INSERT INTO activecartitems(cartid, listingid, addedts)
+VALUES (
+	20, 			-- username: joe1
+	1, 
+	'1/10/2016'
+);
+
+-- CREATE REMOVED CART ITEMS
+--------------------------------------------------
+
+/*
+ * = removed cart item 1
+ */
+INSERT INTO
+	removedcartitems(cartid,listingid,addedts,removedts)
+VALUES (
+	21,			-- username: Intellect
+	2,
+	'Mon Sep 26 20:00:00 AEST 2016',
+	'Tue Sep 27 06:08:07 AEST 2016'
 );

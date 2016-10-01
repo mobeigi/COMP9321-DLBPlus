@@ -39,7 +39,7 @@
 		<div class="col s10 offset-s1">
 		
 			<%-- Display details of user --%>
-    			<div class="card valign grey lighten-1" >
+    		<div class="card valign grey lighten-1" >
 		        <table class="left highlighted striped responsive-table">
 		        	<thead>
 						<tr>
@@ -104,9 +104,77 @@
 					</tbody>	
 	        	</table>
 			</div>
-			
+	    </div>
+	</div>
+	
+ 	<div class="container">
+		<div class="col s10 offset-s1">
+			<%-- Display the user's order history --%>
+    		<div class="card valign grey lighten-1" >
+		        <table class="left highlighted striped responsive-table">
+		        	<thead>
+						<tr>
+							<th>Order ID</th>
+							<th>Seller ID</th>
+							<th>Publication Title</th>
+							<th>Order Date</th>
+							<th>Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="currOrder" items="${ListOfOrders}"
+						           varStatus="loop">
+							<tr>
+								<td><c:out value="${currOrder.id}" /></td>
+								<td><c:out value="${currOrder.sellerid}" /></td>
+								<td><c:out value="${currOrder.pubTitle}" /></td>
+								<td><c:out value="${currOrder.order_date}" /></td>
+								<td><c:out value="${currOrder.price}" /></td>
+							</tr>
+						</c:forEach>
+					</tbody>	
+	        	</table>
+			</div>
+	    </div>
+	</div>
+	<br>
+	    
+ 	<div class="container">
+		<div class="col s10 offset-s1">
+			<%-- Display the user's removed cart items --%>
+    		<div class="card valign grey lighten-1" >
+		        <table class="left highlighted striped responsive-table">
+		        	<thead>
+						<tr>
+							<th>Listing ID</th>
+							<th>Time Added</th>
+							<th>Time Removed</th>
+							<th>Seller Name</th>
+							<th>publication Name</th>
+							<th>publication Type</th>
+							<th>Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="currItem" items="${ListOfRemovedCartItems}"
+						           varStatus="loop">
+							<tr>
+								<td><c:out value="${currItem.listingid}" /></td>
+								<td><c:out value="${currItem.addedts}" /></td>
+								<td><c:out value="${currItem.removedts}" /></td>
+								<td><c:out value="${currItem.sellerName}" /></td>
+								<td><c:out value="${currItem.publicationName}" /></td>
+								<td><c:out value="${currItem.publicationType}" /></td>
+								<td><c:out value="${currItem.price}" /></td>
+							</tr>
+						</c:forEach>
+					</tbody>	
+	        	</table>
+			</div>
 	    </div>
 	    <br>
+	    
+	    
 	    <div class="row">
 	    	<div class="col s10">
 			    <form action="admin" method="POST">
@@ -115,17 +183,6 @@
 					<br>
 			    </form>
 		    </div>
-		    <div class="col s2">
-				<form action="setup" method = "POST">
-					<div>
-						<input type="hidden" name="action" value="add"/>
-						<input type="hidden" name="publicationID" value="${publicationID}"/>
-						<button type="submit" value="Add to Shopping Cart" class="btn waves-effect waves-light">Add to Cart
-						<i class="material-icons right">add</i>
-						</button> 
-					</div>
-			    </form>
-			</div>
 	   	</div>
     </div>
     <br><br>
