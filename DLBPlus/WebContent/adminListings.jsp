@@ -58,6 +58,7 @@
 							<tr>
 								<th>Item ID</th>
 								<th>Seller ID</th>
+								<th>Title</th>
 								<th>Quantity</th>
 								<th>List Date</th>
 								<th>End Date</th>
@@ -75,6 +76,7 @@
 								<tr>
 									<td><c:out value="${listing.id}" /></td>
 									<td><c:out value="${listing.sellerid}" /></td>
+									<td><c:out value="${listing.title}" /></td>
 									<td><c:out value="${listing.quantity}" /></td>
 									<td><c:out value="${listing.listdate}" /></td>
 									<td><c:out value="${listing.enddate}" /></td>
@@ -83,9 +85,10 @@
 									<td><c:out value="${listing.paused}" /></td>
 									<td><c:out value="${listing.numviews}" /></td>
 									<td>
-									    <FORM Action='adminUsers.jsp'> <!-- Link to servlet to perform operation -->
+									    <FORM Action='admin'> <!-- Link to servlet to perform operation -->
 										<INPUT type='submit' value='Remove listing'>
-										<input type="hidden" name="addToCart" value="no"> <!-- Use page operations -->
+										<input type="hidden" name="action" value="removeListing"> <!-- Use page operations -->
+										<input type="hidden" name="itemId" value="${listing.id}"> <!-- Use page operations -->
 										</FORM>
 									</td>
 								</tr>
@@ -99,6 +102,7 @@
     
 	<%-- Page navigation links --%>
 	<%-- Previous page link --%>
+	<%--
 	<c:choose>
 		<c:when test="${searchFound.currPage != 1}">
 			<div class="col s2 offset-s3">
@@ -120,13 +124,14 @@
 			</div>					
 		</c:otherwise>
 	</c:choose>
+	--%>
 	<div class="col s2">
-		<form action="setup" method="post">
-			<input type="hidden" name="action" value="back"/>
+		<form action="admin" method="post">
 			<button type="submit" value="Back" class="btn">Back</button>
 		</form>
-	</div>		
+	</div>
 	<%-- Next page link --%>
+	<%--
 	<c:choose>
 		<c:when test="${searchFound.currPage != searchFound.totalPages}">
 			<div class="col s2">
@@ -148,7 +153,7 @@
 			</div>					
 		</c:otherwise>
 	</c:choose>
-		
+	--%>
 
     
     <jsp:include page="footer.jsp" />
