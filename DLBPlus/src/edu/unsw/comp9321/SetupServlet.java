@@ -2,6 +2,7 @@ package edu.unsw.comp9321;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import edu.unsw.comp9321.Listing.Type;
 
 /**
  * Servlet implementation class SetupServlet
@@ -239,6 +242,7 @@ public class SetupServlet extends HttpServlet {
 			} else {
 				errorMessage = "Incorrect Username or Password";
 				link = "login.jsp";
+				request.getSession().setAttribute("eMessage",errorMessage);
 			}
 		} else if(req.equals("logout")){
 			String errorMessage = "";
@@ -271,30 +275,76 @@ public class SetupServlet extends HttpServlet {
 			//Create new listing
 			link = "createListing.jsp";
 		} else if(req.equals("registerItem")){
-			String itemName = request.getParameter("itemName"); //Required
-			String authors = request.getParameter("authors");	//Required
+			User seller = (User) request.getSession().getAttribute("user");
+			String title = request.getParameter("itemName"); //Required
+			String authors = request.getParameter("authors");	//Required, split
+			List<String> authorList = null;
+			if(authors != null && !authors.isEmpty()){
+				String[] authorStrings = authors.split("|");
+				authorList = new ArrayList<String>(Arrays.asList(authorStrings));
+			}
 			String type = request.getParameter("pubType");		//Required
-			String editors = request.getParameter("editors");
-			String venues = request.getParameter("venues");
+			String editors = request.getParameter("editors");	//split
+			List<String> editorList = null;
+			if(editors != null &&!editors.isEmpty() ){
+				String[] editorStrings = editors.split("|");
+				editorList = new ArrayList<String>(Arrays.asList(editorStrings));
+			}
+			String venues = request.getParameter("venues");		//split
+			List<String> venueList = null;
+			if(venues != null && !venues.isEmpty()){
+				String[] venueStrings = venues.split("|");
+				venueList = new ArrayList<String>(Arrays.asList(venueStrings));
+			}
 			String pages = request.getParameter("pages");
 			String volume = request.getParameter("volume");
-			String year = request.getParameter("year");
+			Integer year = Integer.parseInt(request.getParameter("year"));
 			String month = request.getParameter("month");
 			String address = request.getParameter("address");
 			String number = request.getParameter("number");
-			String urls = request.getParameter("urls");
-			String ees = request.getParameter("ees");
+			String urls = request.getParameter("urls");			//split
+			List<String> urlList = null;
+			if(urls != null && !urls.isEmpty()){
+				String[] urlStrings = urls.split("|");
+				urlList = new ArrayList<String>(Arrays.asList(urlStrings));
+			}
+			String ees = request.getParameter("ees");			//split
+			List<String> eeList = null;
+			if(ees != null && !ees.isEmpty()){
+				String[] eeStrings = ees.split("|");
+				eeList = new ArrayList<String>(Arrays.asList(eeStrings));
+			}
 			String cdrom = request.getParameter("cdrom");
-			String cities = request.getParameter("cities");
+			String cities = request.getParameter("cities");		//split
+			List<String> citeList = null;
+			if(cities != null && !cities.isEmpty()){
+				String[] citeStrings = cities.split("|");
+				citeList = new ArrayList<String>(Arrays.asList(citeStrings));
+			}
 			String publisher = request.getParameter("publisher");
-			String isbns = request.getParameter("isbns");
+			String isbns = request.getParameter("isbns");		//split
+			List<String> isbnList = null;
+			if(isbns != null && !isbns.isEmpty()){
+				String[] isbnStrings = isbns.split("|");
+				isbnList = new ArrayList<String>(Arrays.asList(isbnStrings));
+			}
 			String crossref = request.getParameter("crossref");
 			String series = request.getParameter("series");
 			String chapter = request.getParameter("chapter");
 			String rating = request.getParameter("rating");
 			String note = request.getParameter("note");
-			String price = request.getParameter("price");		//Required
+			Double price = Double.parseDouble(request.getParameter("price"));		//Required
+			Integer quantity = Integer.parseInt(request.getParameter("quantity"));
+			String image = request.getParameter("image");
+			int duration = Integer.parseInt(request.getParameter("duration")) * 24 * 60 * 60;
+			Type listType = Listing.stringToType(type);
 			
+			Timestamp listdate = new Timestamp(new Date().getTime());
+			Timestamp enddate = new Timestamp(new Date().getTime()+ duration);
+			
+			
+			
+			Listing newListing = db.CreateListing(seller, quantity, listdate, enddate, price, image, listType, authorList, editorList, title, venueList, pages, year, address, volume, number, month, urlList, eeList, cdrom, citeList, publisher, note, crossref, isbnList, series, chapter, rating);
 			
 		}
 		
