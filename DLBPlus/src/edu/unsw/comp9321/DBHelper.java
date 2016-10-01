@@ -1496,6 +1496,10 @@ public class DBHelper implements DLBPlusDBInterface {
       query = "DELETE FROM activecartitems WHERE listingid = " + listingID + ";";
       stmt.executeUpdate(query);
       
+      // Remove from removedcartitems
+      query = "DELETE FROM removedcartitems WHERE listingid = " + listingID + ";";
+      stmt.executeUpdate(query);
+      
       // Remove from listings with the specified id
       query = "DELETE FROM listings WHERE id = " + listingID + ";";
       stmt.executeUpdate(query);
