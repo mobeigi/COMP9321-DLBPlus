@@ -8,12 +8,12 @@ import java.sql.Timestamp;
 import java.util.*;
 
 public interface DLBPlusDBInterface {
-	
+
 	// --------------------------
 	// ATTRIBUTES
 	// --------------------------
 	public boolean dbConnStatus = false;
-	
+
 	// --------------------------
 	// METHODS
 	// --------------------------
@@ -21,48 +21,43 @@ public interface DLBPlusDBInterface {
 	 * Initiate connection to DB
 	 */
 	public boolean init();
-	
-	/**
-	 * Obtain a list of publications (FOR SALE) that match the search queries
-	 *
-	 * @param queries contains key-value pair of query and value
-	 * @return List of publications (empty if no results found)
-	 */	 
-	public List<Listing> SearchListings(HashMap<String, String> queries);
+
+
+	public List<Listing> SearchListings(Listing queryListing, Double minSellPrice, Double maxSellPrice, boolean exactMatch, boolean caseSensitive);
 
 	/**
-	* Create a listing (item for sale)
-	*
-	* @return Listing Null if listing unsuccessful, Listing of newly created listing otherwise
-	*/
+	 * Create a listing (item for sale)
+	 *
+	 * @return Listing Null if listing unsuccessful, Listing of newly created listing otherwise
+	 */
 	public Listing CreateListing(User seller, Integer quantity, Timestamp listdate, Timestamp enddate, Double sellprice, String image,
 															 Listing.Type type, List<String> authors, List<String> editors, String title, List<String> venues,
 															 String pages, Integer year, String address, String volume, String number, String month, List<String> urls,
 															 List<String> ees, String cdrom, List<String> cites, String publisher, String note, String crossref,
 															 List<String> isbns, String series, String chapter, String rating);
-	 
+
 	/**
 	 * Obtain a random listing
 	 *
 	 * @return returns a listing if there is at least one in DB; null otherwise
 	 */
-	 public Listing GetRandomListing();
-	 
+	public Listing GetRandomListing();
+
 	/**
 	 * Obtain a particular listing
 	 *
 	 * @param listingID the id of the listing to obtain
 	 * @return the listing corresponding to given ID; null if such a listing doesn't exist
 	 */
-	 public Listing GetListing(int listingID);
-  
-  /**
-   * Increments the number of views on a particular listing
-   *
-   * @param listing the listing being changed
-   * @return true if successful, false otherwise
-   */
-  public boolean IncrementListingViews(Listing listing);
+	public Listing GetListing(int listingID);
+
+	/**
+	 * Increments the number of views on a particular listing
+	 *
+	 * @param listing the listing being changed
+	 * @return true if successful, false otherwise
+	 */
+	public boolean IncrementListingViews(Listing listing);
 
 	/**
 	 * Decrements listing quantity.
@@ -72,38 +67,38 @@ public interface DLBPlusDBInterface {
 	 */
 	public boolean DecrementListingQuantity(Listing listing);
 
-  /**
-   * Set the listing's paused status to be true or false
-   *
-   * @param listing the listing to modify paused status
-   * @param paused the new value for paused
-   * @return boolean True when paused was successfully set. False otherwise
-   */
+	/**
+	 * Set the listing's paused status to be true or false
+	 *
+	 * @param listing the listing to modify paused status
+	 * @param paused the new value for paused
+	 * @return boolean True when paused was successfully set. False otherwise
+	 */
 	public boolean SetPausedStatus(Listing listing, boolean paused);
-  
-  /**
-   * Add a listing to a user's cart
-   *
-   * @param user contains the cartid of the user
-   * @param listingToAdd contains the listing to add into the user's cart
-   * @return CartItem of item that was added if successful, null otherwise
-   */
-  public CartItem AddToCart(User user, Listing listingToAdd);
-  
-  /**
-   * Remove a particular cartItem from a user's cart
-   *
-   * @param cartItem cart item to be removed
-   * @return boolean True when removal was successful
-   */
-  public boolean RemoveFromCart(CartItem cartItem);
+
+	/**
+	 * Add a listing to a user's cart
+	 *
+	 * @param user contains the cartid of the user
+	 * @param listingToAdd contains the listing to add into the user's cart
+	 * @return CartItem of item that was added if successful, null otherwise
+	 */
+	public CartItem AddToCart(User user, Listing listingToAdd);
+
+	/**
+	 * Remove a particular cartItem from a user's cart
+	 *
+	 * @param cartItem cart item to be removed
+	 * @return boolean True when removal was successful
+	 */
+	public boolean RemoveFromCart(CartItem cartItem);
 
 	/**
 	 * Obtain all active cart items in a given cart
 	 *
 	 * @param cartID the id of the cart
 	 * @return returns a list of Cart Items
-	 */	
+	 */
 	public List<CartItem> GetActiveCartItems(int cartID);
 
 	/**
@@ -111,9 +106,9 @@ public interface DLBPlusDBInterface {
 	 *
 	 * @param cartID the cart of id
 	 * @return returns a list of cart items that have been removed
-	 */	
+	 */
 	public List<CartItem> GetRemovedCartItems(int cartID);
-	
+
 	/**
 	 * Create a user by inserting provided user details into database
 	 *
@@ -121,9 +116,9 @@ public interface DLBPlusDBInterface {
 	 * @param plainTextPassword Unsalted Password
 	 * @return User corresponding to successful insertion (null otherwise)
 	 */
-	public User CreateUser(String username, String plainTextPassword, 
-						String fname, String lname, String nickname, String email, String address,
-						Date dob, String creditcard, String dp);
+	public User CreateUser(String username, String plainTextPassword,
+												 String fname, String lname, String nickname, String email, String address,
+												 Date dob, String creditcard, String dp);
 
 	/**
 	 * Validate a user
@@ -135,45 +130,45 @@ public interface DLBPlusDBInterface {
 	public boolean VerifyUser(String inputUsername, String inputPwd);
 
 	/**
-	* Obtain a user
-	*
-	* @param username the username of the user
-	* @return returns a user when successful, null otherwise
-	*/
+	 * Obtain a user
+	 *
+	 * @param username the username of the user
+	 * @return returns a user when successful, null otherwise
+	 */
 	public User GetUser(String username);
-	
+
 	/**
 	 * Obtain a specific user
 	 *
 	 * @param userID the id of the user to obtain
 	 * @return returns User object, null if doesn't exist
-	 */	
+	 */
 	public User GetUser(int userID);
-	
+
 	/**
-	* Checks whether a user with a particular username exists
-	*
-	* @param username the username of potential user
-	* @return User: returns true when user found in db; false otherwise
-	*/
+	 * Checks whether a user with a particular username exists
+	 *
+	 * @param username the username of potential user
+	 * @return User: returns true when user found in db; false otherwise
+	 */
 	public boolean DoesUserExist(String username);
-	
+
 	/**
 	 * Sets the account confirmed status to a new value
-	 * 
+	 *
 	 * @param user the user account
 	 * @param confirmedStatus the new status to change to
 	 * @return True when successfully changed, False otherwise
 	 */
-  public boolean SetAcctConfirmed(User user, boolean confirmedStatus);
-  
-  /**
-   * Changes the details of a user based on their user id (which cannot be changed).
-   *
-   * @param changedUser The User object that contains all the information to change
-   * @return True whether user was changed successfully, false otherwise
-   */
-  public boolean ChangeUserDetails(User changedUser);
+	public boolean SetAcctConfirmed(User user, boolean confirmedStatus);
+
+	/**
+	 * Changes the details of a user based on their user id (which cannot be changed).
+	 *
+	 * @param changedUser The User object that contains all the information to change
+	 * @return True whether user was changed successfully, false otherwise
+	 */
+	public boolean ChangeUserDetails(User changedUser);
 
 	/**
 	 * Change users stored password including salt.
@@ -183,30 +178,30 @@ public interface DLBPlusDBInterface {
 	 * @return true if password successfully changed, false otherwise
 	 */
 	public boolean ChangeUserPassword(User user, String plainTextPassword);
-	
+
 	/**
 	 * Obtain a list of all users
 	 *
 	 * @return @return returns a list of all existing users, regardless of account status, empty list otherwise
-	 */		
+	 */
 	public List<User> GetAllUsers();
-	
+
 	/**
 	 * Return the total number of users
 	 *
 	 * @return the total number of users, -1 on error
-	 */	
+	 */
 	public int GetNumUsers();
-	
+
 	/**
 	 * Obtain a specific range of users (inclusive)
 	 *
-   * @param startIndex the starting index (must be 0 - (numusers - 1))
-   * @param endIndex the ending index (must be 0-numusers and >= startIndex)
+	 * @param startIndex the starting index (must be 0 - (numusers - 1))
+	 * @param endIndex the ending index (must be 0-numusers and >= startIndex)
 	 * @return returns a list of users in specified range
-	 */	
-	 public List<User> GetUsers(int startIndex, int endIndex);
-	
+	 */
+	public List<User> GetUsers(int startIndex, int endIndex);
+
 	/**
 	 * Remove a particular user
 	 *
@@ -214,7 +209,7 @@ public interface DLBPlusDBInterface {
 	 * @return boolean True when successfully removed, False otherwise
 	 */
 	public boolean RemoveUser(int userID);
-	
+
 	/**
 	 * Change the account status of a user
 	 *
@@ -232,24 +227,24 @@ public interface DLBPlusDBInterface {
 	 * @return boolean True when admin is verified, False otherwise
 	 */
 	public boolean VerifyAdmin(String inputUsername, String inputPwd);
-	
+
 	/**
 	 * Create an admin
 	 *
 	 * @param username the username of the new admin
 	 * @param plainTextPassword plaintext password for new admin
 	 * @return returns an Admin object when successfully created, null otherwise
-	 */	
+	 */
 	public Admin CreateAdmin(String username, String plainTextPassword);
-	
+
 	/**
 	 * Get an admin
-	 * 
+	 *
 	 * @param username the username of the admin
 	 * @return returns an Admin object if successfully retrieved, null otherwise
 	 */
 	public Admin GetAdmin(String username);
-	
+
 	/**
 	 * Checks whether an admin with given username exists
 	 *
@@ -257,68 +252,68 @@ public interface DLBPlusDBInterface {
 	 * @return boolean True for exists, False otherwise
 	 */
 	public boolean DoesAdminExist(String username);
-	
+
 	/**
 	 * Obtain a list of all existing listings
 	 *
 	 * @return returns a list of listings
-	 */		
+	 */
 	public List<Listing> GetAllListings();
-	
+
 	/**
 	 * Obtain a list of listings by a particular user
 	 *
 	 * @return returns a list of listings
-	 */		
+	 */
 	public List<Listing> GetUserListings(int userID);
-	
+
 	/**
 	 * Remove a specified listing
 	 *
 	 * @param listingID the id of the listing to remove
 	 * @return returns True if successfully removed; false otherwise
-	 */	
+	 */
 	public boolean RemoveListing(int listingID);
-	
+
 	/**
 	 * Return the total number of listings
 	 *
 	 * @return the total number of listings, or -1 on error
-	 */	
+	 */
 	public int GetNumListings();
-  
-  /**
-   * Obtain a specific range of listings (inclusive)
-   *
-   * @param startIndex the starting index (must be 0 - (numlistings - 1))
-   * @param endIndex the ending index (must be 0-numlistings and >= startIndex)
-   * @return returns a list of listings in specified range or empty list
-   */
+
+	/**
+	 * Obtain a specific range of listings (inclusive)
+	 *
+	 * @param startIndex the starting index (must be 0 - (numlistings - 1))
+	 * @param endIndex the ending index (must be 0-numlistings and >= startIndex)
+	 * @return returns a list of listings in specified range or empty list
+	 */
 	public List<Listing> GetListings(int startIndex, int endIndex);
-	 
-	
+
+
 	/**
 	 * Creates an order, after the purchase has been made
-	 * 
+	 *
 	 * @param buyerID the id of the buyer
 	 * @param soldListing the Listing object that is bought
 	 * @return the Order if successfully created, null otherwise
 	 */
 	public Order CreateOrder(int buyerID, Listing soldListing);
-  
-  /**
-   * Get an order
-   *
-   * @param orderID the id of the order
-   * @return returns an order if it exists, null otherwise
-   **/
-  public Order GetOrder(int orderID);
-  
+
+	/**
+	 * Get an order
+	 *
+	 * @param orderID the id of the order
+	 * @return returns an order if it exists, null otherwise
+	 **/
+	public Order GetOrder(int orderID);
+
 	/**
 	 * Obtain the order history of a particular user
 	 *
 	 * @param buyerID the id of the buyer
 	 * @return returns a list of orders that the user has made
-	 */	
+	 */
 	public List<Order> GetOrderHistory(int buyerID);
 }
