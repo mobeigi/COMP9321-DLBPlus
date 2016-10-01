@@ -98,7 +98,6 @@ public class AdminServlet extends HttpServlet {
 				nextPage = "adminLogin.jsp";
 				request.getSession().setAttribute("errorMsg", "Incorrect username or password.");
 			}
-			
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher(nextPage);
