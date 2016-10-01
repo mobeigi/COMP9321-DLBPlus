@@ -1791,12 +1791,4 @@ public class DBHelper implements DLBPlusDBInterface {
 	    return a;
   }
 
-	@Override
-	public List<Listing> SearchListings(Listing queryListing,
-			Double minSellPrice, Double maxSellPrice, boolean exactMatch,
-			boolean caseSensitive) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
