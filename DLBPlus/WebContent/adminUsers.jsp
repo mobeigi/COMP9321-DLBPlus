@@ -40,12 +40,12 @@
  	</div>
 
 	<!-- Display number of users -->
+	<form action="admin" method="post">
 	<div class="container">
 		<div class="row valign-wrapper">
 			<div class="col s10 offset-s1">
 		   		
 
-		   		
 				<c:choose>
 					<c:when test="${fn:length(ListOfUsers) == 0}">
 						<p class="flow-text center">No users!</p> <!-- Unlikely as there will be at least one Admin user to see this -->
@@ -63,7 +63,6 @@
 								<th> ID </th>
 								<th> Username </th>
 								<th> Status </th>
-								<th> Options </th>
 							</tr>
 						</thead>
 						<tbody>
@@ -72,22 +71,32 @@
 								<tr>
 									<td><a href="admin?userId=${listing.id}">${listing.id}</a></td>
 									<td><c:out value="${listing.username}" /></td>
-									<td><c:out value="${listing.acctstatus}" /></td>
 									<td>
-									    <FORM Action='admin'> <!-- Link to servlet to perform operation -->
-										<INPUT type='submit' value='Remove user'>
-										<input type="hidden" name="action" value="removeUser">
-										</FORM>
+										<select name="${listing.id}">
+										<c:choose>
+											<c:when test="${listing.acctstatus == true}">
+												<option value="true" selected>Active</option>
+												<option value="false">Suspended</option>
+											</c:when>
+											<c:otherwise>
+												<option value="true">Active</option>
+												<option value="false" selected>Suspended</option>
+											</c:otherwise>
+										</c:choose>
+										</select>
 									</td>
 								</tr>
 							</c:forEach>
 						</tbody>	
 		        	</table>
+		        	<br><br>
+		        	<input type="hidden" name="action" value="UpdateUsersStatus">
+					<input type="submit" value='Update changes'>
 				</div>
   			</div>
 		</div>
 	</div>
-    
+	</form>
     
 	<jsp:include page="footer.jsp" />
 </body>

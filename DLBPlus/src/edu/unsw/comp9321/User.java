@@ -2,7 +2,7 @@ package edu.unsw.comp9321;
 
 import java.util.Date;
 
-public class User {
+public class User implements Comparable {
 	private Integer id;
 	private String username;
 	private String fname;
@@ -132,4 +132,13 @@ public class User {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
+
+	@Override
+	// Compares two User objects
+	public int compareTo(Object arg0) {
+		User user2 = (User) arg0;
+		return this.getId() - user2.getId();
+	}
+	
+	
 }

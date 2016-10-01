@@ -1,6 +1,7 @@
 package edu.unsw.comp9321;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -83,10 +84,12 @@ public class AdminServlet extends HttpServlet {
 			nextPage = "adminIndex.jsp";
 
 		} else if (action.equals("viewAllUsers")) {
+			List<User> ListOfUsers = this.db.GetAllUsers();
+			Collections.sort(ListOfUsers);
+			request.setAttribute("ListOfUsers", ListOfUsers);
 			nextPage = "adminUsers.jsp";
 		} else if (action.equals("viewAllListings")) {
-			List<User> ListOfUsers = this.db.GetAllUsers();
-			request.setAttribute("ListOfUsers", ListOfUsers);
+
 			
 			nextPage = "adminPublications.jsp";
 		} else if (action.equals("adminLogout")) {
@@ -96,14 +99,39 @@ public class AdminServlet extends HttpServlet {
 			nextPage = "adminLogin.jsp";
 		}
 		
-		//Check redirect to user details page or listing details page
-		String userId = request.getParameter("userId");
+		//Check redirect to other pages
+		String userId = request.getParameter("userId"); //redirect to user details page
 		if(userId != null) {
-			User currUser
+			User myUser = this.db.GetUser(Integer.parseInt(userId));
 			
 			
-			request.getSession().setAttribute("currAdmin", newAdmin);
+			request.getSession().setAttribute("myUser", myUser);
 			nextPage = "adminUserDetails.jsp";
+		} else if (action.equals("UpdateUsersStatus")) { //update status of users
+			List<User> listOfUsers = this.db.GetAllUsers();
+			
+			for (User user : listOfUsers) {
+				
+				// Obtain the status of the user
+				int currId = user.getId();
+				String currUserStatus = request.getParameter(Integer.toString(currId));
+				
+				// Update the status
+				Boolean newStatus;
+				if (currUserStatus.equals("true")) {
+					newStatus = true;
+				} else {
+					newStatus = false;
+				}
+				this.db.SetUserAccountStatus(this.db.GetUser(currId), newStatus);
+				
+			}
+			
+			// Reload the users page
+			listOfUsers = this.db.GetAllUsers();
+			Collections.sort(listOfUsers);
+			request.setAttribute("ListOfUsers", listOfUsers);
+			nextPage = "adminUsers.jsp";
 		}
 		
 		RequestDispatcher rd = request.getRequestDispatcher(nextPage);
