@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Bibliographic Library | Publication Details</title>
+<title>Bibliographic Library | Listing Details</title>
 
    	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	
@@ -30,7 +30,7 @@
     	<div class="container">
     		<br><br>
     		<h1 class="header center orange-text">Bibliographic Library</h1>
-			<h2 class="header center orange-text">Publication Details</h2>
+			<h2 class="header center orange-text">Listing Details</h2>
     		
     		<br><br>
         </div>

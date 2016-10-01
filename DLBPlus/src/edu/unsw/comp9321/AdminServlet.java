@@ -89,11 +89,10 @@ public class AdminServlet extends HttpServlet {
 			request.setAttribute("ListOfUsers", ListOfUsers);
 			nextPage = "adminUsers.jsp";
 		} else if (action.equals("viewAllListings")) {
-
-			
-			nextPage = "adminPublications.jsp";
+			List<Listing> ListOfListings = this.db.GetListings(0, this.db.GetNumListings());
+			request.setAttribute("ListOfListings", ListOfListings);
+			nextPage = "adminListings.jsp";
 		} else if (action.equals("adminLogout")) {
-			
 			System.out.println("Admin wants to log out...");
 			request.getSession().removeAttribute("currAdmin");
 			nextPage = "adminLogin.jsp";
@@ -107,7 +106,7 @@ public class AdminServlet extends HttpServlet {
 			
 			request.getSession().setAttribute("myUser", myUser);
 			nextPage = "adminUserDetails.jsp";
-		} else if (action.equals("UpdateUsersStatus")) { //update status of users
+		} else if (action != null && action.equals("UpdateUsersStatus")) { //update status of users
 			List<User> listOfUsers = this.db.GetAllUsers();
 			
 			for (User user : listOfUsers) {
