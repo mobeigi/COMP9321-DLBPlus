@@ -155,6 +155,7 @@ public class SetupServlet extends HttpServlet {
 			navigateSearchPage(request);
 			link = "result.jsp";
 		} else if(req.equals("register")){
+			int flag = 0;
 			String errorMessage = "";
 			String firstName = request.getParameter("fname");
 			String lastName = request.getParameter("lname");
@@ -165,6 +166,7 @@ public class SetupServlet extends HttpServlet {
 			String address = request.getParameter("address");
 			String creditCard = request.getParameter("ccn");
 			String stringDob = request.getParameter("dob");
+			String passConfirm = request.getParameter("passConfirm");
 			System.out.println(stringDob);
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd"); 
 			if(address == null){
@@ -181,16 +183,27 @@ public class SetupServlet extends HttpServlet {
 			System.out.println(dob);
 			if (db.DoesUserExist(userName)){
 				errorMessage = "Username already exists!";
+				flag = 1;
 				link = "register.jsp";
-			} else {
-				User newUser = new User();
-				newUser = db.CreateUser(userName, password, firstName, lastName, nickName, email, address, dob, creditCard, dp);
-				Random random = new Random();
-				int rand = random.nextInt(99999);
-				System.out.println("generating " + rand);
-				request.getSession().setAttribute("confirmationNumber", rand);
-				request.getSession().setAttribute("newUser",newUser);
-				link = "confirmation.jsp";
+				request.getSession().setAttribute("eMessage",errorMessage);
+			}
+			if (!passConfirm.equals(password)){
+				errorMessage = "Passwords do not match!";
+				flag = 1;
+				link = "register.jsp";
+				request.getSession().setAttribute("eMessage",errorMessage);
+			}
+			else {
+				if (flag == 0){
+					User newUser = new User();
+					newUser = db.CreateUser(userName, password, firstName, lastName, nickName, email, address, dob, creditCard, dp);
+					Random random = new Random();
+					int rand = random.nextInt(99999);
+					System.out.println("generating " + rand);
+					request.getSession().setAttribute("confirmationNumber", rand);
+					request.getSession().setAttribute("newUser",newUser);
+					link = "confirmation.jsp";
+				}
 			}
 		} else if(req.equals("regSuccess")){
 			String code = request.getParameter("code");
