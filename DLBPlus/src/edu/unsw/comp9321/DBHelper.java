@@ -408,16 +408,160 @@ public class DBHelper implements DLBPlusDBInterface {
 	       return false;
 	     }
 	 }
-	 
+
 	/**
-	 * Obtain a list of publications (FOR SALE) that match the search queries
+	 * Obtain a list of listings (FOR SALE) that match the search queries
 	 *
-	 * @param queries contains key-value pair of query and value
-	 * @return List of publications (empty if no results found)
-	 */	 
-	public List<Listing> SearchListings(HashMap<String, String> queries) {
+	 * @param queryListing Listing that contains query information
+	 * @param minSellPrice Optional minimum sell price (may be null)
+	 * @param maxSellPrice Optional maximum sell price (may be null)
+	 * @param exactMatch Should exact matches be performed on strings
+	 * @param caseSensitive Should string matches be case sensitive
+	 *
+	 * @return List of listings (empty if no results found)
+	 */
+	public List<Listing> SearchListings(Listing queryListing, Double minSellPrice, Double maxSellPrice, boolean exactMatch, boolean caseSensitive) {
 		List<Listing> results = new ArrayList<Listing>();
-		// TODO
+
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("SearchListings", "No connection with database");
+			return results;
+		}
+
+		String query = "SELECT * FROM listings ";
+		ArrayList<String> sqlQueries = new ArrayList<>();
+
+		//Case sensitivity check
+		String compStr = "ILIKE";
+		if (caseSensitive)
+			compStr = "LIKE";
+
+		//Exact match
+		String strQuoteStart = "'%";
+		String strQuoteEnd = "%'";
+
+		if (exactMatch) {
+			strQuoteStart = strQuoteEnd =  "'";
+		}
+
+		//Construct listing
+		if (queryListing.getSellerid() != null)
+			sqlQueries.add("sellerid = " + queryListing.getSellerid());
+
+		if (queryListing.getQuantity() != null)
+			sqlQueries.add("quantity >= " + queryListing.getQuantity());
+
+		if (queryListing.getListdate() != null)
+			sqlQueries.add("listdate >= to_timestamp(" + queryListing.getListdate().getTime()/1000 + ")");
+
+		if (queryListing.getEnddate() != null)
+			sqlQueries.add("enddate <= to_timestamp(" + queryListing.getEnddate().getTime()/1000 + ")");
+
+		if (minSellPrice != null)
+			sqlQueries.add("sellprice >= " + minSellPrice);
+
+		if (maxSellPrice != null)
+			sqlQueries.add("sellprice <= " + maxSellPrice);
+
+		if (queryListing.getType() != null)
+			sqlQueries.add("type = '" + queryListing.getType().toString().toLowerCase() + "'");
+
+		if (queryListing.getAuthors() != null && !queryListing.getAuthors().isEmpty())
+			sqlQueries.add("authors " + compStr + " " + strQuoteStart + StringUtils.join(queryListing.getAuthors() , "|") + strQuoteEnd);
+
+		if (queryListing.getEditors() != null && !queryListing.getEditors().isEmpty())
+			sqlQueries.add("editors " + compStr + " " + strQuoteStart + StringUtils.join(queryListing.getEditors() , "|") + strQuoteEnd);
+
+		if (queryListing.getTitle() != null)
+			sqlQueries.add("title " + compStr + " " + strQuoteStart + queryListing.getTitle() + strQuoteEnd);
+
+		if (queryListing.getVenues() != null && !queryListing.getVenues().isEmpty())
+			sqlQueries.add("venues " + compStr + " " + strQuoteStart + StringUtils.join(queryListing.getVenues() , "|") + strQuoteEnd);
+
+		if (queryListing.getPages() != null)
+			sqlQueries.add("pages " + compStr + " " + strQuoteStart + queryListing.getPages() + strQuoteEnd);
+
+		if (queryListing.getYear() != null)
+			sqlQueries.add("year = " + queryListing.getYear());
+
+		if (queryListing.getAddress() != null)
+			sqlQueries.add("address " + compStr + " " + strQuoteStart + queryListing.getAddress() + strQuoteEnd);
+
+		if (queryListing.getVolume() != null)
+			sqlQueries.add("volume " + compStr + " " + strQuoteStart + queryListing.getVolume() + strQuoteEnd);
+
+		if (queryListing.getNumber() != null)
+			sqlQueries.add("number " + compStr + " " + strQuoteStart + queryListing.getNumber() + strQuoteEnd);
+
+		if (queryListing.getMonth() != null)
+			sqlQueries.add("month " + compStr + " " + strQuoteStart + queryListing.getMonth() + strQuoteEnd);
+
+		if (queryListing.getUrls() != null && !queryListing.getUrls().isEmpty())
+			sqlQueries.add("urls " + compStr + " " + strQuoteStart + StringUtils.join(queryListing.getUrls() , "|") + strQuoteEnd);
+
+		if (queryListing.getEes() != null && !queryListing.getEes().isEmpty())
+			sqlQueries.add("ees " + compStr + " " + strQuoteStart + StringUtils.join(queryListing.getEes() , "|") + strQuoteEnd);
+
+		if (queryListing.getCdrom() != null)
+			sqlQueries.add("cdrom " + compStr + " " + strQuoteStart + queryListing.getCdrom() + strQuoteEnd);
+
+		if (queryListing.getCites() != null && !queryListing.getCites().isEmpty())
+			sqlQueries.add("cites " + compStr + " " + strQuoteStart + StringUtils.join(queryListing.getCites() , "|") + strQuoteEnd);
+
+		if (queryListing.getPublisher() != null)
+			sqlQueries.add("publisher " + compStr + " " + strQuoteStart + queryListing.getPublisher() + strQuoteEnd);
+
+		if (queryListing.getNote() != null)
+			sqlQueries.add("note " + compStr + " " + strQuoteStart + queryListing.getNote() + strQuoteEnd);
+
+		if (queryListing.getCrossref() != null)
+			sqlQueries.add("crossref " + compStr + " " + strQuoteStart + queryListing.getCrossref() + strQuoteEnd);
+
+		if (queryListing.getIsbns() != null && !queryListing.getIsbns().isEmpty())
+			sqlQueries.add("isbns " + compStr + " " + strQuoteStart + StringUtils.join(queryListing.getIsbns() , "|") + strQuoteEnd);
+
+		if (queryListing.getSeries() != null)
+			sqlQueries.add("series " + compStr + " " + strQuoteStart + queryListing.getSeries() + strQuoteEnd);
+
+		if (queryListing.getChapter() != null)
+			sqlQueries.add("chapter " + compStr + " " + strQuoteStart + queryListing.getChapter() + strQuoteEnd);
+
+		if (queryListing.getRating() != null)
+			sqlQueries.add("rating " + compStr + " " + strQuoteStart + queryListing.getRating() + strQuoteEnd);
+
+		//Join sql queries
+		if (!sqlQueries.isEmpty()) {
+			query += "WHERE ";
+
+			for (String q : sqlQueries)
+				query += (q + " AND ");
+
+			try {
+				query = query.substring(0, query.lastIndexOf(" AND ")); //remove final AND if it exists
+			} catch (Exception e) {}
+		}
+
+		query += ";";
+
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+
+			PrintDebugMessage("SearchListings", "RUNNING QUERY: " + query);
+			ResultSet rs = stmt.executeQuery(query);
+
+			Listing l = processResultSetIntoListing(rs);
+
+			while (l != null) {
+				results.add(l);
+				l = processResultSetIntoListing(rs);
+			}
+		}
+		catch (SQLException e) {
+			return results;
+		}
+
 		return results;
 	}
   
@@ -1046,11 +1190,7 @@ public class DBHelper implements DLBPlusDBInterface {
 				String number = rs.getString("number");
 				String month = rs.getString("month");
 
-<<<<<<< HEAD
 				List<String> urls = (rs.getString("urls") == null || rs.getString("urls").equals("")) ?
-=======
-				List<String> urls = (rs.getString("urls").contains("")) ?
->>>>>>> 81debc38d76282d0dda11037ea313ec49d9598ee
 								new LinkedList<String>()
 								: new LinkedList<String>(Arrays.asList(rs.getString("urls").split("\\|")));
 
@@ -1060,11 +1200,7 @@ public class DBHelper implements DLBPlusDBInterface {
 
 				String cdrom = rs.getString("cdrom");
 
-<<<<<<< HEAD
 				List<String> cites = (rs.getString("cites") == null || rs.getString("cites").equals("")) ?
-=======
-				List<String> cites = (rs.getString("cites") == null) ?
->>>>>>> 81debc38d76282d0dda11037ea313ec49d9598ee
 								new LinkedList<String>()
 								: new LinkedList<String>(Arrays.asList(rs.getString("cites").split("\\|")));
 
@@ -1072,21 +1208,13 @@ public class DBHelper implements DLBPlusDBInterface {
 				String note = rs.getString("note");
 				String crossref = rs.getString("crossref");
 
-<<<<<<< HEAD
 				List<String> isbns = (rs.getString("isbns") == null || rs.getString("isbns").equals("")) ?
-=======
-				List<String> isbns = (rs.getString("isbns") == null) ?
->>>>>>> 81debc38d76282d0dda11037ea313ec49d9598ee
 								new LinkedList<String>()
 								: new LinkedList<String>(Arrays.asList(rs.getString("isbns").split("\\|")));
 
 				String series = rs.getString("series");
 
-<<<<<<< HEAD
 				List<String> venues = (rs.getString("venues") == null || rs.getString("venues").equals("")) ?
-=======
-				List<String> venues = (rs.getString("venues") == null) ?
->>>>>>> 81debc38d76282d0dda11037ea313ec49d9598ee
 								new LinkedList<String>()
 								: new LinkedList<String>(Arrays.asList(rs.getString("venues").split("\\|")));
 
