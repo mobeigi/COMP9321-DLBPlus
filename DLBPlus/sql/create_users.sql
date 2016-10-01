@@ -4,13 +4,14 @@
 /*
 == Template (Make sure to put single quotation marks around each field!)
 /*
- * == User 1
+ * == User
  * Username: username
  * Inputpwd: inputpwd
  */
 INSERT INTO 
-	users (username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
 VALUES (
+	id,										-- ID
 	username,								-- USERNAME
 	salt,									-- SALT
 	password,								-- ENCRYPTED PASSWORD
@@ -36,8 +37,9 @@ VALUES (
  * Inputpwd: joe1
  */
 INSERT INTO 
-	users (username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
 VALUES (
+	1,
 	'joe1',
 	'vUyhETbtN4T9BJMtct0rbfcAptukjAwjN/5lAtmkkTQ=',
 	'195d486056b9a4d980c7db6dcffab06c190cfe01',
@@ -60,8 +62,9 @@ VALUES (
  * Inputpwd: boostedanimal
  */
 INSERT INTO 
-	users (username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
 VALUES (
+	2,
 	'Intellect',
 	'T8BpJ7dq0fQG2AlWgexbJDq2fJCW39R/5lAtmkkTQ=',
 	'20d1d58ad733eb772dfac1ff06adbc36b3a4cb61',
@@ -84,8 +87,9 @@ VALUES (
  * Inputpwd: comp9321
  */
 INSERT INTO 
-	users (username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
+	users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, dp, acctstatus, acctconfrm, acctcreated) 
 VALUES (
+	3,
 	'comp9321',										-- USERNAME
 	'mCWY0a7R+zK7X9bslkvAkCgwKDeoBlYz5D9NAPf6SzU=',	-- SALT
 	'5d85d0e75ef96f62509cad0b3ab1c11ae446ecb2',		-- ENCRYPTED PASSWORD
