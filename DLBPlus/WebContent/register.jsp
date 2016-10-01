@@ -58,7 +58,7 @@
 			     		    	<input placeholder="Password" required="" aria-required="" name="pass" type="password" />
 		     		    	</div>
 			           		<div class="col s6">
-			     		    	<input placeholder="Retype Password" required="" aria-required="" name="passConfirm" type="password" />
+			     		    	<input class="validate" placeholder="Retype Password" required="" aria-required="" name="passConfirm" type="password" />
 		     		    	</div>
 			     		</div>
 			     		<div class="row">
