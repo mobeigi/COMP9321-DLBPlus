@@ -48,7 +48,7 @@
 
 				<c:choose>
 					<c:when test="${fn:length(ListOfUsers) == 0}">
-						<p class="flow-text center">No users!</p> <!-- Unlikely as there will be at least one Admin user to see this -->
+						<p class="flow-text center">No users!</p> <!-- Admin user is different than user -->
 					</c:when>
 					<c:otherwise>
 						<p class="flow-text">There are ${fn:length(ListOfUsers)} users!</p>
@@ -66,15 +66,15 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="listing" items="${ListOfUsers}"
+							<c:forEach var="currUser" items="${ListOfUsers}"
 							           varStatus="loop">
 								<tr>
-									<td><a href="admin?userId=${listing.id}">${listing.id}</a></td>
-									<td><c:out value="${listing.username}" /></td>
+									<td><c:out value="${currUser.id}" /></td>
+									<td><a href="admin?userId=${currUser.id}">${currUser.username}</a></td>
 									<td>
-										<select name="${listing.id}">
+										<select name="${currUser.id}">
 										<c:choose>
-											<c:when test="${listing.acctstatus == true}">
+											<c:when test="${currUser.acctstatus == true}">
 												<option value="true" selected>Active</option>
 												<option value="false">Suspended</option>
 											</c:when>

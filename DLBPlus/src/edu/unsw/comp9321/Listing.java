@@ -136,6 +136,14 @@ public class Listing {
 	public List<String> getAuthors() {
 		return authors;
 	}
+	
+	public String getArrayAuthors() {
+		String authorString = "";
+		for(String author : this.authors){
+			authorString += author + "; ";
+		}
+		return authorString.trim().substring(0,authorString.length()-2);
+	}
 
 	public void setAuthors(List<String> authors) {
 		this.authors = authors;

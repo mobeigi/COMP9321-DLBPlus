@@ -29,8 +29,7 @@
 	<div class="section no-pad-bot" id="index-banner">
     	<div class="container">
     		<br><br>
-    		<h1 class="header center orange-text">Bibliographic Library</h1>
-			<h2 class="header center orange-text">Publication Details</h2>
+			<h2 class="header center orange-text">User Details</h2>
     		
     		<br><br>
         </div>
@@ -38,25 +37,81 @@
  	
  	<div class="container">
 		<div class="col s10 offset-s1">
-   			<div class="card valign grey lighten-2" >
-	        		<table class="centered highlighted striped responsive-table">
+		
+			<%-- Display details of user --%>
+    			<div class="card valign grey lighten-1" >
+		        <table class="left highlighted striped responsive-table">
+		        	<thead>
+						<tr>
+							<th> Key </th>
+							<th> Value </th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>ID</td>
+							<td><c:out value="${myUser.id}" /></td>
+						</tr>
+						<tr>
+							<td>Username</td>
+							<td><c:out value="${myUser.username}" /></td>
+						</tr>
+						<tr>
+							<td>First name</td>
+							<td><c:out value="${myUser.fname}" /></td>
+						</tr>
+						<tr>
+							<td>Last name</td>
+							<td><c:out value="${myUser.lname}" /></td>
+						</tr>
+						<tr>
+							<td>Nickname</td>
+							<td><c:out value="${myUser.nickname}" /></td>
+						</tr>
+						<tr>
+							<td>Email</td>
+							<td><c:out value="${myUser.email}" /></td>
+						</tr>
+						<tr>
+							<td>Address</td>
+							<td><c:out value="${myUser.address}" /></td>
+						</tr>
+						<tr>
+							<td>DOB</td>
+							<td><c:out value="${myUser.dob}" /></td>
+						</tr>
+						<tr>
+							<td>Credit Card</td>
+							<td><c:out value="${myUser.creditcard}" /></td>
+						</tr>
+						<tr>
+							<td>Cart Id</td>
+							<td><c:out value="${myUser.cartid}" /></td>
+						</tr>
+						<tr>
+							<td>Status</td>
+							<td><c:out value="${myUser.acctstatus}" /></td>
+						</tr>
+						<tr>
+							<td>Account Confirmed</td>
+							<td><c:out value="${myUser.acctconfrm}" /></td>
+						</tr>
+						<tr>
+							<td>Account Created</td>
+							<td><c:out value="${myUser.acctcreated}" /></td>
+						</tr>
 
-						
-							<c:forEach var="Field" items="${pubEntry}">
-								<tr>
-									<td class="col offset-s1"><c:out value="${Field}"/></td>
-								</tr>
-							</c:forEach>
-						
-					</table>
+					</tbody>	
+	        	</table>
 			</div>
+			
 	    </div>
 	    <br>
 	    <div class="row">
 	    	<div class="col s10">
-			    <form action="setup" method="POST">
-			   		<input type="hidden" name="action" value="back"/>
-					<button type="submit" value="Back To Search" class="btn waves-effect waves-light">Back</button>
+			    <form action="admin" method="POST">
+			   		<input type="hidden" name="action" value="viewAllUsers"/>
+					<button type="submit" value="Back To Manage Users" class="btn waves-effect waves-light">Back</button>
 					<br>
 			    </form>
 		    </div>

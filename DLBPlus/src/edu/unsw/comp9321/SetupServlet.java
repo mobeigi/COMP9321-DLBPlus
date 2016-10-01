@@ -75,20 +75,31 @@ public class SetupServlet extends HttpServlet {
 			String errorMessage = "";
 			if (this.db.dbConnStatus) {
 				List<Listing> randListings = new ArrayList<Listing>();
-				List<Integer> randListingIDs = new ArrayList<Integer>();
 				
-				// Obtain a unique list of random publications
-				Listing listingToAdd = this.db.GetRandomListing();
-				if (listingToAdd == null) {
+				// Check whether there is no listings
+				int totalNumListings = this.db.GetNumListings();
+				if (totalNumListings == 0) {
 					errorMessage = "No listings can be obtained.";
 				}
-				while (listingToAdd != null && randListings.size() < 10) {
-					
-					while (randListingIDs.contains(listingToAdd.getId())) {
+				
+				// Check whether there is < 10 listings
+				else if (totalNumListings <= 10) {
+					randListings = this.db.GetAllListings();
+				}
+				
+				// Case when there are > 10
+				else {
+					// Obtain a unique list of random publications
+					Listing listingToAdd = this.db.GetRandomListing();
+					List<Integer> randListingIDs = new ArrayList<Integer>();
+					while (randListings.size() < 10) {
+						while (randListingIDs.contains(listingToAdd.getId())) {
+							listingToAdd = this.db.GetRandomListing();
+						}
+						randListings.add(listingToAdd);
+						randListingIDs.add(listingToAdd.getId());
 						listingToAdd = this.db.GetRandomListing();
 					}
-					randListings.add(listingToAdd);
-					randListingIDs.add(listingToAdd.getId());
 				}
 
 				// Set random publication list to session

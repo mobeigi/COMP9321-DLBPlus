@@ -9,7 +9,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Bibliographic Library | Manage Publications</title>
+    <title>Bibliographic Library | Manage Listings</title>
 	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -32,62 +32,63 @@
 	<div class="section no-pad-bot" id="index-banner">
     	<div class="container">
     		<br><br>
-    		<h2 class="center orange-text">List of Publications</h2>
+    		<h2 class="center orange-text">List of Listings</h2>
     		<br><br>
         </div>
  	</div>
 
-	<!-- Display number of publications -->
+	<!-- Display number of Listings -->
 	<div class="container">
 		<div class="row valign-wrapper">
 			<div class="col s10 offset-s1">
 		   			
 				<c:choose>
-					<c:when test="${empty listOfUsers.numUsers}"> <!-- use object here -->
-						<p class="flow-text center">No publications!</p> <!-- Unlikely as there will be at least one Admin user to see this -->
+					<c:when test="${fn:length(ListOfListings) == 0}">
+						<p class="flow-text center">No Listings!</p>
 					</c:when>
-					
 					<c:otherwise>
-						<p class="flow-text">There are ${fn:length(listOfUsers.numUsers)} users!</p> <!-- use object here -->
+						<p class="flow-text">There are ${fn:length(ListOfListings)} listings!</p>
 					</c:otherwise>
 				</c:choose>
 
-				<%-- Display list of publications, 10 results per page --%>
+				<%-- Display list of listings --%> <%-- display all listings for now --%>
      			<div class="card valign grey lighten-1" >
 			        <table class="left highlighted striped responsive-table">
 			        	<thead>
 							<tr>
 								<th>Item ID</th>
 								<th>Seller ID</th>
+								<th>Quantity</th>
 								<th>List Date</th>
 								<th>End Date</th>
-								<th>Recommended Price</th>
-								<th>Listed Price</th>
+								<th>Sell Price</th>
+								<th>Image</th>
+								<th>Status</th>
+								<th>Number of Views</th>
 								<th>Options</th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach begin="${0}" 
-									   end="${1}" 
-									   varStatus="loop">
-									   <!-- begin = "${(searchFound.currPage - 1)* searchFound.numItemsPerPage}" -->
-									   <!-- end = "${(searchFound.currPage - 1)* searchFound.numItemsPerPage + searchFound.numItemsPerPage - 1}" -->
-								<c:if test="${loop.index < fn:length(searchFound.results)}">
-									<tr>
-										<td><a href="setup?id=${searchFound.results[loop.index].id}">${searchFound.results[loop.index].title}</a></td>
-										<td><p><i>${searchFound.results[loop.index].author}</i></p></td>
-										<td>${searchFound.results[loop.index].pubType}</td>
-										<td>${searchFound.results[loop.index].pubType}</td>
-										<td>${searchFound.results[loop.index].pubType}</td>
-										<td>${searchFound.results[loop.index].pubType}</td>
-										<td>
-										    <FORM Action='adminUsers.jsp'> <!-- Link to servlet to perform operation -->
-											<INPUT type='submit' value='Remove listing'>
-											<input type="hidden" name="addToCart" value="no"> <!-- Use page operations -->
-											</FORM>
-										</td>
-									</tr>
-								</c:if>
+
+							<c:forEach var="listing" items="${ListOfListings}"
+							           varStatus="loop">
+								<tr>
+									<td><c:out value="${listing.id}" /></td>
+									<td><c:out value="${listing.sellerid}" /></td>
+									<td><c:out value="${listing.quantity}" /></td>
+									<td><c:out value="${listing.listdate}" /></td>
+									<td><c:out value="${listing.enddate}" /></td>
+									<td><c:out value="${listing.sellprice}" /></td>
+									<td><c:out value="${listing.image}" /></td>
+									<td><c:out value="${listing.paused}" /></td>
+									<td><c:out value="${listing.numviews}" /></td>
+									<td>
+									    <FORM Action='adminUsers.jsp'> <!-- Link to servlet to perform operation -->
+										<INPUT type='submit' value='Remove listing'>
+										<input type="hidden" name="addToCart" value="no"> <!-- Use page operations -->
+										</FORM>
+									</td>
+								</tr>
 							</c:forEach>
 						</tbody>	
 		        	</table>
