@@ -43,7 +43,7 @@
 			     		</div>
 			     		<div class="row">
 			     			<div class="col s6">
-			     		    	<input placeholder="Authors (please separate authors with '|')" required="" aria-required="" name="authors" type="text" />
+			     		    	<input class="validate" pattern="[^,]*(,[^,]+)*" placeholder="Authors (please separate authors with ',')" required="" aria-required="" name="authors" type="text" />
 		     		    	</div>
 			     		    <div class="input-field col s6">
 			    				<select name="pubType" required="" aria-required="">
@@ -136,20 +136,42 @@
 			     		    </div>
 			     		</div>
 			     		<div class="row">
-			     			<div class="col s4 offset-s4">
+			     			<div class="col s12">
+				     			<div class="file-field input-field">
+							      <div class="btn">
+							        <span>Add Photo</span>
+							        <input type="file">
+							      </div>
+							      <div class="file-path-wrapper">
+							        <input class="file-path validate" placholder="Select a file.." type="text" name="image">
+							      </div>
+							    </div>
+						    </div>
+						</div>
+			     		<div class="row">
+			     			<div class="col s12">
 			     				<table style="cell-spacing: 0px">
 				     				<tbody>
 				     					<tr>
 					     					<th><p class="flow-text">Price: </p></th>
 					     					<th><i style="font-weight:normal">$</i></th>
 					     		    		<th style="padding-top: 40px">
-					     		    		<input style="height:1.5rem;font-weight: normal" pattern="(0\.((0[1-9]{1})|([1-9]{1}([0-9]{1})?)))|(([1-9]+[0-9]*)(\.([0-9]{1,2}))?)" name="price" aria-required="" required="" placeholder="" class="validate" type="text">
+					     		    		<input style="height:1.5rem;font-weight: normal" pattern="(0\.((0[1-9]{1})|([1-9]{1}([0-9]{1})?)))|(([1-9]+[0-9]*)(\.([0-9]{1,2}))?)" name="price" aria-required="" required="" placeholder="" class="validate center" type="text">
+					     		    		</th>
+					     		    		<th><p class="flow-text">Quantity: </p></th>
+					     		    		<th style="padding-top: 40px">
+					     		    		<input style="height:1.5rem;font-weight: normal" name="quantity" aria-required="" required="" placeholder="0" class="validate center" type="text"/>
+					     		    		</th>
+					     		    		<th><p class="flow-text">Duration: </p></th>
+					     		    		<th style="padding-top: 40px">
+					     		    		<input style="height:1.5rem;font-weight: normal" name="duration" aria-required="" required="" class="validate center" type="text" pattern="^[0-9]*$"/>
 					     		    		</th>
 				     		    		</tr>
 				     		    	</tbody>
 			     		    	</table>
 			     		    </div>
 			     		</div>
+			     		
 			           	<div class="row">
 				           	   				
 							<div class="col s12 center">
