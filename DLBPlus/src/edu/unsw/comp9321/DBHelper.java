@@ -1160,7 +1160,7 @@ public class DBHelper implements DLBPlusDBInterface {
     Listing l = new Listing();
     
     try {
-      if (rs.next()) {
+      if (rs != null && rs.next()) {
         Integer id = rs.getInt("id");
         Integer sellerid = rs.getInt("sellerid");
         Integer quantity = rs.getInt("quantity");
@@ -1174,11 +1174,11 @@ public class DBHelper implements DLBPlusDBInterface {
 
 				String type = rs.getString("type");
 
-				List<String> authors = (rs.getString("authors").equals("")) ?
+				List<String> authors = (rs.getString("authors") == null || rs.getString("authors").equals("")) ?
 								new LinkedList<String>()
 								: new LinkedList<String>(Arrays.asList(rs.getString("authors").split("\\|")));
 
-				List<String> editors = (rs.getString("editors").equals("")) ?
+				List<String> editors = (rs.getString("editors") == null || rs.getString("editors").equals("")) ?
 								new LinkedList<String>()
 								: new LinkedList<String>(Arrays.asList(rs.getString("editors").split("\\|")));
 
@@ -1190,17 +1190,17 @@ public class DBHelper implements DLBPlusDBInterface {
 				String number = rs.getString("number");
 				String month = rs.getString("month");
 
-				List<String> urls = (rs.getString("urls").equals("")) ?
+				List<String> urls = (rs.getString("urls") == null || rs.getString("urls").equals("")) ?
 								new LinkedList<String>()
 								: new LinkedList<String>(Arrays.asList(rs.getString("urls").split("\\|")));
 
-				List<String> ees = (rs.getString("ees").equals("")) ?
+				List<String> ees = (rs.getString("ees") == null || rs.getString("ees").equals("")) ?
 								new LinkedList<String>()
 								: new LinkedList<String>(Arrays.asList(rs.getString("ees").split("\\|")));
 
 				String cdrom = rs.getString("cdrom");
 
-				List<String> cites = (rs.getString("cites").equals("")) ?
+				List<String> cites = (rs.getString("cites") == null || rs.getString("cites").equals("")) ?
 								new LinkedList<String>()
 								: new LinkedList<String>(Arrays.asList(rs.getString("cites").split("\\|")));
 
@@ -1208,21 +1208,21 @@ public class DBHelper implements DLBPlusDBInterface {
 				String note = rs.getString("note");
 				String crossref = rs.getString("crossref");
 
-				List<String> isbns = (rs.getString("isbns").equals("")) ?
+				List<String> isbns = (rs.getString("isbns") == null || rs.getString("isbns").equals("")) ?
 								new LinkedList<String>()
 								: new LinkedList<String>(Arrays.asList(rs.getString("isbns").split("\\|")));
 
 				String series = rs.getString("series");
 
-				List<String> venues = (rs.getString("venues").equals("")) ?
+				List<String> venues = (rs.getString("venues") == null || rs.getString("venues").equals("")) ?
 								new LinkedList<String>()
 								: new LinkedList<String>(Arrays.asList(rs.getString("venues").split("\\|")));
 
 				String chapter = rs.getString("chapter");
 				String rating = rs.getString("rating");
         
-        //Set fields
-        l.setId(id);
+		        //Set fields
+		        l.setId(id);
 				l.setSellerid(sellerid);
 				l.setQuantity(quantity);
 				l.setListdate(listdate);

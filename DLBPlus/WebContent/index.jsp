@@ -119,7 +119,7 @@
 									<c:forEach var="pub" items="${randomListings}">
 										<tr>
 											<td><c:out value="${pub.title}" /></td>
-											<td><c:out value="${pub.formattedAuthors}" /></td>
+											<td><c:out value="${pub.arrayAuthors}" /></td>
 											<td><c:out value="${pub.type}" /></td>
 										</tr>
 									</c:forEach>
