@@ -94,7 +94,17 @@ public class AdminServlet extends HttpServlet {
 			System.out.println("Admin wants to log out...");
 			request.getSession().removeAttribute("currAdmin");
 			nextPage = "adminLogin.jsp";
-		} 
+		}
+		
+		//Check redirect to user details page or listing details page
+		String userId = request.getParameter("userId");
+		if(userId != null) {
+			User currUser
+			
+			
+			request.getSession().setAttribute("currAdmin", newAdmin);
+			nextPage = "adminUserDetails.jsp";
+		}
 		
 		RequestDispatcher rd = request.getRequestDispatcher(nextPage);
 		rd.forward(request, response);

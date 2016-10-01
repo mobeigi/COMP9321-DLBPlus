@@ -5,6 +5,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+<%@ page import="java.util.List" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -41,14 +43,15 @@
 	<div class="container">
 		<div class="row valign-wrapper">
 			<div class="col s10 offset-s1">
-		   			
+		   		
+
+		   		
 				<c:choose>
-					<c:when test="${empty listOfUsers.numUsers}"> <!-- use object here -->
+					<c:when test="${fn:length(ListOfUsers) == 0}">
 						<p class="flow-text center">No users!</p> <!-- Unlikely as there will be at least one Admin user to see this -->
 					</c:when>
-					
 					<c:otherwise>
-						<p class="flow-text">There are ${fn:length(listOfUsers.numUsers)} users!</p> <!-- use object here -->
+						<p class="flow-text">There are ${fn:length(ListOfUsers)} users!</p>
 					</c:otherwise>
 				</c:choose>
 
@@ -59,27 +62,21 @@
 							<tr>
 								<th> ID </th>
 								<th> Username </th>
-								<th> Is Admin</th>
 								<th> Status </th>
 								<th> Options </th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="pub" items="${found}"
-							           varStatus="loop"> <!-- Use data structure here -->
+							<c:forEach var="listing" items="${ListOfUsers}"
+							           varStatus="loop">
 								<tr>
-									<td><a href="setup?id=${searchFound.results[loop.index].id}">${searchFound.results[loop.index].title}</a></td> <!-- Use data structure here -->
-									<td><c:out value="${pub.author}" /></td>
-									<td><c:out value="${pub.pubType}" /></td>
-									<td><c:out value="${pub.pubType2}" /></td>
+									<td><a href="admin?userId=${listing.id}">${listing.id}</a></td>
+									<td><c:out value="${listing.username}" /></td>
+									<td><c:out value="${listing.acctstatus}" /></td>
 									<td>
-									    <FORM Action='adminUsers.jsp'> <!-- Link to servlet to perform operation -->
-										<INPUT type='submit' value='Suspend user'>
-										<input type="hidden" name="addToCart" value="no"> <!-- Use page operations -->
-										</FORM>
-									    <FORM Action='adminIndex.jsp'> <!-- Link to servlet to perform operation -->
+									    <FORM Action='admin'> <!-- Link to servlet to perform operation -->
 										<INPUT type='submit' value='Remove user'>
-										<input type="hidden" name="addToCart" value="no"> <!-- Use page operations -->
+										<input type="hidden" name="action" value="removeUser">
 										</FORM>
 									</td>
 								</tr>
