@@ -271,6 +271,34 @@ public class SetupServlet extends HttpServlet {
 			link = "register.jsp";
 		} else if(req.equals("modified")){
 			link = "modifyDetails.jsp";
+		} else if(req.equals("detailsAdded")){
+			String firstName = request.getParameter("fname");
+			String lastName = request.getParameter("lname");
+			String nickName = request.getParameter("nickname");
+			String email = request.getParameter("email");
+			String password = request.getParameter("pass");
+			String address = request.getParameter("address");
+			String creditCard = request.getParameter("ccn");
+			String stringDob = request.getParameter("dob");
+			String passConfirm = request.getParameter("passConfirm");
+			String dp = "";
+			
+			if (!passConfirm.equals(password)){
+				String errorMessage;
+				errorMessage = "Passwords do not match!";
+				link = "modifyDetails.jsp";
+				request.getSession().setAttribute("eMessage",errorMessage);
+			}
+			else {
+				User toChange = (User) request.getSession().getAttribute("user");
+				
+					User newUser = new User();
+					newUser = db.CreateUser(toChange.getUsername(), password, firstName, lastName, nickName, email, address, toChange.getDob(), creditCard, dp);
+					db.ChangeUserDetails(newUser);
+					link = "userAccount.jsp";
+			}
+			
+			link = "setup.jsp";
 		} else if(req.equals("loginPage")){
 			String errorMessage = "";
 			request.getSession().setAttribute("eMessage",errorMessage);
