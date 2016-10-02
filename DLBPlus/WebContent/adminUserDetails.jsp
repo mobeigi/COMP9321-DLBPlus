@@ -106,8 +106,9 @@
 			</div>
 	    </div>
 	</div>
-	
+
  	<div class="container">
+ 	<h2 class="header center orange-text">User's order history</h2>
 		<div class="col s10 offset-s1">
 			<%-- Display the user's order history --%>
     		<div class="card valign grey lighten-1" >
@@ -116,6 +117,7 @@
 						<tr>
 							<th>Order ID</th>
 							<th>Seller ID</th>
+							<th>Seller Name</th>
 							<th>Publication Title</th>
 							<th>Order Date</th>
 							<th>Price</th>
@@ -127,6 +129,7 @@
 							<tr>
 								<td><c:out value="${currOrder.id}" /></td>
 								<td><c:out value="${currOrder.sellerid}" /></td>
+								<td><c:out value="${SellerNames[loop.index]}" /></td>
 								<td><c:out value="${currOrder.pubTitle}" /></td>
 								<td><c:out value="${currOrder.order_date}" /></td>
 								<td><c:out value="${currOrder.price}" /></td>
@@ -140,6 +143,8 @@
 	<br>
 	    
  	<div class="container">
+ 	<h4 class="header center orange-text"> </h4>
+ 	<h2 class="header center orange-text">User's removed cart items</h2>
 		<div class="col s10 offset-s1">
 			<%-- Display the user's removed cart items --%>
     		<div class="card valign grey lighten-1" >
