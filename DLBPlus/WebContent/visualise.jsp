@@ -33,6 +33,7 @@
 <body>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script type="text/javascript" src="js/materialize.min.js"></script>
+	
 	<jsp:include page="navbar.jsp"/>
 	
 	<div class="section no-pad-bot" id="index-banner">
@@ -59,7 +60,39 @@
 	 </div>
 	 
 	 <!-- Execute visualise listings -->
-	 <script type="text/javascript" src="js/visualiseListings.js"></script>
+	<script type="text/javascript">
+
+	  // create an array with nodes
+	  var nodes = [
+	    <%
+	    	String arrayVisNodes = "";
+	    	for (int i = 0; i < 5; i++) {
+	    		arrayVisNodes += "{id: " + i + ", label: 'Node " + i +"'},";
+	    	}
+	    	arrayVisNodes = arrayVisNodes.substring(0,arrayVisNodes.length()-1);
+	    	System.out.println(arrayVisNodes);
+	    	out.print(arrayVisNodes);
+	    %>
+	  ];
+
+	  // create an array with edges
+	  var edges = [
+	    {from: 1, to: 2, label: 'middle',     font: {align: 'middle'}},
+	    {from: 1, to: 3, label: 'top',        font: {align: 'top'}},
+	    {from: 2, to: 4, label: 'horizontal', font: {align: 'horizontal'}},
+	    {from: 2, to: 5, label: 'bottom',     font: {align: 'bottom'}}
+	  ];
+
+	  // create a network
+	  var container = document.getElementById("visualisation");
+	  var data = {
+	    nodes: nodes,
+	    edges: edges
+	  };
+	  var options = {};
+	  var network = new vis.Network(container, data, options);
+
+	</script>
 	
 	<jsp:include page="footer.jsp" />
 </body>
