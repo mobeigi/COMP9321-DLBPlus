@@ -37,43 +37,6 @@
 
 
 
-<!-- Basic Search Form -->
-<div class="row">
-  <div class="col s8 offset-s2">
-    <div class="card white">
-      <div class="card-content black-text">
-        <div class="card-title">
-          <form action="setup" method="get">
-            <div class="row">
-              <div class="input-field col s6">
-                <input placeholder="Title" name="title" type="text" class="validate" />
-              </div>
-              <div class="input-field col s3">
-                <select name="type">
-                  <option value="" selected>Any</option>
-                  <option value="article">Article</option>
-                  <option value="inproceedings">Inproceedings</option>
-                  <option value="proceedings">Proceedings</option>
-                  <option value="book">Book</option>
-                  <option value="incollection">Incollection</option>
-                  <option value="phdthesis">PHD Thesis</option>
-                  <option value="mastersthesis" >Masters Thesis</option>
-                  <option value="www">Website</option>
-                </select>
-              </div>
-              <div class="input-field col s3" style="vertical-align: middle">
-                <button class="btn waves-effect waves-light" type="submit" value="Search">Search
-                  <i class="material-icons right">send</i>
-                </button>
-                <input type="hidden" name="action" value="search"/>
-              </div>
-            </div>
-          </form>
-        </div>
- 	</div>
- 		
- 		
- 				
  	<!-- Basic Search Form -->
  	<div class="row">
  		<div class="col s8 offset-s2">
@@ -120,19 +83,7 @@
 			</div>
 		</div>
  	</div>
-	
-	<!-- Random Listings -->
-	<div class="section no-pad-bot" id="index-banner">
-    	<div class="container">
-    		<br><br>
-    		<h2 class="center orange-text">Featured Listings</h2>
-    		<br><br>
-        </div>
 
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Random Listings -->
 <div class="section no-pad-bot" id="index-banner">
