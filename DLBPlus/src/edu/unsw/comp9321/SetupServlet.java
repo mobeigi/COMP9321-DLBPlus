@@ -330,7 +330,11 @@ public class SetupServlet extends HttpServlet {
       
 			link = "result.jsp";
 			
-		} else if(req.equals("viewCart")){	
+		} else if(req.equals("viewCart")){
+			User currUser = (User) request.getSession().getAttribute("user");
+			List<CartItem> cartList = db.GetActiveCartItems(currUser.getId());
+			
+			request.getSession().setAttribute("cartList", cartList);
 			link = "cart.jsp";
 		} else if(req.equals("remove")) {
 			link = remove(request);
@@ -498,10 +502,14 @@ public class SetupServlet extends HttpServlet {
 			link = "userAccount.jsp";
 		} else if(req.equals("viewHist")){
 			//View past orders
+			String errorMessage = "";
 			User buyer = (User) request.getSession().getAttribute("user");
 			int buyerID = buyer.getId();
 			List<Order> orderList = db.GetOrderHistory(buyerID);
-			
+			if(orderList.isEmpty()){
+				errorMessage = "You have not purchased anything yet!";
+			}
+			request.getSession().setAttribute("eMessage", errorMessage);
 			request.getSession().setAttribute("userOrderList",orderList);
 			link = "userSoldListings.jsp";
 		} else if(req.equals("viewListings")){
