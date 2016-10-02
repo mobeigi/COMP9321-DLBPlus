@@ -84,7 +84,7 @@
 							<div class="col s12 center">
 								<br>
 					            <input type="hidden" name="action" value="detailsAdded"/>
-					            <button class="btn waves-effect waves-light" type="submit" value="register">Register
+					            <button class="btn waves-effect waves-light" type="submit" value="register">Modify Details
 			  						<i class="material-icons right">send</i>
 			  					</button>
 			  					<br><br>
