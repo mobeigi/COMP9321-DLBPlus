@@ -272,7 +272,6 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("modified")){
 			link = "modifyDetails.jsp";
 		} else if(req.equals("loginPage")){
-			System.out.println("Going to login page");
 			String errorMessage = "";
 			request.getSession().setAttribute("eMessage",errorMessage);
 			link = "login.jsp";
@@ -293,34 +292,35 @@ public class SetupServlet extends HttpServlet {
 			request.getSession().setAttribute("userListings", userListings);
 			link = "userSellListings.jsp";
 		} else if(req.equals("updateListingStatus")){	
-			boolean updated = false;
-			User currUser = (User) request.getSession().getAttribute("user");
 			
-//			String[] listingsToUpdate = request.getParameterValues("pauseListing");
-//			if (listingsToUpdate != null) {
-//				for(String id : listingsToUpdate){
-//					updated = db.SetPausedStatus(db.GetListing(Integer.parseInt(id)), paused);
-//				}
-//			}
-			
+			User currUser = (User) request.getSession().getAttribute("user");			
 			List<Listing> allListings = db.GetUserListings(currUser.getId());
+			
+			// For each listing, check whether the isPaused checkbox is checked
 			for(Listing listing : allListings){
 				int listingId = listing.getId();
-				String currListingStatus = request.getParameter(Integer.toString(listingId));
-				System.out.println(currListingStatus);
+				String[] currListingStatus = request.getParameterValues(Integer.toString(listingId));
 				
-//				Boolean newStatus;
-//				if (currListingStatus.equals("true")) {
-//					newStatus = true;
-//				} else {
-//					newStatus = false;
-//				}
+				// Case when checkbox is NOT checked
+				if (currListingStatus == null) {
+					// NOTE: We don't need to iterate over the string array 'currListingStatus', as
+					// 		 we're sure that for every listing, there will be exactly ONE value in the array,
+					//       and that value is the string 'checked'
+					
+					// Check whether the listing IS paused - change it otherwise
+					if (listing.getPaused()) {
+						this.db.SetPausedStatus(listing, false);
+					}
+				} 
 				
-//				updated = this.db.SetPausedStatus(this.db.GetListing(listingId), newStatus);
+				// Case when checkbox is checked
+				else {
+					// Check whether the listing is NOT paused - change it otherwise
+					if (listing.getPaused() == false) {
+						this.db.SetPausedStatus(listing, true);
+					}
+				}
 
-			}
-			if(updated){
-				System.out.println("yey updated");
 			}
 			
 			String errorMessage = "";

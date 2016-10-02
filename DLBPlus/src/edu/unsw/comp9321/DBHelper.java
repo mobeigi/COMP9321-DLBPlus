@@ -772,7 +772,7 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT * FROM listings;");
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings ORDER BY id ASC;");			// default: return in order of id
       
       Listing l = processResultSetIntoListing(rs);
       
@@ -786,6 +786,7 @@ public class DBHelper implements DLBPlusDBInterface {
     }
     
     return allListings;
+
 	}
 	
 	/**
@@ -805,7 +806,8 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT * FROM users;");
+      String query = "SELECT * FROM users ORDER BY id ASC;";
+      ResultSet rs = stmt.executeQuery(query);
   
       User u = processResultSetIntoUser(rs);
       
@@ -1283,7 +1285,8 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT * FROM listings WHERE sellerid =" + sellerID + ";");
+      String query = "SELECT * FROM listings WHERE sellerid =" + sellerID + " ORDER BY id ASC;";	// default: sort by id
+      ResultSet rs = stmt.executeQuery(query);
     
       Listing l = processResultSetIntoListing(rs);
     

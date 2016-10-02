@@ -85,7 +85,6 @@ public class AdminServlet extends HttpServlet {
 
 		} else if (action.equals("viewAllUsers")) {
 			List<User> ListOfUsers = this.db.GetAllUsers();
-			Collections.sort(ListOfUsers);
 			request.setAttribute("ListOfUsers", ListOfUsers);
 			nextPage = "adminUsers.jsp";
 		} else if (action.equals("viewAllListings")) {
@@ -136,7 +135,6 @@ public class AdminServlet extends HttpServlet {
 			
 			// Reload the users page
 			listOfUsers = this.db.GetAllUsers();
-			Collections.sort(listOfUsers);
 			request.setAttribute("ListOfUsers", listOfUsers);
 			nextPage = "adminUsers.jsp";
 		} else if(action != null && action.equals("removeListing")) { //remove a listing
