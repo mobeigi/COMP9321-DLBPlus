@@ -1835,7 +1835,6 @@ public class DBHelper implements DLBPlusDBInterface {
 		} else {
 			nodeTitleID = this.CreateVisNode("title", pubtitle);
 		}
-		System.out.println("Node title ID: ");
 		
 		// Get the ids of the nodes corresponding to the authors
 		List<Integer> nodeAuthorIDs = new ArrayList<Integer>();
