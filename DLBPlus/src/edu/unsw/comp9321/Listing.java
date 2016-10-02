@@ -1,6 +1,8 @@
 package edu.unsw.comp9321;
 
 import java.sql.Timestamp;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +82,7 @@ public class Listing{
 	public Timestamp getListdate() {
 		return listdate;
 	}
-
+	
 	public void setListdate(Timestamp listdate) {
 		this.listdate = listdate;
 	}
@@ -88,7 +90,7 @@ public class Listing{
 	public Timestamp getEnddate() {
 		return enddate;
 	}
-
+	
 	public void setEnddate(Timestamp enddate) {
 		this.enddate = enddate;
 	}
@@ -128,21 +130,13 @@ public class Listing{
 	public Type getType() {
 		return type;
 	}
-
+	
 	public void setType(String type) {
 		this.type = stringToType(type);
 	}
 
 	public List<String> getAuthors() {
 		return authors;
-	}
-	
-	public String getArrayAuthors() {
-		String authorString = "";
-		for(String author : this.authors){
-			authorString += author + "; ";
-		}
-		return authorString.trim().substring(0,authorString.length()-2);
 	}
 
 	public void setAuthors(List<String> authors) {
@@ -345,4 +339,70 @@ public class Listing{
 		return type;
 	}
 
+	//Helper getters for JLST
+  public String getArrayAuthors() {
+    String authorString = "";
+    for(String author : this.authors){
+      authorString += author + "; ";
+    }
+    return authorString.trim().substring(0,authorString.length()-2);
+  }
+  
+  public String getTypeString() {
+    String typeStr = "";
+    Listing.Type type = this.getType();
+    
+    //Match type
+    if (type == Type.ARTICLE)
+      typeStr = "Article";
+    else if (type == Type.PROCEEDINGS)
+      typeStr = "Proceedings";
+    else if (type == Type.INPROCEEDINGS)
+      typeStr = "Inproceedings";
+    else if (type == Type.BOOK)
+      typeStr = "Book";
+    else if (type == Type.INCOLLECTION)
+      typeStr = "Incollection";
+    else if (type == Type.PHDTHESIS)
+      typeStr = "PHD Thesis";
+    else if (type == Type.MASTERSTHESIS)
+      typeStr = "Masters Thesis";
+    else if (type == Type.WWW)
+      typeStr = "Website";
+    else
+      typeStr = "N/A";
+    
+    return typeStr;
+  }
+  
+  public String getSellerUsername() {
+    DBHelper db = new DBHelper();
+    db.init();
+    User u = db.GetUser(this.getSellerid());
+    String username = null;
+    
+    if (u != null) {
+      username = u.getUsername();
+    }
+    
+    db.close();
+    
+    return username;
+  }
+  
+  public String getListDateString() {
+    return new SimpleDateFormat("dd/MM/yyyy").format(this.getListdate());
+  }
+  
+  public String getEndDateString() {
+    return new SimpleDateFormat("dd/MM/yyyy").format(this.getEnddate());
+  }
+  
+  public String getSellpriceString() {
+    NumberFormat formatter = NumberFormat.getCurrencyInstance();
+    String moneyString = formatter.format(this.sellprice);
+    return moneyString;
+  }
+  
+  
 }

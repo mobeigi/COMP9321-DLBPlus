@@ -46,6 +46,23 @@ public class DBHelper implements DLBPlusDBInterface {
 
 		return dbConnStatus;
 	}
+  
+   /**
+   * Close connection to DB
+   */
+  public boolean close() {
+    if (!dbConnStatus) //if not connected
+      return true;
+    
+    try {
+      dbConn.close();
+      dbConnStatus = false;
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+    
+    return dbConnStatus;
+  }
 
 	/**
 	 * Create a user by inserting provided user details into database

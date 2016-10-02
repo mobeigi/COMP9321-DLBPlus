@@ -113,30 +113,221 @@ public class SetupServlet extends HttpServlet {
 		link = "index.jsp";
 		} else if(req.equals("viewSearchPage")){
 			link = "search.jsp";
-		} else if(req.equals("search")){
-			String query = request.getParameter("searchQuery");
-			String type = request.getParameter("pubType");
-			LinkedList<Listing> result = search(query, type, request);
-			SearchPageBean SPBean = new SearchPageBean(result);
-			request.getSession().setAttribute("searchFound",SPBean);
-			
-			link = "result.jsp";
-		} else if(req.equals("aSearch")){
-			String title = request.getParameter("searchTitle");
-			String author = request.getParameter("searchAuthor");
-			String editor = request.getParameter("searchEditor");
-			String volume = request.getParameter("searchVolume");
-			String chapter = request.getParameter("searchChapter");
-			String pages = request.getParameter("searchPage");
-			String publisher = request.getParameter("searchPubber");
-			String isbn = request.getParameter("searchISBN");
-			String year = request.getParameter("searchYear");
-			String venues = request.getParameter("searchVenues");
-			String seller = request.getParameter("searchSeller");	
-			String type = request.getParameter("searchPubType");
-			LinkedList<Listing> result = aSearch(title, author, editor, volume, chapter, pages, publisher, isbn, year, venues, seller, type);
-			SearchPageBean searchPageBean = new SearchPageBean(result);
-			request.getSession().setAttribute("searchFound", searchPageBean);
+		} } else if (req.equals("search")){
+      String qTitle = (request.getParameter("title") == null || request.getParameter("title").isEmpty()) ? null : new String( request.getParameter("title").getBytes(), "UTF-8").trim();
+      String qSellerUsername = (request.getParameter("sellerusername") == null || request.getParameter("sellerusername").isEmpty()) ? null : new String( request.getParameter("sellerusername").getBytes(), "UTF-8").trim();
+      String qQuantity = (request.getParameter("quantity") == null || request.getParameter("quantity").isEmpty()) ? null : new String( request.getParameter("quantity").getBytes(), "UTF-8").trim();
+      String qStartdate = (request.getParameter("startdate") == null || request.getParameter("startdate").isEmpty()) ? null : new String( request.getParameter("startdate").getBytes(), "UTF-8").trim();
+      String qEnddate = (request.getParameter("enddate") == null || request.getParameter("enddate").isEmpty()) ? null : new String( request.getParameter("enddate").getBytes(), "UTF-8").trim();
+      String qMinprice = (request.getParameter("minprice") == null || request.getParameter("minprice").isEmpty()) ? null : new String( request.getParameter("minprice").getBytes(), "UTF-8").trim();
+      String qMaxprice = (request.getParameter("maxprice") == null || request.getParameter("maxprice").isEmpty()) ? null : new String( request.getParameter("maxprice").getBytes(), "UTF-8").trim();
+      String qAuthors = (request.getParameter("author") == null || request.getParameter("author").isEmpty()) ? null : new String( request.getParameter("author").getBytes(), "UTF-8").trim();
+      String qEditors = (request.getParameter("editor") == null || request.getParameter("editor").isEmpty()) ? null : new String( request.getParameter("editor").getBytes(), "UTF-8").trim();
+      String qVolume = (request.getParameter("volume") == null || request.getParameter("volume").isEmpty()) ? null : new String( request.getParameter("volume").getBytes(), "UTF-8").trim();
+      String qChapter = (request.getParameter("chapter") == null || request.getParameter("chapter").isEmpty()) ? null : new String( request.getParameter("chapter").getBytes(), "UTF-8").trim();
+      String qNumber = (request.getParameter("number") == null || request.getParameter("number").isEmpty()) ? null : new String( request.getParameter("number").getBytes(), "UTF-8").trim();
+      String qCdrom = (request.getParameter("cdrom") == null || request.getParameter("cdrom").isEmpty()) ? null : new String( request.getParameter("cdrom").getBytes(), "UTF-8").trim();
+      String qPages = (request.getParameter("pages") == null || request.getParameter("pages").isEmpty()) ? null : new String( request.getParameter("pages").getBytes(), "UTF-8").trim();
+      String qPublisher = (request.getParameter("publisher") == null || request.getParameter("publisher").isEmpty()) ? null : new String( request.getParameter("publisher").getBytes(), "UTF-8").trim();
+      String qMonth = (request.getParameter("month") == null || request.getParameter("month").isEmpty()) ? null : new String( request.getParameter("month").getBytes(), "UTF-8").trim();
+      String qYear = (request.getParameter("year") == null || request.getParameter("year").isEmpty()) ? null : new String( request.getParameter("year").getBytes(), "UTF-8").trim();
+      String qAddress = (request.getParameter("address") == null || request.getParameter("address").isEmpty()) ? null : new String( request.getParameter("address").getBytes(), "UTF-8").trim();
+      String qVenues = (request.getParameter("venues") == null || request.getParameter("venues").isEmpty()) ? null : new String( request.getParameter("venues").getBytes(), "UTF-8").trim();
+      String qUrls = (request.getParameter("urls") == null || request.getParameter("urls").isEmpty()) ? null : new String( request.getParameter("urls").getBytes(), "UTF-8").trim();
+      String qEes = (request.getParameter("ees") == null || request.getParameter("ees").isEmpty()) ? null : new String( request.getParameter("ees").getBytes(), "UTF-8").trim();
+      String qCites = (request.getParameter("cites") == null || request.getParameter("cites").isEmpty()) ? null : new String( request.getParameter("cites").getBytes(), "UTF-8").trim();
+      String qCrossref = (request.getParameter("crossref") == null || request.getParameter("crossref").isEmpty()) ? null : new String( request.getParameter("crossref").getBytes(), "UTF-8").trim();
+      String qIsbns = (request.getParameter("isbns") == null || request.getParameter("isbns").isEmpty()) ? null : new String( request.getParameter("isbns").getBytes(), "UTF-8").trim();
+      String qNote = (request.getParameter("note") == null || request.getParameter("note").isEmpty()) ? null : new String( request.getParameter("note").getBytes(), "UTF-8").trim();
+      String qSeries = (request.getParameter("series") == null || request.getParameter("series").isEmpty()) ? null : new String( request.getParameter("series").getBytes(), "UTF-8").trim();
+      String qRatings = (request.getParameter("ratings") == null || request.getParameter("ratings").isEmpty()) ? null : new String( request.getParameter("ratings").getBytes(), "UTF-8").trim();
+      String qType = (request.getParameter("type") == null || request.getParameter("type").isEmpty()) ? null : new String( request.getParameter("type").getBytes(), "UTF-8").trim();
+      
+      //Handle separated multiple items
+      //We also trim any whitespace around entries
+      String[] qAuthorList = new String[0];
+      String[] qEditorList = new String[0];
+      String[] qUrlList = new String[0];
+      String[] qEeList = new String[0];
+      String[] qCiteList = new String[0];
+      String[] qIsbnList = new String[0];
+      String[] qVenueList = new String[0];
+      
+      if (qAuthors != null) qAuthorList = qAuthors.trim().split("\\\r\n");
+      if (qEditors != null) qEditorList = qEditors.trim().split("\\\r\n");
+      if (qUrls != null) qUrlList = qUrls.trim().split("\\\r\n");
+      if (qEes != null) qEeList = qEes.trim().split("\\\r\n");
+      if (qCites != null) qCiteList = qCites.trim().split("\\\r\n");
+      if (qIsbns != null) qIsbnList = qIsbns.trim().split("\\\r\n");
+      if (qVenues != null) qVenueList = qVenues.trim().split("\\\r\n");
+      
+      //Options
+      String strMatchCase = (request.getParameterValues("matchcase") == null) ? null : request.getParameterValues("matchcase")[0];
+      String strExactMatch = (request.getParameterValues("exactmatch") == null) ? null : request.getParameterValues("exactmatch")[0];
+      boolean matchCase, exactMatch;
+      matchCase = exactMatch = false;
+      if (strMatchCase != null && strMatchCase.equals("on")) matchCase = true;
+      if (strExactMatch != null && strExactMatch.equals("on")) exactMatch = true;
+      
+      //Creating listing item for searching
+      Listing query = new Listing();
+      
+      if (qSellerUsername != null) {
+        User u = db.GetUser(qSellerUsername);
+  
+        if (u == null) {
+          query.setSellerid(-1); //as username was provided but no user found, search for dummy id
+        } else {
+          query.setSellerid(u.getId());
+        }
+      } else {
+        query.setSellerid(null);
+      }
+      
+      
+      query.setTitle(qTitle);
+      
+      if (qQuantity != null)
+        query.setQuantity(Integer.parseInt(qQuantity));
+      
+      SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+      
+      if (qStartdate != null) {
+        try {
+          Date d = df.parse(qStartdate);
+          query.setListdate(new Timestamp(d.getTime()));
+        } catch (ParseException e) {
+          e.printStackTrace();
+        }
+      }
+      
+      if (qEnddate != null) {
+        try {
+          Date d = df.parse(qEnddate);
+          query.setEnddate(new Timestamp(d.getTime()));
+        } catch (ParseException e) {
+          e.printStackTrace();
+        }
+      }
+      
+      Double minSellPrice = null;
+      Double maxSellPrice = null;
+      
+      if (qMinprice != null)
+        minSellPrice = Double.parseDouble(qMinprice);
+      
+      if (qMaxprice != null)
+        maxSellPrice = Double.parseDouble(qMaxprice);
+      
+      if (qAuthors != null)
+        query.setAuthors(Arrays.asList(qAuthorList));
+      
+      if (qEditors != null)
+        query.setEditors(Arrays.asList(qEditorList));
+      
+      if (qVolume != null)
+        query.setVolume(qVolume);
+      
+      if (qChapter != null)
+        query.setChapter(qChapter);
+      
+      if (qNumber != null)
+        query.setNumber(qNumber);
+      
+      if (qCdrom != null)
+        query.setCdrom(qCdrom);
+      
+      if (qPages != null)
+        query.setPages(qPages);
+      
+      if (qPublisher != null)
+        query.setPublisher(qPublisher);
+      
+      if (qMonth != null)
+        query.setMonth(qMonth);
+      
+      if (qYear != null)
+        query.setYear(Integer.parseInt(qYear));
+      
+      if (qAddress != null)
+        query.setAddress(qAddress);
+      
+      if (qVenues != null)
+        query.setVenues(Arrays.asList(qVenueList));
+      
+      if (qUrls != null)
+        query.setUrls(Arrays.asList(qUrlList));
+      
+      if (qEes != null)
+        query.setEes(Arrays.asList(qEeList));
+      
+      if (qCites != null)
+        query.setCites(Arrays.asList(qCiteList));
+      
+      if (qCrossref != null)
+        query.setCrossref(qCrossref);
+      
+      if (qIsbns != null)
+        query.setIsbns(Arrays.asList(qIsbnList));
+      
+      if (qNote != null)
+        query.setNote(qNote);
+      
+      if (qSeries != null)
+        query.setSeries(qSeries);
+      
+      if (qRatings != null)
+        query.setRating(qRatings);
+      
+      if (qType != null)
+        query.setType(qType);
+      
+      //Perform search
+      List<Listing> results = db.SearchListings(query, minSellPrice, maxSellPrice, exactMatch, matchCase);
+      
+      //Get page number for pagination
+      String qPageNo = (request.getParameter("pageNo") == null || request.getParameter("pageNo").isEmpty()) ? null : new String( request.getParameter("pageNo").getBytes(), "UTF-8").trim();
+      int pageNo = 1;
+      int resultsPerPage = 10;
+      int lastPage = (int)Math.ceil((double)results.size() / resultsPerPage);
+      
+      try {
+        pageNo = Integer.parseInt(qPageNo);
+      } catch (NumberFormatException e) {}
+      
+      //Ensure pageNo is within range
+      if (pageNo > lastPage)
+        pageNo = lastPage;
+      if (pageNo < 1)
+        pageNo = 1;
+      
+      String currentFullUrl = request.getRequestURL().toString();
+      //Ensure query string is not empty
+      if (request.getQueryString() != null && !request.getQueryString().isEmpty()) {
+        String[] queries = request.getQueryString().split("&");
+        ArrayList<String> finalQueryStringArray = new ArrayList<String>();
+        //Remove current pageNo parameters
+        for (String s : queries) {
+          if (!s.startsWith("pageNo="))
+            finalQueryStringArray.add(s);
+        }
+        //Recombine all other parameters in same order
+        StringBuilder sb = new StringBuilder();
+        for (String s : finalQueryStringArray)
+        {
+          sb.append(s);
+          sb.append("&");
+        }
+        String finalQueryString = sb.toString();
+        if (finalQueryString.endsWith("&")) //remove final '&' from join
+          finalQueryString = finalQueryString.substring(0, finalQueryString.length() - 1);
+        currentFullUrl += ("?" + finalQueryString);
+      }
+      request.getSession().setAttribute("currentFullUrl", currentFullUrl);
+      
+      SearchPageBean searchPageBean = new SearchPageBean(results, pageNo);
+      request.getSession().setAttribute("searchFound", searchPageBean);
+      
 			link = "result.jsp";
 			
 		} else if(req.equals("viewCart")){	
@@ -161,15 +352,6 @@ public class SetupServlet extends HttpServlet {
 			 //request.getSession().setAttribute("cartSize", shoppingCartItems.size());
 			 link = "cart.jsp";
 					
-		} else if(req.equals("viewPreviousSearchPage")){
-			navigateSearchPage(request);
-			link = "result.jsp";
-		} else if(req.equals("viewNextSearchPage")){
-			navigateSearchPage(request);
-			link = "result.jsp";
-		} else if(req.equals("viewNextSearchPage")){
-			navigateSearchPage(request);
-			link = "result.jsp";
 		} else if(req.equals("register")){
 			int flag = 0;
 			String errorMessage = "";
@@ -475,20 +657,6 @@ public class SetupServlet extends HttpServlet {
 		 RequestDispatcher rd = request.getRequestDispatcher("/"+link);
 		 rd.forward(request, response);
 	}
-	private void navigateSearchPage(HttpServletRequest request) {
-		String action = request.getParameter("action");
-		SearchPageBean searchPageBean = (SearchPageBean) request.getSession().getAttribute("searchFound");
-		if (searchPageBean == null) {
-			System.out.println("What the fck");
-		} else {
-			if(action.equals("viewPreviousSearchPage")){
-				searchPageBean.currPage = searchPageBean.currPage - 1;
-			} else if(action.equals("viewNextSearchPage")){
-				searchPageBean.currPage = searchPageBean.currPage + 1;
-			}
-			request.getSession().setAttribute("searchFound", searchPageBean);
-		}
-	}
 
 	private String remove(HttpServletRequest request){
 		/*
@@ -505,201 +673,6 @@ public class SetupServlet extends HttpServlet {
 		request.getSession().setAttribute("cartSize", itemsInCart.size());
 		*/
 		return "cart.jsp";
-	}
-	private LinkedList<Listing> aSearch(String title, String author, String editor, String volume, String chapter, String pages, String publisher, String isbn, String year, String venues, String seller, String type) {
-		LinkedList<Listing> result = new LinkedList<Listing>();
-		boolean flag = true;
-		String publicationType = type;
-//		if(type.toLowerCase().equals("any")){
-//			for (Publication p : this.db) {
-//				flag = true;
-//				if(title != "" && flag == true){
-//					if(!p.getTitle().toLowerCase().contains(title.toLowerCase())){
-//						flag = false;
-//					}
-//				}
-//				if(author != "" && flag == true){
-//					if(p.getAuthor()== null || !p.getAuthor().toLowerCase().contains(author.toLowerCase())){
-//						flag = false;
-//					}
-//				}
-//				if(editor != "" && flag == true){
-//					if(p.getEditor()== null || !p.getEditor().toLowerCase().contains(editor.toLowerCase())){
-//						flag = false;
-//					}
-//				}
-//				if(volume != "" && flag == true){
-//					if(p.getVolume()== null || !p.getVolume().toLowerCase().contains(volume.toLowerCase())){
-//						flag = false;
-//					}
-//				}
-//				if(publisher != null && flag == true){
-//					if(p.getPublisher()== null || !p.getPublisher().toLowerCase().contains(publisher.toLowerCase())){
-//						flag = false;
-//					}
-//				}
-//				if(isbn != "" && flag == true){
-//					if(p.getISBN()== null || !p.getISBN().toLowerCase().contains(isbn.toLowerCase())){
-//						flag = false;
-//					}
-//				}
-//				if(year != "" && flag == true){
-//					if(p.getYear()== null || !p.getYear().toLowerCase().contains(year.toLowerCase())){
-//						flag = false;
-//					}
-//				}
-//				if(flag == true){
-//					result.add(p);
-//				}
-//			}
-//		}
-//		if(type.toLowerCase().equals("article")){
-//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-//		}
-//		
-//		if(type.toLowerCase().equals("inproceedings")){
-//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-//		}
-//		
-//		if(type.toLowerCase().equals("proceedings")){
-//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-//		}
-//		
-//		if(type.toLowerCase().equals("book")){
-//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-//		}
-//		
-//		if(type.toLowerCase().equals("incollection")){
-//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-//		}
-//		
-//		if(type.toLowerCase().equals("phdthesis")){
-//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-//		}
-//		
-//		if(type.toLowerCase().equals("phdthesis")){
-//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-//		}
-//		
-//		if(type.toLowerCase().equals("phdthesis")){
-//			advSearchHelper(title, author, editor, volume, publisher, isbn, year, result);
-//		}
-//		
-		return null;
-	}
-	
-	private LinkedList<Listing> advSearchHelper(String title, String author, String editor, String volume, String publisher, String isbn, String year, LinkedList<Listing> results) {
-		/*
-		for (Publication p : this.db) {
-			boolean flag = true;
-			if(publicationType != "" && flag == true){
-				if(!p.getPubType().toLowerCase().equals(publicationType.toLowerCase())){
-
-					flag = false;
-				}
-			}
-			if(title != "" && flag == true){
-				System.out.print("title: " + title+ " == " + p.getTitle());
-				if(!p.getTitle().toLowerCase().contains(title.toLowerCase())){
-
-					flag = false;
-				}
-			}
-			if(author != "" && flag == true){
-				if(p.getAuthor() == null || !p.getAuthor().toLowerCase().contains(author.toLowerCase())){
-				
-					flag = false;
-				}
-			}
-			if(editor != "" && flag == true){
-				if(p.getEditor()== null || !p.getEditor().toLowerCase().contains(editor.toLowerCase())){
-					flag = false;
-				}
-			}
-			if(volume != "" && flag == true){
-				if(p.getVolume()== null || !p.getVolume().toLowerCase().contains(volume.toLowerCase())){
-					flag = false;
-				}
-			}
-			if(publisher != null && flag == true){
-				if(p.getPublisher()== null || !p.getPublisher().toLowerCase().contains(publisher.toLowerCase())){
-					flag = false;
-				}
-			}
-			if(isbn != "" && flag == true){
-				if(p.getISBN() == null || !p.getISBN().toLowerCase().contains(isbn.toLowerCase())){
-					flag = false;
-				}
-			}
-			if(year != "" && flag == true){
-				if(p.getYear()== null || !p.getYear().toLowerCase().contains(year.toLowerCase())){
-					flag = false;
-				}
-			}
-			if(flag == true){
-				results.add(p);
-			}	
-		}
-		*/
-		return results;
-	}
-	private LinkedList<Listing> search(String searchQuery, String pubType, HttpServletRequest request){
-		LinkedList<Listing> result = new LinkedList<Listing>();
-		
-		/*
-		if(pubType.toLowerCase().equals("any")){
-			for (Publication p : this.db) {
-				if (p.getTitle().toLowerCase().contains(searchQuery.toLowerCase())|| (p.getAuthor() != null && p.getAuthor().toLowerCase().contains(searchQuery.toLowerCase()))){
-					result.add(p);
-				}
-			}
-		}
-		
-		if(pubType.toLowerCase().equals("article")){
-			basicSearchHelper(searchQuery, pubType, result);
-		}
-		
-		if(pubType.toLowerCase().equals("inproceedings")){
-			basicSearchHelper(searchQuery, pubType, result);
-		}
-		
-		if(pubType.toLowerCase().equals("proceedings")){
-			basicSearchHelper(searchQuery, pubType, result);
-		}
-		
-		if(pubType.toLowerCase().equals("book")){
-			basicSearchHelper(searchQuery, pubType, result);
-		}
-		
-		if(pubType.toLowerCase().equals("incollection")){
-			basicSearchHelper(searchQuery, pubType, result);
-		}
-		
-		if(pubType.toLowerCase().equals("phdthesis")){
-			basicSearchHelper(searchQuery, pubType, result);
-		}
-		
-		if(pubType.toLowerCase().equals("phdthesis")){
-			basicSearchHelper(searchQuery, pubType, result);
-		}
-		
-		if(pubType.toLowerCase().equals("phdthesis")){
-			basicSearchHelper(searchQuery, pubType, result);
-		}
-		*/
-		return result;
-		
-	}	
-	private LinkedList<Listing> basicSearchHelper(String query, String pubType, LinkedList<Listing> results){
-		/*
-		for (Publication p : this.db) {
-			if (p.getTitle().toLowerCase().contains(query.toLowerCase()) || (p.getAuthor() != null && p.getAuthor().toLowerCase().contains(query.toLowerCase()) && p.getPubType().toLowerCase().equals(pubType))){
-				System.out.println(p.getAuthor());
-				results.add(p);
-			}
-		}
-		*/
-		return results;
 	}
 	
 }

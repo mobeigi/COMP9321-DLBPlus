@@ -10,23 +10,19 @@ public class SearchPageBean {
 	public int totalPages = 0;
 	public int numItemsPerPage = 10;
 	
-	// Constructor given a list of publications
-	public SearchPageBean(List<Listing> searchListings) {
-		
-		// Convert list of publications into publicationBeans
-		if (searchListings != null) {
-			for (Listing listing : searchListings) {
-				Listing newListing = new Listing();
-				this.results.add(newListing);
-			}
-		}
-		
+	// Constructor
+	public SearchPageBean(List<Listing> searchListings, int currPage) {
+		this.results = searchListings;
+    
+    this.currPage = currPage;
+    
 		// Determine number of pages
-		this.totalPages = (int) Math.ceil(new Double(this.results.size()) / new Double(this.numItemsPerPage));
+		this.totalPages = (int) Math.ceil((double)this.results.size() / (double)this.numItemsPerPage);
 	}
 	
 	// getters
 	public List<Listing> getResults() { return this.results; }
+	public int getTotalItems() { return this.results.size(); }
 	public int getCurrPage() { return this.currPage; }
 	public int getTotalPages() { return this.totalPages; }
 	public int getNumItemsPerPage() { return this.numItemsPerPage; }

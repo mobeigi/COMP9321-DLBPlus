@@ -21,6 +21,7 @@ public interface DLBPlusDBInterface {
 	 * Initiate connection to DB
 	 */
 	public boolean init();
+  public boolean close();
 
 
 	public List<Listing> SearchListings(Listing queryListing, Double minSellPrice, Double maxSellPrice, boolean exactMatch, boolean caseSensitive);
