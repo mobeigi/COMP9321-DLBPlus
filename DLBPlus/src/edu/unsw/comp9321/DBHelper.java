@@ -358,52 +358,197 @@ public class DBHelper implements DLBPlusDBInterface {
 	 * @return Listing Null if listing unsuccessful, Listing of newly created listing otherwise
 	 */
 	 public Listing CreateListing(User seller, Integer quantity, Timestamp listdate, Timestamp enddate, Double sellprice, String image,
-																Listing.Type type, List<String> authors, List<String> editors, String title, List<String> venues,
-																String pages, Integer year, String address, String volume, String number, String month, List<String> urls,
-																List<String> ees, String cdrom, List<String> cites, String publisher, String note, String crossref,
-																List<String> isbns, String series, String chapter, String rating) {
-	     if (!dbConnStatus) {
-	       this.PrintDebugMessage("CreateListing", "No connection with database");
-	       return null;
-	     }
-	    
-	     if (seller == null) {
-	       PrintDebugMessage("CreateListing", "Error! Seller or item is null");
-	       return null;
-	     }
-
-		 try {
-	       Statement stmt;
-	       dbConn.setAutoCommit(false);
-	       stmt = dbConn.createStatement();
-
-	       String q = "INSERT INTO listings (sellerid, quantity, listdate, enddate, sellprice, image, type, authors, editors, title, venues, pages, year, address, volume, number, month, urls, ees, cdrom, cites, publisher, note, crossref, isbns, series, chapter, rating) " +
-	         "VALUES (" + seller.getId() + ", " + quantity + ", to_timestamp(" + listdate.getTime()/1000 + "), to_timestamp(" + enddate.getTime()/1000 + "), " + sellprice + ", '" + image + "', " +
-								 		"'" + type.toString().toLowerCase() + "', '" + StringUtils.join(authors , "|") + "', '" + StringUtils.join(editors , "|") + "', '" + title + "', '" + StringUtils.join(venues , "|") + "', '" + pages + "', " + year + ", '" + address +
-								 		"', '" + volume + "', '" + number + "', '" + month + "', '" + StringUtils.join(urls , "|") + "', '" + StringUtils.join(ees , "|") + "', '" + cdrom + "', '" + StringUtils.join(cites , "|") + "', '" + publisher + "', '" + note +
-								 		"', '" + crossref + "', '" + StringUtils.join(isbns , "|") + "', '" + series + "', '" + chapter + "', '" + rating + "') " +
-	         					"RETURNING id;";
-	       PrintDebugMessage("CreateListing", "Running query: " + q);
-	       ResultSet rs = stmt.executeQuery(q);
-	       
-	       if (rs.next()) {
-	    	   
-	    	   // Parse successfully created listing into the visualisation tables
-	    	   this.parseVisualisationDetails(title, authors, editors, venues);
-	    	   
-	    	   // Return the newly created listing object
-		       Integer listingid = rs.getInt("id");
-		       dbConn.commit();
-		       return GetListing(listingid);
-		       
-	       } else {
-	         return null;
-	       }
-	     }
-	     catch (SQLException e) {
-	       return null;
-	     }
-	 }
+                               Listing.Type type, List<String> authors, List<String> editors, String title, List<String> venues,
+                               String pages, Integer year, String address, String volume, String number, String month, List<String> urls,
+                               List<String> ees, String cdrom, List<String> cites, String publisher, String note, String crossref,
+                               List<String> isbns, String series, String chapter, String rating) {
+    if (!dbConnStatus) {
+      this.PrintDebugMessage("CreateListing", "No connection with database");
+      return null;
+    }
+    
+    if (seller == null) {
+      PrintDebugMessage("CreateListing", "Error! Seller or item is null");
+      return null;
+    }
+    
+    try {
+      Statement stmt;
+      dbConn.setAutoCommit(false);
+      stmt = dbConn.createStatement();
+      
+      String q = "INSERT INTO listings (";
+      List<String> inserts = new ArrayList<String>();
+      List<String> insertsValues = new ArrayList<String>();
+      
+      //Go through inputs
+      inserts.add("sellerid");
+      insertsValues.add(seller.getId().toString());
+      
+      if (quantity != null) {
+        inserts.add("quantity");
+        insertsValues.add(quantity.toString());
+      }
+  
+      if (listdate != null) {
+        inserts.add("listdate");
+        insertsValues.add("to_timestamp(" + listdate.getTime()/1000 + ")");
+      }
+  
+      if (enddate != null) {
+        inserts.add("enddate");
+        insertsValues.add("to_timestamp(" + enddate.getTime()/1000 + ")");
+      }
+  
+      if (sellprice != null) {
+        inserts.add("sellprice");
+        insertsValues.add(sellprice.toString());
+      }
+  
+      if (image != null) {
+        inserts.add("image");
+        insertsValues.add("'" + image + "'");
+      }
+  
+      if (type != null) {
+        inserts.add("type");
+        insertsValues.add("'" + type.toString().toLowerCase() + "'");
+      }
+  
+      if (authors != null) {
+        inserts.add("authors");
+        insertsValues.add("'" + StringUtils.join(authors , "|") + "'");
+      }
+  
+      if (editors != null) {
+        inserts.add("editors");
+        insertsValues.add("'" + StringUtils.join(editors , "|") + "'");
+      }
+  
+      if (title != null) {
+        inserts.add("title");
+        insertsValues.add("'" + title + "'");
+      }
+  
+      if (venues != null) {
+        inserts.add("venues");
+        insertsValues.add("'" + StringUtils.join(venues , "|") + "'");
+      }
+  
+      if (pages != null) {
+        inserts.add("pages");
+        insertsValues.add("'" + pages + "'");
+      }
+  
+      if (year != null) {
+        inserts.add("year");
+        insertsValues.add(year.toString());
+      }
+  
+      if (address != null) {
+        inserts.add("address");
+        insertsValues.add("'" + address + "'");
+      }
+  
+      if (volume != null) {
+        inserts.add("volume");
+        insertsValues.add("'" + volume + "'");
+      }
+      
+      if (number != null) {
+        inserts.add("number");
+        insertsValues.add("'" + number + "'");
+      }
+  
+      if (month != null) {
+        inserts.add("month");
+        insertsValues.add("'" + month + "'");
+      }
+  
+      if (urls != null) {
+        inserts.add("urls");
+        insertsValues.add("'" + StringUtils.join(urls , "|") + "'");
+      }
+  
+      if (ees != null) {
+        inserts.add("ees");
+        insertsValues.add("'" + StringUtils.join(ees , "|") + "'");
+      }
+  
+      if (cdrom != null) {
+        inserts.add("cdrom");
+        insertsValues.add("'" + cdrom + "'");
+      }
+  
+      if (cites != null) {
+        inserts.add("cites");
+        insertsValues.add("'" + StringUtils.join(cites , "|") + "'");
+      }
+  
+      if (publisher != null) {
+        inserts.add("publisher");
+        insertsValues.add("'" + publisher + "'");
+      }
+  
+      if (note != null) {
+        inserts.add("note");
+        insertsValues.add("'" + note + "'");
+      }
+      
+      if (crossref != null) {
+        inserts.add("crossref");
+        insertsValues.add("'" + crossref + "'");
+      }
+  
+      if (isbns != null) {
+        inserts.add("isbns");
+        insertsValues.add("'" + StringUtils.join(isbns , "|") + "'");
+      }
+  
+      if (series != null) {
+        inserts.add("series");
+        insertsValues.add("'" + series + "'");
+      }
+  
+      if (chapter != null) {
+        inserts.add("chapter");
+        insertsValues.add("'" + chapter + "'");
+      }
+  
+      if (rating != null) {
+        inserts.add("rating");
+        insertsValues.add("'" + rating + "'");
+      }
+      
+      //Complete query
+      q += StringUtils.join(inserts , ", ");
+      q += ") VALUES (";
+      q += StringUtils.join(insertsValues , ", ");
+      q += ") RETURNING id;";
+      
+      PrintDebugMessage("CreateListing", "Running query: " + q);
+      ResultSet rs = stmt.executeQuery(q);
+      
+      if (rs.next()) {
+        // Return the newly created listing object
+        Integer listingid = rs.getInt("id");
+        PrintDebugMessage("CreateListing", "We made a ID with listing ID: " + listingid);
+        dbConn.commit();
+  
+        // Parse successfully created listing into the visualisation tables
+        this.parseVisualisationDetails(title, authors, editors, venues); //TODO: uncomment and fix
+        
+        return GetListing(listingid);
+        
+      } else {
+        return null;
+      }
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+      return null;
+    }
+  }
 	 
 	/**
 	 * Set the listing's paused status to be true or false

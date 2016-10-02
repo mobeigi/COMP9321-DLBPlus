@@ -606,94 +606,102 @@ public class SetupServlet extends HttpServlet {
 			//Create new listing
 			link = "createListing.jsp";
 		} else if(req.equals("registerItem")){
-			User seller = (User) request.getSession().getAttribute("user");
-			String title = request.getParameter("itemName"); //Required
-			String authors = request.getParameter("authors");	//Required, split
-			List<String> authorList = null;
-			if(authors != null && !authors.isEmpty()){
-				String[] authorStrings = StringUtils.split(authors, "|");
-				authorList = new ArrayList<String>(Arrays.asList(authorStrings));
-			}
-			String type = request.getParameter("pubType");		//Required
-			String editors = request.getParameter("editors");	//split
-			List<String> editorList = null;
-			if(editors != null &&!editors.isEmpty() ){
-				String[] editorStrings = StringUtils.split(editors, "|");
-				editorList = new ArrayList<String>(Arrays.asList(editorStrings));
-			}
-			String venues = request.getParameter("venues");		//split
-			List<String> venueList = null;
-			if(venues != null && !venues.isEmpty()){
-				String[] venueStrings = StringUtils.split(venues, "|");
-				venueList = new ArrayList<String>(Arrays.asList(venueStrings));
-			}
-			String pages = request.getParameter("pages");
-			String volume = request.getParameter("volume");
-			String yearStr = request.getParameter("year");
-			Integer year = null;
-			if (yearStr != null && !yearStr.isEmpty()) {
-				year = Integer.parseInt(yearStr);
-			}
-			String month = request.getParameter("month");
-			String address = request.getParameter("address");
-			String number = request.getParameter("number");
-			String urls = request.getParameter("urls");			//split
-			List<String> urlList = null;
-			if(urls != null && !urls.isEmpty()){
-				String[] urlStrings = StringUtils.split(urls, "|");;
-				urlList = new ArrayList<String>(Arrays.asList(urlStrings));
-			}
-			String ees = request.getParameter("ees");			//split
-			List<String> eeList = null;
-			if(ees != null && !ees.isEmpty()){
-				String[] eeStrings = StringUtils.split(ees, "|");;
-				eeList = new ArrayList<String>(Arrays.asList(eeStrings));
-			}
-			String cdrom = request.getParameter("cdrom");
-			String cites = request.getParameter("cites");		//split
-			List<String> citeList = null;
-			if(cites != null && !cites.isEmpty()){
-				String[] citeStrings = StringUtils.split(cites, "|");;
-				citeList = new ArrayList<String>(Arrays.asList(citeStrings));
-			}
-			String publisher = request.getParameter("publisher");
-			String isbns = request.getParameter("isbns");		//split
-			List<String> isbnList = null;
-			if(isbns != null && !isbns.isEmpty()){
-				String[] isbnStrings = StringUtils.split(isbns, "|");;
-				isbnList = new ArrayList<String>(Arrays.asList(isbnStrings));
-			}
-			String crossref = request.getParameter("crossref");
-			String series = request.getParameter("series");
-			String chapter = request.getParameter("chapter");
-			String rating = request.getParameter("rating");
-			String note = request.getParameter("note");
-			Double price = Double.parseDouble(request.getParameter("price"));		//Required
-			Integer quantity = Integer.parseInt(request.getParameter("quantity"));
-			if(quantity.equals("")){
-				quantity = null;
-			}
-				
-			String image = request.getParameter("image");
-			int duration = Integer.parseInt(request.getParameter("duration")) * 24 * 60 * 60;
-			Type listType = Listing.stringToType(type);
-			
-			Timestamp listdate = new Timestamp(new Date().getTime());
-			Timestamp enddate = new Timestamp(new Date().getTime()+ duration);
-
-			Listing newListing = db.CreateListing(seller, quantity, listdate, enddate, price, image, listType, authorList, editorList, title, venueList, pages, year, address, volume, number, month, urlList, eeList, cdrom, citeList, publisher, note, crossref, isbnList, series, chapter, rating);
-			
-			// Prepare and redirect to view all listings page
-			User currUser = (User) request.getSession().getAttribute("user");
-			List<Listing> userListings = db.GetUserListings(currUser.getId());
-			String errorMessage = "";
-			if(userListings.isEmpty()){
-				errorMessage = "Looks like you dont have any current listings";
-			}
-			request.getSession().setAttribute("eMessage",errorMessage);
-			request.getSession().setAttribute("userListings", userListings);
-			link = "userSellListings.jsp";	
-		} 	
+      User seller = (User) request.getSession().getAttribute("user");
+      
+      if (seller != null) {
+        //Get fields
+        String qTitle = (request.getParameter("title") == null || request.getParameter("title").isEmpty()) ? null : new String( request.getParameter("title").getBytes(), "UTF-8").trim();
+        String qQuantity = (request.getParameter("quantity") == null || request.getParameter("quantity").isEmpty()) ? null : new String( request.getParameter("quantity").getBytes(), "UTF-8").trim();
+        String qAuthors = (request.getParameter("author") == null || request.getParameter("author").isEmpty()) ? null : new String( request.getParameter("author").getBytes(), "UTF-8").trim();
+        String qEditors = (request.getParameter("editor") == null || request.getParameter("editor").isEmpty()) ? null : new String( request.getParameter("editor").getBytes(), "UTF-8").trim();
+        String qVolume = (request.getParameter("volume") == null || request.getParameter("volume").isEmpty()) ? null : new String( request.getParameter("volume").getBytes(), "UTF-8").trim();
+        String qChapter = (request.getParameter("chapter") == null || request.getParameter("chapter").isEmpty()) ? null : new String( request.getParameter("chapter").getBytes(), "UTF-8").trim();
+        String qNumber = (request.getParameter("number") == null || request.getParameter("number").isEmpty()) ? null : new String( request.getParameter("number").getBytes(), "UTF-8").trim();
+        String qCdrom = (request.getParameter("cdrom") == null || request.getParameter("cdrom").isEmpty()) ? null : new String( request.getParameter("cdrom").getBytes(), "UTF-8").trim();
+        String qPages = (request.getParameter("pages") == null || request.getParameter("pages").isEmpty()) ? null : new String( request.getParameter("pages").getBytes(), "UTF-8").trim();
+        String qPublisher = (request.getParameter("publisher") == null || request.getParameter("publisher").isEmpty()) ? null : new String( request.getParameter("publisher").getBytes(), "UTF-8").trim();
+        String qMonth = (request.getParameter("month") == null || request.getParameter("month").isEmpty()) ? null : new String( request.getParameter("month").getBytes(), "UTF-8").trim();
+        String qYear = (request.getParameter("year") == null || request.getParameter("year").isEmpty()) ? null : new String( request.getParameter("year").getBytes(), "UTF-8").trim();
+        String qAddress = (request.getParameter("address") == null || request.getParameter("address").isEmpty()) ? null : new String( request.getParameter("address").getBytes(), "UTF-8").trim();
+        String qVenues = (request.getParameter("venues") == null || request.getParameter("venues").isEmpty()) ? null : new String( request.getParameter("venues").getBytes(), "UTF-8").trim();
+        String qUrls = (request.getParameter("urls") == null || request.getParameter("urls").isEmpty()) ? null : new String( request.getParameter("urls").getBytes(), "UTF-8").trim();
+        String qEes = (request.getParameter("ees") == null || request.getParameter("ees").isEmpty()) ? null : new String( request.getParameter("ees").getBytes(), "UTF-8").trim();
+        String qCites = (request.getParameter("cites") == null || request.getParameter("cites").isEmpty()) ? null : new String( request.getParameter("cites").getBytes(), "UTF-8").trim();
+        String qCrossref = (request.getParameter("crossref") == null || request.getParameter("crossref").isEmpty()) ? null : new String( request.getParameter("crossref").getBytes(), "UTF-8").trim();
+        String qIsbns = (request.getParameter("isbns") == null || request.getParameter("isbns").isEmpty()) ? null : new String( request.getParameter("isbns").getBytes(), "UTF-8").trim();
+        String qNote = (request.getParameter("note") == null || request.getParameter("note").isEmpty()) ? null : new String( request.getParameter("note").getBytes(), "UTF-8").trim();
+        String qSeries = (request.getParameter("series") == null || request.getParameter("series").isEmpty()) ? null : new String( request.getParameter("series").getBytes(), "UTF-8").trim();
+        String qRatings = (request.getParameter("ratings") == null || request.getParameter("ratings").isEmpty()) ? null : new String( request.getParameter("ratings").getBytes(), "UTF-8").trim();
+        String qType = (request.getParameter("type") == null || request.getParameter("type").isEmpty()) ? null : new String( request.getParameter("type").getBytes(), "UTF-8").trim();
+        
+        String qPrice = (request.getParameter("price") == null || request.getParameter("price").isEmpty()) ? null : new String( request.getParameter("price").getBytes(), "UTF-8").trim();
+        String qDuration = (request.getParameter("duration") == null || request.getParameter("duration").isEmpty()) ? null : new String( request.getParameter("duration").getBytes(), "UTF-8").trim();
+        String qImage = (request.getParameter("image") == null || request.getParameter("image").isEmpty()) ? null : new String( request.getParameter("image").getBytes(), "UTF-8").trim();
+  
+        //Handle separated multiple items
+        //We also trim any whitespace around entries
+        List<String> qAuthorList = null;
+        List<String> qEditorList = null;
+        List<String> qUrlList = null;
+        List<String> qEeList = null;
+        List<String> qCiteList = null;
+        List<String> qIsbnList = null;
+        List<String> qVenueList = null;
+  
+        if (qAuthors != null) qAuthorList = Arrays.asList(qAuthors.trim().split("\\\r\n"));
+        if (qEditors != null) qEditorList = Arrays.asList(qEditors.trim().split("\\\r\n"));
+        if (qUrls != null) qUrlList = Arrays.asList(qUrls.trim().split("\\\r\n"));
+        if (qEes != null) qEeList = Arrays.asList(qEes.trim().split("\\\r\n"));
+        if (qCites != null) qCiteList = Arrays.asList(qCites.trim().split("\\\r\n"));
+        if (qIsbns != null) qIsbnList = Arrays.asList(qIsbns.trim().split("\\\r\n"));
+        if (qVenues != null) qVenueList = Arrays.asList(qVenues.trim().split("\\\r\n"));
+        
+        //Create objects
+        Integer quantity = null;
+        try {
+          quantity = Integer.parseInt(qQuantity);
+        } catch (NumberFormatException e) {}
+        
+        Double sellprice = null;
+        try {
+          sellprice = Double.parseDouble(qPrice);
+        } catch (NumberFormatException e) {}
+        
+        Integer year = null;
+        try {
+          year = Integer.parseInt(qYear);
+        } catch (NumberFormatException e) {}
+        
+        int duration = Integer.parseInt(qDuration) * 24 * 60 * 60; //convert duration into seconds (from days)
+        Type listType = Listing.stringToType(qType);
+        
+        Timestamp listdate = new Timestamp(new Date().getTime()); //now
+        Timestamp enddate = new Timestamp(new Date().getTime() + duration); //now + duration
+        
+        Listing newListing = db.CreateListing(seller, quantity, listdate, enddate, sellprice, qImage, listType, qAuthorList,
+                                              qEditorList, qTitle, qVenueList, qPages, year, qAddress, qVolume, qNumber,
+                                              qMonth, qUrlList, qEeList, qCdrom, qCiteList, qPublisher, qNote, qCrossref,
+                                              qIsbnList, qSeries, qChapter, qRatings);
+        
+        
+        if (newListing == null) {
+          System.out.println("We have failed");
+        }
+        
+        // Prepare and redirect to view all listings page
+        List<Listing> userListings = db.GetUserListings(seller.getId());
+        String errorMessage = "";
+        if (userListings.isEmpty()) {
+          errorMessage = "Looks like you don't have any current listings";
+        }
+        request.getSession().setAttribute("eMessage", errorMessage);
+        request.getSession().setAttribute("userListings", userListings);
+        link = "userSellListings.jsp";
+      }
+      else {
+        link = "login.jsp"; //if not logged in
+      }
+    }	
 		// Case when user wants to view admin
 		else if (req.equals("loginAdmin")) {
 			response.sendRedirect("/DLBPlus/admin");

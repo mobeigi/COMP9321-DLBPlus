@@ -1,194 +1,219 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+         pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Bibliographic Library | New Listing</title>
-	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>Bibliographic Library | New Listing</title>
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 
 <body>
-	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="js/materialize.min.js"></script>
-	 <script>
-	   $(document).ready(function() {
-	      $('select').material_select();
-	  });
-	</script>
-	
-	<!-- Header -->
-	<jsp:include page="navbar.jsp" />
-	<div class="section no-pad-bot" id="index-banner">
-    	<div class="container">
-    		<br><br>
-    		<h1 class="header center orange-text">New Listing</h1>
-    		<br><br>
-        </div>
- 	</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+</script>
 
-	<!-- Body -->
-	<div class="row">
- 		<div class="col s6 offset-s3">
- 			<div class="card white">
-        		<div class="card-content black-text">
-					<form action="setup" method="post">
-		              	<div class="row">
-		              		<div class="col s12">
-			           			<input class="validate" placeholder="Item Name" required="" aria-required="" name="itemName" type="text" />
-			           		</div>
-			     		</div>
-			     		<div class="row">
-			     			<div class="col s6">
-			     		    	<input class="validate" pattern="[^,]*(,[^,]+)*" placeholder="Authors (please separate authors with ',')" required="" aria-required="" name="authors" type="text" />
-		     		    	</div>
-			     		    <div class="input-field col s6">
-			    				<select name="pubType" required="" aria-required="">
-						        	<option>Article</option>
-							        <option>Inproceedings</option>
-							        <option>Proceedings</option>
-							        <option>Book</option>
-							        <option>Incollection</option>
-							        <option>Phdthesis</option>
-							        <option>Masterthesis</option>
-							        <option>WWW</option>
-			    				</select>
-			  				</div>
-			     		</div>
-        				<div class="row">
-        					<div class="col s6">
-			              		<input class="validate" placeholder="Editors" name="editors" type="text"/>
-		              		</div>
-		              		<div class="col s6">
-			              		<input class="validate" placeholder="Venues" name="venues" type="text"/>
-		              		</div>
-		              	</div>
-        				<div class="row">
-        					<div class="col s6">
-			              		<input class="validate" placeholder="Pages" name="pages" type="text"/>
-		              		</div>
-		              		<div class="col s6">
-			              		<input class="validate" placeholder="Volume" name="volume" type="text"/>
-		              		</div>
-		              	</div>			     		
-		              	<div class="row">
-			     			<div class="col s6">
-			     		    	<input class="validate" placeholder="Year" name="year" type="text"/>
-			     		    </div>
-			     		    <div class="col s6">
-			     		    	<input class="validate" placeholder="Month" name="month" type="text" />
-			     		    </div>
-			     		</div>
-			     		<div class="row">
-			     			<div class="col s6">
-			     		    	<input class="validate" placeholder="Address" name="address" type="text"/>
-			     		    </div>
-			     		    <div class="col s6">
-			     		    	<input class="validate" placeholder="Number" name="number" type="text" />
-			     		    </div>
-			     		</div>
-			     		<div class="row">
-			     			<div class="col s6">
-			     		    	<input class="validate" placeholder="URLs" name="urls" type="text"/>
-			     		    </div>
-			     		    <div class="col s6">
-			     		    	<input class="validate" placeholder="EEs" name="ees" type="text" />
-			     		    </div>
-			     		</div>
-			     		<div class="row">
-			     			<div class="col s6">
-			     		    	<input class="validate" placeholder="cdrom" name="cdrom" type="text"/>
-			     		    </div>
-			     		    <div class="col s6">
-			     		    	<input class="validate" placeholder="cites" name="cites" type="text" />
-			     		    </div>
-			     		</div>
-			     		<div class="row">
-			     			<div class="col s6">
-			     		    	<input class="validate" placeholder="publisher" name="publisher" type="text"/>
-			     		    </div>
-			     		    <div class="col s6">
-			     		    	<input class="validate" placeholder="isbns" name="isbns" type="text" />
-			     		    </div>
-			     		</div>
-			     		<div class="row">
-			     			<div class="col s6">
-			     		    	<input class="validate" placeholder="Cross Reference" name="crossref" type="text"/>
-			     		    </div>
-			     		    <div class="col s6">
-			     		    	<input class="validate" placeholder="Series" name="series" type="text" />
-			     		    </div>
-			     		</div>
-			     		<div class="row">
-			     			<div class="col s6">
-			     		    	<input class="validate" placeholder="Chapter" name="chapter" type="text"/>
-			     		    </div>
-			     		    <div class="col s6">
-			     		    	<input class="validate" placeholder="Rating" name="rating" type="text" />
-			     		    </div>
-			     		</div>
-			     		<div class="row">
-			     			<div class="col s12">
-			     		    	<input class="validate" placeholder="Note" name="note" type="text"/>
-			     		    </div>
-			     		</div>
-			     		<div class="row">
-			     			<div class="col s12">
-				     			<div class="file-field input-field">
-							      <div class="btn">
-							        <span>Add Photo</span>
-							        <input type="file">
-							      </div>
-							      <div class="file-path-wrapper">
-							        <input class="file-path validate" placholder="Select a file.." type="text" name="image">
-							      </div>
-							    </div>
-						    </div>
-						</div>
-			     		<div class="row">
-			     			<div class="col s12">
-			     				<table style="cell-spacing: 0px">
-				     				<tbody>
-				     					<tr>
-					     					<th><p class="flow-text">Price: </p></th>
-					     					<th><i style="font-weight:normal">$</i></th>
-					     		    		<th style="padding-top: 40px">
-					     		    		<input style="height:1.5rem;font-weight: normal" pattern="(0\.((0[1-9]{1})|([1-9]{1}([0-9]{1})?)))|(([1-9]+[0-9]*)(\.([0-9]{1,2}))?)" name="price" aria-required="" required="" placeholder="" class="validate center" type="text">
-					     		    		</th>
-					     		    		<th><p class="flow-text">Quantity: </p></th>
-					     		    		<th style="padding-top: 40px">
-					     		    		<input style="height:1.5rem;font-weight: normal" name="quantity" aria-required="" required="" placeholder="0" class="validate center" type="text"/>
-					     		    		</th>
-					     		    		<th><p class="flow-text">Duration: </p></th>
-					     		    		<th style="padding-top: 40px">
-					     		    		<input style="height:1.5rem;font-weight: normal" name="duration" aria-required="" required="" class="validate center" type="text" pattern="^[0-9]*$"/>
-					     		    		</th>
-				     		    		</tr>
-				     		    	</tbody>
-			     		    	</table>
-			     		    </div>
-			     		</div>
-			     		
-			           	<div class="row">
-				           	   				
-							<div class="col s12 center">
-								<br>
-					            <input type="hidden" name="action" value="registerItem"/>
-					            <button class="btn waves-effect waves-light" type="submit" value="registerItem">Register Item
-			  						<i class="material-icons right">send</i>
-			  					</button>
-			  					<br><br>
-				  			</div>
-				  		</div>
-					</form>        
-	        	</div>
-      		</div>
-      	</div>
-   	</div>
-	
-	<jsp:include page="footer.jsp" />
+<!-- Header -->
+<jsp:include page="navbar.jsp" />
+<div class="section no-pad-bot" id="index-banner">
+  <div class="container">
+    <br><br>
+    <h1 class="header center orange-text">New Listing</h1>
+    <br><br>
+  </div>
+</div>
+
+<!-- Body -->
+<div class="row">
+  <div class="col s6 offset-s3">
+    <div class="card white">
+      <div class="card-content black-text">
+        <form action="setup" method="post">
+          <div class="row">
+            <div class="col s12">
+              <input placeholder="Title" name="title" type="text" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12">
+              <label>Publication Type</label>
+              <select name="type">
+                <option value="" selected>Any</option>
+                <option value="article">Article</option>
+                <option value="inproceedings">Inproceedings</option>
+                <option value="proceedings">Proceedings</option>
+                <option value="book">Book</option>
+                <option value="incollection">Incollection</option>
+                <option value="phdthesis">PHD Thesis</option>
+                <option value="mastersthesis" >Masters Thesis</option>
+                <option value="www">Website</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s6">
+              <textarea placeholder="Author" name="author" class="materialize-textarea"></textarea>
+            </div>
+            <div class="input-field col s6">
+              <textarea placeholder="Editors" name="editor" class="materialize-textarea"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s6">
+              <input placeholder="Volume" name="volume" type="text" />
+            </div>
+            <div class="col s6">
+              <input placeholder="Chapter" name="chapter" type="text" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s6">
+              <input placeholder="Number" name="number" type="text" />
+            </div>
+            <div class="col s6">
+              <input placeholder="CDROM" name="cdrom" type="text" />
+            </div>
+          </div>
+
+          <div class="row">
+
+            <div class="col s6">
+              <input placeholder="Pages" name="pages" type="text" />
+            </div>
+            <div class="col s6">
+              <input placeholder="Publisher" name="publisher" type="text" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s6">
+              <select name="month">
+                <option value="" disabled selected>Month</option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+              </select>
+            </div>
+            <div class="col s6">
+              <input placeholder="Year" name="year" type="text" maxlength="4" pattern="\d{4}" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s6" style="margin-top: 50px;">
+              <input placeholder="Address"  name="address" type="text" />
+            </div>
+            <div class="input-field col s6">
+              <textarea placeholder="Venues" name="venues" class="materialize-textarea"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s6">
+              <textarea placeholder="URLs" name="urls" class="materialize-textarea"></textarea>
+            </div>
+            <div class="input-field col s6">
+              <textarea placeholder="EEs" name="ees" class="materialize-textarea"></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s6">
+              <textarea placeholder="Cites" name="cites" class="materialize-textarea"></textarea>
+            </div>
+            <div class="col s6" style="margin-top: 50px;">
+              <input placeholder="Cross References"  name="crossref" type="text" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s6">
+              <textarea placeholder="ISBNs" name="isbns" class="materialize-textarea"></textarea>
+            </div>
+            <div class="col s6" style="margin-top: 50px;">
+              <input placeholder="Note"  name="note" type="text" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col s6">
+              <input placeholder="Series"  name="series" type="text" />
+            </div>
+            <div class="col s6">
+              <input placeholder="Ratings"  name="ratings" type="text" />
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col s12">
+              <div class="file-field input-field">
+                <div class="btn">
+                  <span>Add Photo</span>
+                  <input type="file">
+                </div>
+                <div class="file-path-wrapper">
+                  <input class="file-path validate" placholder="Select a file.." type="text" name="image">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12">
+              <table style="cell-spacing: 0px">
+                <tbody>
+                <tr>
+                  <th><p class="flow-text">Price: </p></th>
+                  <th><i style="font-weight:normal">$</i></th>
+                  <th style="padding-top: 40px">
+                    <input style="height:1.5rem;font-weight: normal" pattern="(0\.((0[1-9]{1})|([1-9]{1}([0-9]{1})?)))|(([1-9]+[0-9]*)(\.([0-9]{1,2}))?)" name="price" aria-required="" required="" placeholder="" class="validate center" type="text">
+                  </th>
+                  <th><p class="flow-text">Quantity: </p></th>
+                  <th style="padding-top: 40px">
+                    <input style="height:1.5rem;font-weight: normal" name="quantity" aria-required="" required="" placeholder="0" class="validate center" type="text"/>
+                  </th>
+                  <th><p class="flow-text">Duration: </p></th>
+                  <th style="padding-top: 40px">
+                    <input style="height:1.5rem;font-weight: normal" name="duration" aria-required="" required="" class="validate center" type="text" pattern="^[0-9]*$"/>
+                  </th>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+
+          <div class="row">
+
+            <div class="col s12 center">
+              <br>
+              <input type="hidden" name="action" value="registerItem"/>
+              <button class="btn waves-effect waves-light" type="submit" value="registerItem">Register Item
+                <i class="material-icons right">send</i>
+              </button>
+              <br><br>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<jsp:include page="footer.jsp" />
 </body>
 </html>

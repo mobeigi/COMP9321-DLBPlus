@@ -346,6 +346,10 @@ public class Listing{
   
   private String joinMultiString(List<String> list) {
     String result = "";
+    
+    if (list.isEmpty())
+      return result;
+    
     for(String s : list){
       result += s + "; ";
     }
