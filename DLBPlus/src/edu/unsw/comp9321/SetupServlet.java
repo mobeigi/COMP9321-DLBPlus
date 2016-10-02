@@ -452,7 +452,11 @@ public class SetupServlet extends HttpServlet {
 			request.getSession().setAttribute("eMessage",errorMessage);
 			link = "register.jsp";
 		} else if(req.equals("modified")){
+			User user = (User) request.getSession().getAttribute("user");
+			request.getSession().setAttribute("user",user);
 			link = "modifyDetails.jsp";
+			String errorMessage = "";
+			request.getSession().setAttribute("eMessage",errorMessage);
 		} else if(req.equals("detailsAdded")){
 			String errorMessage = "";
 			String firstName = request.getParameter("fname");
