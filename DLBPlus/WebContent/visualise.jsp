@@ -64,12 +64,15 @@
 
 	  // create an array with nodes
 	  var nodes = [
-	    {id: 1, label: 'Node 1'},
-	    {id: 2, label: 'Node 2'},
-	    {id: 3, label: 'Node 3:\nLeft-Aligned', font: {'face': 'Monospace', align: 'left'}},
-	    {id: 4, label: 'Node 4'},
-	    {id: 5, label: 'Node 5\nLeft-Aligned box', shape: 'box',
-	     font: {'face': 'Monospace', align: 'left'}}
+	    <%
+	    	String arrayVisNodes = "";
+	    	for (int i = 0; i < 5; i++) {
+	    		arrayVisNodes += "{id: " + i + ", label: 'Node " + i +"'},";
+	    	}
+	    	arrayVisNodes = arrayVisNodes.substring(0,arrayVisNodes.length()-1);
+	    	System.out.println(arrayVisNodes);
+	    	out.print(arrayVisNodes);
+	    %>
 	  ];
 
 	  // create an array with edges
