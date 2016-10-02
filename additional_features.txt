@@ -13,3 +13,9 @@
 		* Suppose they're correct:
 			- Get user object based on 'userForgotten', and attach to a form where they can type in a new password
 			- User inputs new password, server generates new salt and password, and logs them in.
+			
+* Sort various lists by particular colmns (eg sort by date, id, price etc)
+	- Listings
+	- Users
+	- Orders
+	- Cart items

@@ -67,7 +67,7 @@ public class SetupServlet extends HttpServlet {
 		} else {
 			req = "home";
 		}
-		String link = "home.jsp";
+		String link = "index.jsp";
 			
 		if(req.equals("back")){
 			link = "index.jsp";
@@ -408,11 +408,19 @@ public class SetupServlet extends HttpServlet {
 			
 			Timestamp listdate = new Timestamp(new Date().getTime());
 			Timestamp enddate = new Timestamp(new Date().getTime()+ duration);
-			
-			
-			
+
 			Listing newListing = db.CreateListing(seller, quantity, listdate, enddate, price, image, listType, authorList, editorList, title, venueList, pages, year, address, volume, number, month, urlList, eeList, cdrom, citeList, publisher, note, crossref, isbnList, series, chapter, rating);
 			
+			// Prepare and redirect to view all listings page
+			User currUser = (User) request.getSession().getAttribute("user");
+			List<Listing> userListings = db.GetUserListings(currUser.getId());
+			String errorMessage = "";
+			if(userListings.isEmpty()){
+				errorMessage = "Looks like you dont have any current listings";
+			}
+			request.getSession().setAttribute("eMessage",errorMessage);
+			request.getSession().setAttribute("userListings", userListings);
+			link = "userSellListings.jsp";	
 		} 	
 		// Case when user wants to view admin
 		else if (req.equals("loginAdmin")) {
@@ -427,6 +435,13 @@ public class SetupServlet extends HttpServlet {
 			request.getSession().setAttribute("viewListing", listing);
 			
 			link = "listing.jsp";
+		}
+		
+		// Case when user wants to visualise shit
+		else if (req.equals("visualise")) {
+			
+			// Prepare visualise page
+			link = "visualise.jsp";
 		}
 		
 		 RequestDispatcher rd = request.getRequestDispatcher("/"+link);

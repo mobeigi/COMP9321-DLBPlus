@@ -2,8 +2,10 @@
 
 <!-- Header -->
 	<nav class="light-blue lighten-1" role="navigation">
-	   	<div class="nav-wrapper container"><a id="logo-container" href="?action=home" class="brand-logo"><img src="images/logo_white.png" alt="logo"></a>
-   			<ul class="right hide-on-med-and-down"> 			
+	   	<div class="nav-wrapper container">
+			<a id="logo-container" href="?action=home" class="brand-logo"><img src="images/logo_white.png" alt="logo"></a>
+   			<ul class="right hide-on-med-and-down"> 
+   				<li><a href="?action=visualise">Visualise</a></li>			
 				<c:choose>
 					<c:when test="${not empty user}">
 						<li><a href="userAccount.jsp">Account</a></li>
@@ -17,6 +19,7 @@
 						<li><a href="?action=loginPage">Login</a></li>
 					</c:otherwise>
 				</c:choose>
-	     </ul>
+				
+	     	</ul>
 	   </div>
 	</nav>
