@@ -87,6 +87,7 @@
 	    	for (VisRelationship visRelationship : visRelationships) {
 	    		arrayVisRelationships += "{from: " + visRelationship.getFromNodeID() + 
 	    								 ", to: " + visRelationship.getToNodeID() + 
+	    								 ", label: '" + visRelationship.getRelationshipValue() + "'" + 
 	    								 ", " + font + "},";
 	    	}
 	    	arrayVisRelationships = arrayVisRelationships.substring(0,arrayVisRelationships.length()-1);	// remove trailing comma
