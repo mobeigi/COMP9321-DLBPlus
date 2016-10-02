@@ -454,6 +454,7 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("modified")){
 			link = "modifyDetails.jsp";
 		} else if(req.equals("detailsAdded")){
+			String errorMessage = "";
 			String firstName = request.getParameter("fname");
 			String lastName = request.getParameter("lname");
 			String nickName = request.getParameter("nickname");
@@ -466,21 +467,29 @@ public class SetupServlet extends HttpServlet {
 			String dp = "";
 			
 			if (!passConfirm.equals(password)){
-				String errorMessage;
 				errorMessage = "Passwords do not match!";
 				link = "modifyDetails.jsp";
 				request.getSession().setAttribute("eMessage",errorMessage);
 			}
 			else {
 				User toChange = (User) request.getSession().getAttribute("user");
+				toChange.setFname(firstName);
+				toChange.setLname(lastName);
+				toChange.setNickname(nickName);
+				toChange.setEmail(email);
+				toChange.setAddress(address);
+				toChange.setCreditcard(creditCard);
+				db.ChangeUserPassword(toChange, password);
+				boolean success = db.ChangeUserDetails(toChange);
+				if (success){
+					System.out.println("acc details changed");
+				}
 				
-					User newUser = new User();
-					newUser = db.CreateUser(toChange.getUsername(), password, firstName, lastName, nickName, email, address, toChange.getDob(), creditCard, dp);
-					db.ChangeUserDetails(newUser);
-					link = "userAccount.jsp";
-			}
-			
-			link = "setup.jsp";
+				request.getSession().setAttribute("eMessage",errorMessage);
+				link = "userAccount.jsp";
+			}                  
+			request.getSession().setAttribute("eMessage",errorMessage);
+			link = "userAccount.jsp";
 		} else if(req.equals("loginPage")){
 			String errorMessage = "";
 			request.getSession().setAttribute("eMessage",errorMessage);
