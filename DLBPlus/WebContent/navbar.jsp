@@ -4,13 +4,8 @@
 	<nav class="light-blue lighten-1" role="navigation">
 	   	<div class="nav-wrapper container">
 			<a id="logo-container" href="?action=home" class="brand-logo"><img src="images/logo_white.png" alt="logo"></a>
-	   		<ul id="nav-mobile" class="left hide-on-med-and-down">
-				<li>
-					<a href="?action=visualise">Visualise</a> 
-				</li>
-	       	</ul>
-	   		
-   			<ul class="right hide-on-med-and-down"> 			
+   			<ul class="right hide-on-med-and-down"> 
+   				<li><a href="?action=visualise">Visualise</a></li>			
 				<c:choose>
 					<c:when test="${not empty user}">
 						<li><a href="userAccount.jsp">Account</a></li>
@@ -24,6 +19,7 @@
 						<li><a href="?action=loginPage">Login</a></li>
 					</c:otherwise>
 				</c:choose>
+				
 	     	</ul>
 	   </div>
 	</nav>
