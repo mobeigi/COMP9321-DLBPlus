@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+   
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -75,6 +77,20 @@
         				<div class="col s12">
         					<h5 class="Header center flow-text">Account Management</h5>
         					<br>
+        						First Name: ${user.fname}
+        						<br>
+        						Last Name: ${user.lname}
+        						<br>
+        						Nickname: ${user.nickname}
+        						<br>
+        						Email: ${user.email}
+        						<br>
+        						Address: ${user.address}
+        						<br>
+        						Credit Card: ${user.creditcard}
+        						<br>
+        						Account Creation Date: ${user.acctcreated}
+								<br>
         					<div class="container center">
 	        					<form method="post" action="setup">
 		        					<input type="hidden" name="action" value="modified"/>
