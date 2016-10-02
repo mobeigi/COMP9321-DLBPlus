@@ -772,7 +772,7 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT * FROM listings;");
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings ORDER BY id ASC;");			// default: return in order of id
       
       Listing l = processResultSetIntoListing(rs);
       

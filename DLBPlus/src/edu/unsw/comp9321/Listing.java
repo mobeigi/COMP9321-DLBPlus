@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Listing {
+public class Listing{
   //Enums
   public enum Type {
     ARTICLE,
@@ -344,4 +344,5 @@ public class Listing {
 
 		return type;
 	}
+
 }

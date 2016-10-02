@@ -35,7 +35,7 @@
  	<div class="row">
  		<div class="col s10 offset-s1">
  			<div class="card white">
-        		<div class="card-content black-text">
+        		<div class="card-content">
 		 			<div class="card-title">
 		 				<c:choose>
 							<c:when test="${not empty eMessage}">
@@ -43,7 +43,7 @@
 		 					</c:when>
 			 				<c:otherwise>
 			 					
-			 					<form method="Post" action="setup">
+			 					<form method="get" action="setup">
 			 						<div class="row">
 								        <table class="centered highlighted striped responsive-table">
 								        	<thead>
@@ -70,11 +70,11 @@
 														<td><c:out value="${listing.numviews}" /></td>
 														<c:choose>
 															<c:when test="${listing.paused}">
-																<td><input type="checkbox" checked="checked" name="${listing.id}" value="true" id="${listing.id}">
+																<td><input type="checkbox" checked="checked" name="${listing.id}" value="checked" id="${listing.id}">
 																<label for="${listing.id}"></label></td>
 															</c:when>
 															<c:otherwise>
-																<td><input type="checkbox" name="${listing.id}" value="false" id="${listing.id}">
+																<td><input type="checkbox" name="${listing.id}" value="checked" id="${listing.id}">
 																<label for="${listing.id}"></label></td>
 															</c:otherwise>
 														</c:choose>

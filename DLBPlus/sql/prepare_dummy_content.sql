@@ -261,6 +261,53 @@ VALUES (
 		'June'
 );
 
+/*
+ * Listing 3
+ */
+INSERT INTO
+	listings(
+		id,
+		sellerid,					-- seller: userX
+		quantity,					-- quantity
+		listdate,
+		enddate,
+		sellprice,			-- sellprice
+		paused,				-- paused		
+		numviews,					-- num views
+		"type",	-- type
+		authors,	-- authors
+		editors,					-- editors
+		title, -- title
+		venues,		-- venues
+		year,					-- year
+		volume,					-- vol
+		month,				-- month
+		note,	-- note
+		series,			-- series
+		rating							-- rating
+	)
+VALUES (
+		3,
+		4,					-- seller: userX
+		10,					-- quantity
+		'Sat Oct 1 09:00:00 AEST 2016',
+		'Sat Oct 5 11:00:00 AEST 2016',
+		'55.00',			-- sellprice
+		't',				-- paused		
+		90,					-- num views
+		'inproceedings',	-- type
+		'Sandeep|Teuku|Ali',	-- authors
+		'Amin',					-- editors
+		'How to punish students when it comes to giving out creative marks', -- title
+		'Scientia Hall',		-- venues
+		'2010',					-- year
+		'XII',					-- vol
+		'January',				-- month
+		'Should use this for web apps',	-- note
+		'Training individuals',			-- series
+		'POOR'							-- rating
+);
+
 -- CREATE ORDERS
 --------------------------------------------------
 
