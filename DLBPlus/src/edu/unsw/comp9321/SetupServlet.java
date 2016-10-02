@@ -416,19 +416,23 @@ public class SetupServlet extends HttpServlet {
 				}
 			}
 		} else if(req.equals("regSuccess")){
+			String errorMessage = "";
+			
 			String code = request.getParameter("code");
 			String emailCode = request.getSession().getAttribute("confirmationNumber").toString();
 			User newUser = (User) request.getSession().getAttribute("newUser");
 			System.out.println("code is" + emailCode);
-			if(newUser == null) System.out.println("WHAT THE FUCK");
 			System.out.println(newUser.getId());
 			if(code == null){
 				link = "confirmation.jsp";
 			} else {
 				if(code.equals(emailCode)){
 					request.getSession().setAttribute("user",newUser);
+					this.db.SetAcctConfirmed(newUser, true);
 					link = "userAccount.jsp";
 				} else {
+					errorMessage = "Code is incorrect!";
+					request.getSession().setAttribute("eMessage",errorMessage);
 					link = "confirmation.jsp";
 				}
 			}
@@ -447,7 +451,13 @@ public class SetupServlet extends HttpServlet {
 					System.out.println(user.getUsername());
 					link = "userAccount.jsp";
 				} else {
-					
+					Random random = new Random();
+					int rand = random.nextInt(99999);
+					System.out.println("generating " + rand);
+					request.getSession().setAttribute("confirmationNumber", rand);
+					request.getSession().setAttribute("newUser",user);
+					SendEmail(user.getEmail(),rand);
+					link = "confirmation.jsp";
 				}
 			} else {
 				errorMessage = "Incorrect Username or Password";
@@ -725,12 +735,11 @@ public class SetupServlet extends HttpServlet {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("dlpbpluscode@gmail.com,"));
+            message.setFrom(new InternetAddress("erikzhong1@gmail.com,"));
             message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(email));
-            message.setSubject("Testing Subject");
-            message.setText("Dear Mail Crawler,"
-                + "\n\n No spam to my email, please!");
+            message.setSubject("DLBPlus email account verification");
+            message.setText("your random code is " + rand);
 
             Transport.send(message);
 
