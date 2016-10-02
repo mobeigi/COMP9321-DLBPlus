@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!-- Header -->
-	<nav class="light-blue lighten-1" role="navigation">
+	<nav class="green lighten-1" role="navigation">
 	   	<div class="nav-wrapper container"><a id="logo-container" href="?action=home" class="brand-logo"><img src="images/logo_white.png" alt="logo"></a>
    			<ul class="right hide-on-med-and-down"> 			
 				<c:choose>
