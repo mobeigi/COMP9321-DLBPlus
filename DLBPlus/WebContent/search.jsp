@@ -152,7 +152,7 @@
               <textarea placeholder="Cites" name="cites" class="materialize-textarea"></textarea>
             </div>
             <div class="col s6" style="margin-top: 50px;">
-              <input placeholder="Crossref"  name="crossref" type="text" />
+              <input placeholder="Cross References"  name="crossref" type="text" />
             </div>
           </div>
 
@@ -201,7 +201,7 @@
               <input type="checkbox" class="filled-in" id="matchcase-checkbox" name="matchcase" />
               <label for="matchcase-checkbox">Match Case</label>
 
-              <input type="checkbox" class="filled-in" id="exactmatch-checkbox" name="exactmatch" />
+              <input type="checkbox" class="filled-in" id="exactmatch-checkbox" name="exactmatch" style="margin-left: 10px;" />
               <label for="exactmatch-checkbox">Exact Match</label>
               <br><br>
             </div>

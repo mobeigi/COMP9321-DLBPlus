@@ -2,12 +2,23 @@ package edu.unsw.comp9321;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.PasswordAuthentication;
+import java.security.Security;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.net.PasswordAuthentication;
 import java.util.*;
-
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -400,15 +411,16 @@ public class SetupServlet extends HttpServlet {
 					System.out.println("generating " + rand);
 					request.getSession().setAttribute("confirmationNumber", rand);
 					request.getSession().setAttribute("newUser",newUser);
+					SendEmail(email,rand);
 					link = "confirmation.jsp";
 				}
 			}
 		} else if(req.equals("regSuccess")){
 			String code = request.getParameter("code");
 			String emailCode = request.getSession().getAttribute("confirmationNumber").toString();
-			User newUser = new User(); 
-			newUser = (User) request.getSession().getAttribute("newUser");
+			User newUser = (User) request.getSession().getAttribute("newUser");
 			System.out.println("code is" + emailCode);
+			if(newUser == null) System.out.println("WHAT THE FUCK");
 			System.out.println(newUser.getId());
 			if(code == null){
 				link = "confirmation.jsp";
@@ -421,7 +433,6 @@ public class SetupServlet extends HttpServlet {
 				}
 			}
 			
-			
 		} else if(req.equals("login")){
 			String errorMessage = "";
 			String userName = request.getParameter("uname");
@@ -431,9 +442,13 @@ public class SetupServlet extends HttpServlet {
 			System.out.println(success);
 			if(success == true){
 				User user = db.GetUser(userName);
-				request.getSession().setAttribute("user",user);
-				System.out.println(user.getUsername());
-				link = "userAccount.jsp";
+				if (user.getAcctconfrm()){
+					request.getSession().setAttribute("user",user);
+					System.out.println(user.getUsername());
+					link = "userAccount.jsp";
+				} else {
+					
+				}
 			} else {
 				errorMessage = "Incorrect Username or Password";
 				link = "login.jsp";
@@ -452,8 +467,13 @@ public class SetupServlet extends HttpServlet {
 			request.getSession().setAttribute("eMessage",errorMessage);
 			link = "register.jsp";
 		} else if(req.equals("modified")){
+			User user = (User) request.getSession().getAttribute("user");
+			request.getSession().setAttribute("user",user);
 			link = "modifyDetails.jsp";
+			String errorMessage = "";
+			request.getSession().setAttribute("eMessage",errorMessage);
 		} else if(req.equals("detailsAdded")){
+			String errorMessage = "";
 			String firstName = request.getParameter("fname");
 			String lastName = request.getParameter("lname");
 			String nickName = request.getParameter("nickname");
@@ -466,21 +486,29 @@ public class SetupServlet extends HttpServlet {
 			String dp = "";
 			
 			if (!passConfirm.equals(password)){
-				String errorMessage;
 				errorMessage = "Passwords do not match!";
 				link = "modifyDetails.jsp";
 				request.getSession().setAttribute("eMessage",errorMessage);
 			}
 			else {
 				User toChange = (User) request.getSession().getAttribute("user");
+				toChange.setFname(firstName);
+				toChange.setLname(lastName);
+				toChange.setNickname(nickName);
+				toChange.setEmail(email);
+				toChange.setAddress(address);
+				toChange.setCreditcard(creditCard);
+				db.ChangeUserPassword(toChange, password);
+				boolean success = db.ChangeUserDetails(toChange);
+				if (success){
+					System.out.println("acc details changed");
+				}
 				
-					User newUser = new User();
-					newUser = db.CreateUser(toChange.getUsername(), password, firstName, lastName, nickName, email, address, toChange.getDob(), creditCard, dp);
-					db.ChangeUserDetails(newUser);
-					link = "userAccount.jsp";
-			}
-			
-			link = "setup.jsp";
+				request.getSession().setAttribute("eMessage",errorMessage);
+				link = "userAccount.jsp";
+			}                  
+			request.getSession().setAttribute("eMessage",errorMessage);
+			link = "userAccount.jsp";
 		} else if(req.equals("loginPage")){
 			String errorMessage = "";
 			request.getSession().setAttribute("eMessage",errorMessage);
@@ -489,6 +517,11 @@ public class SetupServlet extends HttpServlet {
 			link = "userAccount.jsp";
 		} else if(req.equals("viewHist")){
 			//View past orders
+			User buyer = (User) request.getSession().getAttribute("user");
+			int buyerID = buyer.getId();
+			List<Order> orderList = db.GetOrderHistory(buyerID);
+			
+			request.getSession().setAttribute("userOrderList",orderList);
 			link = "userSoldListings.jsp";
 		} else if(req.equals("viewListings")){
 			//View sales
@@ -637,13 +670,29 @@ public class SetupServlet extends HttpServlet {
 			response.sendRedirect("/DLBPlus/admin");
 			return;
 		}
-		//View listing
-		else if (req.equals("viewListing")){
-			int listingID = Integer.parseInt(request.getParameter("id"));
-			
-			Listing listing = db.GetListing(listingID);
-			request.getSession().setAttribute("viewListing", listing);
-			
+		else if (req.equals("viewListingDetails")){
+			int listingID = -1;
+      
+      try {
+        listingID = Integer.parseInt(request.getParameter("id"));
+      } catch (NumberFormatException e) {}
+      
+      if (listingID != -1) {
+        Listing listing = db.GetListing(listingID);
+        if (listing != null) {
+          request.getSession().setAttribute("listings", listing);
+          
+          //Increment views for listing
+          User viewer = (User)request.getSession().getAttribute("user");
+          if (viewer == null || (viewer.getId() != listing.getSellerid())) { //null viewer = guest
+            db.IncrementListingViews(listing);
+          }
+        } else {
+          listingID = -1; //error
+        }
+      }
+      
+      request.getSession().setAttribute("listingFound", (listingID != -1));
 			link = "listing.jsp";
 		}
 		
@@ -657,7 +706,40 @@ public class SetupServlet extends HttpServlet {
 		 RequestDispatcher rd = request.getRequestDispatcher("/"+link);
 		 rd.forward(request, response);
 	}
+	private void SendEmail(String email, int rand) {
+		final String username = "dlbpluscode@gmail.com	";
+        final String password = "uncommonpassword";
 
+        Properties props = new Properties();
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+          new javax.mail.Authenticator() {
+            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new javax.mail.PasswordAuthentication(username, password);
+            }
+          });
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("dlpbpluscode@gmail.com,"));
+            message.setRecipients(Message.RecipientType.TO,
+                InternetAddress.parse(email));
+            message.setSubject("Testing Subject");
+            message.setText("Dear Mail Crawler,"
+                + "\n\n No spam to my email, please!");
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+	}
 	private String remove(HttpServletRequest request){
 		/*
 		ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("ShoppingCart");
@@ -674,5 +756,5 @@ public class SetupServlet extends HttpServlet {
 		*/
 		return "cart.jsp";
 	}
-	
+
 }
