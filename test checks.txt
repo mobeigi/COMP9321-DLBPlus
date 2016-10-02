@@ -1,0 +1,3 @@
+== This file contains a list of checks that should be done prior to demo
+
+* SearchListings: Does it only contain listings of quantity > 0?
