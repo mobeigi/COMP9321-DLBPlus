@@ -113,7 +113,7 @@ public class SetupServlet extends HttpServlet {
 		link = "index.jsp";
 		} else if(req.equals("viewSearchPage")){
 			link = "search.jsp";
-		} } else if (req.equals("search")){
+		} else if (req.equals("search")){
       String qTitle = (request.getParameter("title") == null || request.getParameter("title").isEmpty()) ? null : new String( request.getParameter("title").getBytes(), "UTF-8").trim();
       String qSellerUsername = (request.getParameter("sellerusername") == null || request.getParameter("sellerusername").isEmpty()) ? null : new String( request.getParameter("sellerusername").getBytes(), "UTF-8").trim();
       String qQuantity = (request.getParameter("quantity") == null || request.getParameter("quantity").isEmpty()) ? null : new String( request.getParameter("quantity").getBytes(), "UTF-8").trim();
