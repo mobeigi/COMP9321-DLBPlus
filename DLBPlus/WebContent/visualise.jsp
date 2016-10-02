@@ -65,29 +65,41 @@
 	  // create an array with nodes
 	  var nodes = [
 	    <%
+	    	List<VisNode> visNodes = (List<VisNode>) request.getAttribute("visNodes");
 	    	String arrayVisNodes = "";
-	    	for (int i = 0; i < 5; i++) {
-	    		arrayVisNodes += "{id: " + i + ", label: 'Node " + i +"'},";
+	    	for (VisNode visNode : visNodes) {
+	    		arrayVisNodes += "{id: " + visNode.getID() + 
+	    						 ", label: '" + visNode.getValue() + "'},";
 	    	}
-	    	arrayVisNodes = arrayVisNodes.substring(0,arrayVisNodes.length()-1);
-	    	System.out.println(arrayVisNodes);
+	    	arrayVisNodes = arrayVisNodes.substring(0,arrayVisNodes.length()-1);	// remove trailing comma
+	    	System.out.println("Vis Nodes string: " + arrayVisNodes);
 	    	out.print(arrayVisNodes);
 	    %>
 	  ];
 
 	  // create an array with edges
 	  var edges = [
-	    {from: 1, to: 2, label: 'middle',     font: {align: 'middle'}},
-	    {from: 1, to: 3, label: 'top',        font: {align: 'top'}},
-	    {from: 2, to: 4, label: 'horizontal', font: {align: 'horizontal'}},
-	    {from: 2, to: 5, label: 'bottom',     font: {align: 'bottom'}}
+	    <%
+	    	// Prepare font object
+	    	String font = "font: {align: 'top'}";
+	    	List<VisRelationship> visRelationships = (List<VisRelationship>) request.getAttribute("visRelationships");
+	    	String arrayVisRelationships = "";
+	    	for (VisRelationship visRelationship : visRelationships) {
+	    		arrayVisRelationships += "{from: " + visRelationship.getFromNodeID() + 
+	    								 ", to: " + visRelationship.getToNodeID() + 
+	    								 ", " + font + "},";
+	    	}
+	    	arrayVisRelationships = arrayVisRelationships.substring(0,arrayVisRelationships.length()-1);	// remove trailing comma
+	    	System.out.println("Vis relationship string: " + arrayVisRelationships);
+	    	out.print(arrayVisRelationships);
+	    %>
 	  ];
 
-	  // create a network
+	  // Display the graph-visuaslisation
 	  var container = document.getElementById("visualisation");
 	  var data = {
-	    nodes: nodes,
-	    edges: edges
+		    nodes: nodes,
+		    edges: edges
 	  };
 	  var options = {};
 	  var network = new vis.Network(container, data, options);

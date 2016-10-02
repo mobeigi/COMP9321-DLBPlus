@@ -326,4 +326,16 @@ public interface DLBPlusDBInterface {
 	 * @return returns a list of orders that the user has made
 	 */
 	public List<Order> GetOrderHistory(int buyerID);
+	
+	/**
+	 * Obtains all visualisation nodes
+	 * @return list of vis_nodes, empty list otherwise
+	 */
+	public List<VisNode> GetAllVisNodes();
+	
+	/**
+	 * Obtains all visualisation relationships
+	 * @return list of vis_relationships, empty list otherwise
+	 */
+	public List<VisRelationship> GetAllVisRelationships();
 }

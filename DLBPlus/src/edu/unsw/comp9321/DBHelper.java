@@ -1979,7 +1979,7 @@ public class DBHelper implements DLBPlusDBInterface {
 	    		Integer id = rs.getInt("id");
 	    		String username = rs.getString("username");
         
-	    		//Set User fields
+	    		//Set Admin fields
 	    		a.setId(id);
 	    		a.setUsername(username);
 
@@ -2265,6 +2265,121 @@ public class DBHelper implements DLBPlusDBInterface {
 		} catch (SQLException e) {
 			return;		// this should never be returned
 		}	
+	}
+
+	/**
+	 * Obtains all visualisation nodes
+	 * @return list of vis_nodes, empty list otherwise
+	 */
+	public List<VisNode> GetAllVisNodes() {
+		List<VisNode> allVisNodes = new ArrayList<VisNode>();
+		
+	    if (!dbConnStatus) {
+	        this.PrintDebugMessage("GetAllVisNodes", "No connection with database");
+	        return allVisNodes;
+	    }
+	      
+	    try {
+	        Statement stmt;
+	        dbConn.setAutoCommit(false);
+	        stmt = dbConn.createStatement();
+	        String query = "SELECT * FROM vis_nodes ORDER BY id ASC;";
+	        ResultSet rs = stmt.executeQuery(query);
+	    
+	        VisNode vn = processResultSetIntoVisNode(rs);
+	        while (vn != null) {
+	        	allVisNodes.add(vn);
+	        	vn = processResultSetIntoVisNode(rs);
+	        }
+	        
+	    } catch (SQLException e) {
+	    	System.out.println(e);
+	        return allVisNodes;
+	    }
+		return allVisNodes;
+	}
+	
+	/**
+	 * Parses result set into a visualisation node
+	 * @param rs the result set
+	 * @return a new visNode, null otherwise
+	 */
+	private VisNode processResultSetIntoVisNode(ResultSet rs) {
+		VisNode vn = new VisNode();
+	    
+	    try {
+	    	if (rs.next()) {
+	    		Integer id = rs.getInt("id");
+	    		String attrtype = rs.getString("attrtype");
+	    		String value = rs.getString("value");
+	    		
+	    		// Set vis node fields
+	    		vn.setID(id);
+	    		vn.setValue(value);
+	    		vn.setNodeType(attrtype);
+
+	    	} else { //No result found
+	    		return null;
+	    	}
+	    } catch (SQLException e) {
+	    	System.out.println(e);
+	    	return null;
+	    }
+	    return vn;		
+	}
+
+	/**
+	 * Obtains all visualisation relationships
+	 * @return list of vis_relationships, empty list otherwise
+	 */
+	public List<VisRelationship> GetAllVisRelationships() {
+		List<VisRelationship> allVisRelationships = new ArrayList<VisRelationship>();
+		
+	    if (!dbConnStatus) {
+	        this.PrintDebugMessage("GetAllVisRelationships", "No connection with database");
+	        return allVisRelationships;
+	    }
+	    try {
+	        Statement stmt;
+	        dbConn.setAutoCommit(false);
+	        stmt = dbConn.createStatement();
+	        String query = "SELECT * FROM vis_relationships;";
+	        ResultSet rs = stmt.executeQuery(query);
+	    
+	        VisRelationship vr = processResultSetIntoVisRelationship(rs);
+	        while (vr != null) {
+	        	allVisRelationships.add(vr);
+	        	vr = processResultSetIntoVisRelationship(rs);
+	        }
+	    } catch (SQLException e) {
+	    	System.out.println(e);
+	        return allVisRelationships;
+	    }
+		return allVisRelationships;
+	}
+	
+	private VisRelationship processResultSetIntoVisRelationship(ResultSet rs) {
+		VisRelationship vr = new VisRelationship();
+	    
+	    try {
+	    	if (rs.next()) {
+	    		Integer fromNodeID = rs.getInt("firstnode");
+	    		String reltype = rs.getString("reltype");
+	    		Integer toNodeID = rs.getInt("secondnode");
+	    		
+	    		// Set vis relationship fields
+	    		vr.setFromNodeID(fromNodeID);
+	    		vr.setRelationshipValue(reltype);
+	    		vr.setToNodeID(toNodeID);
+
+	    	} else { //No result found
+	    		return null;
+	    	}
+	    } catch (SQLException e) {
+	    	System.out.println(e);
+	    	return null;
+	    }
+	    return vr;	
 	}
 
 	
