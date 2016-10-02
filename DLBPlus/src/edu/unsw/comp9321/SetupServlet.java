@@ -406,9 +406,9 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("regSuccess")){
 			String code = request.getParameter("code");
 			String emailCode = request.getSession().getAttribute("confirmationNumber").toString();
-			User newUser = new User(); 
-			newUser = (User) request.getSession().getAttribute("newUser");
+			User newUser = (User) request.getSession().getAttribute("newUser");
 			System.out.println("code is" + emailCode);
+			if(newUser == null) System.out.println("WHAT THE FUCK");
 			System.out.println(newUser.getId());
 			if(code == null){
 				link = "confirmation.jsp";
