@@ -18,7 +18,7 @@
   ];
 
   // create a network
-  var container = document.getElementById('');
+  var container = document.getElementById("visualisation");
   var data = {
     nodes: nodes,
     edges: edges

@@ -633,9 +633,10 @@ public class SetupServlet extends HttpServlet {
 			}
 			String pages = request.getParameter("pages");
 			String volume = request.getParameter("volume");
-			Integer year = Integer.parseInt(request.getParameter("year"));
-			if (year.equals("")){
-				year = null;
+			String yearStr = request.getParameter("year");
+			Integer year = null;
+			if (yearStr != null) {
+				year = Integer.parseInt(yearStr);
 			}
 			String month = request.getParameter("month");
 			String address = request.getParameter("address");
