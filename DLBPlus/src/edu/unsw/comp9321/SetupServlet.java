@@ -663,13 +663,29 @@ public class SetupServlet extends HttpServlet {
 			response.sendRedirect("/DLBPlus/admin");
 			return;
 		}
-		//View listing
-		else if (req.equals("viewListing")){
-			int listingID = Integer.parseInt(request.getParameter("id"));
-			
-			Listing listing = db.GetListing(listingID);
-			request.getSession().setAttribute("viewListing", listing);
-			
+		else if (req.equals("viewListingDetails")){
+			int listingID = -1;
+      
+      try {
+        listingID = Integer.parseInt(request.getParameter("id"));
+      } catch (NumberFormatException e) {}
+      
+      if (listingID != -1) {
+        Listing listing = db.GetListing(listingID);
+        if (listing != null) {
+          request.getSession().setAttribute("listings", listing);
+          
+          //Increment views for listing
+          User viewer = (User)request.getSession().getAttribute("user");
+          if (viewer == null || (viewer.getId() != listing.getSellerid())) { //null viewer = guest
+            db.IncrementListingViews(listing);
+          }
+        } else {
+          listingID = -1; //error
+        }
+      }
+      
+      request.getSession().setAttribute("listingFound", (listingID != -1));
 			link = "listing.jsp";
 		}
 		
