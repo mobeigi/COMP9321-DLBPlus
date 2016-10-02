@@ -14,6 +14,20 @@
 	
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <script type="text/javascript" src="js/vis.js"></script>
+  	<link href="css/vis.css" rel="stylesheet" type="text/css" />
+  	
+	<style type="text/css">
+	    #visualisation {
+	      width: 800px;
+	      height: 800px;
+	    }
+	    p {
+	      max-width: 1000px;
+	   	}
+  	</style>
+    
 </head>
 
 <body>
@@ -28,21 +42,50 @@
     		<br><br>
         </div>
  	</div>
-	
+ 	
+ 	<!-- Query box -->
+	<center><p> Here is the query area! </p></center>
+	<br>
 	
 	<div class="row">
 		<div class="col s8 offset-s2">
 			<div class="card white">
-	       		<div class="card-content black-text">
-		 			<div class="card-title">
 		 			
-		 			<div id="visualisation"></div>
-		 			
-		 			</div>
-		 		</div>
-	 		</div>
+		 			<!-- Area to visualise the listings -->
+		 			<div id="visualisation"></div>		 			
+		 	</div>
+
 	 	</div>
 	 </div>
+	 
+	 <script type="text/javascript">
+	  // create an array with nodes
+	  var nodes = [
+	    {id: 1, label: 'Node 1'},
+	    {id: 2, label: 'Node 2'},
+	    {id: 3, label: 'Node 3:\nLeft-Aligned', font: {'face': 'Monospace', align: 'left'}},
+	    {id: 4, label: 'Node 4'},
+	    {id: 5, label: 'Node 5\nLeft-Aligned box', shape: 'box',
+	     font: {'face': 'Monospace', align: 'left'}}
+	  ];
+	
+	  // create an array with edges
+	  var edges = [
+	    {from: 1, to: 2, label: 'middle',     font: {align: 'middle'}},
+	    {from: 1, to: 3, label: 'top',        font: {align: 'top'}},
+	    {from: 2, to: 4, label: 'horizontal', font: {align: 'horizontal'}},
+	    {from: 2, to: 5, label: 'bottom',     font: {align: 'bottom'}}
+	  ];
+	
+	  // create a network
+	  var container = document.getElementById("visualisation");
+	  var data = {
+	    nodes: nodes,
+	    edges: edges
+	  };
+	  var options = {};
+	  var network = new vis.Network(container, data, options);
+	</script>
 	
 	
 	<jsp:include page="footer.jsp" />
