@@ -1,6 +1,7 @@
 package edu.unsw.comp9321;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -105,6 +106,17 @@ public class AdminServlet extends HttpServlet {
 			List<Order> ListOfOrders = this.db.GetOrderHistory(Integer.parseInt(userId));
 			List<CartItem> ListOfRemovedCartItems = this.db.GetRemovedCartItems(myUser.getCartid());
 			
+			int numOrders = ListOfOrders.size();
+			List<String> SellerNames = new ArrayList<String>();
+			
+			//obtain seller names from order seller name IDs
+			for(int i=0; i<numOrders; i++) {
+				int currSellerId = ListOfOrders.get(i).getSellerid();
+				
+				SellerNames.add(this.db.GetUser(currSellerId).getFname() + " " + this.db.GetUser(currSellerId).getLname());
+			}
+			
+			request.getSession().setAttribute("SellerNames", SellerNames);
 			request.getSession().setAttribute("ListOfOrders", ListOfOrders);
 			request.getSession().setAttribute("ListOfRemovedCartItems", ListOfRemovedCartItems);
 			request.getSession().setAttribute("myUser", myUser);

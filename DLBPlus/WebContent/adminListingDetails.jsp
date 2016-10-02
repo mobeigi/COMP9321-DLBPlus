@@ -126,20 +126,70 @@
 							<td>Month</td>
 							<td><c:out value="${viewListing.month}" /></td>
 						</tr>
+						<c:forEach var="currURL" items="${viewListing.urls}"
+						           varStatus="loop">
+							<tr>
+								<td>URL</td>
+								<td><c:out value="${currURL}" /></td>
+							</tr>
+						</c:forEach>
+						<c:forEach var="currEE" items="${viewListing.ees}"
+						           varStatus="loop">
+							<tr>
+								<td>EE</td>
+								<td><c:out value="${currEE}" /></td>
+							</tr>
+						</c:forEach>
 						<tr>
-							<td>Is Paused</td>
-							<td><c:out value="${viewListing.paused}" /></td>
+							<td>CD ROM</td>
+							<td><c:out value="${viewListing.cdrom}" /></td>
+						</tr>
+						<c:forEach var="currCity" items="${viewListing.cites}"
+						           varStatus="loop">
+							<tr>
+								<td>City</td>
+								<td><c:out value="${currCity}" /></td>
+							</tr>
+						</c:forEach>
+						<tr>
+							<td>Publisher</td>
+							<td><c:out value="${viewListing.publisher}" /></td>
 						</tr>
 						<tr>
-							<td>Number of Views</td>
-							<td><c:out value="${viewListing.numviews}" /></td>
+							<td>Note</td>
+							<td><c:out value="${viewListing.note}" /></td>
 						</tr>
 						<tr>
-							<td>Type</td>
-							<td><c:out value="${viewListing.type}" /></td>
+							<td>Crossref</td>
+							<td><c:out value="${viewListing.crossref}" /></td>
 						</tr>
-						
-						
+						<c:forEach var="currISBN" items="${viewListing.isbns}"
+						           varStatus="loop">
+							<tr>
+								<td>ISBN</td>
+								<td><c:out value="${currISBN}" /></td>
+							</tr>
+						</c:forEach>
+						<tr>
+							<td>Series</td>
+							<td><c:out value="${viewListing.series}" /></td>
+						</tr>
+						<c:forEach var="currVenue" items="${viewListing.venues}"
+						           varStatus="loop">
+							<tr>
+								<td>Venue</td>
+								<td><c:out value="${currVenue}" /></td>
+							</tr>
+						</c:forEach>
+						<tr>
+							<td>Chapter</td>
+							<td><c:out value="${viewListing.chapter}" /></td>
+						</tr>
+						<tr>
+							<td>Rating</td>
+							<td><c:out value="${viewListing.rating}" /></td>
+						</tr>
+
 					</tbody>	
 	        	</table>
 			</div>
@@ -150,23 +200,12 @@
 	    
 	    <div class="row">
 	    	<div class="col s9">
-			    <form action="setup" method="POST">
-			   		<input type="hidden" name="action" value="back"/>
-					<button type="submit" value="Back To Search" class="btn waves-effect waves-light">Back</button>
+			    <form action="admin" method="POST">
+			   		<input type="hidden" name="action" value="viewAllListings"/>
+					<button type="submit" value="Back To Manage Listings" class="btn waves-effect waves-light">Back</button>
 					<br>
 			    </form>
 		    </div>
-		    <div class="col s3">
-				<form action="setup" method = "POST">
-					<div>
-						<input type="hidden" name="action" value="add"/>
-						<input type="hidden" name="publicationID" value="${publicationID}"/>
-						<button type="submit" value="Add to Shopping Cart" class="btn waves-effect waves-light">Add to Cart
-						<i class="material-icons right">add</i>
-						</button> 
-					</div>
-			    </form>
-			</div>
 	   	</div>
     </div>
     <br><br>
