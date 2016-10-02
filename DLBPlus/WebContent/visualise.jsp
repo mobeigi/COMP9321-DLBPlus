@@ -46,22 +46,28 @@
  	</div>
  	
  	<!-- Query box -->
-	<center>
-		<div class="row">
-			<form action="setup" method="get">
-	            <div class="col s6">
-              		<input placeholder="Pages" name="pages" type="text" />
-	            </div>
-	            <div class="col s6">
-              		<input placeholder="Publisher" name="publisher" type="text" />
-	            </div>
-				
-				<input type="hidden" name="action" value="queryVisualisation">
-				<button class="btn waves-effect waves-light" type="submit">Query</button>
-				 
-			</form>
+	<div class="row">
+		<div class="col s8 offset-s2">
+			<div class="card white">
+			
+				<div class="row">
+					<form action="setup" method="get">
+			            <div class="col s6">
+		              		<input placeholder="Pages" name="pages" type="text" />
+			            </div>
+			            <div class="col s6">
+		              		<input placeholder="Publisher" name="publisher" type="text" />
+			            </div>
+						
+						<input type="hidden" name="action" value="queryVisualisation">
+						<button class="btn waves-effect waves-light" type="submit">Query</button>
+						 
+					</form>
+				</div>
+		
+			</div>
 		</div>
-	</center>
+	</div>
 	<br>
 	
 	<div class="row">
