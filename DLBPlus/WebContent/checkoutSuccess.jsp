@@ -4,11 +4,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Bibliographic Library | Register Successful!</title>
+<title>Insert title here</title>
 <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 
 <body>
@@ -20,15 +20,14 @@
 	  });
 	</script>
 	<jsp:include page="navbar.jsp" />
-	
 	<div class="section no-pad-bot" id="index-banner">
-    	<div class="container">
-    		<br><br>
-    		<h1 class="header center orange-text">Registration Success!</h1>
-    		<br><br>
-        </div>
- 	</div>
-	
+	  <div class="container">
+	    <br><br>
+	    <h1 class="header center orange-text">Checkout Successful!</h1>
+	    <br><br>
+	  </div>
+	</div> 
+    
 	<div class="row">
  		<div class="col s4 offset-s4">
  			<div class="card white">
@@ -54,8 +53,8 @@
       		</div>
       	</div>
    	</div>
-    <br>
-    
-    <jsp:include page="footer.jsp" />
+    <br>      
+                
+<jsp:include page="footer.jsp" />
 </body>
 </html>

@@ -99,14 +99,24 @@
 		
 	<div class="container">
 		<div class="center-align">
-
-				<form action="setup" method="POST">
-					<input type="hidden" name="action" value="back">
-					<button class="btn waves-effect waves-light" type="submit" value="Back to Search">Back to Search
-					<i class="material-icons right"></i>
-					</button> 
-				</form>
-
+			<div class="row">
+				<div class="col s2 offset-s4">
+					<form action="setup" method="post">
+						<input type="hidden" name="action" value="checkout">
+						<button class="btn waves-effect waves-light" type="submit">Checkout
+						<i class="material-icons right"></i>
+						</button>
+					</form>
+				</div>
+				<div class="col s2">
+					<form action="setup" method="POST">
+						<input type="hidden" name="action" value="back">
+						<button class="btn waves-effect waves-light" type="submit">Back
+						<i class="material-icons right"></i>
+						</button> 
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
 	<br><br>

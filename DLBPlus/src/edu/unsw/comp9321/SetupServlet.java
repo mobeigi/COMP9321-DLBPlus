@@ -380,7 +380,8 @@ public class SetupServlet extends HttpServlet {
 			request.getSession().setAttribute("cartList", cartList);
 			
 			link = "cart.jsp";
-					
+		} else if(req.equals("checkout")){
+			link = checkoutCartItems(request);
 		} else if(req.equals("register")){
 			int flag = 0;
 			String errorMessage = "";
@@ -394,7 +395,6 @@ public class SetupServlet extends HttpServlet {
 			String creditCard = request.getParameter("ccn");
 			String stringDob = request.getParameter("dob");
 			String passConfirm = request.getParameter("passConfirm");
-			System.out.println(stringDob);
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd"); 
 			if(address == null){
 				address="";
@@ -407,7 +407,6 @@ public class SetupServlet extends HttpServlet {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			System.out.println(dob);
 			if (db.DoesUserExist(userName)){
 				errorMessage = "Username already exists!";
 				flag = 1;
@@ -429,7 +428,7 @@ public class SetupServlet extends HttpServlet {
 					System.out.println("generating " + rand);
 					request.getSession().setAttribute("confirmationNumber", rand);
 					request.getSession().setAttribute("newUser",newUser);
-					SendEmail(email,rand);
+					SendConfirmEmail(email,rand);
 					link = "confirmation.jsp";
 				}
 			}
@@ -440,7 +439,6 @@ public class SetupServlet extends HttpServlet {
 			String emailCode = request.getSession().getAttribute("confirmationNumber").toString();
 			User newUser = (User) request.getSession().getAttribute("newUser");
 			System.out.println("code is" + emailCode);
-			System.out.println(newUser.getId());
 			if(code == null){
 				link = "confirmation.jsp";
 			} else {
@@ -474,7 +472,7 @@ public class SetupServlet extends HttpServlet {
 					System.out.println("generating " + rand);
 					request.getSession().setAttribute("confirmationNumber", rand);
 					request.getSession().setAttribute("newUser",user);
-					SendEmail(user.getEmail(),rand);
+					SendConfirmEmail(user.getEmail(),rand);
 					link = "confirmation.jsp";
 				}
 			} else {
@@ -738,7 +736,70 @@ public class SetupServlet extends HttpServlet {
 		 RequestDispatcher rd = request.getRequestDispatcher("/"+link);
 		 rd.forward(request, response);
 	}
-	private void SendEmail(String email, int rand) {
+	private String checkoutCartItems(HttpServletRequest request) {
+		User currUser = (User) request.getSession().getAttribute("user");
+		List<CartItem> checkOutItems = db.GetActiveCartItems(currUser.getCartid());
+		for(CartItem checkOutItem : checkOutItems){
+			//Gets the listing id and object of an item in the shopping cart
+			Integer listingid = checkOutItem.getListingid();
+			Listing listing = db.GetListing(listingid);
+			
+			// Send checkout message to seller's emali
+			String sellerName = checkOutItem.getSellerName();
+			User seller = db.GetUser(sellerName);
+			SendCheckoutEmail(seller.getEmail(), listingid, sellerName, currUser.getUsername());
+			
+			// Decrement listing's quantity
+			db.DecrementListingQuantity(listing);
+			
+			// Create order
+			db.CreateOrder(currUser.getId(), listing);
+			
+			// Remove from cart
+			db.RemoveFromCart(checkOutItem);
+		}
+		
+		
+		System.out.println("Checkout complete!");
+		return "checkoutSuccess.jsp";
+	}
+
+	private void SendCheckoutEmail(String email, Integer listingid, String sellerName, String buyerName) {
+		final String username = "dlbpluscode@gmail.com	";
+        final String password = "uncommonpassword";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+          new javax.mail.Authenticator() {
+            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new javax.mail.PasswordAuthentication(username, password);
+            }
+          });
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("erikzhong1@gmail.com,"));
+            message.setRecipients(Message.RecipientType.TO,
+                InternetAddress.parse(email));
+            message.setSubject("DLBPlus Purchase Notification!");
+            message.setText("Hi " + sellerName + ", " + buyerName + " has just purchased an item from " + listingid);
+
+            Transport.send(message);
+
+            System.out.println("Seller notified");
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+	}
+	
+	
+	private void SendConfirmEmail(String email, int rand) {
 		final String username = "dlbpluscode@gmail.com	";
         final String password = "uncommonpassword";
 

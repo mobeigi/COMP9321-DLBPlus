@@ -1839,38 +1839,44 @@ public class DBHelper implements DLBPlusDBInterface {
 		
 		// Get the ids of the nodes corresponding to the authors
 		List<Integer> nodeAuthorIDs = new ArrayList<Integer>();
-		for (String author : authors) {
-			Integer nodeAuthorID = 0;
-			if (this.DoesVisNodeExist("author", author)) {
-				nodeAuthorID = this.GetVisNodeID("author", author);
-			} else {
-				nodeAuthorID = this.CreateVisNode("author", author);
+		if (authors != null) {
+			for (String author : authors) {
+				Integer nodeAuthorID = 0;
+				if (this.DoesVisNodeExist("author", author)) {
+					nodeAuthorID = this.GetVisNodeID("author", author);
+				} else {
+					nodeAuthorID = this.CreateVisNode("author", author);
+				}
+				nodeAuthorIDs.add(nodeAuthorID);
 			}
-			nodeAuthorIDs.add(nodeAuthorID);
 		}
 		
 		// Get the ids of the nodes corresponding to the editors
 		List<Integer> nodeEditorIDs = new ArrayList<Integer>();
-		for (String editor : editors) {
-			Integer nodeEditorID = 0;
-			if (this.DoesVisNodeExist("editor", editor)) {
-				nodeEditorID = this.GetVisNodeID("editor", editor);
-			} else {
-				nodeEditorID = this.CreateVisNode("editor", editor);
+		if (editors != null) {
+			for (String editor : editors) {
+				Integer nodeEditorID = 0;
+				if (this.DoesVisNodeExist("editor", editor)) {
+					nodeEditorID = this.GetVisNodeID("editor", editor);
+				} else {
+					nodeEditorID = this.CreateVisNode("editor", editor);
+				}
+				nodeEditorIDs.add(nodeEditorID);
 			}
-			nodeEditorIDs.add(nodeEditorID);
 		}
 		
 		// Get the ids of the nodes corresponding to the venues
 		List<Integer> nodeVenueIDs = new ArrayList<Integer>();
-		for (String venue : venues) {
-			Integer nodeVenueID = 0;
-			if (this.DoesVisNodeExist("venue", venue)) {
-				nodeVenueID = this.GetVisNodeID("venue", venue);
-			} else {
-				nodeVenueID = this.CreateVisNode("venue", venue);
+		if (venues != null) {
+			for (String venue : venues) {
+				Integer nodeVenueID = 0;
+				if (this.DoesVisNodeExist("venue", venue)) {
+					nodeVenueID = this.GetVisNodeID("venue", venue);
+				} else {
+					nodeVenueID = this.CreateVisNode("venue", venue);
+				}
+				nodeVenueIDs.add(nodeVenueID);
 			}
-			nodeVenueIDs.add(nodeVenueID);
 		}
 		
 		// Populate the vis_relationships
