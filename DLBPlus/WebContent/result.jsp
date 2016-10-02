@@ -75,7 +75,7 @@
                          varStatus="loop">
                 <c:if test="${loop.index < fn:length(searchFound.results)}">
                   <tr>
-                    <td><a href="setup?id=${searchFound.results[loop.index].id}">${searchFound.results[loop.index].title}</a></td>
+                    <td><a href="setup?action=viewListingDetails&id=${searchFound.results[loop.index].id}">${searchFound.results[loop.index].title}</a></td>
                     <td><p><i>${searchFound.results[loop.index].arrayAuthors}</i></p></td>
                     <td>${searchFound.results[loop.index].year}</td>
                     <td>${searchFound.results[loop.index].typeString}</td>

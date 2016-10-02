@@ -341,11 +341,15 @@ public class Listing{
 
 	//Helper getters for JLST
   public String getArrayAuthors() {
-    String authorString = "";
-    for(String author : this.authors){
-      authorString += author + "; ";
+    return joinMultiString(this.authors);
+  }
+  
+  private String joinMultiString(List<String> list) {
+    String result = "";
+    for(String s : list){
+      result += s + "; ";
     }
-    return authorString.trim().substring(0,authorString.length()-2);
+    return result.trim().substring(0, result.length()-2);
   }
   
   public String getTypeString() {
