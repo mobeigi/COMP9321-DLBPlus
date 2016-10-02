@@ -406,6 +406,95 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
+-- Name: vis_nodes; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE vis_nodes (
+    id integer NOT NULL,
+    attrtype text NOT NULL,
+    value text NOT NULL
+);
+
+
+ALTER TABLE vis_nodes OWNER TO postgres;
+
+--
+-- Name: vis_nodes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE vis_nodes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE vis_nodes_id_seq OWNER TO postgres;
+
+--
+-- Name: vis_nodes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE vis_nodes_id_seq OWNED BY vis_nodes.id;
+
+
+--
+-- Name: vis_relationships; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE vis_relationships (
+    firstnode integer NOT NULL,
+    reltype text NOT NULL,
+    secondnode integer NOT NULL
+);
+
+
+ALTER TABLE vis_relationships OWNER TO postgres;
+
+--
+-- Name: vis_relationships_firstnode_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE vis_relationships_firstnode_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE vis_relationships_firstnode_seq OWNER TO postgres;
+
+--
+-- Name: vis_relationships_firstnode_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE vis_relationships_firstnode_seq OWNED BY vis_relationships.firstnode;
+
+
+--
+-- Name: vis_relationships_secondnode_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE vis_relationships_secondnode_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE vis_relationships_secondnode_seq OWNER TO postgres;
+
+--
+-- Name: vis_relationships_secondnode_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE vis_relationships_secondnode_seq OWNED BY vis_relationships.secondnode;
+
+
+--
 -- Name: cartid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -487,6 +576,27 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regcl
 --
 
 ALTER TABLE ONLY users ALTER COLUMN cartid SET DEFAULT nextval('users_cartid_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY vis_nodes ALTER COLUMN id SET DEFAULT nextval('vis_nodes_id_seq'::regclass);
+
+
+--
+-- Name: firstnode; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY vis_relationships ALTER COLUMN firstnode SET DEFAULT nextval('vis_relationships_firstnode_seq'::regclass);
+
+
+--
+-- Name: secondnode; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY vis_relationships ALTER COLUMN secondnode SET DEFAULT nextval('vis_relationships_secondnode_seq'::regclass);
 
 
 --
@@ -622,6 +732,43 @@ SELECT pg_catalog.setval('users_id_seq', 1, false);
 
 
 --
+-- Data for Name: vis_nodes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY vis_nodes (id, attrtype, value) FROM stdin;
+\.
+
+
+--
+-- Name: vis_nodes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('vis_nodes_id_seq', 1, false);
+
+
+--
+-- Data for Name: vis_relationships; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY vis_relationships (firstnode, reltype, secondnode) FROM stdin;
+\.
+
+
+--
+-- Name: vis_relationships_firstnode_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('vis_relationships_firstnode_seq', 1, false);
+
+
+--
+-- Name: vis_relationships_secondnode_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('vis_relationships_secondnode_seq', 1, false);
+
+
+--
 -- Name: admins_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -678,6 +825,14 @@ ALTER TABLE ONLY users
 
 
 --
+-- Name: vis_nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY vis_nodes
+    ADD CONSTRAINT vis_nodes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: activecartitems_cartid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -731,6 +886,22 @@ ALTER TABLE ONLY removedcartitems
 
 ALTER TABLE ONLY removedcartitems
     ADD CONSTRAINT removedcartitems_listingid_fkey FOREIGN KEY (listingid) REFERENCES listings(id);
+
+
+--
+-- Name: vis_relationships_firstnode_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY vis_relationships
+    ADD CONSTRAINT vis_relationships_firstnode_fkey FOREIGN KEY (firstnode) REFERENCES vis_nodes(id);
+
+
+--
+-- Name: vis_relationships_secondnode_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY vis_relationships
+    ADD CONSTRAINT vis_relationships_secondnode_fkey FOREIGN KEY (secondnode) REFERENCES vis_nodes(id);
 
 
 --
