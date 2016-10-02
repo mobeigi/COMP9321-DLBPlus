@@ -22,12 +22,13 @@
 	    #visualisation {
 	      width: 800px;
 	      height: 800px;
+          border: 1px solid lightgray;
 	    }
 	    p {
 	      max-width: 1000px;
 	   	}
   	</style>
-    
+  	
 </head>
 
 <body>
@@ -45,7 +46,22 @@
  	</div>
  	
  	<!-- Query box -->
-	<center><p> Here is the query area! </p></center>
+	<center>
+		<div class="row">
+			<form action="setup" method="get">
+	            <div class="col s6">
+              		<input placeholder="Pages" name="pages" type="text" />
+	            </div>
+	            <div class="col s6">
+              		<input placeholder="Publisher" name="publisher" type="text" />
+	            </div>
+				
+				<input type="hidden" name="action" value="queryVisualisation">
+				<button class="btn waves-effect waves-light" type="submit">Query</button>
+				 
+			</form>
+		</div>
+	</center>
 	<br>
 	
 	<div class="row">
@@ -53,7 +69,9 @@
 			<div class="card white">
 		 			
 		 			<!-- Area to visualise the listings -->
-		 			<div id="visualisation"></div>		 			
+		 			<center>
+		 				<div id="visualisation"></div>	
+		 			</center>	 			
 		 	</div>
 
 	 	</div>
@@ -66,14 +84,18 @@
 	  var nodes = [
 	    <%
 	    	List<VisNode> visNodes = (List<VisNode>) request.getAttribute("visNodes");
-	    	String arrayVisNodes = "";
-	    	for (VisNode visNode : visNodes) {
-	    		arrayVisNodes += "{id: " + visNode.getID() + 
-	    						 ", label: '" + visNode.getValue() + "'},";
+	    	if (visNodes != null) {
+		    	String arrayVisNodes = "";
+		    	for (VisNode visNode : visNodes) {
+		    		arrayVisNodes += "{id: " + visNode.getID() + 
+		    						 ", label: '" + visNode.getValue() + "'},";
+		    	}
+		    	arrayVisNodes = arrayVisNodes.substring(0,arrayVisNodes.length()-1);	// remove trailing comma
+		    	System.out.println("Vis Nodes string: " + arrayVisNodes);
+		    	out.print(arrayVisNodes);
+	    	} else {
+	    		out.print("");
 	    	}
-	    	arrayVisNodes = arrayVisNodes.substring(0,arrayVisNodes.length()-1);	// remove trailing comma
-	    	System.out.println("Vis Nodes string: " + arrayVisNodes);
-	    	out.print(arrayVisNodes);
 	    %>
 	  ];
 
@@ -83,27 +105,39 @@
 	    	// Prepare font object
 	    	String font = "font: {align: 'top'}";
 	    	List<VisRelationship> visRelationships = (List<VisRelationship>) request.getAttribute("visRelationships");
-	    	String arrayVisRelationships = "";
-	    	for (VisRelationship visRelationship : visRelationships) {
-	    		arrayVisRelationships += "{from: " + visRelationship.getFromNodeID() + 
-	    								 ", to: " + visRelationship.getToNodeID() + 
-	    								 ", label: '" + visRelationship.getRelationshipValue() + "'" + 
-	    								 ", " + font + "},";
+	    	if (visRelationships != null) {
+		    	String arrayVisRelationships = "";
+		    	for (VisRelationship visRelationship : visRelationships) {
+		    		arrayVisRelationships += "{from: " + visRelationship.getFromNodeID() + 
+		    								 ", to: " + visRelationship.getToNodeID() + 
+		    								 ", label: '" + visRelationship.getRelationshipValue() + "'" + 
+		    								 ", " + font + "},";
+		    	}
+		    	arrayVisRelationships = arrayVisRelationships.substring(0,arrayVisRelationships.length()-1);	// remove trailing comma
+		    	System.out.println("Vis relationship string: " + arrayVisRelationships);
+		    	out.print(arrayVisRelationships);
+	    	} else {
+	    		out.print("");
 	    	}
-	    	arrayVisRelationships = arrayVisRelationships.substring(0,arrayVisRelationships.length()-1);	// remove trailing comma
-	    	System.out.println("Vis relationship string: " + arrayVisRelationships);
-	    	out.print(arrayVisRelationships);
 	    %>
 	  ];
-
-	  // Display the graph-visuaslisation
+	  
+	  // Check if there are nodes and relationships to display
 	  var container = document.getElementById("visualisation");
-	  var data = {
-		    nodes: nodes,
-		    edges: edges
-	  };
-	  var options = {};
-	  var network = new vis.Network(container, data, options);
+	  if (nodes.length > 0 && edges.length > 0) {
+		  // Display the graph-visuaslisation
+		  var data = {
+			    nodes: nodes,
+			    edges: edges
+		  };
+		  var options = {};
+		  var network = new vis.Network(container, data, options);		  
+	  }
+	  
+	  // Case when nothing to display
+	  else {
+		  container.innerHTML = "No listings to visualise!";
+	  }
 
 	</script>
 	
