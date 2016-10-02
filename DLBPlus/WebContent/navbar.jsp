@@ -8,7 +8,7 @@
    				<li><a href="?action=visualise">Visualise</a></li>			
 				<c:choose>
 					<c:when test="${not empty user}">
-						<li><a href="userAccount.jsp">Account</a></li>
+						<li><a href="?action=toAccount">Account</a></li>
 						<li><a href="?action=viewCart">Cart</a></li>
 						<li><a></a></li>
 						<li><a href="?action=logout">Logout</a>

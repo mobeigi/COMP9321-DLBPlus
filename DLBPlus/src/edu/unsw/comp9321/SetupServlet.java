@@ -339,22 +339,36 @@ public class SetupServlet extends HttpServlet {
 		} else if(req.equals("remove")) {
 			link = remove(request);
 		} else if(req.equals("add")){
-			/*
-			Integer id = Integer.parseInt(request.getParameter("publicationID"));
-			 ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("ShoppingCart");
-			 LinkedList<Listing> shoppingCartItems = shoppingCart.getElements();
-
-			 if (shoppingCartItems.contains(this.db.get(id))) {
+			String errorMessage = "";
+			boolean flag = false;
+			int listingID = Integer.parseInt(request.getParameter("listingID"));
+			Listing listing = db.GetListing(listingID);
+			User currUser = (User) request.getSession().getAttribute("user");
+			List<CartItem> cartList = db.GetActiveCartItems(currUser.getCartid());
+			if(cartList != null){
+				for(CartItem cartItem : cartList){
+					if(cartItem.getListingid() == listingID){
+						flag = true;
+					}
+				}
+			}
+			
+			if(flag){
 				 request.getSession().setAttribute("isAlreadySelected", true);
-			 }
-			 else {
-	    	 		request.getSession().setAttribute("isAlreadySelected", false);
-	    	 		shoppingCartItems.add(this.db.get(id));
-	    	 		shoppingCart.setElements(shoppingCartItems);
-			 }
-			 */
-			 //request.getSession().setAttribute("cartSize", shoppingCartItems.size());
-			 link = "cart.jsp";
+			} else {
+				request.getSession().setAttribute("isAlreadySelected", false);
+				CartItem item = db.AddToCart(currUser, listing);
+				if(item == null){
+					errorMessage = "Failed to add item!";
+				}
+			}
+			
+			
+			cartList = db.GetActiveCartItems(currUser.getCartid());
+			request.getSession().setAttribute("cartListSize", cartList.size());
+			request.getSession().setAttribute("cartList", cartList);
+			
+			link = "cart.jsp";
 					
 		} else if(req.equals("register")){
 			int flag = 0;
@@ -701,19 +715,25 @@ public class SetupServlet extends HttpServlet {
 	}
 
 	private String remove(HttpServletRequest request){
-		/*
-		ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("ShoppingCart");
-		LinkedList<Publication> itemsInCart = shoppingCart.getElements();
+		List<CartItem> cartList = (List<CartItem>) request.getSession().getAttribute("cartList");
+		Integer listingID = Integer.parseInt(request.getParameter("removeListingID"));
+		User currUser = (User) request.getSession().getAttribute("user");
+		CartItem item = null;
+		if(!cartList.isEmpty() && cartList != null){
+			for(CartItem cartItem : cartList){
+				if(cartItem.getListingid() == listingID){
+					item = cartItem;
+				}
+			}
+		}
+		if(item != null){
+			db.RemoveFromCart(item);
+		}
 		
-		String[] itemsToRemove = request.getParameterValues("removeFromCart");
-		if (itemsToRemove == null) {
-			return "cart.jsp";
-		}
-		for (String item : itemsToRemove) {
-			//itemsInCart.remove(this.db.get(Integer.parseInt(item)));
-		}
-		request.getSession().setAttribute("cartSize", itemsInCart.size());
-		*/
+		cartList = db.GetActiveCartItems(currUser.getCartid());
+		request.getSession().setAttribute("cartListSize", cartList.size());
+		request.getSession().setAttribute("cartList", cartList);
+
 		return "cart.jsp";
 	}
 	

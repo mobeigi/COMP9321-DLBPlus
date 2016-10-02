@@ -306,7 +306,7 @@
       <form action="setup" method = "POST">
         <div>
           <input type="hidden" name="action" value="add"/>
-          <input type="hidden" name="publicationID" value="${publicationID}"/>
+          <input type="hidden" name="listingID" value="${listings.id}"/>
           <button type="submit" value="Add to Shopping Cart" class="btn waves-effect waves-light">Add to Cart
             <i class="material-icons right">add</i>
           </button>

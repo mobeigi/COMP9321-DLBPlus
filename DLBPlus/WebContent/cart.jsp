@@ -46,28 +46,38 @@
 
 				<c:choose>
 					
-					<c:when test="${cartSize eq 0}">
+					<c:when test="${cartListSize eq 0}">
 						<div class="card valign grey lighten-4" >
 							<br>
 							<p class="flow-text center">Cart is empty!</p>
 							<br>
 						</div>
 					</c:when>
-					<c:when test="${cartSize ne 0}">
+					<c:when test="${cartListSize ne 0}">
 						<form action="setup" method="POST">
 							<div class="card valign grey lighten-4" >
 								<div class="col s10">
 									<table class="centered highlighted responsive-table">							
 									<thead>
-										<th>Title</th>
-										<th> </th>
+										<tr>
+											<th>Listing ID</th>
+											<th>Title</th>
+											<th>Type</th>
+											<th>Seller Name</th>
+											<th>Price</th>
+											<th> </th>
+										</tr>
 									</thead>
 									<tbody>
-										<c:forEach var="publication" items="${ShoppingCart.elements}">
+										<c:forEach var="item" items="${cartList}">
 											<tr>
-											<td><c:out value="${publication.title}" /></td>
-											<td><input type="checkbox" name="removeFromCart" value="<c:out value="${publication.id}" />" id="${publication.id}">
-											<label for="${publication.id}"></label></td>
+											<td><c:out value="${item.listingid}" /></td>
+											<td><c:out value="${item.publicationName}" /></td>
+											<td><c:out value="${item.publicationType}" /></td>
+											<td><c:out value="${item.sellerName}" /></td>
+											<td><c:out value="${item.price}" /></td>
+											<td><input type="checkbox" name="removeListingID" value="<c:out value="${item.listingid}" />" id="${item.listingid}">
+											<label for="${item.listingid}"></label></td>
 											</tr>
 										</c:forEach>
 									</tbody>

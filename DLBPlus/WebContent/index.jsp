@@ -76,14 +76,9 @@
 				                <div class="col s3">
 				                    <a href ="?action=viewSearchPage" id="search">Advanced Search</a>
 				    			</div>
-				                
-				                <div class="col s3">
-				                    <a href ="?action=viewCart">Shopping Cart</a>
-				                </div>
 			                </div>
 				        </form>
-					</div>
-					
+					</div>		
 				</div>
 			</div>
 		</div>
