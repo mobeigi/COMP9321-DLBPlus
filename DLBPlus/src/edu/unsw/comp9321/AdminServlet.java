@@ -99,8 +99,9 @@ public class AdminServlet extends HttpServlet {
 		}
 		
 		//Check redirect to other pages
-		String userId = request.getParameter("userId"); //redirect to user details page
-		if(userId != null) {
+		String userId = request.getParameter("userId");
+		String listingId = request.getParameter("listingId");
+		if(userId != null) { //redirect to user details page
 			User myUser = this.db.GetUser(Integer.parseInt(userId));
 			List<Order> ListOfOrders = this.db.GetOrderHistory(Integer.parseInt(userId));
 			List<CartItem> ListOfRemovedCartItems = this.db.GetRemovedCartItems(myUser.getCartid());
@@ -109,6 +110,10 @@ public class AdminServlet extends HttpServlet {
 			request.getSession().setAttribute("ListOfRemovedCartItems", ListOfRemovedCartItems);
 			request.getSession().setAttribute("myUser", myUser);
 			nextPage = "adminUserDetails.jsp";
+		} else if (listingId != null) { //redirect to listing details page
+			Listing listing = this.db.GetListing(Integer.parseInt(listingId));
+			request.getSession().setAttribute("viewListing", listing);
+			nextPage = "adminListingDetails.jsp";
 		} else if (action != null && action.equals("UpdateUsersStatus")) { //update status of users
 			List<User> listOfUsers = this.db.GetAllUsers();
 			

@@ -76,7 +76,7 @@
 								<tr>
 									<td><c:out value="${listing.id}" /></td>
 									<td><c:out value="${listing.sellerid}" /></td>
-									<td><c:out value="${listing.title}" /></td>
+									<td><a href="admin?listingId=${listing.id}">${listing.title}</a></td>
 									<td><c:out value="${listing.quantity}" /></td>
 									<td><c:out value="${listing.listdate}" /></td>
 									<td><c:out value="${listing.enddate}" /></td>
