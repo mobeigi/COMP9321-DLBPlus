@@ -502,6 +502,11 @@ public class SetupServlet extends HttpServlet {
 			link = "userAccount.jsp";
 		} else if(req.equals("viewHist")){
 			//View past orders
+			User buyer = (User) request.getSession().getAttribute("user");
+			int buyerID = buyer.getId();
+			List<Order> orderList = db.GetOrderHistory(buyerID);
+			
+			request.getSession().setAttribute("userOrderList",orderList);
 			link = "userSoldListings.jsp";
 		} else if(req.equals("viewListings")){
 			//View sales
