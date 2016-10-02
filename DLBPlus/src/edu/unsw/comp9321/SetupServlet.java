@@ -2,12 +2,23 @@ package edu.unsw.comp9321;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.PasswordAuthentication;
+import java.security.Security;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.net.PasswordAuthentication;
 import java.util.*;
-
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -418,14 +429,16 @@ public class SetupServlet extends HttpServlet {
 					System.out.println("generating " + rand);
 					request.getSession().setAttribute("confirmationNumber", rand);
 					request.getSession().setAttribute("newUser",newUser);
+					SendEmail(email,rand);
 					link = "confirmation.jsp";
 				}
 			}
 		} else if(req.equals("regSuccess")){
+			String errorMessage = "";
+			
 			String code = request.getParameter("code");
 			String emailCode = request.getSession().getAttribute("confirmationNumber").toString();
-			User newUser = new User(); 
-			newUser = (User) request.getSession().getAttribute("newUser");
+			User newUser = (User) request.getSession().getAttribute("newUser");
 			System.out.println("code is" + emailCode);
 			System.out.println(newUser.getId());
 			if(code == null){
@@ -433,12 +446,14 @@ public class SetupServlet extends HttpServlet {
 			} else {
 				if(code.equals(emailCode)){
 					request.getSession().setAttribute("user",newUser);
+					this.db.SetAcctConfirmed(newUser, true);
 					link = "userAccount.jsp";
 				} else {
+					errorMessage = "Code is incorrect!";
+					request.getSession().setAttribute("eMessage",errorMessage);
 					link = "confirmation.jsp";
 				}
 			}
-			
 			
 		} else if(req.equals("login")){
 			String errorMessage = "";
@@ -449,9 +464,19 @@ public class SetupServlet extends HttpServlet {
 			System.out.println(success);
 			if(success == true){
 				User user = db.GetUser(userName);
-				request.getSession().setAttribute("user",user);
-				System.out.println(user.getUsername());
-				link = "userAccount.jsp";
+				if (user.getAcctconfrm()){
+					request.getSession().setAttribute("user",user);
+					System.out.println(user.getUsername());
+					link = "userAccount.jsp";
+				} else {
+					Random random = new Random();
+					int rand = random.nextInt(99999);
+					System.out.println("generating " + rand);
+					request.getSession().setAttribute("confirmationNumber", rand);
+					request.getSession().setAttribute("newUser",user);
+					SendEmail(user.getEmail(),rand);
+					link = "confirmation.jsp";
+				}
 			} else {
 				errorMessage = "Incorrect Username or Password";
 				link = "login.jsp";
@@ -713,7 +738,39 @@ public class SetupServlet extends HttpServlet {
 		 RequestDispatcher rd = request.getRequestDispatcher("/"+link);
 		 rd.forward(request, response);
 	}
+	private void SendEmail(String email, int rand) {
+		final String username = "dlbpluscode@gmail.com	";
+        final String password = "uncommonpassword";
 
+        Properties props = new Properties();
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+          new javax.mail.Authenticator() {
+            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new javax.mail.PasswordAuthentication(username, password);
+            }
+          });
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("erikzhong1@gmail.com,"));
+            message.setRecipients(Message.RecipientType.TO,
+                InternetAddress.parse(email));
+            message.setSubject("DLBPlus email account verification");
+            message.setText("your random code is " + rand);
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+	}
 	private String remove(HttpServletRequest request){
 		List<CartItem> cartList = (List<CartItem>) request.getSession().getAttribute("cartList");
 		Integer listingID = Integer.parseInt(request.getParameter("removeListingID"));
@@ -736,5 +793,5 @@ public class SetupServlet extends HttpServlet {
 
 		return "cart.jsp";
 	}
-	
+
 }

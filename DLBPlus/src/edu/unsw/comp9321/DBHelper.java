@@ -387,9 +387,15 @@ public class DBHelper implements DLBPlusDBInterface {
 	       ResultSet rs = stmt.executeQuery(q);
 	       
 	       if (rs.next()) {
-	         Integer listingid = rs.getInt("id");
-	         dbConn.commit();
-	         return GetListing(listingid);
+	    	   
+	    	   // Parse successfully created listing into the visualisation tables
+	    	   this.parseVisualisationDetails(title, authors, editors, venues);
+	    	   
+	    	   // Return the newly created listing object
+		       Integer listingid = rs.getInt("id");
+		       dbConn.commit();
+		       return GetListing(listingid);
+		       
 	       } else {
 	         return null;
 	       }
@@ -1810,5 +1816,275 @@ public class DBHelper implements DLBPlusDBInterface {
     
 	    return a;
   }
+	
+	/**
+	 * This function parses given parameters into the visualisation related tables
+	 * 
+	 * @param pubtitle the title of the publication
+	 * @param authors the list of publication authors
+	 * @param editors the list of publication editors
+	 * @param venues the list of publication venues
+	 */
+	private void parseVisualisationDetails(String pubtitle, List<String> authors, 
+										List<String> editors, List<String> venues) {
+		
+		// Get the id of the node corresponding to title
+		Integer nodeTitleID = 0;
+		if (this.DoesVisNodeExist("title", pubtitle)) {
+			nodeTitleID = this.GetVisNodeID("title", pubtitle);
+		} else {
+			nodeTitleID = this.CreateVisNode("title", pubtitle);
+		}
+		System.out.println("Node title ID: ");
+		
+		// Get the ids of the nodes corresponding to the authors
+		List<Integer> nodeAuthorIDs = new ArrayList<Integer>();
+		for (String author : authors) {
+			Integer nodeAuthorID = 0;
+			if (this.DoesVisNodeExist("author", author)) {
+				nodeAuthorID = this.GetVisNodeID("author", author);
+			} else {
+				nodeAuthorID = this.CreateVisNode("author", author);
+			}
+			nodeAuthorIDs.add(nodeAuthorID);
+		}
+		
+		// Get the ids of the nodes corresponding to the editors
+		List<Integer> nodeEditorIDs = new ArrayList<Integer>();
+		for (String editor : editors) {
+			Integer nodeEditorID = 0;
+			if (this.DoesVisNodeExist("editor", editor)) {
+				nodeEditorID = this.GetVisNodeID("editor", editor);
+			} else {
+				nodeEditorID = this.CreateVisNode("editor", editor);
+			}
+			nodeEditorIDs.add(nodeEditorID);
+		}
+		
+		// Get the ids of the nodes corresponding to the venues
+		List<Integer> nodeVenueIDs = new ArrayList<Integer>();
+		for (String venue : venues) {
+			Integer nodeVenueID = 0;
+			if (this.DoesVisNodeExist("venue", venue)) {
+				nodeVenueID = this.GetVisNodeID("venue", venue);
+			} else {
+				nodeVenueID = this.CreateVisNode("venue", venue);
+			}
+			nodeVenueIDs.add(nodeVenueID);
+		}
+		
+		// Populate the vis_relationships
+		// Build Author Entries
+		for (Integer authorID : nodeAuthorIDs) {
+			// Check if there is already a relationship between the title and author
+			// - do nothing
+			if (!this.DoesVisRelationshipEntryExists(nodeTitleID, "authoredBy", authorID)) {
+				this.CreateVisRelationship(nodeTitleID, "authoredBy", authorID);
+			}
+		}
+		
+		// Build Editor Entries
+		for (Integer editorID : nodeEditorIDs) {
+			// Check if there is already a relationship between the title and author
+			// - do nothing
+			if (!this.DoesVisRelationshipEntryExists(nodeTitleID, "editedBy", editorID)) {
+				this.CreateVisRelationship(nodeTitleID, "editedBy", editorID);
+			}
+		}
+		
+		// Build Venue Entries
+		for (Integer venueID : nodeVenueIDs) {
+			// Check if there is already a relationship between the title and author
+			// - do nothing
+			if (!this.DoesVisRelationshipEntryExists(nodeTitleID, "publishedIn", venueID)) {
+				this.CreateVisRelationship(nodeTitleID, "publishedIn", venueID);
+			}
+		}
+	}
+	
+	/**
+	 * This function checks in the vis_nodes table whether there is a node
+	 * of type "attrtype" and "value"
+	 * 
+	 * @param attrtype the type of node
+	 * @param value the value of the node
+	 * @return True when such a node exists, false otherwise
+	 * 
+	 * NOTE WHEN CHECKING FOR PUBLICATION EXISTENCE:
+	 * This function assumes a publication with the same name but different number of authors (specified
+	 * by the user who's listing up the publication) will be considered the SAME publication.
+	 * ie does NOT do checks for authors
+	 * 
+	 */
+	private boolean DoesVisNodeExist(String attrtype, String value) {
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("DoesVisNodeExist", "No connection with database");
+		    return true;
+	    }
 
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			String query = "SELECT COUNT(*) FROM vis_nodes " +
+					"WHERE ( " +
+					" 	attrtype = '" + attrtype + "' AND " +
+					"   value = '" + value + "' " + 
+					");";
+			ResultSet rs = stmt.executeQuery(query);
+			if (rs.next()) {
+				int count = rs.getInt("count");
+				if (count == 0)
+					return false;
+				else
+					return true;
+			}
+
+			return true; //this should never be returned
+		} catch (SQLException e) {
+			return true; //this should never be returned
+		}
+	}
+	
+	/**
+	 * Obtains the ID of a specific vis_node with the given details
+	 * 
+	 * @param attrtype the type of node
+	 * @param value the value of node
+	 * @return the id of the node, null otherwise
+	 */
+	private Integer GetVisNodeID(String attrtype, String value) {
+		
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("GetVisNodeID", "No connection with database");
+		    return null;
+	    }
+
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			String query = "SELECT id FROM vis_nodes " +
+					"WHERE ( " +
+					" 	attrtype = '" + attrtype + "' AND " +
+					"   value = '" + value + "' " + 
+					");";
+			ResultSet rs = stmt.executeQuery(query);
+			
+			try {
+				if (rs != null && rs.next()) {
+					Integer id = rs.getInt("id");
+					return id;
+			    } else { //No result found
+			        return null;
+			    }
+			} catch (SQLException e) {
+			     return null;
+			}
+
+		} catch (SQLException e) {
+			return null; //this should never be returned
+		}	
+	}
+	
+	/**
+	 * Insert an entry into the vis_nodes database
+	 * 
+	 * @param attrtype the type of node
+	 * @param value the value of node
+	 * @return the id of the created node, null otherwise
+	 */
+	private Integer CreateVisNode(String attrtype, String value) {
+		
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("CreateVisNode", "No connection with database");
+		    return null;
+	    }
+
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			String query = "INSERT INTO vis_nodes(attrtype, value) " +
+					"VALUES ( " +
+					"	'" + attrtype + "', '" + value + "'" + 
+					");";
+			stmt.executeUpdate(query);
+			dbConn.commit();
+			return this.GetVisNodeID(attrtype, value);
+
+		} catch (SQLException e) {
+			return null; //this should never be returned
+		}	
+	}
+	
+	/**
+	 * Checks whether a particular relationship exists
+	 * 
+	 * @param nodeTitleID the id of the publication
+	 * @param relationship 
+	 * @param relNodeID
+	 * @return
+	 */
+	private boolean DoesVisRelationshipEntryExists(Integer firstNodeID, 
+										String relationship, Integer secondNodeID) {
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("DoesVisRelationshipEntryExists", "No connection with database");
+		    return true;
+	    }
+
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			String query = "SELECT COUNT(*) FROM vis_relationships " +
+					"WHERE ( " +
+					" 	firstnode = '" + firstNodeID + "' AND " +
+					" 	reltype = '" + relationship + "' AND " +
+					"   secondnode = '" + secondNodeID + "' " + 
+					");";
+			ResultSet rs = stmt.executeQuery(query);
+			if (rs.next()) {
+				int count = rs.getInt("count");
+				if (count == 0)
+					return false;
+				else
+					return true;
+			}
+
+			return true; //this should never be returned
+		} catch (SQLException e) {
+			return true; //this should never be returned
+		}
+	}
+	
+	/**
+	 * This function will insert an entry into the vis_relationships table with
+	 * the specified detail
+	 * 
+	 * @param firstNodeID the first node
+	 * @param relationship the relationship type
+	 * @param secondNodeID the second node
+	 */
+	private void CreateVisRelationship(Integer firstNodeID, 
+								String relationship, Integer secondNodeID) {
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("CreateVisRelationship", "No connection with database");
+	    }
+
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+			String query = "INSERT INTO vis_relationships(firstnode, reltype, secondnode) " +
+					"VALUES ( " + firstNodeID + ", '" + relationship + "', " + secondNodeID + ");";
+			stmt.executeUpdate(query);
+			dbConn.commit();
+
+		} catch (SQLException e) {
+			return;		// this should never be returned
+		}	
+	}
+
+	
 }

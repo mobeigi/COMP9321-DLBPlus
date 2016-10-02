@@ -47,9 +47,11 @@
 
   List<String> editors = new ArrayList<String>();
   editors.add("Sir William Franklin");
+  editors.add("Sir Franklin William");
 
   List<String> venues = new ArrayList<String>();
   venues.add("UNSW");
+  venues.add("USYD");
 
   List<String> urls = new ArrayList<String>();
   urls.add("http://www.google.com");

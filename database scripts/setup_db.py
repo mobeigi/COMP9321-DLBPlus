@@ -19,7 +19,7 @@ def setup_db():
 	
 	# Drop the following table names, if they exist in the database
 	print "Dropping tables, if they exist..."
-	table_names = ['users', 'admins', 'listings', 'activecartitems', 'removedcartitems', 'orders']
+	table_names = ['users', 'admins', 'listings', 'activecartitems', 'removedcartitems', 'orders', 'vis_nodes', 'vis_relationships']
 	for table_name in table_names:
 		query = "DROP TABLE IF EXISTS %s CASCADE" % table_name
 		cursor.execute(query)
@@ -132,6 +132,26 @@ def setup_db():
 			);	
 			"""
 	cursor.execute(query)
+	
+	print "Creating visualisation nodes table..."
+	query = """
+			CREATE TABLE vis_nodes (
+				id			SERIAL	PRIMARY KEY,
+				attrtype	TEXT	NOT NULL,
+				value		TEXT	NOT NULL
+			);
+			"""
+	cursor.execute(query)
+	
+	print "Creating visualisation relationships table..."
+	query = """
+			CREATE TABLE vis_relationships (
+				firstnode	SERIAL	REFERENCES vis_nodes(id),
+				reltype		TEXT	NOT NULL,
+				secondnode	SERIAL	REFERENCES vis_nodes(id)
+			);
+			"""
+	cursor.execute(query)	
 			
 	# Persist the changes to database
 	print "Persisting changes..."
