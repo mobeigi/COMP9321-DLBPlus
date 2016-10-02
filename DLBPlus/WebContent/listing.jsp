@@ -51,6 +51,13 @@
               <th class="centered">Value</th>
             </tr>
 
+            <c:if test="${listings.image != null}">
+              <tr>
+                <td class="col offset-s1">Image</td>
+                <td class="col offset-s1"><img src="${listings.image}" class="listingImage"/></td>
+              </tr>
+            </c:if>
+
             <c:if test="${ listings.id != null}">
               <tr>
                 <td class="col offset-s1">ID</td>
@@ -279,13 +286,6 @@
               <tr>
                 <td class="col offset-s1">Series</td>
                 <td class="col offset-s1">${listings.series}</td>
-              </tr>
-            </c:if>
-
-            <c:if test="${listings.rating != null}">
-              <tr>
-                <td class="col offset-s1">Rating</td>
-                <td class="col offset-s1">${listings.rating}</td>
               </tr>
             </c:if>
           </table>

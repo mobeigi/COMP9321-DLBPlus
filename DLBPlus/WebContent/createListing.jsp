@@ -8,7 +8,24 @@
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="css/main.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <script type="text/javascript">
+    function imgToBase64() {
+      var inputField = document.getElementById("base64Img");
+      var file    = document.querySelector('input[type=file]').files[0];
+      var reader  = new FileReader();
+
+      reader.addEventListener("load", function () {
+        inputField.value = reader.result;
+      }, false);
+
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
 </head>
 
 <body>
@@ -164,10 +181,11 @@
               <div class="file-field input-field">
                 <div class="btn">
                   <span>Add Photo</span>
-                  <input type="file">
+                  <input type="file" onchange="imgToBase64()">
+                  <input type="hidden" name="image" id="base64Img"/>
                 </div>
                 <div class="file-path-wrapper">
-                  <input class="file-path validate" placholder="Select a file.." type="text" name="image">
+                  <input class="file-path validate" placholder="Select a file.." type="text">
                 </div>
               </div>
             </div>

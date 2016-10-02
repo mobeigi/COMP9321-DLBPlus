@@ -25,6 +25,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang3.StringUtils;
 
 import edu.unsw.comp9321.Listing.Type;
@@ -33,96 +38,96 @@ import edu.unsw.comp9321.Listing.Type;
  * Servlet implementation class SetupServlet
  */
 public class SetupServlet extends HttpServlet {
-
-	// Maintains connection with database
-	private DBHelper db = null;
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public SetupServlet() {
-        super();
-        
-        // Instantiate database connection
-		this.db = new DBHelper();
-		boolean initSuccess = this.db.init();
-		if (!initSuccess) {
-			System.out.println("LOL there was an error.");
-		} else {
-			System.out.println("Successfully connected");
-		}
+  
+  // Maintains connection with database
+  private DBHelper db = null;
+  /**
+   * @see HttpServlet#HttpServlet()
+   */
+  public SetupServlet() {
+    super();
+    
+    // Instantiate database connection
+    this.db = new DBHelper();
+    boolean initSuccess = this.db.init();
+    if (!initSuccess) {
+      System.out.println("LOL there was an error.");
+    } else {
+      System.out.println("Successfully connected");
     }
-
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request,response);
-	}
-
-	private LinkedList<String> getEntryDeets(Integer listingID) {
-		Listing listing = this.db.GetListing(listingID);
-		//LinkedList<String> entryDetails = pub.getPubDetails();
-		//return entryDetails;	
-		return null;
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			
-		String req;
-		if(request.getParameter("action") != null){
-			req = request.getParameter("action");
-		} else {
-			req = "home";
-		}
-		String link = "index.jsp";
-			
-		if(req.equals("home")){
-			String errorMessage = "";
-			if (this.db.dbConnStatus) {
-				List<Listing> randListings = new ArrayList<Listing>();
-				
-				// Check whether there is no listings
-				int totalNumListings = this.db.GetNumListings();
-				if (totalNumListings == 0) {
-					errorMessage = "No listings can be obtained.";
-				}
-				
-				// Check whether there is < 10 listings
-				else if (totalNumListings <= 10) {
-					randListings = this.db.GetAllListings();
-				}
-				
-				// Case when there are > 10
-				else {
-					// Obtain a unique list of random publications
-					Listing listingToAdd = this.db.GetRandomListing();
-					List<Integer> randListingIDs = new ArrayList<Integer>();
-					while (randListings.size() < 10) {
-						while (randListingIDs.contains(listingToAdd.getId())) {
-							listingToAdd = this.db.GetRandomListing();
-						}
-						randListings.add(listingToAdd);
-						randListingIDs.add(listingToAdd.getId());
-						listingToAdd = this.db.GetRandomListing();
-					}
-				}
-
-				// Set random publication list to session
-				request.getSession().setAttribute("eMessage", errorMessage);
-				request.setAttribute("randomListings", randListings);
-				
-			} else {
-				System.out.println("Could not get random publication. Connection doesn't exist.");
-			}
-			
-		link = "index.jsp";
-		} else if(req.equals("viewSearchPage")){
-			link = "search.jsp";
-		} else if (req.equals("search")){
+  }
+  
+  
+  /**
+   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+   */
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    doPost(request,response);
+  }
+  
+  private LinkedList<String> getEntryDeets(Integer listingID) {
+    Listing listing = this.db.GetListing(listingID);
+    //LinkedList<String> entryDetails = pub.getPubDetails();
+    //return entryDetails;
+    return null;
+  }
+  
+  /**
+   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+   */
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    
+    String req;
+    if(request.getParameter("action") != null){
+      req = request.getParameter("action");
+    } else {
+      req = "home";
+    }
+    String link = "index.jsp";
+    
+    if(req.equals("home")){
+      String errorMessage = "";
+      if (this.db.dbConnStatus) {
+        List<Listing> randListings = new ArrayList<Listing>();
+        
+        // Check whether there is no listings
+        int totalNumListings = this.db.GetNumListings();
+        if (totalNumListings == 0) {
+          errorMessage = "No listings can be obtained.";
+        }
+        
+        // Check whether there is < 10 listings
+        else if (totalNumListings <= 10) {
+          randListings = this.db.GetAllListings();
+        }
+        
+        // Case when there are > 10
+        else {
+          // Obtain a unique list of random publications
+          Listing listingToAdd = this.db.GetRandomListing();
+          List<Integer> randListingIDs = new ArrayList<Integer>();
+          while (randListings.size() < 10) {
+            while (randListingIDs.contains(listingToAdd.getId())) {
+              listingToAdd = this.db.GetRandomListing();
+            }
+            randListings.add(listingToAdd);
+            randListingIDs.add(listingToAdd.getId());
+            listingToAdd = this.db.GetRandomListing();
+          }
+        }
+        
+        // Set random publication list to session
+        request.getSession().setAttribute("eMessage", errorMessage);
+        request.setAttribute("randomListings", randListings);
+        
+      } else {
+        System.out.println("Could not get random publication. Connection doesn't exist.");
+      }
+      
+      link = "index.jsp";
+    } else if(req.equals("viewSearchPage")){
+      link = "search.jsp";
+    } else if (req.equals("search")){
       String qTitle = (request.getParameter("title") == null || request.getParameter("title").isEmpty()) ? null : new String( request.getParameter("title").getBytes(), "UTF-8").trim();
       String qSellerUsername = (request.getParameter("sellerusername") == null || request.getParameter("sellerusername").isEmpty()) ? null : new String( request.getParameter("sellerusername").getBytes(), "UTF-8").trim();
       String qQuantity = (request.getParameter("quantity") == null || request.getParameter("quantity").isEmpty()) ? null : new String( request.getParameter("quantity").getBytes(), "UTF-8").trim();
@@ -183,7 +188,7 @@ public class SetupServlet extends HttpServlet {
       
       if (qSellerUsername != null) {
         User u = db.GetUser(qSellerUsername);
-  
+        
         if (u == null) {
           query.setSellerid(-1); //as username was provided but no user found, search for dummy id
         } else {
@@ -337,275 +342,276 @@ public class SetupServlet extends HttpServlet {
       SearchPageBean searchPageBean = new SearchPageBean(results, pageNo);
       request.getSession().setAttribute("searchFound", searchPageBean);
       
-			link = "result.jsp";
-			
-		} else if(req.equals("viewCart")){
-			User currUser = (User) request.getSession().getAttribute("user");
-			List<CartItem> cartList = db.GetActiveCartItems(currUser.getId());
-			
-			request.getSession().setAttribute("cartList", cartList);
-			link = "cart.jsp";
-		} else if(req.equals("remove")) {
-			link = remove(request);
-		} else if(req.equals("add")){
-			String errorMessage = "";
-			boolean flag = false;
-			int listingID = Integer.parseInt(request.getParameter("listingID"));
-			Listing listing = db.GetListing(listingID);
-			User currUser = (User) request.getSession().getAttribute("user");
-			List<CartItem> cartList = db.GetActiveCartItems(currUser.getCartid());
-			if(cartList != null){
-				for(CartItem cartItem : cartList){
-					if(cartItem.getListingid() == listingID){
-						flag = true;
-					}
-				}
-			}
-			
-			if(flag){
-				 request.getSession().setAttribute("isAlreadySelected", true);
-			} else {
-				request.getSession().setAttribute("isAlreadySelected", false);
-				CartItem item = db.AddToCart(currUser, listing);
-				if(item == null){
-					errorMessage = "Failed to add item!";
-				}
-			}
-			
-			
-			cartList = db.GetActiveCartItems(currUser.getCartid());
-			request.getSession().setAttribute("cartListSize", cartList.size());
-			request.getSession().setAttribute("cartList", cartList);
-			
-			link = "cart.jsp";
-		} else if(req.equals("checkout")){
-			link = checkoutCartItems(request);
-		} else if(req.equals("register")){
-			int flag = 0;
-			String errorMessage = "";
-			String firstName = request.getParameter("fname");
-			String lastName = request.getParameter("lname");
-			String userName = request.getParameter("uname");
-			String nickName = request.getParameter("nickname");
-			String email = request.getParameter("email");
-			String password = request.getParameter("pass");
-			String address = request.getParameter("address");
-			String creditCard = request.getParameter("ccn");
-			String stringDob = request.getParameter("dob");
-			String passConfirm = request.getParameter("passConfirm");
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd"); 
-			if(address == null){
-				address="";
-			}
-			System.out.println(firstName + " " + lastName + " " + userName+ " " + email + " " + password + " " + address + " " + creditCard + " " + stringDob);
-			Date dob = null;
-			String dp = "";
-			try {
-				dob = df.parse(stringDob);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			if (db.DoesUserExist(userName)){
-				errorMessage = "Username already exists!";
-				flag = 1;
-				link = "register.jsp";
-				request.getSession().setAttribute("eMessage",errorMessage);
-			}
-			if (!passConfirm.equals(password)){
-				errorMessage = "Passwords do not match!";
-				flag = 1;
-				link = "register.jsp";
-				request.getSession().setAttribute("eMessage",errorMessage);
-			}
-			else {
-				if (flag == 0){
-					User newUser = new User();
-					newUser = db.CreateUser(userName, password, firstName, lastName, nickName, email, address, dob, creditCard, dp);
-					Random random = new Random();
-					int rand = random.nextInt(99999);
-					System.out.println("generating " + rand);
-					request.getSession().setAttribute("confirmationNumber", rand);
-					request.getSession().setAttribute("newUser",newUser);
-					SendConfirmEmail(email,rand);
-					link = "confirmation.jsp";
-				}
-			}
-		} else if(req.equals("regSuccess")){
-			String errorMessage = "";
-			
-			String code = request.getParameter("code");
-			String emailCode = request.getSession().getAttribute("confirmationNumber").toString();
-			User newUser = (User) request.getSession().getAttribute("newUser");
-			System.out.println("code is" + emailCode);
-			if(code == null){
-				link = "confirmation.jsp";
-			} else {
-				if(code.equals(emailCode)){
-					request.getSession().setAttribute("user",newUser);
-					this.db.SetAcctConfirmed(newUser, true);
-					link = "userAccount.jsp";
-				} else {
-					errorMessage = "Code is incorrect!";
-					request.getSession().setAttribute("eMessage",errorMessage);
-					link = "confirmation.jsp";
-				}
-			}
-			
-		} else if(req.equals("login")){
-			String errorMessage = "";
-			String userName = request.getParameter("uname");
-			String password = request.getParameter("pass");
-			
-			boolean success = db.VerifyUser(userName, password);
-			System.out.println(success);
-			if(success == true){
-				User user = db.GetUser(userName);
-				if (user.getAcctconfrm()){
-					request.getSession().setAttribute("user",user);
-					System.out.println(user.getUsername());
-					link = "userAccount.jsp";
-				} else {
-					Random random = new Random();
-					int rand = random.nextInt(99999);
-					System.out.println("generating " + rand);
-					request.getSession().setAttribute("confirmationNumber", rand);
-					request.getSession().setAttribute("newUser",user);
-					SendConfirmEmail(user.getEmail(),rand);
-					link = "confirmation.jsp";
-				}
-			} else {
-				errorMessage = "Incorrect Username or Password";
-				link = "login.jsp";
-				request.getSession().setAttribute("eMessage",errorMessage);
-			}
-		} else if(req.equals("logout")){
-			String errorMessage = "";
-			request.getSession().setAttribute("eMessage",errorMessage);
-			request.getSession().setAttribute("user",null);
-			link = "index.jsp";
-		} else if(req.equals("confirmPurchase")){
-			link = "transactionSuccessful.jsp";
-		} else if(req.equals("registerPage")){
-			System.out.println("Going to register page");
-			String errorMessage = "";
-			request.getSession().setAttribute("eMessage",errorMessage);
-			link = "register.jsp";
-		} else if(req.equals("modified")){
-			User user = (User) request.getSession().getAttribute("user");
-			request.getSession().setAttribute("user",user);
-			link = "modifyDetails.jsp";
-			String errorMessage = "";
-			request.getSession().setAttribute("eMessage",errorMessage);
-		} else if(req.equals("detailsAdded")){
-			String errorMessage = "";
-			String firstName = request.getParameter("fname");
-			String lastName = request.getParameter("lname");
-			String nickName = request.getParameter("nickname");
-			String email = request.getParameter("email");
-			String password = request.getParameter("pass");
-			String address = request.getParameter("address");
-			String creditCard = request.getParameter("ccn");
-			String stringDob = request.getParameter("dob");
-			String passConfirm = request.getParameter("passConfirm");
-			String dp = "";
-			
-			if (!passConfirm.equals(password)){
-				errorMessage = "Passwords do not match!";
-				link = "modifyDetails.jsp";
-				request.getSession().setAttribute("eMessage",errorMessage);
-			}
-			else {
-				User toChange = (User) request.getSession().getAttribute("user");
-				toChange.setFname(firstName);
-				toChange.setLname(lastName);
-				toChange.setNickname(nickName);
-				toChange.setEmail(email);
-				toChange.setAddress(address);
-				toChange.setCreditcard(creditCard);
-				db.ChangeUserPassword(toChange, password);
-				boolean success = db.ChangeUserDetails(toChange);
-				if (success){
-					System.out.println("acc details changed");
-				}
-				
-				request.getSession().setAttribute("eMessage",errorMessage);
-				link = "userAccount.jsp";
-			}                  
-			request.getSession().setAttribute("eMessage",errorMessage);
-			link = "userAccount.jsp";
-		} else if(req.equals("loginPage")){
-			String errorMessage = "";
-			request.getSession().setAttribute("eMessage",errorMessage);
-			link = "login.jsp";
-		} else if(req.equals("toAccount")){
-			link = "userAccount.jsp";
-		} else if(req.equals("viewHist")){
-			//View past orders
-			String errorMessage = "";
-			User buyer = (User) request.getSession().getAttribute("user");
-			int buyerID = buyer.getId();
-			List<Order> orderList = db.GetOrderHistory(buyerID);
-			if(orderList.isEmpty()){
-				errorMessage = "You have not purchased anything yet!";
-			}
-			request.getSession().setAttribute("eMessage", errorMessage);
-			request.getSession().setAttribute("userOrderList",orderList);
-			link = "userSoldListings.jsp";
-		} else if(req.equals("viewListings")){
-			//View sales
-			String errorMessage = "";
-			User currUser = (User) request.getSession().getAttribute("user");
-			List<Listing> userListings = db.GetUserListings(currUser.getId());
-			if(userListings.isEmpty()){
-				errorMessage = "Looks like you dont have any current listings";
-			}
-			request.getSession().setAttribute("eMessage",errorMessage);
-			request.getSession().setAttribute("userListings", userListings);
-			link = "userSellListings.jsp";
-		} else if(req.equals("updateListingStatus")){	
-			
-			User currUser = (User) request.getSession().getAttribute("user");			
-			List<Listing> allListings = db.GetUserListings(currUser.getId());
-			
-			// For each listing, check whether the isPaused checkbox is checked
-			for(Listing listing : allListings){
-				int listingId = listing.getId();
-				String[] currListingStatus = request.getParameterValues(Integer.toString(listingId));
-				
-				// Case when checkbox is NOT checked
-				if (currListingStatus == null) {
-					// NOTE: We don't need to iterate over the string array 'currListingStatus', as
-					// 		 we're sure that for every listing, there will be exactly ONE value in the array,
-					//       and that value is the string 'checked'
-					
-					// Check whether the listing IS paused - change it otherwise
-					if (listing.getPaused()) {
-						this.db.SetPausedStatus(listing, false);
-					}
-				} 
-				
-				// Case when checkbox is checked
-				else {
-					// Check whether the listing is NOT paused - change it otherwise
-					if (listing.getPaused() == false) {
-						this.db.SetPausedStatus(listing, true);
-					}
-				}
-
-			}
-			
-			String errorMessage = "";
-			List<Listing> userListings = db.GetUserListings(currUser.getId());
-			if(userListings.isEmpty()){
-				errorMessage = "Looks like you dont have any current listings";
-			}
-			request.getSession().setAttribute("eMessage",errorMessage);
-			request.getSession().setAttribute("userListings", userListings);
-			link = "userSellListings.jsp";
-		} else if(req.equals("createListing")){
-			//Create new listing
-			link = "createListing.jsp";
-		} else if(req.equals("registerItem")){
+      link = "result.jsp";
+      
+    } else if(req.equals("viewCart")){
+      User currUser = (User) request.getSession().getAttribute("user");
+      List<CartItem> cartList = db.GetActiveCartItems(currUser.getId());
+      
+      request.getSession().setAttribute("cartList", cartList);
+      link = "cart.jsp";
+    } else if(req.equals("remove")) {
+      link = remove(request);
+    } else if(req.equals("add")){
+      String errorMessage = "";
+      boolean flag = false;
+      int listingID = Integer.parseInt(request.getParameter("listingID"));
+      Listing listing = db.GetListing(listingID);
+      User currUser = (User) request.getSession().getAttribute("user");
+      List<CartItem> cartList = db.GetActiveCartItems(currUser.getCartid());
+      if(cartList != null){
+        for(CartItem cartItem : cartList){
+          if(cartItem.getListingid() == listingID){
+            flag = true;
+          }
+        }
+      }
+      
+      if(flag){
+        request.getSession().setAttribute("isAlreadySelected", true);
+      } else {
+        request.getSession().setAttribute("isAlreadySelected", false);
+        CartItem item = db.AddToCart(currUser, listing);
+        if(item == null){
+          errorMessage = "Failed to add item!";
+        }
+      }
+      
+      
+      cartList = db.GetActiveCartItems(currUser.getCartid());
+      request.getSession().setAttribute("cartListSize", cartList.size());
+      request.getSession().setAttribute("cartList", cartList);
+      
+      link = "cart.jsp";
+    } else if(req.equals("checkout")){
+      link = checkoutCartItems(request);
+    } else if(req.equals("register")){
+      int flag = 0;
+      String errorMessage = "";
+      String firstName = request.getParameter("fname");
+      String lastName = request.getParameter("lname");
+      String userName = request.getParameter("uname");
+      String nickName = request.getParameter("nickname");
+      String email = request.getParameter("email");
+      String password = request.getParameter("pass");
+      String address = request.getParameter("address");
+      String creditCard = request.getParameter("ccn");
+      String stringDob = request.getParameter("dob");
+      String passConfirm = request.getParameter("passConfirm");
+      SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+      if(address == null){
+        address="";
+      }
+      System.out.println(firstName + " " + lastName + " " + userName+ " " + email + " " + password + " " + address + " " + creditCard + " " + stringDob);
+      Date dob = null;
+      String dp = "";
+      try {
+        dob = df.parse(stringDob);
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+      if (db.DoesUserExist(userName)){
+        errorMessage = "Username already exists!";
+        flag = 1;
+        link = "register.jsp";
+        request.getSession().setAttribute("eMessage",errorMessage);
+      }
+      if (!passConfirm.equals(password)){
+        errorMessage = "Passwords do not match!";
+        flag = 1;
+        link = "register.jsp";
+        request.getSession().setAttribute("eMessage",errorMessage);
+      }
+      else {
+        if (flag == 0){
+          User newUser = new User();
+          newUser = db.CreateUser(userName, password, firstName, lastName, nickName, email, address, dob, creditCard, dp);
+          Random random = new Random();
+          int rand = random.nextInt(99999);
+          System.out.println("generating " + rand);
+          request.getSession().setAttribute("confirmationNumber", rand);
+          request.getSession().setAttribute("newUser",newUser);
+          SendConfirmEmail(email,rand);
+          link = "confirmation.jsp";
+        }
+      }
+    } else if(req.equals("regSuccess")){
+      String errorMessage = "";
+      
+      String code = request.getParameter("code");
+      String emailCode = request.getSession().getAttribute("confirmationNumber").toString();
+      User newUser = (User) request.getSession().getAttribute("newUser");
+      System.out.println("code is" + emailCode);
+      if(code == null){
+        link = "confirmation.jsp";
+      } else {
+        if(code.equals(emailCode)){
+          request.getSession().setAttribute("user",newUser);
+          this.db.SetAcctConfirmed(newUser, true);
+          link = "userAccount.jsp";
+        } else {
+          errorMessage = "Code is incorrect!";
+          request.getSession().setAttribute("eMessage",errorMessage);
+          link = "confirmation.jsp";
+        }
+      }
+      
+    } else if(req.equals("login")){
+      String errorMessage = "";
+      String userName = request.getParameter("uname");
+      String password = request.getParameter("pass");
+      
+      boolean success = db.VerifyUser(userName, password);
+      System.out.println(success);
+      if(success == true){
+        User user = db.GetUser(userName);
+        if (user.getAcctconfrm()){
+          request.getSession().setAttribute("user",user);
+          System.out.println(user.getUsername());
+          link = "userAccount.jsp";
+        } else {
+          Random random = new Random();
+          int rand = random.nextInt(99999);
+          System.out.println("generating " + rand);
+          request.getSession().setAttribute("confirmationNumber", rand);
+          request.getSession().setAttribute("newUser",user);
+          SendConfirmEmail(user.getEmail(),rand);
+          link = "confirmation.jsp";
+        }
+      } else {
+        errorMessage = "Incorrect Username or Password";
+        link = "login.jsp";
+        request.getSession().setAttribute("eMessage",errorMessage);
+      }
+    } else if(req.equals("logout")){
+      String errorMessage = "";
+      request.getSession().setAttribute("eMessage",errorMessage);
+      request.getSession().setAttribute("user",null);
+      link = "index.jsp";
+    } else if(req.equals("confirmPurchase")){
+      link = "transactionSuccessful.jsp";
+    } else if(req.equals("registerPage")){
+      System.out.println("Going to register page");
+      String errorMessage = "";
+      request.getSession().setAttribute("eMessage",errorMessage);
+      link = "register.jsp";
+    } else if(req.equals("modified")){
+      User user = (User) request.getSession().getAttribute("user");
+      request.getSession().setAttribute("user",user);
+      link = "modifyDetails.jsp";
+      String errorMessage = "";
+      request.getSession().setAttribute("eMessage",errorMessage);
+    } else if(req.equals("detailsAdded")){
+      String errorMessage = "";
+      String firstName = request.getParameter("fname");
+      String lastName = request.getParameter("lname");
+      String nickName = request.getParameter("nickname");
+      String email = request.getParameter("email");
+      String password = request.getParameter("pass");
+      String address = request.getParameter("address");
+      String creditCard = request.getParameter("ccn");
+      String stringDob = request.getParameter("dob");
+      String passConfirm = request.getParameter("passConfirm");
+      String dp = "";
+      
+      if (!passConfirm.equals(password)){
+        errorMessage = "Passwords do not match!";
+        link = "modifyDetails.jsp";
+        request.getSession().setAttribute("eMessage",errorMessage);
+      }
+      else {
+        User toChange = (User) request.getSession().getAttribute("user");
+        toChange.setFname(firstName);
+        toChange.setLname(lastName);
+        toChange.setNickname(nickName);
+        toChange.setEmail(email);
+        toChange.setAddress(address);
+        toChange.setCreditcard(creditCard);
+        db.ChangeUserPassword(toChange, password);
+        boolean success = db.ChangeUserDetails(toChange);
+        if (success){
+          System.out.println("acc details changed");
+        }
+        
+        request.getSession().setAttribute("eMessage",errorMessage);
+        link = "userAccount.jsp";
+      }
+      request.getSession().setAttribute("eMessage",errorMessage);
+      link = "userAccount.jsp";
+    } else if(req.equals("loginPage")){
+      String errorMessage = "";
+      request.getSession().setAttribute("eMessage",errorMessage);
+      link = "login.jsp";
+    } else if(req.equals("toAccount")){
+      link = "userAccount.jsp";
+    } else if(req.equals("viewHist")){
+      //View past orders
+      String errorMessage = "";
+      User buyer = (User) request.getSession().getAttribute("user");
+      int buyerID = buyer.getId();
+      List<Order> orderList = db.GetOrderHistory(buyerID);
+      if(orderList.isEmpty()){
+        errorMessage = "You have not purchased anything yet!";
+      }
+      request.getSession().setAttribute("eMessage", errorMessage);
+      request.getSession().setAttribute("userOrderList",orderList);
+      link = "userSoldListings.jsp";
+    } else if(req.equals("viewListings")){
+      //View sales
+      String errorMessage = "";
+      User currUser = (User) request.getSession().getAttribute("user");
+      List<Listing> userListings = db.GetUserListings(currUser.getId());
+      if(userListings.isEmpty()){
+        errorMessage = "Looks like you dont have any current listings";
+      }
+      request.getSession().setAttribute("eMessage",errorMessage);
+      request.getSession().setAttribute("userListings", userListings);
+      link = "userSellListings.jsp";
+    } else if(req.equals("updateListingStatus")){
+      
+      User currUser = (User) request.getSession().getAttribute("user");
+      List<Listing> allListings = db.GetUserListings(currUser.getId());
+      
+      // For each listing, check whether the isPaused checkbox is checked
+      for(Listing listing : allListings){
+        int listingId = listing.getId();
+        String[] currListingStatus = request.getParameterValues(Integer.toString(listingId));
+        
+        // Case when checkbox is NOT checked
+        if (currListingStatus == null) {
+          // NOTE: We don't need to iterate over the string array 'currListingStatus', as
+          // 		 we're sure that for every listing, there will be exactly ONE value in the array,
+          //       and that value is the string 'checked'
+          
+          // Check whether the listing IS paused - change it otherwise
+          if (listing.getPaused()) {
+            this.db.SetPausedStatus(listing, false);
+          }
+        }
+        
+        // Case when checkbox is checked
+        else {
+          // Check whether the listing is NOT paused - change it otherwise
+          if (listing.getPaused() == false) {
+            this.db.SetPausedStatus(listing, true);
+          }
+        }
+        
+      }
+      
+      String errorMessage = "";
+      List<Listing> userListings = db.GetUserListings(currUser.getId());
+      if(userListings.isEmpty()){
+        errorMessage = "Looks like you dont have any current listings";
+      }
+      request.getSession().setAttribute("eMessage",errorMessage);
+      request.getSession().setAttribute("userListings", userListings);
+      link = "userSellListings.jsp";
+    } else if(req.equals("createListing")){
+      //Create new listing
+      link = "createListing.jsp";
+    } else if(req.equals("registerItem")){
+  
       User seller = (User) request.getSession().getAttribute("user");
       
       if (seller != null) {
@@ -637,7 +643,7 @@ public class SetupServlet extends HttpServlet {
         String qPrice = (request.getParameter("price") == null || request.getParameter("price").isEmpty()) ? null : new String( request.getParameter("price").getBytes(), "UTF-8").trim();
         String qDuration = (request.getParameter("duration") == null || request.getParameter("duration").isEmpty()) ? null : new String( request.getParameter("duration").getBytes(), "UTF-8").trim();
         String qImage = (request.getParameter("image") == null || request.getParameter("image").isEmpty()) ? null : new String( request.getParameter("image").getBytes(), "UTF-8").trim();
-  
+        
         //Handle separated multiple items
         //We also trim any whitespace around entries
         List<String> qAuthorList = null;
@@ -647,7 +653,7 @@ public class SetupServlet extends HttpServlet {
         List<String> qCiteList = null;
         List<String> qIsbnList = null;
         List<String> qVenueList = null;
-  
+        
         if (qAuthors != null) qAuthorList = Arrays.asList(qAuthors.trim().split("\\\r\n"));
         if (qEditors != null) qEditorList = Arrays.asList(qEditors.trim().split("\\\r\n"));
         if (qUrls != null) qUrlList = Arrays.asList(qUrls.trim().split("\\\r\n"));
@@ -679,9 +685,9 @@ public class SetupServlet extends HttpServlet {
         Timestamp enddate = new Timestamp(new Date().getTime() + duration); //now + duration
         
         Listing newListing = db.CreateListing(seller, quantity, listdate, enddate, sellprice, qImage, listType, qAuthorList,
-                                              qEditorList, qTitle, qVenueList, qPages, year, qAddress, qVolume, qNumber,
-                                              qMonth, qUrlList, qEeList, qCdrom, qCiteList, qPublisher, qNote, qCrossref,
-                                              qIsbnList, qSeries, qChapter, qRatings);
+          qEditorList, qTitle, qVenueList, qPages, year, qAddress, qVolume, qNumber,
+          qMonth, qUrlList, qEeList, qCdrom, qCiteList, qPublisher, qNote, qCrossref,
+          qIsbnList, qSeries, qChapter, qRatings);
         
         
         if (newListing == null) {
@@ -701,14 +707,14 @@ public class SetupServlet extends HttpServlet {
       else {
         link = "login.jsp"; //if not logged in
       }
-    }	
-		// Case when user wants to view admin
-		else if (req.equals("loginAdmin")) {
-			response.sendRedirect("/DLBPlus/admin");
-			return;
-		}
-		else if (req.equals("viewListingDetails")){
-			int listingID = -1;
+    }
+    // Case when user wants to view admin
+    else if (req.equals("loginAdmin")) {
+      response.sendRedirect("/DLBPlus/admin");
+      return;
+    }
+    else if (req.equals("viewListingDetails")){
+      int listingID = -1;
       
       try {
         listingID = Integer.parseInt(request.getParameter("id"));
@@ -730,140 +736,140 @@ public class SetupServlet extends HttpServlet {
       }
       
       request.getSession().setAttribute("listingFound", (listingID != -1));
-			link = "listing.jsp";
-		}
-		
-		// Case when user wants to visualise shit
-		else if (req.equals("visualise")) {
-			
-			// Prepare visualise page
-			link = "visualise.jsp";
-		}
-		
-		 RequestDispatcher rd = request.getRequestDispatcher("/"+link);
-		 rd.forward(request, response);
-	}
-	private String checkoutCartItems(HttpServletRequest request) {
-		User currUser = (User) request.getSession().getAttribute("user");
-		List<CartItem> checkOutItems = db.GetActiveCartItems(currUser.getCartid());
-		for(CartItem checkOutItem : checkOutItems){
-			//Gets the listing id and object of an item in the shopping cart
-			Integer listingid = checkOutItem.getListingid();
-			Listing listing = db.GetListing(listingid);
-			
-			// Send checkout message to seller's emali
-			String sellerName = checkOutItem.getSellerName();
-			User seller = db.GetUser(sellerName);
-			System.out.println(seller.getEmail());
-			System.out.println(listingid);
-			System.out.println(sellerName);
-			System.out.println(currUser.getUsername());
-			SendCheckoutEmail(seller.getEmail(), listingid, sellerName, currUser.getUsername());
-			
-			// Decrement listing's quantity
-			db.DecrementListingQuantity(listing);
-			
-			// Create order
-			db.CreateOrder(currUser.getId(), listing);
-			
-			// Remove from cart
-			db.HardRemoveFromCart(checkOutItem);
-		}
-		
-		
-		System.out.println("Checkout complete!");
-		return "checkoutSuccess.jsp";
-	}
-
-	private void SendCheckoutEmail(String email, Integer listingid, String sellerName, String buyerName) {
-		final String username = "dlbpluscode@gmail.com	";
-        final String password = "uncommonpassword";
-
-        Properties props = new Properties();
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-
-        Session session = Session.getInstance(props,
-          new javax.mail.Authenticator() {
-            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-                return new javax.mail.PasswordAuthentication(username, password);
-            }
-          });
-        try {
-
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("erikzhong1@gmail.com,"));
-            message.setRecipients(Message.RecipientType.TO,
-                InternetAddress.parse(email));
-            message.setSubject("DLBPlus Purchase Notification!");
-            message.setText("Hi " + sellerName + ", " + buyerName + " has just purchased an item from " + listingid);
-
-            Transport.send(message);
-
-            System.out.println("Seller notified");
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
+      link = "listing.jsp";
+    }
+    
+    // Case when user wants to visualise shit
+    else if (req.equals("visualise")) {
+      
+      // Prepare visualise page
+      link = "visualise.jsp";
+    }
+    
+    RequestDispatcher rd = request.getRequestDispatcher("/"+link);
+    rd.forward(request, response);
+  }
+  private String checkoutCartItems(HttpServletRequest request) {
+    User currUser = (User) request.getSession().getAttribute("user");
+    List<CartItem> checkOutItems = db.GetActiveCartItems(currUser.getCartid());
+    for(CartItem checkOutItem : checkOutItems){
+      //Gets the listing id and object of an item in the shopping cart
+      Integer listingid = checkOutItem.getListingid();
+      Listing listing = db.GetListing(listingid);
+      
+      // Send checkout message to seller's emali
+      String sellerName = checkOutItem.getSellerName();
+      User seller = db.GetUser(sellerName);
+      System.out.println(seller.getEmail());
+      System.out.println(listingid);
+      System.out.println(sellerName);
+      System.out.println(currUser.getUsername());
+      SendCheckoutEmail(seller.getEmail(), listingid, sellerName, currUser.getUsername());
+      
+      // Decrement listing's quantity
+      db.DecrementListingQuantity(listing);
+      
+      // Create order
+      db.CreateOrder(currUser.getId(), listing);
+      
+      // Remove from cart
+      db.HardRemoveFromCart(checkOutItem);
+    }
+    
+    
+    System.out.println("Checkout complete!");
+    return "checkoutSuccess.jsp";
+  }
+  
+  private void SendCheckoutEmail(String email, Integer listingid, String sellerName, String buyerName) {
+    final String username = "dlbpluscode@gmail.com	";
+    final String password = "uncommonpassword";
+    
+    Properties props = new Properties();
+    props.put("mail.smtp.starttls.enable", "true");
+    props.put("mail.smtp.auth", "true");
+    props.put("mail.smtp.host", "smtp.gmail.com");
+    props.put("mail.smtp.port", "587");
+    
+    Session session = Session.getInstance(props,
+      new javax.mail.Authenticator() {
+        protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+          return new javax.mail.PasswordAuthentication(username, password);
         }
-	}
-	
-	
-	private void SendConfirmEmail(String email, int rand) {
-		final String username = "dlbpluscode@gmail.com	";
-        final String password = "uncommonpassword";
-
-        Properties props = new Properties();
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-
-        Session session = Session.getInstance(props,
-          new javax.mail.Authenticator() {
-            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-                return new javax.mail.PasswordAuthentication(username, password);
-            }
-          });
-        try {
-
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("erikzhong1@gmail.com,"));
-            message.setRecipients(Message.RecipientType.TO,
-                InternetAddress.parse(email));
-            message.setSubject("DLBPlus email account verification");
-            message.setText("your random code is " + rand);
-
-            Transport.send(message);
-
-            System.out.println("Done");
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
+      });
+    try {
+      
+      Message message = new MimeMessage(session);
+      message.setFrom(new InternetAddress("erikzhong1@gmail.com,"));
+      message.setRecipients(Message.RecipientType.TO,
+        InternetAddress.parse(email));
+      message.setSubject("DLBPlus Purchase Notification!");
+      message.setText("Hi " + sellerName + ", " + buyerName + " has just purchased an item from " + listingid);
+      
+      Transport.send(message);
+      
+      System.out.println("Seller notified");
+      
+    } catch (MessagingException e) {
+      throw new RuntimeException(e);
+    }
+  }
+  
+  
+  private void SendConfirmEmail(String email, int rand) {
+    final String username = "dlbpluscode@gmail.com	";
+    final String password = "uncommonpassword";
+    
+    Properties props = new Properties();
+    props.put("mail.smtp.starttls.enable", "true");
+    props.put("mail.smtp.auth", "true");
+    props.put("mail.smtp.host", "smtp.gmail.com");
+    props.put("mail.smtp.port", "587");
+    
+    Session session = Session.getInstance(props,
+      new javax.mail.Authenticator() {
+        protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+          return new javax.mail.PasswordAuthentication(username, password);
         }
-	}
-	private String remove(HttpServletRequest request){
-		List<CartItem> cartList = (List<CartItem>) request.getSession().getAttribute("cartList");
-		Integer listingID = Integer.parseInt(request.getParameter("removeListingID"));
-		User currUser = (User) request.getSession().getAttribute("user");
-		CartItem item = null;
-		if(!cartList.isEmpty() && cartList != null){
-			for(CartItem cartItem : cartList){
-				if(cartItem.getListingid() == listingID){
-					item = cartItem;
-				}
-			}
-		}
-		if(item != null){
-			db.RemoveFromCart(item);
-		}
-		
-		cartList = db.GetActiveCartItems(currUser.getCartid());
-		request.getSession().setAttribute("cartListSize", cartList.size());
-		request.getSession().setAttribute("cartList", cartList);
-
-		return "cart.jsp";
-	}
-
+      });
+    try {
+      
+      Message message = new MimeMessage(session);
+      message.setFrom(new InternetAddress("erikzhong1@gmail.com,"));
+      message.setRecipients(Message.RecipientType.TO,
+        InternetAddress.parse(email));
+      message.setSubject("DLBPlus email account verification");
+      message.setText("your random code is " + rand);
+      
+      Transport.send(message);
+      
+      System.out.println("Done");
+      
+    } catch (MessagingException e) {
+      throw new RuntimeException(e);
+    }
+  }
+  private String remove(HttpServletRequest request){
+    List<CartItem> cartList = (List<CartItem>) request.getSession().getAttribute("cartList");
+    Integer listingID = Integer.parseInt(request.getParameter("removeListingID"));
+    User currUser = (User) request.getSession().getAttribute("user");
+    CartItem item = null;
+    if(!cartList.isEmpty() && cartList != null){
+      for(CartItem cartItem : cartList){
+        if(cartItem.getListingid() == listingID){
+          item = cartItem;
+        }
+      }
+    }
+    if(item != null){
+      db.RemoveFromCart(item);
+    }
+    
+    cartList = db.GetActiveCartItems(currUser.getCartid());
+    request.getSession().setAttribute("cartListSize", cartList.size());
+    request.getSession().setAttribute("cartList", cartList);
+    
+    return "cart.jsp";
+  }
+  
 }

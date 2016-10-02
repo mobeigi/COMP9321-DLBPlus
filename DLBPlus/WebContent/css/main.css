@@ -24,3 +24,11 @@ input.currency:before {
 .centered th {
   text-align: center;
 }
+
+/* Listing Details */
+.listingImage {
+  max-height: 256px;
+  max-width: 256px;
+  width: auto;
+  height: auto;
+}
