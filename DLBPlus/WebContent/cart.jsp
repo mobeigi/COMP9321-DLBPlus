@@ -110,7 +110,7 @@
 				</div>
 				<div class="col s2">
 					<form action="setup" method="POST">
-						<input type="hidden" name="action" value="back">
+						<input type="hidden" name="action" value="home">
 						<button class="btn waves-effect waves-light" type="submit">Back
 						<i class="material-icons right"></i>
 						</button> 

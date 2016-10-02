@@ -80,9 +80,7 @@ public class SetupServlet extends HttpServlet {
 		}
 		String link = "index.jsp";
 			
-		if(req.equals("back")){
-			link = "index.jsp";
-		} else if(req.equals("home")){
+		if(req.equals("home")){
 			String errorMessage = "";
 			if (this.db.dbConnStatus) {
 				List<Listing> randListings = new ArrayList<Listing>();
@@ -633,7 +631,7 @@ public class SetupServlet extends HttpServlet {
 			String volume = request.getParameter("volume");
 			String yearStr = request.getParameter("year");
 			Integer year = null;
-			if (yearStr != null) {
+			if (yearStr != null && !yearStr.isEmpty()) {
 				year = Integer.parseInt(yearStr);
 			}
 			String month = request.getParameter("month");
@@ -748,6 +746,10 @@ public class SetupServlet extends HttpServlet {
 			// Send checkout message to seller's emali
 			String sellerName = checkOutItem.getSellerName();
 			User seller = db.GetUser(sellerName);
+			System.out.println(seller.getEmail());
+			System.out.println(listingid);
+			System.out.println(sellerName);
+			System.out.println(currUser.getUsername());
 			SendCheckoutEmail(seller.getEmail(), listingid, sellerName, currUser.getUsername());
 			
 			// Decrement listing's quantity
@@ -757,7 +759,7 @@ public class SetupServlet extends HttpServlet {
 			db.CreateOrder(currUser.getId(), listing);
 			
 			// Remove from cart
-			db.RemoveFromCart(checkOutItem);
+			db.HardRemoveFromCart(checkOutItem);
 		}
 		
 		

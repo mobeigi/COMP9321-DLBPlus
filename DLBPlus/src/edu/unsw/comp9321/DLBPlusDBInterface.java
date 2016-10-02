@@ -87,12 +87,21 @@ public interface DLBPlusDBInterface {
 	public CartItem AddToCart(User user, Listing listingToAdd);
 
 	/**
-	 * Remove a particular cartItem from a user's cart
+	 * Remove a particular cartItem from a user's cart, and
+	 * add it to removedcartitems
 	 *
 	 * @param cartItem cart item to be removed
 	 * @return boolean True when removal was successful
 	 */
 	public boolean RemoveFromCart(CartItem cartItem);
+	
+	/**
+	 * Remove a particular cartItem from a user's cart
+	 *
+	 * @param cartItem cart item to be removed
+	 * @return boolean True when removal was successful
+	 */
+	public boolean HardRemoveFromCart(CartItem cartItem);
 
 	/**
 	 * Obtain all active cart items in a given cart

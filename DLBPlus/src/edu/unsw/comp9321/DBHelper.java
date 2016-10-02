@@ -678,6 +678,37 @@ public class DBHelper implements DLBPlusDBInterface {
 	}
 	
 	/**
+	 * Remove a particular cartItem from a user's cart
+	 *
+	 * @param cartItem cart item to be removed
+	 * @return boolean True when removal was successful
+	 */
+	public boolean HardRemoveFromCart(CartItem cartItem) {
+	    if (!dbConnStatus) {
+	        this.PrintDebugMessage("HardRemoveFromCart", "No connection with database");
+	        return false;
+	      }
+
+	      if (!cartItem.isActive()) {
+	        this.PrintDebugMessage("HardRemoveFromCart", "CartItem is not active, cannot remove this item.");
+	        return false;
+	      }
+	      
+	      try {
+	        //Remove previous item
+	        Statement stmt = dbConn.createStatement();
+	        stmt.executeUpdate("DELETE FROM activecartitems WHERE ctid IN ( SELECT ctid FROM activecartitems " +
+	                           "WHERE cartid=" + cartItem.getCartid() + " AND listingid=" + cartItem.getListingid() + " AND addedts=to_timestamp(" + cartItem.getAddedts().getTime()/1000 + ") " +
+	                           "ORDER BY addedts ASC LIMIT 1 );");
+	        dbConn.commit();
+	        return true;
+	      }
+	      catch (SQLException e) {
+	        return false;
+	      }		
+	}
+	
+	/**
 	 * Obtain a user
 	 *
 	 * @param userID the id of the user

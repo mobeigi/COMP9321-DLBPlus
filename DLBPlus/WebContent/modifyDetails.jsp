@@ -90,11 +90,6 @@
 			  					<br><br>
 				  			</div>
 				  		</div>
-				  		<div class="row">
-				  			<div class="col s12">
-				  				<p class="center">Already registered? <a href="?action=loginPage">Login</a></p>
-				  			</div>
-				  		</div>
 					</form>        
 	        	</div>
       		</div>

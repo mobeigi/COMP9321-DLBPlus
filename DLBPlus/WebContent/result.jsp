@@ -138,7 +138,7 @@
           <%-- Back button --%>
           <div class="col s2">
             <form action="setup" method="post">
-              <input type="hidden" name="action" value="back"/>
+              <input type="hidden" name="action" value="home"/>
               <button type="submit" value="Back" class="btn">Back</button>
             </form>
           </div>

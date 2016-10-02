@@ -213,7 +213,7 @@
 </div>
 <div class="center-align">
   <form action="setup" method="POST">
-    <input type="hidden" name="action" value="back"/>
+    <input type="hidden" name="action" value="home"/>
     <button class="btn waves-effect waves-light" type="submit" value="back">Back</button>
     <br>
   </form>
