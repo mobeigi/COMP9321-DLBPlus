@@ -547,12 +547,12 @@ public class SetupServlet extends HttpServlet {
       request.getSession().setAttribute("eMessage",errorMessage);
       link = "login.jsp";
     } else if(req.equals("myaccount")){
-      User currUser = (User)request.getSession().getAttribute("user");
-      if (currUser == null) {
-        link = "login.jsp";
-      } else {
-        link = "userAccount.jsp";
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/dblplus?action=login");
+        return;
       }
+      
+      link = "userAccount.jsp";
     } else if(req.equals("vieworderhistory")){
       //View past orders
       String errorMessage = "";
@@ -566,21 +566,22 @@ public class SetupServlet extends HttpServlet {
       request.getSession().setAttribute("userOrderList",orderList);
       link = "userSoldListings.jsp";
     } else if(req.equals("viewlistings")){
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/dblplus?action=login");
+        return;
+      }
+      
       //View sales
       String errorMessage = "";
-      User currUser = (User) request.getSession().getAttribute("user");
       
-      if (currUser == null) {
-        link = "login.jsp";
-      } else {
-        List<Listing> userListings = db.GetUserListings(currUser.getId());
-        if (userListings.isEmpty()) {
-          errorMessage = "Looks like you dont have any current listings";
-        }
-        request.getSession().setAttribute("eMessage", errorMessage);
-        request.getSession().setAttribute("userListings", userListings);
-        link = "userSellListings.jsp";
+      User currUser = (User) request.getSession().getAttribute("user");
+      List<Listing> userListings = db.GetUserListings(currUser.getId());
+      if (userListings.isEmpty()) {
+        errorMessage = "Looks like you dont have any current listings";
       }
+      request.getSession().setAttribute("eMessage", errorMessage);
+      request.getSession().setAttribute("userListings", userListings);
+      link = "userSellListings.jsp";
     } else if(req.equals("updateListingStatus")){
       
       User currUser = (User) request.getSession().getAttribute("user");
@@ -723,9 +724,11 @@ public class SetupServlet extends HttpServlet {
       }
     }
     // Case when user wants to view admin
-    else if (req.equals("loginAdmin")) {
-      response.sendRedirect("/DLBPlus/admin");
-      return;
+    else if (req.equals("adminlogin")) {
+      response.sendRedirect("/admin?action=login");
+    }
+    else if (req.equals("portal")) {
+      response.sendRedirect("/admin?action=portal");
     }
     else if (req.equals("viewlistingdetails")){
       int listingID = -1;
@@ -926,6 +929,17 @@ public class SetupServlet extends HttpServlet {
     request.getSession().setAttribute("cartList", cartList);
     
     return "cart.jsp";
+  }
+  
+  /**
+   * Check if admin is logged in.
+   *
+   * @param req Request object
+   * @return true if logged in, false otherwise
+   */
+  private boolean isLoggedIn(HttpServletRequest req) {
+    User u = (User)req.getSession().getAttribute("user");
+    return (u != null);
   }
   
 }

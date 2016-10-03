@@ -31,7 +31,7 @@
 <div class="section no-pad-bot" id="index-banner">
   <div class="container">
     <br><br>
-    <h2 class="header center orange-text">Admin Page</h2>
+    <h2 class="header center orange-text">Admin Portal</h2>
     <br><br>
   </div>
 </div>

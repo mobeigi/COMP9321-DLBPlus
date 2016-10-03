@@ -42,8 +42,8 @@
 </div>
 
 <!-- Display number of users -->
-<form action="admin" method="post">
-  <div class="container">
+<div class="container">
+  <form action="admin" method="post">
     <div class="row valign-wrapper">
       <div class="col s10 offset-s1">
 
@@ -93,17 +93,19 @@
           </table>
           <br><br>
           <input type="hidden" name="action" value="UpdateUsersStatus">
-          <input type="submit" value='Update changes'>
+          <button type="submit" value="Update changes" class="btn">Update changes</button>
         </div>
       </div>
     </div>
-  </div>
-</form>
-
-<div class="col s2">
-  <form action="admin" method="post">
-    <button type="submit" value="Back" class="btn">Back</button>
   </form>
+
+  <%-- Back button --%>
+  <div class="col s2">
+    <a href="/admin?action=portal">
+      <button type="submit" value="Back" class="btn">Back</button>
+    </a>
+  </div>
+
 </div>
 
 <jsp:include page="footer.jsp" />

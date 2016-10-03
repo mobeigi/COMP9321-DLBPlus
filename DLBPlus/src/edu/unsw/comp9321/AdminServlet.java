@@ -59,8 +59,26 @@ public class AdminServlet extends HttpServlet {
 			return;
 		}
 		
+		//Quick redirects
+    if (action.equals("login")) {
+      RequestDispatcher rd = request.getRequestDispatcher("adminLogin.jsp");
+      rd.forward(request, response);
+      return;
+    }
+    
+    if (action.equals("portal")) {
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/admin?action=login");
+        return;
+      }
+      
+      RequestDispatcher rd = request.getRequestDispatcher("adminIndex.jsp");
+      rd.forward(request, response);
+      return;
+    }
+		
 		// Case when no admin, action = login: verify
-		if (currAdmin == null && action.equals("adminLogin")) {
+		if (currAdmin == null && action.equals("adminLoginProcess")) {
 			String inputUsername = request.getParameter("username");
 			String inputPwd = request.getParameter("password");
 			
@@ -68,7 +86,9 @@ public class AdminServlet extends HttpServlet {
 			if (this.db.VerifyAdmin(inputUsername, inputPwd)) {
 				Admin newAdmin = this.db.GetAdmin(inputUsername);
 				request.getSession().setAttribute("currAdmin", newAdmin);
-				System.out.println("Admin succesfully logged in!");
+				System.out.println("Admin successfully logged in!");
+        response.sendRedirect("admin?action=portal");
+        return;
 			} else {
 				// Admin could not be verified - redirect back to login page
 				request.setAttribute("errorMsg", "Incorrect username or password.");
@@ -81,21 +101,44 @@ public class AdminServlet extends HttpServlet {
 		// At this point, admin is logged in. Redirect based on action
 		String nextPage = "adminIndex.jsp";
 		if (action == null) {
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/admin?action=login");
+        return;
+      }
+      
 			// no action specified
-			nextPage = "adminIndex.jsp";
+      response.sendRedirect("/dblplus?action=portal");
+      return;
 
-		} else if (action.equals("viewAllUsers")) {
+		} else if (action.equals("viewallusers")) {
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/admin?action=login");
+        return;
+      }
+      
 			List<User> ListOfUsers = this.db.GetAllUsers();
 			request.setAttribute("ListOfUsers", ListOfUsers);
 			nextPage = "adminUsers.jsp";
-		} else if (action.equals("viewAllListings")) {
+		} else if (action.equals("viewalllistings")) {
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/admin?action=login");
+        return;
+      }
+      
 			List<Listing> ListOfListings = this.db.GetListings(0, this.db.GetNumListings());
 			request.setAttribute("ListOfListings", ListOfListings);
 			nextPage = "adminListings.jsp";
 		} else if (action.equals("adminLogout")) {
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/admin?action=login");
+        return;
+      }
+      
 			System.out.println("Admin wants to log out...");
 			request.getSession().removeAttribute("currAdmin");
-			nextPage = "adminLogin.jsp";
+      
+      response.sendRedirect("/admin?action=login");
+      return;
 		}
 		
 		//Check redirect to other pages
@@ -126,6 +169,11 @@ public class AdminServlet extends HttpServlet {
 			request.getSession().setAttribute("viewListing", listing);
 			nextPage = "adminListingDetails.jsp";
 		} else if (action != null && action.equals("UpdateUsersStatus")) { //update status of users
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/admin?action=login");
+        return;
+      }
+      
 			List<User> listOfUsers = this.db.GetAllUsers();
 			
 			for (User user : listOfUsers) {
@@ -149,7 +197,16 @@ public class AdminServlet extends HttpServlet {
 			listOfUsers = this.db.GetAllUsers();
 			request.setAttribute("ListOfUsers", listOfUsers);
 			nextPage = "adminUsers.jsp";
+      
+      response.sendRedirect("/admin?action=viewallusers");
+      return;
+      
 		} else if(action != null && action.equals("removeListing")) { //remove a listing
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/admin?action=login");
+        return;
+      }
+      
 			String itemId = request.getParameter("itemId");
 			this.db.RemoveListing(Integer.parseInt(itemId));
 			
@@ -161,5 +218,16 @@ public class AdminServlet extends HttpServlet {
 		RequestDispatcher rd = request.getRequestDispatcher(nextPage);
 		rd.forward(request, response);
 	}
-
+  
+  /**
+   * Check if admin is logged in.
+   *
+   * @param req Request object
+   * @return true if logged in, false otherwise
+   */
+	private boolean isLoggedIn(HttpServletRequest req) {
+    Admin a = (Admin)req.getSession().getAttribute("currAdmin");
+    return (a != null);
+  }
+	
 }

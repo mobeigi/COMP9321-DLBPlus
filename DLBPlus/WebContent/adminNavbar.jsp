@@ -6,8 +6,9 @@
     <ul class="right hide-on-med-and-down">
       <c:choose>
       <c:when test="${not empty currAdmin}">
-      <li><a href="admin?action=viewAllUsers">Manage Users</a></li>
-      <li><a href="admin?action=viewAllListings">Manage Listings</a></li>
+      <li><a href="admin?action=portal">Portal</a></li>
+      <li><a href="admin?action=viewallusers">Manage Users</a></li>
+      <li><a href="admin?action=viewalllistings">Manage Listings</a></li>
       <li><a href="admin?action=adminLogout">Logout</a>
         </c:when>
         </c:choose>

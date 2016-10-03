@@ -31,6 +31,8 @@
   User u2 = db.CreateUser("joe2", "teddy23", "Joe", "Joey","Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
   User u3 = db.CreateUser("joe3", "@@879@@KAPPA", "Joe", "Joey","Blogs", "joeblogs@gmail.com", "10 main st", date, "1000000", "my dp");
 
+  Admin a = db.CreateAdmin("moadmin", "123");
+
   if (u1 == null)
     u1 = db.GetUser("joe1");
   if (u2 == null)

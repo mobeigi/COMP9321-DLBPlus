@@ -58,17 +58,17 @@
         <table class="left highlighted striped responsive-table">
           <thead>
           <tr>
-            <th>Item ID</th>
-            <th>Seller ID</th>
-            <th>Title</th>
-            <th>Quantity</th>
-            <th>List Date</th>
-            <th>End Date</th>
-            <th>Sell Price</th>
-            <th>Image</th>
-            <th>Status</th>
-            <th>Number of Views</th>
-            <th>Options</th>
+            <th class="centered"></th>
+            <th class="centered">Title</th>
+            <th class="centered">Author</th>
+            <th class="centered">Year</th>
+            <th class="centered">Type</th>
+            <th class="centered">List Date</th>
+            <th class="centered">End Date</th>
+            <th class="centered">Quantity</th>
+            <th class="centered">Price</th>
+            <th class="centered">Seller</th>
+            <th class="centered">Admin</th>
           </tr>
           </thead>
           <tbody>
@@ -76,27 +76,35 @@
           <c:forEach var="listing" items="${ListOfListings}"
                      varStatus="loop">
             <tr>
-              <td><c:out value="${listing.id}" /></td>
-              <td><c:out value="${listing.sellerid}" /></td>
-              <td><a href="admin?listingId=${listing.id}">${listing.title}</a></td>
-              <td><c:out value="${listing.quantity}" /></td>
-              <td><c:out value="${listing.listdate}" /></td>
-              <td><c:out value="${listing.enddate}" /></td>
-              <td><c:out value="${listing.sellprice}" /></td>
-              <td><c:out value="${listing.image}" /></td>
-              <td><c:out value="${listing.paused}" /></td>
-              <td><c:out value="${listing.numviews}" /></td>
+              <td><img src="${listing.imageOrDefault}" class="listingImageThumbnail" /></td>
+              <td><a href="/dblplus?action=viewlistingdetails&id=${listing.id}">${listing.title}</a></td>
+              <td><p><i>${listing.arrayAuthors}</i></p></td>
+              <td>${listing.year}</td>
+              <td>${listing.typeString}</td>
+              <td>${listing.listDateString}</td>
+              <td>${listing.endDateString}</td>
+              <td>${listing.quantity}</td>
+              <td>${listing.sellpriceString}</td>
+              <td>${listing.sellerUsername}</td>
               <td>
-                <FORM Action='admin'> <!-- Link to servlet to perform operation -->
-                  <INPUT type='submit' value='Remove listing'>
+                <form action='admin'> <!-- Link to servlet to perform operation -->
+                  <button type="submit" value="Remove listing" class="btn">Remove listing</button>
                   <input type="hidden" name="action" value="removeListing"> <!-- Use page operations -->
                   <input type="hidden" name="itemId" value="${listing.id}"> <!-- Use page operations -->
-                </FORM>
+                </form>
               </td>
             </tr>
           </c:forEach>
           </tbody>
         </table>
+
+        <%-- Back button --%>
+        <div class="col s2">
+          <a href="/admin?action=portal">
+            <button type="submit" value="Back" class="btn">Back</button>
+          </a>
+        </div>
+
       </div>
     </div>
   </div>
@@ -127,11 +135,7 @@
   </c:otherwise>
 </c:choose>
 --%>
-<div class="col s2">
-  <form action="admin" method="post">
-    <button type="submit" value="Back" class="btn">Back</button>
-  </form>
-</div>
+
 <%-- Next page link --%>
 <%--
 <c:choose>

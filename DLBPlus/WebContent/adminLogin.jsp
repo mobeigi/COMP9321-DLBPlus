@@ -4,7 +4,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <title>DBL+ | Register</title>
+  <title>DBL+ | Admin Login</title>
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <link rel="shortcut icon" href="/images/favicon.ico">
@@ -56,7 +56,7 @@
 
             <div class="col s12 center">
               <br>
-              <input type="hidden" name="action" value="adminLogin"/>
+              <input type="hidden" name="action" value="adminLoginProcess"/>
               <button class="btn waves-effect waves-light" type="submit">Login
                 <i class="material-icons right">send</i>
               </button>
