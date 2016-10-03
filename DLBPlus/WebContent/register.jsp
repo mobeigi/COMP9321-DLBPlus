@@ -102,7 +102,7 @@
           </div>
           <div class="row">
             <div class="col s12">
-              <p class="center">Already registered? <a href="?action=loginPage">Login</a></p>
+              <p class="center">Already registered? <a href="/dblplus?action=login">Login</a></p>
             </div>
           </div>
         </form>

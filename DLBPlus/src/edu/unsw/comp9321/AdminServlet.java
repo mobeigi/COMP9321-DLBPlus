@@ -60,21 +60,23 @@ public class AdminServlet extends HttpServlet {
 		}
 		
 		//Quick redirects
-    if (action.equals("login")) {
-      RequestDispatcher rd = request.getRequestDispatcher("adminLogin.jsp");
-      rd.forward(request, response);
-      return;
-    }
-    
-    if (action.equals("portal")) {
-      if (!isLoggedIn(request)) {
-        response.sendRedirect("/admin?action=login");
+    if (action != null) {
+      if (action.equals("login")) {
+        RequestDispatcher rd = request.getRequestDispatcher("adminLogin.jsp");
+        rd.forward(request, response);
         return;
       }
-      
-      RequestDispatcher rd = request.getRequestDispatcher("adminIndex.jsp");
-      rd.forward(request, response);
-      return;
+  
+      if (action.equals("portal")) {
+        if (!isLoggedIn(request)) {
+          response.sendRedirect("/admin?action=login");
+          return;
+        }
+    
+        RequestDispatcher rd = request.getRequestDispatcher("adminIndex.jsp");
+        rd.forward(request, response);
+        return;
+      }
     }
 		
 		// Case when no admin, action = login: verify
