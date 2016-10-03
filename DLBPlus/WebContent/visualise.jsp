@@ -21,6 +21,21 @@
   <link href="css/vis.css" rel="stylesheet" type="text/css" />
 
   <style type="text/css">
+  	#visualisationArea {
+  		position: relative;
+  		width: 800px;
+  		height: 800px;
+  	}
+  	
+  	#visualisationLegend {
+  		position: absolute;
+  		top: 10px;
+  		left: 10px;
+  		z-index: 99;
+  		border: 1px solid #00BFFF;
+  		border-radius: 5px;
+  	}
+    
     #visualisation {
       width: 800px;
       height: 800px;
@@ -98,7 +113,12 @@
 
       <!-- Area to visualise the listings -->
       <center>
-        <div id="visualisation"></div>
+      	<div id="visualisationArea">
+      		<div id="visualisation"></div>
+      		<div id="visualisationLegend">
+      			 <img src="images/visualisation_legend.png" height="180" width="180"> 
+      		</div>
+      	</div>
       </center>
     </div>
 
