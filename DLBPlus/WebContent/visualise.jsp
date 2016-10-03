@@ -160,7 +160,7 @@
 	    			break;
 	    			
 	    		case VENUE:
-	    			arrayVisNodes += "images/venue-icon.ico";
+	    			arrayVisNodes += "images/venue-icon.png";
 	    			break;
     		
     			default:
