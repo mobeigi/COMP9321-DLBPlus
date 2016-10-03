@@ -18,6 +18,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <script type="text/javascript" src="js/vis.js"></script>
+  
+  <!-- JQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  
   <link href="css/vis.css" rel="stylesheet" type="text/css" />
 
   <style type="text/css">
@@ -235,7 +239,11 @@
         if (nodeID == null) {
         	console.log("Node ID undefined. Did you click on an edge?");
         } else {
-        	console.log("Node ID clicked: " + params.nodes[0]);
+        	console.log("Node ID clicked: " + nodeID);
+        	
+        	// Search for the type of the node (using JQuery)
+        	nodeType = $.grep(data.nodes, function(e){ return e.id == nodeID; })[0].type;
+        	console.log("Type of node: " + nodeType);
         	
         	// ToDo: Redirect to visualise, but searching for the double clicked node!
         }
