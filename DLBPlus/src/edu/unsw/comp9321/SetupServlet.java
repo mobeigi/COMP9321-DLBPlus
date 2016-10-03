@@ -821,33 +821,20 @@ public class SetupServlet extends HttpServlet {
     // Case when user wants to query the visualisation
     else if (req.equals("queryVisualisation")) {
     	
-    	// Obtain search query fields
-        String qTitles = (request.getParameter("queryVisTitles") == null || request.getParameter("queryVisTitles").isEmpty()) ? null : new String( request.getParameter("queryVisTitles").getBytes(), "UTF-8").trim();
-        String qAuthors = (request.getParameter("queryVisAuthors") == null || request.getParameter("queryVisAuthors").isEmpty()) ? null : new String( request.getParameter("queryVisAuthors").getBytes(), "UTF-8").trim();
-        String qEditors = (request.getParameter("queryVisEditors") == null || request.getParameter("queryVisEditors").isEmpty()) ? null : new String( request.getParameter("queryVisEditors").getBytes(), "UTF-8").trim();
-        String qVenues = (request.getParameter("queryVisVenues") == null || request.getParameter("queryVisVenues").isEmpty()) ? null : new String( request.getParameter("queryVisVenues").getBytes(), "UTF-8").trim();
-        
-        String[] qTitleList = new String[0];
-        String[] qAuthorList = new String[0];
-        String[] qEditorList = new String[0];
-        String[] qVenueList = new String[0];
-
-        // Split fields based on newline
-        if (qTitles != null) qTitleList = qTitles.trim().split("\\\r\n");
-        if (qAuthors != null) qAuthorList = qAuthors.trim().split("\\\r\n");
-        if (qEditors != null) qEditorList = qEditors.trim().split("\\\r\n");
-        if (qVenues != null) qVenueList = qVenues.trim().split("\\\r\n");
-        
-        // Create the query
-        VisQuery query = new VisQuery();
-        if (qTitles != null)
-        	query.setTitles(Arrays.asList(qTitleList));
-        if (qAuthors != null)
-            query.setAuthors(Arrays.asList(qAuthorList));
-        if (qEditors != null)
-            query.setEditors(Arrays.asList(qEditorList));
-        if (qVenues != null)
-            query.setVenues(Arrays.asList(qVenueList));
+    	// Obtain value of query (split based on newline)
+    	String qData = (request.getParameter("queryData") == null || request.getParameter("queryData").isEmpty()) ? null : new String( request.getParameter("queryData").getBytes(), "UTF-8").trim();
+    	String[] qDataList = new String[0];
+    	if (qData != null) qDataList = qData.trim().split("\\\r\n");
+    	
+    	// Obtain type of query
+    	String qType = new String( request.getParameter("queryType").getBytes(), "UTF-8").trim();	// this will never be null
+    	
+    	// Create the query object
+    	VisQuery query = new VisQuery();
+    	if (qData != null) {
+    		query.setQueryData(Arrays.asList(qDataList));
+    	}
+    	query.setQueryType(qType);
         
         // TODO: Remove duplicates in query fields for the lists
        

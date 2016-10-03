@@ -6,28 +6,34 @@ package edu.unsw.comp9321;
 import java.util.*;
 
 public class VisQuery {
-	private List<String> qTitles;
-	private List<String> qAuthors;
-	private List<String> qEditors;
-	private List<String> qVenues;
 	
-	// Constructor
-	public VisQuery() {
-		this.qTitles = new ArrayList<String>();
-		this.qAuthors = new ArrayList<String>();
-		this.qEditors = new ArrayList<String>();
-		this.qVenues = new ArrayList<String>();
-		
+	public enum Type {
+	    TITLES,
+	    AUTHORS,
+	    EDITORS,
+	    VENUES
 	}
 	
-	// Getters and setters
-	public List<String> getTitles() { return this.qTitles; }
-	public List<String> getAuthors() { return this.qAuthors; }
-	public List<String> getEditors() { return this.qEditors; }
-	public List<String> getVenues() { return this.qVenues; }
+	private List<String> qDataList = null;
+	private VisQuery.Type qType;
 	
-	public void setTitles(List<String> newTitles) { this.qTitles = newTitles; }
-	public void setAuthors(List<String> newAuthors) { this.qAuthors = newAuthors; }
-	public void setEditors(List<String> newEditors) { this.qEditors = newEditors; }
-	public void setVenues(List<String> newVenues) { this.qVenues = newVenues; }
+	// Constructor
+	public VisQuery() {}
+	
+	// Getters and setters
+	public List<String> getQueryData() { return this.qDataList; }
+	public VisQuery.Type getQueryType() { return this.qType; }
+	
+	public void setQueryData(List<String> newData) { this.qDataList = newData; }
+	public void setQueryType(String typeStr) { 
+		if (typeStr.equals("titles")) {
+			this.qType = VisQuery.Type.TITLES;
+		} else if (typeStr.equals("authors")) {
+			this.qType = VisQuery.Type.AUTHORS;
+		} else if (typeStr.equals("editors")) {
+			this.qType = VisQuery.Type.EDITORS;
+		} else if (typeStr.equals("venues")) {
+			this.qType = VisQuery.Type.VENUES;
+		}
+	}
 }

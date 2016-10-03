@@ -51,6 +51,12 @@
   </div>
 </div>
 
+<script>
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+</script>
+
 <!-- Query box -->
 <div class="row">
   <div class="col s8 offset-s2">
@@ -58,22 +64,21 @@
 
       <div class="row">
         <form action="dblplus" method="get">
-          <div class="col s2">
-            <label for="queryVisTitlesBox">Titles:</label>
-            <textarea id="queryVisTitlesBox" name="queryVisTitles" class="materialize-textarea"></textarea>
+        
+          <div class="col s6">
+          	<label for="queryBox">Query Data:</label>
+            <textarea id="queryBox" name="queryData" class="materialize-textarea"></textarea>
           </div>
-          <div class="col s2">
-            <label for="queryVisAuthorsBox">Authors:</label>
-            <textarea id="queryVisAuthorsBox" name="queryVisAuthors" class="materialize-textarea"></textarea>
-          </div>
-          <div class="col s2">
-            <label for="queryVisEditorsBox">Editors:</label>
-            <textarea id="queryVisEditorsBox" name="queryVisEditors" class="materialize-textarea"></textarea>
-          </div>
-          <div class="col s2">
-            <label for="queryVisVenuesBox">Venues:</label>
-            <textarea id="queryVisVenuesBox" name="queryVisVenues" class="materialize-textarea"></textarea>
-          </div>
+          
+          <div class="col s3">
+		  	<select name="queryType">
+		      	<option value="titles" selected>Titles</option>
+		      	<option value="authors">Authors</option>
+		      	<option value="editors">Editors</option>
+		      	<option value="venues">Editors</option>
+		      	<label>Query field:</label>
+		    </select>
+	 	  </div>
 
           <input type="hidden" name="action" value="queryVisualisation">
           <button class="btn waves-effect waves-light" type="submit">Query</button>
