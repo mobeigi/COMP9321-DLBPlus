@@ -60,6 +60,7 @@
           <div class="card valign grey lighten-2" >
             <table class="centered highlighted striped responsive-table">
               <tr>
+                <th class="centered"></th>
                 <th class="centered">Title</th>
                 <th class="centered">Author</th>
                 <th class="centered">Year</th>
@@ -75,6 +76,7 @@
                          varStatus="loop">
                 <c:if test="${loop.index < fn:length(searchFound.results)}">
                   <tr>
+                    <td><img src="${searchFound.results[loop.index].imageOrDefault}" class="listingImageThumbnail" /></td>
                     <td><a href="setup?action=viewListingDetails&id=${searchFound.results[loop.index].id}">${searchFound.results[loop.index].title}</a></td>
                     <td><p><i>${searchFound.results[loop.index].arrayAuthors}</i></p></td>
                     <td>${searchFound.results[loop.index].year}</td>

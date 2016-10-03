@@ -32,3 +32,10 @@ input.currency:before {
   width: auto;
   height: auto;
 }
+
+.listingImageThumbnail {
+  max-height: 96px;
+  max-width: 96px;
+  width: auto;
+  height: auto;
+}
