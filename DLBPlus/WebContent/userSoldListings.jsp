@@ -48,22 +48,21 @@
                 <table class="centered highlighted striped responsive-table">
                   <thead>
                   <tr>
-                    <th> Order ID </th>
-                    <th> Title </th>
-                    <th> Seller ID</th>
-                    <th> Order Date</th>
-                    <th> Price </th>
+                    <th class="centered">Order ID</th>
+                    <th class="centered">Title</th>
+                    <th class="centered">Seller</th>
+                    <th class="centered">Order Date</th>
+                    <th class="centered">Price</th>
                   </tr>
                   </thead>
                   <tbody>
                   <c:forEach var="order" items="${userOrderList}">
                     <tr>
-                      <td><c:out value="${order.id}"/></td>
-                      <td><c:out value="${order.title}"/></td>
-                      <td><c:out value="${order.sellerid}" /></td>
-                      <td><c:out value="${order.order_date}" /></td>
-                      <td>$<c:out value="${order.price}" /></td>
-
+                      <td>${order.id}</td>
+                      <td>${order.pubTitle}</td>
+                      <td>${order.sellerUsername}</td>
+                      <td>${order.orderDateString}</td>
+                      <td>${order.priceString}</td>
                     </tr>
                   </c:forEach>
                   </tbody>
@@ -74,11 +73,16 @@
         </div>
       </div>
     </div>
+
+    <%-- Back button --%>
+    <div class="col s2">
+      <a href="/dblplus?action=myaccount">
+        <button type="submit" value="Back" class="btn">Back</button>
+      </a>
+    </div>
+
   </div>
 </div>
-
-
-
 
 <jsp:include page="footer.jsp" />
 </body>

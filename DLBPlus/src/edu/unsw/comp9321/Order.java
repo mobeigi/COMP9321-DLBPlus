@@ -1,6 +1,8 @@
 package edu.unsw.comp9321;
 
 import java.sql.Timestamp;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 
 public class Order {
   private Integer id;
@@ -61,4 +63,30 @@ public class Order {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
+  
+  //Helper getters for JLST
+  public String getOrderDateString() {
+    return new SimpleDateFormat("dd/MM/yyyy").format(this.getOrder_date());
+  }
+  
+  public String getPriceString() {
+    NumberFormat formatter = NumberFormat.getCurrencyInstance();
+    String moneyString = formatter.format(this.price);
+    return moneyString;
+  }
+  
+  public String getSellerUsername() {
+    DBHelper db = new DBHelper();
+    db.init();
+    User u = db.GetUser(this.getSellerid());
+    String username = null;
+    
+    if (u != null) {
+      username = u.getUsername();
+    }
+    
+    db.close();
+    
+    return username;
+  }
 }

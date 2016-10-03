@@ -361,21 +361,27 @@ public class SetupServlet extends HttpServlet {
       Listing listing = db.GetListing(listingID);
       User currUser = (User) request.getSession().getAttribute("user");
       List<CartItem> cartList = db.GetActiveCartItems(currUser.getCartid());
-      if(cartList != null){
-        for(CartItem cartItem : cartList){
-          if(cartItem.getListingid() == listingID){
-            flag = true;
+      
+      //Check if seller = curruser
+      if (currUser.getId().equals(listing.getSellerid())) {
+        errorMessage = "You can't buy an item that you are selling.";
+      } else {
+        if (cartList != null) {
+          for (CartItem cartItem : cartList) {
+            if (cartItem.getListingid() == listingID) {
+              flag = true;
+            }
           }
         }
-      }
-      
-      if(flag){
-        request.getSession().setAttribute("isAlreadySelected", true);
-      } else {
-        request.getSession().setAttribute("isAlreadySelected", false);
-        CartItem item = db.AddToCart(currUser, listing);
-        if(item == null){
-          errorMessage = "Failed to add item!";
+  
+        if (flag) {
+          request.getSession().setAttribute("isAlreadySelected", true);
+        } else {
+          request.getSession().setAttribute("isAlreadySelected", false);
+          CartItem item = db.AddToCart(currUser, listing);
+          if (item == null) {
+            errorMessage = "Failed to add item!";
+          }
         }
       }
       
@@ -554,6 +560,11 @@ public class SetupServlet extends HttpServlet {
       
       link = "userAccount.jsp";
     } else if(req.equals("vieworderhistory")){
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/dblplus?action=login");
+        return;
+      }
+      
       //View past orders
       String errorMessage = "";
       User buyer = (User) request.getSession().getAttribute("user");
