@@ -1342,7 +1342,7 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT * FROM listings where id = " + listingID + ";" );
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings WHERE id = " + listingID + ";" );
       
       return processResultSetIntoListing(rs);
     }

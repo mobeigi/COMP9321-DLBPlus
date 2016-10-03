@@ -98,23 +98,33 @@ public class SetupServlet extends HttpServlet {
           errorMessage = "No listings can be obtained.";
         }
         
-        // Check whether there is < 10 listings
-        else if (totalNumListings <= 10) {
-          randListings = this.db.GetAllListings();
+        //Get all listings
+        List<Listing> allListings = db.GetAllListings();
+  
+        //Filter out paused items and items with no quantity
+        for (Iterator<Listing> iter = allListings.listIterator(); iter.hasNext(); ) {
+          Listing l = iter.next();
+          if (l.getQuantity() <= 0 || l.getPaused())
+            iter.remove();
         }
         
-        // Case when there are > 10
+        // Obtain a unique list of random listings
+        if (allListings.size() <= 10) {
+          randListings = allListings;
+        }
         else {
-          // Obtain a unique list of random publications
-          Listing listingToAdd = this.db.GetRandomListing();
+          Random rand = new Random();
+          int randIndex = rand.nextInt(allListings.size() - 1);
+          
+          Listing listingToAdd = allListings.get(randIndex);
           List<Integer> randListingIDs = new ArrayList<Integer>();
           while (randListings.size() < 10) {
             while (randListingIDs.contains(listingToAdd.getId())) {
-              listingToAdd = this.db.GetRandomListing();
+              randIndex = rand.nextInt(allListings.size() - 1);
+              listingToAdd = allListings.get(randIndex);
             }
             randListings.add(listingToAdd);
             randListingIDs.add(listingToAdd.getId());
-            listingToAdd = this.db.GetRandomListing();
           }
         }
         
@@ -300,6 +310,13 @@ public class SetupServlet extends HttpServlet {
       
       //Perform search
       List<Listing> results = db.SearchListings(query, minSellPrice, maxSellPrice, exactMatch, matchCase);
+  
+      //Filter out paused items and items with no quantity
+      for (Iterator<Listing> iter = results.listIterator(); iter.hasNext(); ) {
+        Listing l = iter.next();
+        if (l.getQuantity() <= 0 || l.getPaused())
+          iter.remove();
+      }
       
       //Get page number for pagination
       String qPageNo = (request.getParameter("pageNo") == null || request.getParameter("pageNo").isEmpty()) ? null : new String( request.getParameter("pageNo").getBytes(), "UTF-8").trim();
