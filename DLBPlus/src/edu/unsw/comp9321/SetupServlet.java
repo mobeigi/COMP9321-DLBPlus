@@ -127,7 +127,7 @@ public class SetupServlet extends HttpServlet {
       }
       
       link = "index.jsp";
-    } else if(req.equals("viewSearchPage")){
+    } else if(req.equals("advancedsearch")){
       link = "search.jsp";
     } else if (req.equals("search")){
       String qTitle = (request.getParameter("title") == null || request.getParameter("title").isEmpty()) ? null : new String( request.getParameter("title").getBytes(), "UTF-8").trim();
@@ -346,7 +346,7 @@ public class SetupServlet extends HttpServlet {
       
       link = "result.jsp";
       
-    } else if(req.equals("viewCart")){
+    } else if(req.equals("viewcart")){
       User currUser = (User) request.getSession().getAttribute("user");
       List<CartItem> cartList = db.GetActiveCartItems(currUser.getId());
       
@@ -387,7 +387,7 @@ public class SetupServlet extends HttpServlet {
       link = "cart.jsp";
     } else if(req.equals("checkout")){
       link = checkoutCartItems(request);
-    } else if(req.equals("register")){
+    } else if(req.equals("registeraccount")){
       int flag = 0;
       String errorMessage = "";
       String firstName = request.getParameter("fname");
@@ -450,7 +450,8 @@ public class SetupServlet extends HttpServlet {
         if(code.equals(emailCode)){
           request.getSession().setAttribute("user",newUser);
           this.db.SetAcctConfirmed(newUser, true);
-          link = "userAccount.jsp";
+          response.sendRedirect("dblplus?action=myaccount");
+          return;
         } else {
           errorMessage = "Code is incorrect!";
           request.getSession().setAttribute("eMessage",errorMessage);
@@ -458,19 +459,20 @@ public class SetupServlet extends HttpServlet {
         }
       }
       
-    } else if(req.equals("login")){
+    } else if(req.equals("loginProcess")){
       String errorMessage = "";
       String userName = request.getParameter("uname");
       String password = request.getParameter("pass");
       
       boolean success = db.VerifyUser(userName, password);
       System.out.println(success);
-      if(success == true){
+      if(success){
         User user = db.GetUser(userName);
         if (user.getAcctconfrm()){
           request.getSession().setAttribute("user",user);
           System.out.println(user.getUsername());
-          link = "userAccount.jsp";
+          response.sendRedirect("dblplus?action=myaccount");
+          return;
         } else {
           Random random = new Random();
           int rand = random.nextInt(99999);
@@ -492,12 +494,12 @@ public class SetupServlet extends HttpServlet {
       link = "index.jsp";
     } else if(req.equals("confirmPurchase")){
       link = "transactionSuccessful.jsp";
-    } else if(req.equals("registerPage")){
+    } else if(req.equals("register")){
       System.out.println("Going to register page");
       String errorMessage = "";
       request.getSession().setAttribute("eMessage",errorMessage);
       link = "register.jsp";
-    } else if(req.equals("modified")){
+    } else if(req.equals("modifydetails")){
       User user = (User) request.getSession().getAttribute("user");
       request.getSession().setAttribute("user",user);
       link = "modifyDetails.jsp";
@@ -540,13 +542,18 @@ public class SetupServlet extends HttpServlet {
       }
       request.getSession().setAttribute("eMessage",errorMessage);
       link = "userAccount.jsp";
-    } else if(req.equals("loginPage")){
+    } else if(req.equals("login")){
       String errorMessage = "";
       request.getSession().setAttribute("eMessage",errorMessage);
       link = "login.jsp";
-    } else if(req.equals("toAccount")){
-      link = "userAccount.jsp";
-    } else if(req.equals("viewHist")){
+    } else if(req.equals("myaccount")){
+      User currUser = (User)request.getSession().getAttribute("user");
+      if (currUser == null) {
+        link = "login.jsp";
+      } else {
+        link = "userAccount.jsp";
+      }
+    } else if(req.equals("vieworderhistory")){
       //View past orders
       String errorMessage = "";
       User buyer = (User) request.getSession().getAttribute("user");
@@ -558,17 +565,22 @@ public class SetupServlet extends HttpServlet {
       request.getSession().setAttribute("eMessage", errorMessage);
       request.getSession().setAttribute("userOrderList",orderList);
       link = "userSoldListings.jsp";
-    } else if(req.equals("viewListings")){
+    } else if(req.equals("viewlistings")){
       //View sales
       String errorMessage = "";
       User currUser = (User) request.getSession().getAttribute("user");
-      List<Listing> userListings = db.GetUserListings(currUser.getId());
-      if(userListings.isEmpty()){
-        errorMessage = "Looks like you dont have any current listings";
+      
+      if (currUser == null) {
+        link = "login.jsp";
+      } else {
+        List<Listing> userListings = db.GetUserListings(currUser.getId());
+        if (userListings.isEmpty()) {
+          errorMessage = "Looks like you dont have any current listings";
+        }
+        request.getSession().setAttribute("eMessage", errorMessage);
+        request.getSession().setAttribute("userListings", userListings);
+        link = "userSellListings.jsp";
       }
-      request.getSession().setAttribute("eMessage",errorMessage);
-      request.getSession().setAttribute("userListings", userListings);
-      link = "userSellListings.jsp";
     } else if(req.equals("updateListingStatus")){
       
       User currUser = (User) request.getSession().getAttribute("user");
@@ -609,7 +621,7 @@ public class SetupServlet extends HttpServlet {
       request.getSession().setAttribute("eMessage",errorMessage);
       request.getSession().setAttribute("userListings", userListings);
       link = "userSellListings.jsp";
-    } else if(req.equals("createListing")){
+    } else if(req.equals("createlisting")){
       //Create new listing
       link = "createListing.jsp";
     } else if(req.equals("registerItem")){
@@ -715,7 +727,7 @@ public class SetupServlet extends HttpServlet {
       response.sendRedirect("/DLBPlus/admin");
       return;
     }
-    else if (req.equals("viewListingDetails")){
+    else if (req.equals("viewlistingdetails")){
       int listingID = -1;
       
       try {
@@ -790,7 +802,7 @@ public class SetupServlet extends HttpServlet {
     	link = "visualise.jsp";
     }
     
-    RequestDispatcher rd = request.getRequestDispatcher("/"+link);
+    RequestDispatcher rd = request.getRequestDispatcher("/" + link);
     rd.forward(request, response);
   }
   private String checkoutCartItems(HttpServletRequest request) {

@@ -8,10 +8,11 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <title>Bibliographic Library | Listing</title>
+  <title>DBL+ | Listing</title>
 
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+  <link rel="shortcut icon" href="/images/favicon.ico">
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
   <link type="text/css" rel="stylesheet" href="css/main.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -128,7 +129,7 @@
               </tr>
             </c:if>
 
-            <c:if test="${listings.authors != null}">
+            <c:if test="${listings.authors != null && not empty listings.authors}">
               <tr>
                 <td class="col offset-s1">Authors</td>
                 <td class="col offset-s1">
@@ -139,7 +140,7 @@
               </tr>
             </c:if>
 
-            <c:if test="${listings.editors != null}">
+            <c:if test="${listings.editors != null && not empty listings.editors}">
               <tr>
                 <td class="col offset-s1">Editors</td>
                 <td class="col offset-s1">
@@ -213,7 +214,7 @@
               </tr>
             </c:if>
 
-            <c:if test="${listings.venues != null}">
+            <c:if test="${listings.venues != null && not empty listings.venues}">
               <tr>
                 <td class="col offset-s1">Venues</td>
                 <td class="col offset-s1">
@@ -224,7 +225,7 @@
               </tr>
             </c:if>
 
-            <c:if test="${listings.urls != null}">
+            <c:if test="${listings.urls != null && not empty listings.urls}">
               <tr>
                 <td class="col offset-s1">URLs</td>
                 <td class="col offset-s1">
@@ -235,7 +236,7 @@
               </tr>
             </c:if>
 
-            <c:if test="${listings.ees != null}">
+            <c:if test="${listings.ees != null && not empty listings.ees}">
               <tr>
                 <td class="col offset-s1">EEs</td>
                 <td class="col offset-s1">
@@ -246,7 +247,7 @@
               </tr>
             </c:if>
 
-            <c:if test="${listings.cites != null}">
+            <c:if test="${listings.cites != null && not empty listings.cites}">
               <tr>
                 <td class="col offset-s1">Cites</td>
                 <td class="col offset-s1">
@@ -264,7 +265,7 @@
               </tr>
             </c:if>
 
-            <c:if test="${listings.isbns != null}">
+            <c:if test="${listings.isbns != null && not empty listings.isbns}">
               <tr>
                 <td class="col offset-s1">ISBNs</td>
                 <td class="col offset-s1">
@@ -296,14 +297,14 @@
   <br>
   <div class="row">
     <div class="col s9">
-      <form action="setup" method="POST">
+      <form action="dblplus" method="POST">
         <input type="hidden" name="action" value="back"/>
         <button type="submit" value="Back To Search" class="btn waves-effect waves-light">Back</button>
         <br>
       </form>
     </div>
     <div class="col s3">
-      <form action="setup" method = "POST">
+      <form action="dblplus" method = "POST">
         <div>
           <input type="hidden" name="action" value="add"/>
           <input type="hidden" name="listingID" value="${listings.id}"/>

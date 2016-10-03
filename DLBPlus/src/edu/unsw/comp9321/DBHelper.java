@@ -415,12 +415,12 @@ public class DBHelper implements DLBPlusDBInterface {
         insertsValues.add("'" + type.toString().toLowerCase() + "'");
       }
   
-      if (authors != null) {
+      if (authors != null && !authors.isEmpty()) {
         inserts.add("authors");
         insertsValues.add("'" + StringUtils.join(authors , "|") + "'");
       }
   
-      if (editors != null) {
+      if (editors != null && !editors.isEmpty()) {
         inserts.add("editors");
         insertsValues.add("'" + StringUtils.join(editors , "|") + "'");
       }
@@ -430,7 +430,7 @@ public class DBHelper implements DLBPlusDBInterface {
         insertsValues.add("'" + title + "'");
       }
   
-      if (venues != null) {
+      if (venues != null && !venues.isEmpty()) {
         inserts.add("venues");
         insertsValues.add("'" + StringUtils.join(venues , "|") + "'");
       }
@@ -465,12 +465,12 @@ public class DBHelper implements DLBPlusDBInterface {
         insertsValues.add("'" + month + "'");
       }
   
-      if (urls != null) {
+      if (urls != null && !urls.isEmpty()) {
         inserts.add("urls");
         insertsValues.add("'" + StringUtils.join(urls , "|") + "'");
       }
   
-      if (ees != null) {
+      if (ees != null && !ees.isEmpty()) {
         inserts.add("ees");
         insertsValues.add("'" + StringUtils.join(ees , "|") + "'");
       }
@@ -480,7 +480,7 @@ public class DBHelper implements DLBPlusDBInterface {
         insertsValues.add("'" + cdrom + "'");
       }
   
-      if (cites != null) {
+      if (cites != null && !cites.isEmpty()) {
         inserts.add("cites");
         insertsValues.add("'" + StringUtils.join(cites , "|") + "'");
       }
@@ -500,7 +500,7 @@ public class DBHelper implements DLBPlusDBInterface {
         insertsValues.add("'" + crossref + "'");
       }
   
-      if (isbns != null) {
+      if (isbns != null && !isbns.isEmpty()) {
         inserts.add("isbns");
         insertsValues.add("'" + StringUtils.join(isbns , "|") + "'");
       }

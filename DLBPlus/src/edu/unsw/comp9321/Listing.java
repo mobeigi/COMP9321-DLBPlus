@@ -341,7 +341,11 @@ public class Listing{
 
 	//Helper getters for JLST
   public String getArrayAuthors() {
-    return joinMultiString(this.authors);
+    String authors = joinMultiString(this.authors);
+    if (authors == "")
+      return "N/A";
+    
+    return authors;
   }
   
   private String joinMultiString(List<String> list) {

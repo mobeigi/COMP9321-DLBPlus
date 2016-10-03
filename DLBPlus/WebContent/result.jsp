@@ -9,9 +9,10 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Bibliographic Library | Results</title>
+  <title>DBL+ | Results</title>
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+  <link rel="shortcut icon" href="/images/favicon.ico">
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
   <link type="text/css" rel="stylesheet" href="css/main.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -77,7 +78,7 @@
                 <c:if test="${loop.index < fn:length(searchFound.results)}">
                   <tr>
                     <td><img src="${searchFound.results[loop.index].imageOrDefault}" class="listingImageThumbnail" /></td>
-                    <td><a href="setup?action=viewListingDetails&id=${searchFound.results[loop.index].id}">${searchFound.results[loop.index].title}</a></td>
+                    <td><a href="/dblplus?action=viewlistingdetails&id=${searchFound.results[loop.index].id}">${searchFound.results[loop.index].title}</a></td>
                     <td><p><i>${searchFound.results[loop.index].arrayAuthors}</i></p></td>
                     <td>${searchFound.results[loop.index].year}</td>
                     <td>${searchFound.results[loop.index].typeString}</td>
@@ -119,12 +120,12 @@
           <c:choose>
             <c:when test="${searchFound.currPage != searchFound.totalPages}">
               <div class="col s2">
-                  <a href="${currentFullUrl}&pageNo=${searchFound.currPage + 1}">
+                <a href="${currentFullUrl}&pageNo=${searchFound.currPage + 1}">
                   <button type="submit" class="btn btn-link">
                     Next
                     <span class="glyphicon glyphicon-chevron-right"></span>
                   </button>
-                  </a>
+                </a>
               </div>
             </c:when>
             <c:otherwise>
@@ -139,10 +140,9 @@
 
           <%-- Back button --%>
           <div class="col s2">
-            <form action="setup" method="post">
-              <input type="hidden" name="action" value="home"/>
+            <a href="/dblplus?action=advancedsearch">
               <button type="submit" value="Back" class="btn">Back</button>
-            </form>
+            </a>
           </div>
 
         </c:otherwise>

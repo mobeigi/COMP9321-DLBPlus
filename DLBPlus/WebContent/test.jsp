@@ -68,8 +68,8 @@
   isbns.add("5059494126594");
 
   db.CreateListing(u3, 10, start, end, 99.99, "test image", Listing.Type.ARTICLE, authors, editors, "How to be ninja", venues,
-      "12p", 2014, "10 main st", "XII", "2nd", "january", urls, ees, "ROM2", cites, "Penguin", "This is a note", "CR-120-23",
-      isbns, "1st series", "18", "5");
+    "12p", 2014, "10 main st", "XII", "2nd", "january", urls, ees, "ROM2", cites, "Penguin", "This is a note", "CR-120-23",
+    isbns, "1st series", "18", "5");
 
 %>
 </body>

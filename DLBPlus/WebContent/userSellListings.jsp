@@ -6,9 +6,10 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <title>Bibliographic Library | Current Listings</title>
+  <title>DBL+ | Current Listings</title>
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+  <link rel="shortcut icon" href="/images/favicon.ico">
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
   <link type="text/css" rel="stylesheet" href="css/main.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -44,7 +45,7 @@
             </c:when>
             <c:otherwise>
 
-              <form method="get" action="setup">
+              <form method="get" action="dblplus">
                 <div class="row">
                   <table class="centered highlighted striped responsive-table">
                     <thead>
@@ -65,7 +66,7 @@
                       <tr>
                         <td><c:out value="${listing.id}"/></td>
                         <td><img src="${listing.imageOrDefault}" class="listingImageThumbnail" /></td>
-                        <td><a href="setup?action=viewListing&&id=${listing.id}">${listing.title}</a></td>
+                        <td><a href="/dblplus?action=viewlistingdetails&id=${listing.id}">${listing.title}</a></td>
                         <td><c:out value="${listing.arrayAuthors}" /></td>
                         <td><c:out value="${listing.typeString}" /></td>
                         <td><c:out value="${listing.quantity}" /></td>

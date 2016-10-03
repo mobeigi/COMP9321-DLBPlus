@@ -10,9 +10,10 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Bibliographic Library | Advanced Search</title>
+  <title>DBL+ | Advanced Search</title>
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+  <link rel="shortcut icon" href="/images/favicon.ico">
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
   <link type="text/css" rel="stylesheet" href="css/main.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -43,7 +44,7 @@
   <div class="col s8 offset-s2">
     <div class="card white">
       <div class="card-content black-text">
-        <form action="setup" method="get">
+        <form action="dblplus" method="get">
           <div class="row">
             <div class="col s12">
               <input placeholder="Title" name="title" type="text" />
@@ -198,9 +199,10 @@
               </button>
               <br />
               <br />
+
               <input type="checkbox" class="filled-in" id="matchcase-checkbox" name="matchcase" />
               <label for="matchcase-checkbox">Match Case</label>
-
+              &nbsp;
               <input type="checkbox" class="filled-in" id="exactmatch-checkbox" name="exactmatch" style="margin-left: 10px;" />
               <label for="exactmatch-checkbox">Exact Match</label>
               <br><br>
@@ -212,7 +214,7 @@
   </div>
 </div>
 <div class="center-align">
-  <form action="setup" method="POST">
+  <form action="dblplus" method="POST">
     <input type="hidden" name="action" value="home"/>
     <button class="btn waves-effect waves-light" type="submit" value="back">Back</button>
     <br>

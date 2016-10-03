@@ -4,9 +4,10 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <title>Bibliographic Library | New Listing</title>
+  <title>DBL+ | New Listing</title>
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+  <link rel="shortcut icon" href="/images/favicon.ico">
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
   <link type="text/css" rel="stylesheet" href="css/main.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -52,7 +53,7 @@
   <div class="col s6 offset-s3">
     <div class="card white">
       <div class="card-content black-text">
-        <form action="setup" method="post">
+        <form action="dblplus" method="post">
           <div class="row">
             <div class="col s12">
               <input placeholder="Title" name="title" type="text" />
