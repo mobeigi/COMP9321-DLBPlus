@@ -27,6 +27,10 @@
 	    p {
 	      max-width: 1000px;
 	   	}
+	   	
+	   	input {
+	   		display: inline;
+	   	}
   	</style>
   	
 </head>
@@ -52,16 +56,25 @@
 			
 				<div class="row">
 					<form action="setup" method="get">
-			            <div class="col s6">
-		              		<input placeholder="Pages" name="pages" type="text" />
+			            <div class="col s2">
+			            	<label for="queryVisTitleBox">Title:</label>
+		              		<input id="queryVisTitleBox" name="queryVisTitle" type="text" />
 			            </div>
-			            <div class="col s6">
-		              		<input placeholder="Publisher" name="publisher" type="text" />
+			            <div class="col s2">
+			            	<label for="queryVisAuthorsBox">Authors:</label>
+			            	<textarea id="queryVisAuthorsBox" name="queryVisAuthors" class="materialize-textarea"></textarea>
+			            </div>
+			            <div class="col s2">
+			            	<label for="queryVisEditorsBox">Editors:</label>
+		              		<textarea id="queryVisEditorsBox" name="queryVisEditors" class="materialize-textarea"></textarea>
+			            </div>
+			            <div class="col s2">
+			            	<label for="queryVisVenuesBox">Venues:</label>
+		              		<textarea id="queryVisVenuesBox" name="queryVisVenues" class="materialize-textarea"></textarea>
 			            </div>
 						
 						<input type="hidden" name="action" value="queryVisualisation">
 						<button class="btn waves-effect waves-light" type="submit">Query</button>
-						 
 					</form>
 				</div>
 		

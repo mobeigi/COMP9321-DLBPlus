@@ -748,8 +748,6 @@ public class SetupServlet extends HttpServlet {
       List<VisNode> visNodes = this.db.GetAllVisNodes();
       List<VisRelationship> visRelationships = this.db.GetAllVisRelationships();
       
-      System.out.println("Num relationships: " + visRelationships.size());
-      
       // Bind visNodes and visRelationships to request
       request.setAttribute("visNodes", visNodes);
       request.setAttribute("visRelationships", visRelationships);
