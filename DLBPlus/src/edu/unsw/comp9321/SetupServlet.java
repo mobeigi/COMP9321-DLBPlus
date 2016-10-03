@@ -375,8 +375,10 @@ public class SetupServlet extends HttpServlet {
       
       for (CartItem ci : cartList)
         cartListAsListings.add(db.GetListing(ci.getListingid()));
+  
+      request.getSession().setAttribute("cartList", cartList);
+      request.getSession().setAttribute("cartListAsListings", cartListAsListings);
       
-      request.getSession().setAttribute("cartList", cartListAsListings);
       link = "cart.jsp";
     } else if(req.equals("remove")) {
       link = remove(request);
@@ -413,14 +415,14 @@ public class SetupServlet extends HttpServlet {
       
       
       cartList = db.GetActiveCartItems(currUser.getCartid());
-      request.getSession().setAttribute("cartListSize", cartList.size());
   
       List<Listing> cartListAsListings = new ArrayList<Listing>();
   
       for (CartItem ci : cartList)
         cartListAsListings.add(db.GetListing(ci.getListingid()));
-      
-      request.getSession().setAttribute("cartList", cartListAsListings);
+  
+      request.getSession().setAttribute("cartList", cartList);
+      request.getSession().setAttribute("cartListAsListings", cartListAsListings);
       
       response.sendRedirect("/dblplus?action=viewcart");
       return;
@@ -973,14 +975,14 @@ public class SetupServlet extends HttpServlet {
     }
     
     cartList = db.GetActiveCartItems(currUser.getCartid());
-    request.getSession().setAttribute("cartListSize", cartList.size());
   
     List<Listing> cartListAsListings = new ArrayList<Listing>();
   
     for (CartItem ci : cartList)
       cartListAsListings.add(db.GetListing(ci.getListingid()));
   
-    request.getSession().setAttribute("cartList", cartListAsListings);
+    request.getSession().setAttribute("cartList", cartList);
+    request.getSession().setAttribute("cartListAsListings", cartListAsListings);
     
     return "cart.jsp";
   }

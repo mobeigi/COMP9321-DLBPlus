@@ -3,6 +3,8 @@
 <%@ page import="edu.unsw.comp9321.*, java.util.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -48,14 +50,14 @@
 
     <c:choose>
 
-      <c:when test="${cartListSize eq 0}">
+      <c:when test="${fn:length(cartListAsListings) eq 0}">
         <div class="card valign grey lighten-4" >
           <br>
           <p class="flow-text center">Cart is empty!</p>
           <br>
         </div>
       </c:when>
-      <c:when test="${cartListSize ne 0}">
+      <c:when test="${fn:length(cartListAsListings) ne 0}">
         <form action="dblplus" method="POST">
           <div class="card valign grey lighten-4" >
             <div class="col s10">
@@ -76,7 +78,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="item" items="${cartList}">
+                <c:forEach var="item" items="${cartListAsListings}">
                   <tr>
                   <tr>
                     <td><img src="${item.imageOrDefault}" class="listingImageThumbnail" /></td>
@@ -114,20 +116,22 @@
   <div class="center-align">
     <div class="row">
       <div class="col s2 offset-s4">
-        <form action="dblplus" method="post">
-          <input type="hidden" name="action" value="checkout">
-          <button class="btn waves-effect waves-light" type="submit">Checkout
-            <i class="material-icons right"></i>
-          </button>
-        </form>
+        <c:if test="${fn:length(cartListAsListings) ne 0}">
+          <form action="dblplus" method="post">
+            <input type="hidden" name="action" value="checkout">
+            <button class="btn waves-effect waves-light" type="submit">Checkout
+              <i class="material-icons right"></i>
+            </button>
+          </form>
+        </c:if>
       </div>
       <div class="col s2">
-        <form action="dblplus" method="POST">
-          <input type="hidden" name="action" value="home">
-          <button class="btn waves-effect waves-light" type="submit">Back
-            <i class="material-icons right"></i>
-          </button>
-        </form>
+        <%-- Back button --%>
+        <div class="col s2">
+          <a href="/dblplus?action=myaccount">
+            <button type="submit" value="Back" class="btn">Back</button>
+          </a>
+        </div>
       </div>
     </div>
   </div>
