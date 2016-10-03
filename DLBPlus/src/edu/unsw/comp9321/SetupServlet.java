@@ -862,7 +862,7 @@ public class SetupServlet extends HttpServlet {
       message.setFrom(new InternetAddress("erikzhong1@gmail.com,"));
       message.setRecipients(Message.RecipientType.TO,
         InternetAddress.parse(email));
-      message.setSubject("DLBPlus Purchase Notification!");
+      message.setSubject("DBL+ Purchase Notification!");
       message.setText("Hi " + sellerName + ", " + buyerName + " has just purchased an item from " + listingid);
       
       Transport.send(message);
@@ -897,8 +897,8 @@ public class SetupServlet extends HttpServlet {
       message.setFrom(new InternetAddress("erikzhong1@gmail.com,"));
       message.setRecipients(Message.RecipientType.TO,
         InternetAddress.parse(email));
-      message.setSubject("DLBPlus email account verification");
-      message.setText("your random code is " + rand);
+      message.setSubject("DBL+ email account verification");
+      message.setContent("Your DBL+ confirmation code is: <strong>" + rand + "</strong>", "text/html");
       
       Transport.send(message);
       

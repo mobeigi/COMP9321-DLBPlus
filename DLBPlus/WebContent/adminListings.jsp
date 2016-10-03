@@ -88,7 +88,7 @@
               <td>${listing.sellerUsername}</td>
               <td>
                 <form action='admin'> <!-- Link to servlet to perform operation -->
-                  <button type="submit" value="Remove listing" class="btn">Remove listing</button>
+                  <button type="submit" class="btn">Remove</button>
                   <input type="hidden" name="action" value="removeListing"> <!-- Use page operations -->
                   <input type="hidden" name="itemId" value="${listing.id}"> <!-- Use page operations -->
                 </form>
