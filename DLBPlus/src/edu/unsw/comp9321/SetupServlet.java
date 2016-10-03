@@ -789,6 +789,7 @@ public class SetupServlet extends HttpServlet {
         
         // Create the query
         VisQuery query = new VisQuery();
+        query.setTitle(qTitle);
         if (qAuthors != null)
             query.setAuthors(Arrays.asList(qAuthorList));
         if (qEditors != null)
