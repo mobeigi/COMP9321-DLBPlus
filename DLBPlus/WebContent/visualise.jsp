@@ -170,10 +170,19 @@
       if (visRelationships != null && visRelationships.size() > 0) {
         String arrayVisRelationships = "";
         for (VisRelationship visRelationship : visRelationships) {
-          arrayVisRelationships += "{from: " + visRelationship.getFromNodeID() +
-                       ", to: " + visRelationship.getToNodeID() +
-                       ", label: '" + visRelationship.getRelationshipValue() + "'" +
-                       ", " + font + "},";
+        	arrayVisRelationships += "{";
+        	
+        	// Consider from node id
+        	arrayVisRelationships += "from: " + visRelationship.getFromNodeID();
+        	
+        	// Consider to node id
+        	arrayVisRelationships += ", to: " + visRelationship.getToNodeID();
+        	
+        	// Consider font
+        	arrayVisRelationships += ", " + font;
+                       
+            // Close object
+            arrayVisRelationships += "},";
         }
         arrayVisRelationships = arrayVisRelationships.substring(0,arrayVisRelationships.length()-1);	// remove trailing comma
         System.out.println("Vis relationship string: " + arrayVisRelationships);
