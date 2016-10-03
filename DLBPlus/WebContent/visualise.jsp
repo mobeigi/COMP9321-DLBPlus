@@ -106,8 +106,44 @@
 	    	if (visNodes != null && visNodes.size() > 0) {
 		    	String arrayVisNodes = "";
 		    	for (VisNode visNode : visNodes) {
-		    		arrayVisNodes += "{id: " + visNode.getID() + 
-		    						 ", label: '" + visNode.getValue() + "'},";
+		    		arrayVisNodes += "{";
+		    		
+		    		// id
+		    		arrayVisNodes += "id: " + visNode.getID();
+		    		
+		    		// label
+		    		arrayVisNodes += ", label: '" + visNode.getValue() + "'";
+		    		
+		    		// image based on type
+		    		arrayVisNodes += ", image: '";
+		    		switch(visNode.getNodeType()) {
+		    		
+			    		case TITLE:
+			    			arrayVisNodes += "images/visualisation/publication-icon.png";
+			    			break;
+			    			
+			    		case AUTHOR:
+			    			arrayVisNodes += "images/visualisation/author-icon.png";
+			    			break;
+			    			
+			    		case EDITOR:
+			    			arrayVisNodes += "images/visualisation/editor-icon.png";
+			    			break;
+			    			
+			    		case VENUE:
+			    			arrayVisNodes += "images/visualisation/venue-icon.ico";
+			    			break;
+		    		
+		    			default:
+		    				break;
+		    		}
+		    		arrayVisNodes += "'";
+		    		
+		    		// Shape
+		    		arrayVisNodes += ", shape: 'image'";
+		    		
+		    		// Close object
+		    		arrayVisNodes +=  "},";
 		    	}
 		    	arrayVisNodes = arrayVisNodes.substring(0,arrayVisNodes.length()-1);	// remove trailing comma
 		    	System.out.println("Vis Nodes string: " + arrayVisNodes);
