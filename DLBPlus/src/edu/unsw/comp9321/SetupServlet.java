@@ -98,23 +98,33 @@ public class SetupServlet extends HttpServlet {
           errorMessage = "No listings can be obtained.";
         }
         
-        // Check whether there is < 10 listings
-        else if (totalNumListings <= 10) {
-          randListings = this.db.GetAllListings();
+        //Get all listings
+        List<Listing> allListings = db.GetAllListings();
+  
+        //Filter out paused items and items with no quantity
+        for (Iterator<Listing> iter = allListings.listIterator(); iter.hasNext(); ) {
+          Listing l = iter.next();
+          if (l.getQuantity() <= 0 || l.getPaused())
+            iter.remove();
         }
         
-        // Case when there are > 10
+        // Obtain a unique list of random listings
+        if (allListings.size() <= 10) {
+          randListings = allListings;
+        }
         else {
-          // Obtain a unique list of random publications
-          Listing listingToAdd = this.db.GetRandomListing();
+          Random rand = new Random();
+          int randIndex = rand.nextInt(allListings.size() - 1);
+          
+          Listing listingToAdd = allListings.get(randIndex);
           List<Integer> randListingIDs = new ArrayList<Integer>();
           while (randListings.size() < 10) {
             while (randListingIDs.contains(listingToAdd.getId())) {
-              listingToAdd = this.db.GetRandomListing();
+              randIndex = rand.nextInt(allListings.size() - 1);
+              listingToAdd = allListings.get(randIndex);
             }
             randListings.add(listingToAdd);
             randListingIDs.add(listingToAdd.getId());
-            listingToAdd = this.db.GetRandomListing();
           }
         }
         
@@ -300,6 +310,13 @@ public class SetupServlet extends HttpServlet {
       
       //Perform search
       List<Listing> results = db.SearchListings(query, minSellPrice, maxSellPrice, exactMatch, matchCase);
+  
+      //Filter out paused items and items with no quantity
+      for (Iterator<Listing> iter = results.listIterator(); iter.hasNext(); ) {
+        Listing l = iter.next();
+        if (l.getQuantity() <= 0 || l.getPaused())
+          iter.remove();
+      }
       
       //Get page number for pagination
       String qPageNo = (request.getParameter("pageNo") == null || request.getParameter("pageNo").isEmpty()) ? null : new String( request.getParameter("pageNo").getBytes(), "UTF-8").trim();
@@ -347,10 +364,21 @@ public class SetupServlet extends HttpServlet {
       link = "result.jsp";
       
     } else if(req.equals("viewcart")){
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/dblplus?action=login");
+        return;
+      }
+      
       User currUser = (User) request.getSession().getAttribute("user");
       List<CartItem> cartList = db.GetActiveCartItems(currUser.getId());
+      List<Listing> cartListAsListings = new ArrayList<Listing>();
       
+      for (CartItem ci : cartList)
+        cartListAsListings.add(db.GetListing(ci.getListingid()));
+  
       request.getSession().setAttribute("cartList", cartList);
+      request.getSession().setAttribute("cartListAsListings", cartListAsListings);
+      
       link = "cart.jsp";
     } else if(req.equals("remove")) {
       link = remove(request);
@@ -361,30 +389,44 @@ public class SetupServlet extends HttpServlet {
       Listing listing = db.GetListing(listingID);
       User currUser = (User) request.getSession().getAttribute("user");
       List<CartItem> cartList = db.GetActiveCartItems(currUser.getCartid());
-      if(cartList != null){
-        for(CartItem cartItem : cartList){
-          if(cartItem.getListingid() == listingID){
-            flag = true;
+      
+      //Check if seller = curruser
+      if (currUser.getId().equals(listing.getSellerid())) {
+        errorMessage = "You can't buy an item that you are selling.";
+      } else {
+        if (cartList != null) {
+          for (CartItem cartItem : cartList) {
+            if (cartItem.getListingid() == listingID) {
+              flag = true;
+            }
           }
         }
-      }
-      
-      if(flag){
-        request.getSession().setAttribute("isAlreadySelected", true);
-      } else {
-        request.getSession().setAttribute("isAlreadySelected", false);
-        CartItem item = db.AddToCart(currUser, listing);
-        if(item == null){
-          errorMessage = "Failed to add item!";
+  
+        if (flag) {
+          request.getSession().setAttribute("isAlreadySelected", true);
+        } else {
+          request.getSession().setAttribute("isAlreadySelected", false);
+          CartItem item = db.AddToCart(currUser, listing);
+          if (item == null) {
+            errorMessage = "Failed to add item!";
+          }
         }
       }
       
       
       cartList = db.GetActiveCartItems(currUser.getCartid());
-      request.getSession().setAttribute("cartListSize", cartList.size());
+  
+      List<Listing> cartListAsListings = new ArrayList<Listing>();
+  
+      for (CartItem ci : cartList)
+        cartListAsListings.add(db.GetListing(ci.getListingid()));
+  
       request.getSession().setAttribute("cartList", cartList);
+      request.getSession().setAttribute("cartListAsListings", cartListAsListings);
       
-      link = "cart.jsp";
+      response.sendRedirect("/dblplus?action=viewcart");
+      return;
+      
     } else if(req.equals("checkout")){
       link = checkoutCartItems(request);
     } else if(req.equals("registeraccount")){
@@ -554,6 +596,11 @@ public class SetupServlet extends HttpServlet {
       
       link = "userAccount.jsp";
     } else if(req.equals("vieworderhistory")){
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/dblplus?action=login");
+        return;
+      }
+      
       //View past orders
       String errorMessage = "";
       User buyer = (User) request.getSession().getAttribute("user");
@@ -621,7 +668,9 @@ public class SetupServlet extends HttpServlet {
       }
       request.getSession().setAttribute("eMessage",errorMessage);
       request.getSession().setAttribute("userListings", userListings);
-      link = "userSellListings.jsp";
+      
+      response.sendRedirect("/dblplus?action=viewlistings");
+      return;
     } else if(req.equals("createlisting")){
       //Create new listing
       link = "createListing.jsp";
@@ -931,8 +980,14 @@ public class SetupServlet extends HttpServlet {
     }
     
     cartList = db.GetActiveCartItems(currUser.getCartid());
-    request.getSession().setAttribute("cartListSize", cartList.size());
+  
+    List<Listing> cartListAsListings = new ArrayList<Listing>();
+  
+    for (CartItem ci : cartList)
+      cartListAsListings.add(db.GetListing(ci.getListingid()));
+  
     request.getSession().setAttribute("cartList", cartList);
+    request.getSession().setAttribute("cartListAsListings", cartListAsListings);
     
     return "cart.jsp";
   }

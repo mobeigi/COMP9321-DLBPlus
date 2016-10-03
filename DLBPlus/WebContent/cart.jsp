@@ -3,6 +3,8 @@
 <%@ page import="edu.unsw.comp9321.*, java.util.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -32,7 +34,7 @@
 
     <c:choose>
       <c:when test="${isAlreadySelected eq 'true'}">
-        <h2 class="header center orange-text"> Publication is already in your shopping cart! </h2>
+        <span class="header center">Listing is already in your shopping cart!</span>
       </c:when>
       <c:otherwise>
         <h2 class="header center orange-text">Shopping Cart</h2>
@@ -48,38 +50,49 @@
 
     <c:choose>
 
-      <c:when test="${cartListSize eq 0}">
+      <c:when test="${fn:length(cartListAsListings) eq 0}">
         <div class="card valign grey lighten-4" >
           <br>
           <p class="flow-text center">Cart is empty!</p>
           <br>
         </div>
       </c:when>
-      <c:when test="${cartListSize ne 0}">
+      <c:when test="${fn:length(cartListAsListings) ne 0}">
         <form action="dblplus" method="POST">
           <div class="card valign grey lighten-4" >
             <div class="col s10">
               <table class="centered highlighted responsive-table">
                 <thead>
                 <tr>
-                  <th>Listing ID</th>
-                  <th>Title</th>
-                  <th>Type</th>
-                  <th>Seller Name</th>
-                  <th>Price</th>
-                  <th> </th>
+                  <th class="centered"></th>
+                  <th class="centered">Title</th>
+                  <th class="centered">Author</th>
+                  <th class="centered">Year</th>
+                  <th class="centered">Type</th>
+                  <th class="centered">List Date</th>
+                  <th class="centered">End Date</th>
+                  <th class="centered">Quantity</th>
+                  <th class="centered">Price</th>
+                  <th class="centered">Seller</th>
+                  <th class="centered"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="item" items="${cartList}">
+                <c:forEach var="item" items="${cartListAsListings}">
                   <tr>
-                    <td><c:out value="${item.listingid}" /></td>
-                    <td><c:out value="${item.publicationName}" /></td>
-                    <td><c:out value="${item.publicationType}" /></td>
-                    <td><c:out value="${item.sellerName}" /></td>
-                    <td><c:out value="${item.price}" /></td>
-                    <td><input type="checkbox" name="removeListingID" value="<c:out value="${item.listingid}" />" id="${item.listingid}">
-                      <label for="${item.listingid}"></label></td>
+                  <tr>
+                    <td><img src="${item.imageOrDefault}" class="listingImageThumbnail" /></td>
+                    <td><a href="/dblplus?action=viewlistingdetails&id=${item.id}">${item.title}</a></td>
+                    <td><i>${item.arrayAuthors}</i></td>
+                    <td>${item.year}</td>
+                    <td>${item.typeString}</td>
+                    <td>${item.listDateString}</td>
+                    <td>${item.endDateString}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.sellpriceString}</td>
+                    <td>${item.sellerUsername}</td>
+                    <td><input type="checkbox" name="removeListingID" value="${item.id}" id="${item.id}">
+                      <label for="${item.id}"></label></td>
                   </tr>
                 </c:forEach>
                 </tbody>
@@ -103,20 +116,22 @@
   <div class="center-align">
     <div class="row">
       <div class="col s2 offset-s4">
-        <form action="dblplus" method="post">
-          <input type="hidden" name="action" value="checkout">
-          <button class="btn waves-effect waves-light" type="submit">Checkout
-            <i class="material-icons right"></i>
-          </button>
-        </form>
+        <c:if test="${fn:length(cartListAsListings) ne 0}">
+          <form action="dblplus" method="post">
+            <input type="hidden" name="action" value="checkout">
+            <button class="btn waves-effect waves-light" type="submit">Checkout
+              <i class="material-icons right"></i>
+            </button>
+          </form>
+        </c:if>
       </div>
       <div class="col s2">
-        <form action="dblplus" method="POST">
-          <input type="hidden" name="action" value="home">
-          <button class="btn waves-effect waves-light" type="submit">Back
-            <i class="material-icons right"></i>
-          </button>
-        </form>
+        <%-- Back button --%>
+        <div class="col s2">
+          <a href="/dblplus?action=myaccount">
+            <button type="submit" value="Back" class="btn">Back</button>
+          </a>
+        </div>
       </div>
     </div>
   </div>

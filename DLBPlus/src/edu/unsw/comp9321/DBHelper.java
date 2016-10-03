@@ -1190,7 +1190,7 @@ public class DBHelper implements DLBPlusDBInterface {
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
       String q = "INSERT INTO orders (buyerid, sellerid, pubtitle, order_date, price) " +
-        "VALUES (" + userID + ", " + soldListing.getSellerid() + ", " + soldListing.getTitle() + ", to_timestamp(" + now.getTime()/1000 + ")," + soldListing.getSellprice() + ")" +
+        "VALUES (" + userID + ", " + soldListing.getSellerid() + ", '" + soldListing.getTitle() + "', to_timestamp(" + now.getTime()/1000 + ")," + soldListing.getSellprice() + ")" +
         "RETURNING id;";
       PrintDebugMessage("CreateOrder", "Running query: " + q);
       ResultSet rs = stmt.executeQuery(q);
@@ -1342,7 +1342,7 @@ public class DBHelper implements DLBPlusDBInterface {
       Statement stmt;
       dbConn.setAutoCommit(false);
       stmt = dbConn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT * FROM listings where id = " + listingID + ";" );
+      ResultSet rs = stmt.executeQuery("SELECT * FROM listings WHERE id = " + listingID + ";" );
       
       return processResultSetIntoListing(rs);
     }

@@ -303,6 +303,8 @@
         <br>
       </form>
     </div>
+
+    <c:if test="${user != null && listings.sellerid != user.id}">
     <div class="col s3">
       <form action="dblplus" method = "POST">
         <div>
@@ -314,6 +316,7 @@
         </div>
       </form>
     </div>
+    </c:if>
   </div>
 </div>
 <br><br>
