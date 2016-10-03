@@ -143,6 +143,9 @@
     		// label
     		arrayVisNodes += ", label: '" + visNode.getValue() + "'";
     		
+    		// type
+    		arrayVisNodes += ", type: '" + visNode.getNodeType().toString().toLowerCase() + "'";
+    		
     		// image based on type
     		arrayVisNodes += ", image: '";
     		switch(visNode.getNodeType()) {
@@ -223,6 +226,21 @@
     };
     var options = {};
     var network = new vis.Network(container, data, options);
+    
+    // Set double click function
+    network.on("doubleClick", function (params) {
+        params.event = "[original event]";
+        console.log("Double click function triggered!");
+        nodeID = params.nodes[0];
+        if (nodeID == null) {
+        	console.log("Node ID undefined. Did you click on an edge?");
+        } else {
+        	console.log("Node ID clicked: " + params.nodes[0]);
+        	
+        	// ToDo: Redirect to visualise, but searching for the double clicked node!
+        }
+    });
+    
   }
 
   // Case when nothing to display
