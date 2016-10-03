@@ -243,7 +243,9 @@
         	
         	// Search for the type of the node (using JQuery)
         	nodeType = $.grep(data.nodes, function(e){ return e.id == nodeID; })[0].type;
+        	nodeValue = $.grep(data.nodes, function(e){ return e.id == nodeID; })[0].label;
         	console.log("Type of node: " + nodeType);
+        	console.log("Value of node: " + nodeValue);
         	
         	// ToDo: Redirect to visualise, but searching for the double clicked node!
         }
