@@ -2358,6 +2358,11 @@ public class DBHelper implements DLBPlusDBInterface {
 		return allVisRelationships;
 	}
 	
+	/**
+	 * Parses the result set into a visualisation relationship
+	 * @param rs the input result set
+	 * @return a visualisation node, null otherwise
+	 */
 	private VisRelationship processResultSetIntoVisRelationship(ResultSet rs) {
 		VisRelationship vr = new VisRelationship();
 	    
