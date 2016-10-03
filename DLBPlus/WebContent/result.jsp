@@ -79,7 +79,7 @@
                   <tr>
                     <td><img src="${searchFound.results[loop.index].imageOrDefault}" class="listingImageThumbnail" /></td>
                     <td><a href="/dblplus?action=viewlistingdetails&id=${searchFound.results[loop.index].id}">${searchFound.results[loop.index].title}</a></td>
-                    <td><p><i>${searchFound.results[loop.index].arrayAuthors}</i></p></td>
+                    <td><i>${searchFound.results[loop.index].arrayAuthors}</i></td>
                     <td>${searchFound.results[loop.index].year}</td>
                     <td>${searchFound.results[loop.index].typeString}</td>
                     <td>${searchFound.results[loop.index].listDateString}</td>
@@ -137,13 +137,6 @@
               </div>
             </c:otherwise>
           </c:choose>
-
-          <%-- Back button --%>
-          <div class="col s2">
-            <a href="/dblplus?action=advancedsearch">
-              <button type="submit" value="Back" class="btn">Back</button>
-            </a>
-          </div>
 
         </c:otherwise>
       </c:choose>

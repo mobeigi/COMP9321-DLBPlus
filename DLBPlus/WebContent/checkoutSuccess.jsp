@@ -36,20 +36,15 @@
       <div class="card-content black-text">
         <div class="row">
           <div class="col s12 center">
-            <form action="dblplus" method="post">
-              <br>
-              <input type="hidden" name="action" value="toAccount"/>
-              <button class="btn waves-effect waves-light" type="submit" value="toAccount">To Account Page</button>
-              <br><br>
-            </form>
+            <a href="/dblplus?action=myaccount">
+              <button class="btn waves-effect waves-light">My Account</button>
+            </a>
           </div>
         </div>
         <div class="center-align">
-          <form action="dblplus" method="POST">
-            <input type="hidden" name="action" value="home"/>
-            <button class="btn waves-effect waves-light" type="submit" value="home">Home</button>
-            <br>
-          </form>
+          <a href="/dblplus?action=home">
+            <button class="btn waves-effect waves-light">Home</button>
+          </a>
         </div>
       </div>
     </div>

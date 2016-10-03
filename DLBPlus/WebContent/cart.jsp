@@ -32,7 +32,7 @@
 
     <c:choose>
       <c:when test="${isAlreadySelected eq 'true'}">
-        <h2 class="header center orange-text"> Publication is already in your shopping cart! </h2>
+        <span class="header center">Listing is already in your shopping cart!</span>
       </c:when>
       <c:otherwise>
         <h2 class="header center orange-text">Shopping Cart</h2>
@@ -62,24 +62,35 @@
               <table class="centered highlighted responsive-table">
                 <thead>
                 <tr>
-                  <th>Listing ID</th>
-                  <th>Title</th>
-                  <th>Type</th>
-                  <th>Seller Name</th>
-                  <th>Price</th>
-                  <th> </th>
+                  <th class="centered"></th>
+                  <th class="centered">Title</th>
+                  <th class="centered">Author</th>
+                  <th class="centered">Year</th>
+                  <th class="centered">Type</th>
+                  <th class="centered">List Date</th>
+                  <th class="centered">End Date</th>
+                  <th class="centered">Quantity</th>
+                  <th class="centered">Price</th>
+                  <th class="centered">Seller</th>
+                  <th class="centered"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach var="item" items="${cartList}">
                   <tr>
-                    <td><c:out value="${item.listingid}" /></td>
-                    <td><c:out value="${item.publicationName}" /></td>
-                    <td><c:out value="${item.publicationType}" /></td>
-                    <td><c:out value="${item.sellerName}" /></td>
-                    <td><c:out value="${item.price}" /></td>
-                    <td><input type="checkbox" name="removeListingID" value="<c:out value="${item.listingid}" />" id="${item.listingid}">
-                      <label for="${item.listingid}"></label></td>
+                  <tr>
+                    <td><img src="${item.imageOrDefault}" class="listingImageThumbnail" /></td>
+                    <td><a href="/dblplus?action=viewlistingdetails&id=${item.id}">${item.title}</a></td>
+                    <td><i>${item.arrayAuthors}</i></td>
+                    <td>${item.year}</td>
+                    <td>${item.typeString}</td>
+                    <td>${item.listDateString}</td>
+                    <td>${item.endDateString}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.sellpriceString}</td>
+                    <td>${item.sellerUsername}</td>
+                    <td><input type="checkbox" name="removeListingID" value="${item.id}" id="${item.id}">
+                      <label for="${item.id}"></label></td>
                   </tr>
                 </c:forEach>
                 </tbody>

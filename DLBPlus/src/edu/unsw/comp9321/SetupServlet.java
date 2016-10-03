@@ -347,10 +347,19 @@ public class SetupServlet extends HttpServlet {
       link = "result.jsp";
       
     } else if(req.equals("viewcart")){
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/dblplus?action=login");
+        return;
+      }
+      
       User currUser = (User) request.getSession().getAttribute("user");
       List<CartItem> cartList = db.GetActiveCartItems(currUser.getId());
+      List<Listing> cartListAsListings = new ArrayList<Listing>();
       
-      request.getSession().setAttribute("cartList", cartList);
+      for (CartItem ci : cartList)
+        cartListAsListings.add(db.GetListing(ci.getListingid()));
+      
+      request.getSession().setAttribute("cartList", cartListAsListings);
       link = "cart.jsp";
     } else if(req.equals("remove")) {
       link = remove(request);
@@ -388,9 +397,17 @@ public class SetupServlet extends HttpServlet {
       
       cartList = db.GetActiveCartItems(currUser.getCartid());
       request.getSession().setAttribute("cartListSize", cartList.size());
-      request.getSession().setAttribute("cartList", cartList);
+  
+      List<Listing> cartListAsListings = new ArrayList<Listing>();
+  
+      for (CartItem ci : cartList)
+        cartListAsListings.add(db.GetListing(ci.getListingid()));
       
-      link = "cart.jsp";
+      request.getSession().setAttribute("cartList", cartListAsListings);
+      
+      response.sendRedirect("/dblplus?action=viewcart");
+      return;
+      
     } else if(req.equals("checkout")){
       link = checkoutCartItems(request);
     } else if(req.equals("registeraccount")){
@@ -632,7 +649,9 @@ public class SetupServlet extends HttpServlet {
       }
       request.getSession().setAttribute("eMessage",errorMessage);
       request.getSession().setAttribute("userListings", userListings);
-      link = "userSellListings.jsp";
+      
+      response.sendRedirect("/dblplus?action=viewlistings");
+      return;
     } else if(req.equals("createlisting")){
       //Create new listing
       link = "createListing.jsp";
@@ -938,7 +957,13 @@ public class SetupServlet extends HttpServlet {
     
     cartList = db.GetActiveCartItems(currUser.getCartid());
     request.getSession().setAttribute("cartListSize", cartList.size());
-    request.getSession().setAttribute("cartList", cartList);
+  
+    List<Listing> cartListAsListings = new ArrayList<Listing>();
+  
+    for (CartItem ci : cartList)
+      cartListAsListings.add(db.GetListing(ci.getListingid()));
+  
+    request.getSession().setAttribute("cartList", cartListAsListings);
     
     return "cart.jsp";
   }

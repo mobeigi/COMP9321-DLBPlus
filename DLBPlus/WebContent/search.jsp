@@ -214,11 +214,9 @@
   </div>
 </div>
 <div class="center-align">
-  <form action="dblplus" method="POST">
-    <input type="hidden" name="action" value="home"/>
-    <button class="btn waves-effect waves-light" type="submit" value="back">Back</button>
-    <br>
-  </form>
+  <a href="/dblplus?action=home">
+    <button class="btn waves-effect waves-light">Back</button>
+  </a>
 </div><br>
 
 <jsp:include page="footer.jsp" />

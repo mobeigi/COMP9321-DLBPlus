@@ -5,7 +5,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <title>DBL+ | Register</title>
+  <title>DBL+ | Login</title>
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <link rel="shortcut icon" href="/images/favicon.ico">
