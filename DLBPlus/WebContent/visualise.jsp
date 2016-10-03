@@ -153,7 +153,6 @@
     		arrayVisNodes +=  "},";
     	}
         arrayVisNodes = arrayVisNodes.substring(0,arrayVisNodes.length()-1);	// remove trailing comma
-        System.out.println("Vis Nodes string: " + arrayVisNodes);
         out.print(arrayVisNodes);
       } else {
         out.print("");
@@ -185,7 +184,6 @@
             arrayVisRelationships += "},";
         }
         arrayVisRelationships = arrayVisRelationships.substring(0,arrayVisRelationships.length()-1);	// remove trailing comma
-        System.out.println("Vis relationship string: " + arrayVisRelationships);
         out.print(arrayVisRelationships);
       } else {
         out.print("");
