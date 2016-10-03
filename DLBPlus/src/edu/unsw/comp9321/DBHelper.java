@@ -2387,5 +2387,20 @@ public class DBHelper implements DLBPlusDBInterface {
 	    return vr;	
 	}
 
+	/**
+	 * Searches the visualisation tables for visNodes and visRelationships
+	 * satisfying a given query
+	 * 
+	 * @param query encapsulates the information to search
+	 * @return a VisResult
+	 */
+	public VisResult SearchVis(VisQuery query) {
+		VisResult result = new VisResult();
+		
+		// TODO Auto-generated method stub
+		
+		return result;
+	}
+
 	
 }

@@ -338,4 +338,13 @@ public interface DLBPlusDBInterface {
 	 * @return list of vis_relationships, empty list otherwise
 	 */
 	public List<VisRelationship> GetAllVisRelationships();
+	
+	/**
+	 * Searches the visualisation tables for visNodes and visRelationships
+	 * satisfying a given query
+	 * 
+	 * @param query encapsulates the information to search
+	 * @return a VisResult
+	 */
+	public VisResult SearchVis(VisQuery query);
 }

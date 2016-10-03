@@ -754,6 +754,42 @@ public class SetupServlet extends HttpServlet {
       link = "visualise.jsp";
     }
     
+    // Case when user wants to query the visualisation
+    else if (req.equals("queryVisualisation")) {
+    	
+    	// Obtain search query fields
+        String qTitle = (request.getParameter("queryVisTitle") == null || request.getParameter("queryVisTitle").isEmpty()) ? null : new String( request.getParameter("queryVisTitle").getBytes(), "UTF-8").trim();
+        String qAuthors = (request.getParameter("queryVisAuthors") == null || request.getParameter("queryVisAuthors").isEmpty()) ? null : new String( request.getParameter("queryVisAuthors").getBytes(), "UTF-8").trim();
+        String qEditors = (request.getParameter("queryVisEditors") == null || request.getParameter("queryVisEditors").isEmpty()) ? null : new String( request.getParameter("queryVisEditors").getBytes(), "UTF-8").trim();
+        String qVenues = (request.getParameter("queryVisVenues") == null || request.getParameter("queryVisVenues").isEmpty()) ? null : new String( request.getParameter("queryVisVenues").getBytes(), "UTF-8").trim();
+        
+        String[] qAuthorList = new String[0];
+        String[] qEditorList = new String[0];
+        String[] qVenueList = new String[0];
+
+        // Split fields based on newline
+        if (qAuthors != null) qAuthorList = qAuthors.trim().split("\\\r\n");
+        if (qEditors != null) qEditorList = qEditors.trim().split("\\\r\n");
+        if (qVenues != null) qVenueList = qVenues.trim().split("\\\r\n");
+        
+        // Create the query
+        VisQuery query = new VisQuery();
+        if (qAuthors != null)
+            query.setAuthors(Arrays.asList(qAuthorList));
+        if (qEditors != null)
+            query.setEditors(Arrays.asList(qEditorList));
+        if (qVenues != null)
+            query.setVenues(Arrays.asList(qVenueList));
+        
+        // Obtain the node and relationship results based on query
+        VisResult result = this.db.SearchVis(query);
+        
+        // Bind visNodes and visRelationships from result to request
+        request.setAttribute("visNodes", result.getVisNodesResult());
+        request.setAttribute("visRelationships", result.getVisRelationshipResult());
+    	link = "visualise.jsp";
+    }
+    
     RequestDispatcher rd = request.getRequestDispatcher("/"+link);
     rd.forward(request, response);
   }

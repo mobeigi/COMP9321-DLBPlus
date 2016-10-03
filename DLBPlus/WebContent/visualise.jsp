@@ -103,7 +103,7 @@
 	  var nodes = [
 	    <%
 	    	List<VisNode> visNodes = (List<VisNode>) request.getAttribute("visNodes");
-	    	if (visNodes != null) {
+	    	if (visNodes != null && visNodes.size() > 0) {
 		    	String arrayVisNodes = "";
 		    	for (VisNode visNode : visNodes) {
 		    		arrayVisNodes += "{id: " + visNode.getID() + 
@@ -124,7 +124,7 @@
 	    	// Prepare font object
 	    	String font = "font: {align: 'top'}";
 	    	List<VisRelationship> visRelationships = (List<VisRelationship>) request.getAttribute("visRelationships");
-	    	if (visRelationships != null) {
+	    	if (visRelationships != null && visRelationships.size() > 0) {
 		    	String arrayVisRelationships = "";
 		    	for (VisRelationship visRelationship : visRelationships) {
 		    		arrayVisRelationships += "{from: " + visRelationship.getFromNodeID() + 
