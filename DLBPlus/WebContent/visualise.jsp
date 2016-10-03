@@ -72,16 +72,18 @@
           
           <div class="col s3">
 		  	<select name="queryType">
-		      	<option value="titles" selected>Titles</option>
-		      	<option value="authors">Authors</option>
-		      	<option value="editors">Editors</option>
-		      	<option value="venues">Editors</option>
+		      	<option value="title" selected>Titles</option>
+		      	<option value="author">Authors</option>
+		      	<option value="editor">Editors</option>
+		      	<option value="venue">Venues</option>
 		      	<label>Query field:</label>
 		    </select>
 	 	  </div>
-
-          <input type="hidden" name="action" value="queryVisualisation">
-          <button class="btn waves-effect waves-light" type="submit">Query</button>
+			
+		  <div>
+	          <input type="hidden" name="action" value="queryVisualisation">
+	          <button class="btn waves-effect waves-light" type="submit">Query</button>
+          </div>
         </form>
       </div>
 

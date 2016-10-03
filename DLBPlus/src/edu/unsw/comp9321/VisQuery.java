@@ -7,33 +7,25 @@ import java.util.*;
 
 public class VisQuery {
 	
-	public enum Type {
-	    TITLES,
-	    AUTHORS,
-	    EDITORS,
-	    VENUES
-	}
-	
 	private List<String> qDataList = null;
-	private VisQuery.Type qType;
+	private String qType;
 	
 	// Constructor
 	public VisQuery() {}
 	
 	// Getters and setters
 	public List<String> getQueryData() { return this.qDataList; }
-	public VisQuery.Type getQueryType() { return this.qType; }
+	public String getQueryType() { return this.qType; }
 	
 	public void setQueryData(List<String> newData) { this.qDataList = newData; }
-	public void setQueryType(String typeStr) { 
-		if (typeStr.equals("titles")) {
-			this.qType = VisQuery.Type.TITLES;
-		} else if (typeStr.equals("authors")) {
-			this.qType = VisQuery.Type.AUTHORS;
-		} else if (typeStr.equals("editors")) {
-			this.qType = VisQuery.Type.EDITORS;
-		} else if (typeStr.equals("venues")) {
-			this.qType = VisQuery.Type.VENUES;
+	public void setQueryType(String typeStr) { this.qType = typeStr; }
+	
+	// Debugging
+	public void showDetails() {
+		System.out.println("Query type: " + this.qType);
+		System.out.println("Query data list: ");
+		for (String qData : this.qDataList) {
+			System.out.println(qData);
 		}
 	}
 }
