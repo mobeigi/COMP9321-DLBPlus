@@ -773,23 +773,26 @@ public class SetupServlet extends HttpServlet {
     else if (req.equals("queryVisualisation")) {
     	
     	// Obtain search query fields
-        String qTitle = (request.getParameter("queryVisTitle") == null || request.getParameter("queryVisTitle").isEmpty()) ? null : new String( request.getParameter("queryVisTitle").getBytes(), "UTF-8").trim();
+        String qTitles = (request.getParameter("queryVisTitles") == null || request.getParameter("queryVisTitles").isEmpty()) ? null : new String( request.getParameter("queryVisTitles").getBytes(), "UTF-8").trim();
         String qAuthors = (request.getParameter("queryVisAuthors") == null || request.getParameter("queryVisAuthors").isEmpty()) ? null : new String( request.getParameter("queryVisAuthors").getBytes(), "UTF-8").trim();
         String qEditors = (request.getParameter("queryVisEditors") == null || request.getParameter("queryVisEditors").isEmpty()) ? null : new String( request.getParameter("queryVisEditors").getBytes(), "UTF-8").trim();
         String qVenues = (request.getParameter("queryVisVenues") == null || request.getParameter("queryVisVenues").isEmpty()) ? null : new String( request.getParameter("queryVisVenues").getBytes(), "UTF-8").trim();
         
+        String[] qTitleList = new String[0];
         String[] qAuthorList = new String[0];
         String[] qEditorList = new String[0];
         String[] qVenueList = new String[0];
 
         // Split fields based on newline
+        if (qTitles != null) qTitleList = qTitles.trim().split("\\\r\n");
         if (qAuthors != null) qAuthorList = qAuthors.trim().split("\\\r\n");
         if (qEditors != null) qEditorList = qEditors.trim().split("\\\r\n");
         if (qVenues != null) qVenueList = qVenues.trim().split("\\\r\n");
         
         // Create the query
         VisQuery query = new VisQuery();
-        query.setTitle(qTitle);
+        if (qTitles != null)
+        	query.setTitles(Arrays.asList(qTitleList));
         if (qAuthors != null)
             query.setAuthors(Arrays.asList(qAuthorList));
         if (qEditors != null)
@@ -797,6 +800,8 @@ public class SetupServlet extends HttpServlet {
         if (qVenues != null)
             query.setVenues(Arrays.asList(qVenueList));
         
+        // TODO: Remove duplicates in query fields for the lists
+       
         // Obtain the node and relationship results based on query
         VisResult result = this.db.SearchVis(query);
         

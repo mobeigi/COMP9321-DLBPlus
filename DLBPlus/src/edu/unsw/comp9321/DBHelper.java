@@ -2396,9 +2396,119 @@ public class DBHelper implements DLBPlusDBInterface {
 	 */
 	public VisResult SearchVis(VisQuery query) {
 		VisResult result = new VisResult();
+
+		if (!dbConnStatus) {
+			this.PrintDebugMessage("SearchVis", "No connection with database");
+			return result;
+		}
+
+		// Obtain the visNodes corresponding to query
 		
-		// TODO Auto-generated method stub
+		// Assemble conditional selection based on query
+		String nodesQueryStr = "SELECT * FROM vis_nodes ";
+		ArrayList<String> sqlQueries = new ArrayList<>();
+
+		// Consider titles
+		// Case when no titles - return ALL titles
+		if (query.getTitles() == null || query.getTitles().isEmpty()) {
+			sqlQueries.add("attrtype = 'title'");
+		} else {
+			for (String title : query.getTitles()) {
+				sqlQueries.add("value = '" + title + "'");
+			}
+		}
 		
+		// Consider authors
+		// Case when no authors queried - return ALL authors
+		if (query.getAuthors() == null || query.getAuthors().isEmpty()) {
+			sqlQueries.add("attrtype = 'author'");
+		} else {
+			for (String author : query.getAuthors()) {
+				sqlQueries.add("value = '" + author + "'");
+			}
+		}
+		
+		// Consider editors
+		// Case when no editors queried - return ALL editors
+		if (query.getEditors() == null || query.getEditors().isEmpty()) {
+			sqlQueries.add("attrtype = 'editor'");
+		} else {
+			for (String editor : query.getEditors()) {
+				sqlQueries.add("value = '" + editor + "'");
+			}
+		}
+		
+		// Consider venues
+		// Case when no venues are queried - return ALL venues
+		if (query.getVenues() == null || query.getVenues().isEmpty()) {
+			sqlQueries.add("attrtype = 'venue'");
+		} else {
+			for (String venue : query.getVenues()) {
+				sqlQueries.add("value = '" + venue + "'");
+			}
+		}
+		
+		// Build nodes conditional query
+		String nodeConditions = "";
+		if (!sqlQueries.isEmpty()) {
+			nodeConditions = "WHERE (";
+			for (String q: sqlQueries) {
+				nodeConditions += q + " OR ";
+			}
+			
+			// Remove trailing 'OR'
+			try {
+				nodeConditions = nodeConditions.substring(0, nodeConditions.lastIndexOf(" OR "));
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			nodeConditions += ")";
+		}
+		nodesQueryStr += nodeConditions + ";";
+		
+		// Build the query string for relationships
+		String relQueryStr = "SELECT * FROM vis_relationships vr " +
+							 " WHERE (" +
+							 		 "vr.firstnode in ( SELECT id FROM vis_nodes " + nodeConditions + ")" +
+							 		 " AND " + 
+							 		 "vr.secondnode in ( SELECT id FROM vis_nodes " + nodeConditions + ")" +
+							 ");";
+		try {
+			Statement stmt;
+			dbConn.setAutoCommit(false);
+			stmt = dbConn.createStatement();
+
+			// Execute the nodes query string
+			PrintDebugMessage("SearchVis", "RUNNING QUERY: " + nodesQueryStr);
+			ResultSet rs = stmt.executeQuery(nodesQueryStr);
+
+			// Parse the visNodes results
+			List<VisNode> visNodesResults = new ArrayList<VisNode>();
+			VisNode vn = processResultSetIntoVisNode(rs);
+			while (vn != null) {
+				visNodesResults.add(vn);
+				vn = processResultSetIntoVisNode(rs);
+			}
+			result.setVisNodesResult(visNodesResults);
+			
+			// Execute the relationships query string
+			PrintDebugMessage("SearchVis", "RUNNING QUERY: " + relQueryStr);
+			rs = stmt.executeQuery(relQueryStr);
+
+			// Parse the visNodes results
+			List<VisRelationship> visRelationshipResults = new ArrayList<VisRelationship>();
+			VisRelationship vr = processResultSetIntoVisRelationship(rs);
+			while (vr != null) {
+				visRelationshipResults.add(vr);
+				vr = processResultSetIntoVisRelationship(rs);
+			}
+			result.setVisRelationshipResult(visRelationshipResults);
+			
+		}
+		catch (SQLException e) {
+			System.out.println(e);
+			return result;
+		}
 		return result;
 	}
 

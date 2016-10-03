@@ -72,6 +72,25 @@
   db.CreateListing(u3, 10, start, end, 99.99, "test image", Listing.Type.ARTICLE, authors, editors, "How to be ninja", venues,
     "12p", 2014, "10 main st", "XII", "2nd", "january", urls, ees, "ROM2", cites, "Penguin", "This is a note", "CR-120-23",
     isbns, "1st series", "18", "5");
+  
+  authors = new ArrayList<String>();
+  authors.add("Bard Main");
+  authors.add("Ian Wong");
+  
+  editors = new ArrayList<String>();
+  editors.add("lol wut editor");
+  
+  venues = new ArrayList<String>();
+  venues.add("The holy mountain");
+  
+  urls = new ArrayList<String>();
+  ees = new ArrayList<String>();
+  cites = new ArrayList<String>();
+  isbns = new ArrayList<String>();
+  
+  db.CreateListing(u3, 10, start, end, 99.99, "test image", Listing.Type.ARTICLE, authors, editors, "How to be gangster", venues,
+		    "15p", 2015, "14 Strange St", "V", "4th", "december", urls, ees, "CDRom1", cites, "Publisher", "Noteworthy", "crossref",
+		    isbns, "3rd series", "18", "SUPERB");
 
 %>
 </body>

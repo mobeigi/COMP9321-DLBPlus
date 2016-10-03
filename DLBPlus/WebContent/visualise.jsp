@@ -59,8 +59,8 @@
       <div class="row">
         <form action="dblplus" method="get">
           <div class="col s2">
-            <label for="queryVisTitleBox">Title:</label>
-            <input id="queryVisTitleBox" name="queryVisTitle" type="text" />
+            <label for="queryVisTitlesBox">Titles:</label>
+            <textarea id="queryVisTitlesBox" name="queryVisTitles" class="materialize-textarea"></textarea>
           </div>
           <div class="col s2">
             <label for="queryVisAuthorsBox">Authors:</label>
