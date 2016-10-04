@@ -109,6 +109,15 @@ class Listing():
 		print "Authors: ", self.authors
 		
 # ----------------------------
+# This class is an exception
+class ParseLimitReached(SAX.ErrorHandler):
+	def __init__(self):
+		pass
+		
+	def error(self, exception):
+		print "lol maximum pubs reached"
+		return
+
 # This class is responsible for the semantic parsing of the publication
 # XML file
 class SaxPublicationHandler(SAX.ContentHandler):
@@ -122,6 +131,7 @@ class SaxPublicationHandler(SAX.ContentHandler):
 		numPublicationsParsed = 0	# Keep track of how many publications were parsed
 		db_cursor = None			# Cursor used to insert publications into db
 		seller_ids = []
+		parseLimit = 100
 		
 		# Constructor
 		def __init__(self, cursor):
@@ -151,6 +161,9 @@ class SaxPublicationHandler(SAX.ContentHandler):
 			
 		# Handles start tags
 		def startElement(self, tagname, attrs):
+		
+			if self.numPublicationsParsed >= self.parseLimit:
+				return
 			
 			# Initiate publication object for a publication type start tag
 			if tagname in self.publication_types:
@@ -168,6 +181,8 @@ class SaxPublicationHandler(SAX.ContentHandler):
 			
 		# Handles end tags
 		def endElement(self, tagname):
+			if self.numPublicationsParsed >= self.parseLimit:
+					return
 		
 			# Add publications if closing tagname is a publication type
 			if tagname in self.publication_types:
@@ -265,7 +280,10 @@ class SaxPublicationHandler(SAX.ContentHandler):
 			
 		# Handles all the characters between start and end tags
 		# ie element values
-		def characters(self, contentStr):			
+		def characters(self, contentStr):
+			if self.numPublicationsParsed >= self.parseLimit:
+				return
+		
 			# Remove whitespaces
 			content = contentStr.strip().encode("utf-8")
 			
@@ -467,6 +485,8 @@ def insertPublications(xmlFilename):
 	# Set the content handler
 	saxPublicationHandler = SaxPublicationHandler(cursor)
 	xmlParser.setContentHandler(saxPublicationHandler)
+	parseLimitHandler = ParseLimitReached()
+	xmlParser.setErrorHandler(parseLimitHandler)
 
 	# Parse the XML file (will also insert into database)
 	print "Parsing XML file..."
