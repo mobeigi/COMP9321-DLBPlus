@@ -39,3 +39,8 @@ input.currency:before {
   width: auto;
   height: auto;
 }
+
+.userNameListing {
+  margin-left: 30px;
+  margin-right: 10px;
+}

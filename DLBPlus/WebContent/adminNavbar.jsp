@@ -9,6 +9,7 @@
       <li><a href="admin?action=portal">Portal</a></li>
       <li><a href="admin?action=viewallusers">Manage Users</a></li>
       <li><a href="admin?action=viewalllistings">Manage Listings</a></li>
+      <li class="userNameListing"><strong>${currAdmin.username}</strong></li>
       <li><a href="admin?action=adminLogout">Logout</a>
         </c:when>
         </c:choose>

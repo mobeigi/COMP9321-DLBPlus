@@ -10,7 +10,7 @@
         <c:when test="${not empty user}">
           <li><a href="/dblplus?action=myaccount">Account</a></li>
           <li><a href="/dblplus?action=viewcart">Cart</a></li>
-          <li><a></a></li>
+          <li class="userNameListing"><strong>${user.username}</strong></li>
           <li><a href="/dblplus?action=logout">Logout</a>
         </c:when>
 
