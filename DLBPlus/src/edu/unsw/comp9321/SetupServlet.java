@@ -2,6 +2,7 @@ package edu.unsw.comp9321;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.PasswordAuthentication;
 import java.security.Security;
 import java.sql.Timestamp;
@@ -309,48 +310,12 @@ public class SetupServlet extends HttpServlet {
           iter.remove();
       }
       
-      //Get page number for pagination
-      String qPageNo = (request.getParameter("pageNo") == null || request.getParameter("pageNo").isEmpty()) ? null : new String( request.getParameter("pageNo").getBytes(), "UTF-8").trim();
-      int pageNo = 1;
-      int resultsPerPage = 10;
-      int lastPage = (int)Math.ceil((double)results.size() / resultsPerPage);
-      
-      try {
-        pageNo = Integer.parseInt(qPageNo);
-      } catch (NumberFormatException e) {}
-      
-      //Ensure pageNo is within range
-      if (pageNo > lastPage)
-        pageNo = lastPage;
-      if (pageNo < 1)
-        pageNo = 1;
-      
-      String currentFullUrl = request.getRequestURL().toString();
-      //Ensure query string is not empty
-      if (request.getQueryString() != null && !request.getQueryString().isEmpty()) {
-        String[] queries = request.getQueryString().split("&");
-        ArrayList<String> finalQueryStringArray = new ArrayList<String>();
-        //Remove current pageNo parameters
-        for (String s : queries) {
-          if (!s.startsWith("pageNo="))
-            finalQueryStringArray.add(s);
-        }
-        //Recombine all other parameters in same order
-        StringBuilder sb = new StringBuilder();
-        for (String s : finalQueryStringArray)
-        {
-          sb.append(s);
-          sb.append("&");
-        }
-        String finalQueryString = sb.toString();
-        if (finalQueryString.endsWith("&")) //remove final '&' from join
-          finalQueryString = finalQueryString.substring(0, finalQueryString.length() - 1);
-        currentFullUrl += ("?" + finalQueryString);
-      }
+      int pageNo = getPaginationPageNum(request, results.size(), 10);
+      String currentFullUrl = getCurrentFullUrl(request);
       request.getSession().setAttribute("currentFullUrl", currentFullUrl);
-      
-      SearchPageBean searchPageBean = new SearchPageBean(results, pageNo);
-      request.getSession().setAttribute("searchFound", searchPageBean);
+  
+      ListingBean listingBean = new ListingBean(results, pageNo);
+      request.getSession().setAttribute("searchFound", listingBean);
       
       link = "result.jsp";
       
@@ -367,8 +332,15 @@ public class SetupServlet extends HttpServlet {
       for (CartItem ci : cartList)
         cartListAsListings.add(db.GetListing(ci.getListingid()));
   
+      int pageNo = getPaginationPageNum(request, cartListAsListings.size(), 10);
+  
+      String currentFullUrl = getCurrentFullUrl(request);
+      request.getSession().setAttribute("currentFullUrl", currentFullUrl);
+  
+      ListingBean listingBean = new ListingBean(cartListAsListings, pageNo);
+      
       request.getSession().setAttribute("cartList", cartList);
-      request.getSession().setAttribute("cartListAsListings", cartListAsListings);
+      request.getSession().setAttribute("cartListAsListings", listingBean);
       
       link = "cart.jsp";
     } else if(req.equals("remove")) {
@@ -412,8 +384,15 @@ public class SetupServlet extends HttpServlet {
       for (CartItem ci : cartList)
         cartListAsListings.add(db.GetListing(ci.getListingid()));
   
+      int pageNo = getPaginationPageNum(request, cartListAsListings.size(), 10);
+  
+      String currentFullUrl = getCurrentFullUrl(request);
+      request.getSession().setAttribute("currentFullUrl", currentFullUrl);
+  
+      ListingBean listingBean = new ListingBean(cartListAsListings, pageNo);
+      
       request.getSession().setAttribute("cartList", cartList);
-      request.getSession().setAttribute("cartListAsListings", cartListAsListings);
+      request.getSession().setAttribute("cartListAsListings", listingBean);
       
       response.sendRedirect("/dblplus?action=viewcart");
       return;
@@ -597,11 +576,20 @@ public class SetupServlet extends HttpServlet {
       User buyer = (User) request.getSession().getAttribute("user");
       int buyerID = buyer.getId();
       List<Order> orderList = db.GetOrderHistory(buyerID);
+      
       if(orderList.isEmpty()){
         errorMessage = "You have not purchased anything yet!";
+      } else {
+        int pageNo = getPaginationPageNum(request, orderList.size(), 10);
+  
+        String currentFullUrl = getCurrentFullUrl(request);
+        request.getSession().setAttribute("currentFullUrl", currentFullUrl);
+  
+        OrderBean orderBean = new OrderBean(orderList, pageNo);
+        request.getSession().setAttribute("userOrderList", orderBean);
       }
       request.getSession().setAttribute("eMessage", errorMessage);
-      request.getSession().setAttribute("userOrderList",orderList);
+      
       link = "userSoldListings.jsp";
     } else if(req.equals("viewlistings")){
       if (!isLoggedIn(request)) {
@@ -615,10 +603,19 @@ public class SetupServlet extends HttpServlet {
       User currUser = (User) request.getSession().getAttribute("user");
       List<Listing> userListings = db.GetUserListings(currUser.getId());
       if (userListings.isEmpty()) {
-        errorMessage = "Looks like you dont have any current listings";
+        errorMessage = "Looks like you don't have any current listings";
+      } else {
+        int pageNo = getPaginationPageNum(request, userListings.size(), 10);
+  
+        String currentFullUrl = getCurrentFullUrl(request);
+        request.getSession().setAttribute("currentFullUrl", currentFullUrl);
+  
+        ListingBean listingBean = new ListingBean(userListings, pageNo);
+        request.getSession().setAttribute("userListings", listingBean);
       }
+  
       request.getSession().setAttribute("eMessage", errorMessage);
-      request.getSession().setAttribute("userListings", userListings);
+      
       link = "userSellListings.jsp";
     } else if(req.equals("updateListingStatus")){
       
@@ -969,8 +966,16 @@ public class SetupServlet extends HttpServlet {
     for (CartItem ci : cartList)
       cartListAsListings.add(db.GetListing(ci.getListingid()));
   
+    //Get page number for pagination
+    int pageNo = getPaginationPageNum(request, cartListAsListings.size(), 10);
+  
+    String currentFullUrl = getCurrentFullUrl(request);
+    request.getSession().setAttribute("currentFullUrl", currentFullUrl);
+  
+    ListingBean listingBean = new ListingBean(cartListAsListings, pageNo);
+    
     request.getSession().setAttribute("cartList", cartList);
-    request.getSession().setAttribute("cartListAsListings", cartListAsListings);
+    request.getSession().setAttribute("cartListAsListings", listingBean);
     
     return "cart.jsp";
   }
@@ -984,6 +989,59 @@ public class SetupServlet extends HttpServlet {
   private boolean isLoggedIn(HttpServletRequest req) {
     User u = (User)req.getSession().getAttribute("user");
     return (u != null);
+  }
+ 
+  private String getCurrentFullUrl(HttpServletRequest request) {
+    String currentFullUrl = request.getRequestURL().toString();
+    //Ensure query string is not empty
+    if (request.getQueryString() != null && !request.getQueryString().isEmpty()) {
+      String[] queries = request.getQueryString().split("&");
+      ArrayList<String> finalQueryStringArray = new ArrayList<String>();
+      //Remove current pageNo parameters
+      for (String s : queries) {
+        if (!s.startsWith("pageNo="))
+          finalQueryStringArray.add(s);
+      }
+      //Recombine all other parameters in same order
+      StringBuilder sb = new StringBuilder();
+      for (String s : finalQueryStringArray)
+      {
+        sb.append(s);
+        sb.append("&");
+      }
+      String finalQueryString = sb.toString();
+      if (finalQueryString.endsWith("&")) //remove final '&' from join
+        finalQueryString = finalQueryString.substring(0, finalQueryString.length() - 1);
+      currentFullUrl += ("?" + finalQueryString);
+    }
+    
+    return currentFullUrl;
+  }
+  
+  private int getPaginationPageNum(HttpServletRequest request, int size, int resultsPerPage) {
+    //Get page number for pagination
+    String qPageNo = null;
+    int pageNo = 1;
+    
+    try {
+      qPageNo = (request.getParameter("pageNo") == null || request.getParameter("pageNo").isEmpty()) ? null : new String(request.getParameter("pageNo").getBytes(), "UTF-8").trim();
+    } catch (Exception e) {
+      return pageNo;
+    }
+    int lastPage = (int) Math.ceil((double)size / resultsPerPage);
+  
+    try {
+      pageNo = Integer.parseInt(qPageNo);
+    } catch (NumberFormatException e) {
+    }
+  
+    //Ensure pageNo is within range
+    if (pageNo > lastPage)
+      pageNo = lastPage;
+    if (pageNo < 1)
+      pageNo = 1;
+    
+    return pageNo;
   }
   
 }

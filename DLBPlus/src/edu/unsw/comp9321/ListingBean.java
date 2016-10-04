@@ -4,14 +4,14 @@ package edu.unsw.comp9321;
  */
 import java.util.*;
 
-public class SearchPageBean {
+public class ListingBean {
 	public List<Listing> results = new ArrayList<Listing>();
 	public int currPage = 1;
 	public int totalPages = 0;
 	public int numItemsPerPage = 10;
 	
 	// Constructor
-	public SearchPageBean(List<Listing> searchListings, int currPage) {
+	public ListingBean(List<Listing> searchListings, int currPage) {
 		this.results = searchListings;
     
     this.currPage = currPage;

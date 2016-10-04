@@ -50,14 +50,14 @@
 
     <c:choose>
 
-      <c:when test="${fn:length(cartListAsListings) eq 0}">
+      <c:when test="${fn:length(cartListAsListings.results) eq 0}">
         <div class="card valign grey lighten-4" >
           <br>
           <p class="flow-text center">Cart is empty!</p>
           <br>
         </div>
       </c:when>
-      <c:when test="${fn:length(cartListAsListings) ne 0}">
+      <c:when test="${fn:length(cartListAsListings.results) ne 0}">
         <form action="dblplus" method="POST">
           <div class="card valign grey lighten-4" >
             <div class="col s10">
@@ -78,27 +78,77 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="item" items="${cartListAsListings}">
-                  <tr>
-                  <tr>
-                    <td><img src="${item.imageOrDefault}" class="listingImageThumbnail" /></td>
-                    <td><a href="/dblplus?action=viewlistingdetails&id=${item.id}">${item.title}</a></td>
-                    <td><i>${item.arrayAuthors}</i></td>
-                    <td>${item.yearString}</td>
-                    <td>${item.typeString}</td>
-                    <td>${item.listDateString}</td>
-                    <td>${item.endDateString}</td>
-                    <td>${item.quantity}</td>
-                    <td>${item.sellpriceString}</td>
-                    <td>${item.sellerUsername}</td>
-                    <td><input type="checkbox" name="removeListingID" value="${item.id}" id="${item.id}">
-                      <label for="${item.id}"></label></td>
-                  </tr>
+                <c:forEach begin="${(cartListAsListings.currPage - 1) * cartListAsListings.numItemsPerPage}"
+                           end="${(cartListAsListings.currPage - 1)* cartListAsListings.numItemsPerPage + cartListAsListings.numItemsPerPage - 1}"
+                           varStatus="loop">
+                  <c:if test="${loop.index < fn:length(cartListAsListings.results)}">
+                    <tr>
+                    <tr>
+                      <td><img src="${cartListAsListings.results[loop.index].imageOrDefault}" class="listingImageThumbnail" /></td>
+                      <td><a href="/dblplus?action=viewlistingdetails&id=${cartListAsListings.results[loop.index].id}">${cartListAsListings.results[loop.index].title}</a></td>
+                      <td><i>${cartListAsListings.results[loop.index].arrayAuthors}</i></td>
+                      <td>${cartListAsListings.results[loop.index].yearString}</td>
+                      <td>${cartListAsListings.results[loop.index].typeString}</td>
+                      <td>${cartListAsListings.results[loop.index].listDateString}</td>
+                      <td>${cartListAsListings.results[loop.index].endDateString}</td>
+                      <td>${cartListAsListings.results[loop.index].quantity}</td>
+                      <td>${cartListAsListings.results[loop.index].sellpriceString}</td>
+                      <td>${cartListAsListings.results[loop.index].sellerUsername}</td>
+                      <td><input type="checkbox" name="removeListingID" value="${cartListAsListings.results[loop.index].id}" id="${cartListAsListings.results[loop.index].id}">
+                        <label for="${cartListAsListings.results[loop.index].id}"></label></td>
+                    </tr>
+                  </c:if>
                 </c:forEach>
                 </tbody>
               </table>
             </div>
           </div>
+
+            <%-- Page navigation links --%>
+            <%-- Previous page link --%>
+          <c:choose>
+            <c:when test="${cartListAsListings.currPage != 1}">
+              <div class="col s2 offset-s3">
+                <a href="${currentFullUrl}&pageNo=${cartListAsListings.currPage - 1}">
+                  <button type="button" class="btn btn-link">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    Previous
+                  </button>
+                </a>
+              </div>
+            </c:when>
+            <c:otherwise>
+              <div class="col s2 offset-s3">
+                <button type="button" class="btn btn-link disabled" style="float:left">
+                  <span class="glyphicon glyphicon-chevron-left"></span>
+                  Previous
+                </button>
+              </div>
+            </c:otherwise>
+          </c:choose>
+
+            <%-- Next page link --%>
+          <c:choose>
+            <c:when test="${cartListAsListings.currPage != cartListAsListings.totalPages}">
+              <div class="col s2">
+                <a href="${currentFullUrl}&pageNo=${cartListAsListings.currPage + 1}">
+                  <button type="button" class="btn btn-link">
+                    Next
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                  </button>
+                </a>
+              </div>
+            </c:when>
+            <c:otherwise>
+              <div class="col s2">
+                <button type="button" class="btn btn-link disabled">
+                  Next
+                  <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+              </div>
+            </c:otherwise>
+          </c:choose>
+
           <div class="right-align">
             <input type="hidden" name="action" value="remove">
             <button class="btn waves-effect waves-light" type="submit" value="Remove from Cart">Remove from Cart
@@ -116,7 +166,7 @@
   <div class="center-align">
     <div class="row">
       <div class="col s2 offset-s4">
-        <c:if test="${fn:length(cartListAsListings) ne 0}">
+        <c:if test="${fn:length(cartListAsListings.results) ne 0}">
           <form action="dblplus" method="post">
             <input type="hidden" name="action" value="checkout">
             <button class="btn waves-effect waves-light" type="submit">Checkout

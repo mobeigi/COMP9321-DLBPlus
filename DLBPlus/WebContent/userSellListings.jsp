@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -40,67 +41,121 @@
       <div class="card-content">
         <div class="card-title">
           <c:choose>
-            <c:when test="${not empty eMessage}">
-              <p class="red-text center">${eMessage}</p>
-            </c:when>
-            <c:otherwise>
+          <c:when test="${not empty eMessage}">
+            <p class="red-text center">${eMessage}</p>
+          </c:when>
+          <c:otherwise>
 
-              <form method="get" action="dblplus">
-                <div class="row">
-                  <table class="centered highlighted striped responsive-table">
-                    <thead>
+          <div class="row">
+            <form method="get" action="dblplus">
+              <table class="centered highlighted striped responsive-table">
+                <thead>
+                <tr>
+                  <th>Listing ID</th>
+                  <th></th>
+                  <th>Title</th>
+                  <th>Authors</th>
+                  <th>Type</th>
+                  <th>Quantity</th>
+                  <th>Listed Price</th>
+                  <th>Number of Views</th>
+                  <th>Paused </th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach begin="${(userListings.currPage - 1) * userListings.numItemsPerPage}"
+                           end="${(userListings.currPage - 1)* userListings.numItemsPerPage + userListings.numItemsPerPage - 1}"
+                           varStatus="loop">
+                  <c:if test="${loop.index < fn:length(userListings.results)}">
                     <tr>
-                      <th>Listing ID</th>
-                      <th></th>
-                      <th>Title</th>
-                      <th>Authors</th>
-                      <th>Type</th>
-                      <th>Quantity</th>
-                      <th>Listed Price</th>
-                      <th>Number of Views</th>
-                      <th>Paused </th>
+                      <td>${userListings.results[loop.index].id}</td>
+                      <td><img src="${userListings.results[loop.index].imageOrDefault}" class="listingImageThumbnail" /></td>
+                      <td><a href="/dblplus?action=viewlistingdetails&id=${userListings.results[loop.index].id}">${userListings.results[loop.index].title}</a></td>
+                      <td>${userListings.results[loop.index].arrayAuthors}</td>
+                      <td>${userListings.results[loop.index].typeString}</td>
+                      <td>${userListings.results[loop.index].quantity}</td>
+                      <td>${userListings.results[loop.index].sellprice}</td>
+                      <td>${userListings.results[loop.index].numviews}</td>
+                      <c:choose>
+                      <c:when test="${userListings.results[loop.index].paused}">
+                      <td><input type="checkbox" checked="checked" name="${userListings.results[loop.index].id}" value="checked" id="${userListings.results[loop.index].id}">
+                        </c:when>
+                        <c:otherwise>
+                      <td><input type="checkbox" name="${userListings.results[loop.index].id}" value="checked" id="${userListings.results[loop.index].id}">
+                        </c:otherwise>
+                        </c:choose>
+                        <label for="${userListings.results[loop.index].id}"></label></td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="listing" items="${userListings}">
-                      <tr>
-                        <td><c:out value="${listing.id}"/></td>
-                        <td><img src="${listing.imageOrDefault}" class="listingImageThumbnail" /></td>
-                        <td><a href="/dblplus?action=viewlistingdetails&id=${listing.id}">${listing.title}</a></td>
-                        <td><c:out value="${listing.arrayAuthors}" /></td>
-                        <td><c:out value="${listing.typeString}" /></td>
-                        <td><c:out value="${listing.quantity}" /></td>
-                        <td>$<c:out value="${listing.sellprice}" /></td>
-                        <td><c:out value="${listing.numviews}" /></td>
-                        <c:choose>
-                        <c:when test="${listing.paused}">
-                        <td><input type="checkbox" checked="checked" name="${listing.id}" value="checked" id="${listing.id}">
-                          </c:when>
-                          <c:otherwise>
-                        <td><input type="checkbox" name="${listing.id}" value="checked" id="${listing.id}">
-                          </c:otherwise>
-                          </c:choose>
-                          <label for="${listing.id}"></label></td>
-                      </tr>
-                    </c:forEach>
-                    </tbody>
-                  </table>
+                  </c:if>
+                </c:forEach>
+                </tbody>
+              </table>
+
+              <div class="row">
+                <div class="right-align">
+                  <input type="hidden" name="action" value="updateListingStatus">
+                  <button class="btn waves-effect waves-light" type="submit" value="updateListingStatus">Apply Changes
+                    <i class="material-icons right"></i>
+                  </button>
                 </div>
-                <div class="row">
-                  <div class="right-align">
-                    <input type="hidden" name="action" value="updateListingStatus">
-                    <button class="btn waves-effect waves-light" type="submit" value="updateListingStatus">Apply Changes
-                      <i class="material-icons right"></i>
+              </div>
+            </form>
+
+
+              <%-- Page navigation links --%>
+              <%-- Previous page link --%>
+            <c:choose>
+              <c:when test="${userListings.currPage != 1}">
+                <div class="col s2 offset-s3">
+                  <a href="${currentFullUrl}&pageNo=${userListings.currPage - 1}">
+                    <button type="submit" class="btn btn-link">
+                      <span class="glyphicon glyphicon-chevron-left"></span>
+                      Previous
                     </button>
-                  </div>
+                  </a>
                 </div>
-              </form>
-            </c:otherwise>
-          </c:choose>
+              </c:when>
+              <c:otherwise>
+                <div class="col s2 offset-s3">
+                  <button type="button" class="btn btn-link disabled" style="float:left">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    Previous
+                  </button>
+                </div>
+              </c:otherwise>
+            </c:choose>
+
+              <%-- Next page link --%>
+            <c:choose>
+              <c:when test="${userListings.currPage != userListings.totalPages}">
+                <div class="col s2">
+                  <a href="${currentFullUrl}&pageNo=${userListings.currPage + 1}">
+                    <button type="submit" class="btn btn-link">
+                      Next
+                      <span class="glyphicon glyphicon-chevron-right"></span>
+                    </button>
+                  </a>
+                </div>
+              </c:when>
+              <c:otherwise>
+                <div class="col s2">
+                  <button type="button" class="btn btn-link disabled">
+                    Next
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                  </button>
+                </div>
+              </c:otherwise>
+            </c:choose>
+
+
+          </div>
         </div>
+        </c:otherwise>
+        </c:choose>
       </div>
     </div>
   </div>
+</div>
 </div>
 
 
