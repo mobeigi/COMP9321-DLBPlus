@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -56,20 +57,73 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <c:forEach var="order" items="${userOrderList}">
-                    <tr>
-                      <td>${order.id}</td>
-                      <td>${order.pubTitle}</td>
-                      <td>${order.sellerUsername}</td>
-                      <td>${order.orderDateString}</td>
-                      <td>${order.priceString}</td>
-                    </tr>
+                  <c:forEach begin="${(userOrderList.currPage - 1) * userOrderList.numItemsPerPage}"
+                             end="${(userOrderList.currPage - 1)* userOrderList.numItemsPerPage + userOrderList.numItemsPerPage - 1}"
+                             varStatus="loop">
+                    <c:if test="${loop.index < fn:length(userOrderList.results)}">
+                      <tr>
+                        <td>${userOrderList.results[loop.index].id}</td>
+                        <td>${userOrderList.results[loop.index].pubTitle}</td>
+                        <td>${userOrderList.results[loop.index].sellerUsername}</td>
+                        <td>${userOrderList.results[loop.index].orderDateString}</td>
+                        <td>${userOrderList.results[loop.index].priceString}</td>
+                      </tr>
+                    </c:if>
                   </c:forEach>
                   </tbody>
+                  </tbody>
                 </table>
+
+                <br />
+                  <%-- Page navigation links --%>
+                  <%-- Previous page link --%>
+                <c:choose>
+                  <c:when test="${userOrderList.currPage != 1}">
+                    <div class="col s2 offset-s3">
+                      <a href="${currentFullUrl}&pageNo=${userOrderList.currPage - 1}">
+                        <button type="submit" class="btn btn-link">
+                          <span class="glyphicon glyphicon-chevron-left"></span>
+                          Previous
+                        </button>
+                      </a>
+                    </div>
+                  </c:when>
+                  <c:otherwise>
+                    <div class="col s2 offset-s3">
+                      <button type="button" class="btn btn-link disabled" style="float:left">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        Previous
+                      </button>
+                    </div>
+                  </c:otherwise>
+                </c:choose>
+
+                  <%-- Next page link --%>
+                <c:choose>
+                  <c:when test="${userOrderList.currPage != userOrderList.totalPages}">
+                    <div class="col s2">
+                      <a href="${currentFullUrl}&pageNo=${userOrderList.currPage + 1}">
+                        <button type="submit" class="btn btn-link">
+                          Next
+                          <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+                      </a>
+                    </div>
+                  </c:when>
+                  <c:otherwise>
+                    <div class="col s2">
+                      <button type="button" class="btn btn-link disabled">
+                        Next
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                      </button>
+                    </div>
+                  </c:otherwise>
+                </c:choose>
+
               </div>
             </c:otherwise>
           </c:choose>
+
         </div>
       </div>
     </div>

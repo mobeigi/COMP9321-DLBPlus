@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
-  <display-name>ass1</display-name>
-  <welcome-file-list>
-    <welcome-file>dblplus</welcome-file>
-  </welcome-file-list>
-  <servlet>
-    <description></description>
-    <display-name>SetupServlet</display-name>
-    <servlet-name>SetupServlet</servlet-name>
-    <servlet-class>edu.unsw.comp9321.SetupServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>SetupServlet</servlet-name>
-    <url-pattern>/dblplus</url-pattern>
-  </servlet-mapping>
+    <display-name>ass1</display-name>
+    <welcome-file-list>
+        <welcome-file>dblplus</welcome-file>
+    </welcome-file-list>
+    <servlet>
+        <description></description>
+        <display-name>SetupServlet</display-name>
+        <servlet-name>SetupServlet</servlet-name>
+        <servlet-class>edu.unsw.comp9321.SetupServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <description></description>
+        <display-name>AdminServlet</display-name>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>edu.unsw.comp9321.AdminServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetupServlet</servlet-name>
+        <url-pattern>/dblplus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
 </web-app>
