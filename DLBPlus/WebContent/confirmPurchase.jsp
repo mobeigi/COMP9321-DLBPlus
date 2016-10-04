@@ -8,7 +8,6 @@
 </head>
 <body>
 <jsp:include page="navbar.jsp" />
-WE CONFIRMPURCHASING BOIS
 <form method="post" action="dblplus">
   <center>
     <table border="1" width="30%" cellpadding="5">

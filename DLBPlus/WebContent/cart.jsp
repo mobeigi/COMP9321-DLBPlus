@@ -30,7 +30,7 @@
 <div class="section no-pad-bot" id="index-banner">
   <div class="container">
     <br><br>
-    <h1 class="header center orange-text">Bibliographic Library</h1>
+    <h1 class="header center orange-text">Shopping Cart</h1>
 
     <c:choose>
       <c:when test="${isAlreadySelected eq 'true'}">

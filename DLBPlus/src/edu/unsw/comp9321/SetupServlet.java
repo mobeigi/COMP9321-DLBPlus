@@ -446,6 +446,7 @@ public class SetupServlet extends HttpServlet {
         e.printStackTrace();
       }
       if (db.DoesUserExist(userName)){
+    	System.out.println("Checking username ----- exists");
         errorMessage = "Username already exists!";
         flag = 1;
         link = "register.jsp";
@@ -459,6 +460,7 @@ public class SetupServlet extends HttpServlet {
       }
       else {
         if (flag == 0){
+          errorMessage = "";
           User newUser = new User();
           newUser = db.CreateUser(userName, password, firstName, lastName, nickName, email, address, dob, creditCard, dp);
           Random random = new Random();
@@ -466,7 +468,8 @@ public class SetupServlet extends HttpServlet {
           System.out.println("generating " + rand);
           request.getSession().setAttribute("confirmationNumber", rand);
           request.getSession().setAttribute("newUser",newUser);
-          SendConfirmEmail(email,rand);
+          request.getSession().setAttribute("eMessage", errorMessage);
+          SendConfirmEmail(userName, email,rand);
           link = "confirmation.jsp";
         }
       }
@@ -512,7 +515,7 @@ public class SetupServlet extends HttpServlet {
           System.out.println("generating " + rand);
           request.getSession().setAttribute("confirmationNumber", rand);
           request.getSession().setAttribute("newUser",user);
-          SendConfirmEmail(user.getEmail(),rand);
+          SendConfirmEmail(userName, user.getEmail(),rand);
           link = "confirmation.jsp";
         }
       } else {
@@ -854,14 +857,12 @@ public class SetupServlet extends HttpServlet {
       Integer listingid = checkOutItem.getListingid();
       Listing listing = db.GetListing(listingid);
       
-      // Send checkout message to seller's emali
+      // Send checkout message to seller's email
       String sellerName = checkOutItem.getSellerName();
       User seller = db.GetUser(sellerName);
-      System.out.println(seller.getEmail());
-      System.out.println(listingid);
-      System.out.println(sellerName);
-      System.out.println(currUser.getUsername());
-      SendCheckoutEmail(seller.getEmail(), listingid, sellerName, currUser.getUsername());
+      String listingName = listing.getTitle();
+      String buyerAddress = currUser.getAddress();
+      SendCheckoutEmail(seller.getEmail(), listingName, sellerName, currUser.getUsername(), buyerAddress);
       
       // Decrement listing's quantity
       db.DecrementListingQuantity(listing);
@@ -878,7 +879,7 @@ public class SetupServlet extends HttpServlet {
     return "checkoutSuccess.jsp";
   }
   
-  private void SendCheckoutEmail(String email, Integer listingid, String sellerName, String buyerName) {
+  private void SendCheckoutEmail(String email, String listingName, String sellerName, String buyerName, String buyerAddress) {
     final String username = "dlbpluscode@gmail.com	";
     final String password = "uncommonpassword";
     
@@ -901,7 +902,8 @@ public class SetupServlet extends HttpServlet {
       message.setRecipients(Message.RecipientType.TO,
         InternetAddress.parse(email));
       message.setSubject("DBL+ Purchase Notification!");
-      message.setText("Hi " + sellerName + ", " + buyerName + " has just purchased an item from " + listingid);
+      message.setText("Hi " + sellerName + ",\n" + "A copy of " + listingName + " has just been purchased by " + buyerName + ".\n" + "Item will be shipped ASAP to " + buyerAddress + "\n\n From,\nDBL+");
+      System.out.println("Hi " + sellerName + ",\n" + "A copy of " + listingName + " has just been purchased by " + buyerName + ".\n" + "Item will be shipped ASAP to " + buyerAddress + ".\n\nFrom,\nDBL+");
       
       Transport.send(message);
       
@@ -913,7 +915,7 @@ public class SetupServlet extends HttpServlet {
   }
   
   
-  private void SendConfirmEmail(String email, int rand) {
+  private void SendConfirmEmail(String userName, String email, int rand) {
     final String username = "dlbpluscode@gmail.com	";
     final String password = "uncommonpassword";
     
@@ -936,7 +938,7 @@ public class SetupServlet extends HttpServlet {
       message.setRecipients(Message.RecipientType.TO,
         InternetAddress.parse(email));
       message.setSubject("DBL+ email account verification");
-      message.setContent("Your DBL+ confirmation code is: <strong>" + rand + "</strong>", "text/html");
+      message.setContent("Hi " + userName + ",<br>" + "Thank you for registering with DBL+. Your account confirmation code is:<br><br>" + "<center><strong>" + rand + "</strong></center><br><br>" + "From,<br>The DBL+ Team","text/html");
       
       Transport.send(message);
       

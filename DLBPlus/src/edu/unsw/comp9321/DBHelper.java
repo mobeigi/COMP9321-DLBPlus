@@ -128,9 +128,9 @@ public class DBHelper implements DLBPlusDBInterface {
 			dbConn.setAutoCommit(false);
 			stmt = dbConn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM users where username = '" + username + "';" );
-
 			if (rs.next()) {
 				int count = rs.getInt("count");
+				System.out.println("count: " + count);
 				if (count == 0)
 					return false;
 				else

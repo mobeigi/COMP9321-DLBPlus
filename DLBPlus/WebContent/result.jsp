@@ -29,10 +29,9 @@
 <jsp:include page="navbar.jsp" />
 <div class="section no-pad-bot" id="index-banner">
   <div class="container">
-    <br><br>
-    <h1 class="header center orange-text">Bibliographic Library</h1>
-    <br>
+  	<br><br>
     <h2 class="header center orange-text">Search Results</h2>
+    <br><br>
   </div>
 </div>
 

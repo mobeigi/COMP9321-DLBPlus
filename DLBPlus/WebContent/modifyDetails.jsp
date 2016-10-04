@@ -31,8 +31,7 @@
 <div class="section no-pad-bot" id="index-banner">
   <div class="container">
     <br><br>
-    <h1 class="header center orange-text">Bibliographic Library</h1>
-    <h2 class="header center orange-text">Modify Details</h2>
+    <h1 class="header center orange-text">Modify Details</h1>
     <br><br>
   </div>
 </div>
