@@ -120,19 +120,20 @@
                   </c:otherwise>
                 </c:choose>
 
+                <br />
+                  <%-- Back button --%>
+                <div class="col s2">
+                  <a href="/admin?action=viewallusers">
+                    <button type="submit" value="Back" class="btn">Back</button>
+                  </a>
+                </div>
+
               </div>
             </c:otherwise>
           </c:choose>
 
         </div>
       </div>
-    </div>
-
-    <%-- Back button --%>
-    <div class="col s2">
-      <a href="/admin?action=viewallusers">
-        <button type="submit" value="Back" class="btn">Back</button>
-      </a>
     </div>
 
   </div>

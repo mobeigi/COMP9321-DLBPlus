@@ -145,7 +145,7 @@ public class AdminServlet extends HttpServlet {
         response.sendRedirect("admin?action=login");
         return;
       }
-  
+      
       //View past orders
       String errorMessage = "";
       String qUserId = (request.getParameter("userid") == null || request.getParameter("userid").isEmpty()) ? null : new String( request.getParameter("userid").getBytes(), "UTF-8").trim();
@@ -165,15 +165,15 @@ public class AdminServlet extends HttpServlet {
           errorMessage = "No user exists with user id:" + userId;
         } else {
           List<Order> orderList = db.GetOrderHistory(userId);
-  
+          
           if(orderList.isEmpty()){
             errorMessage = "This user has not purchased anything yet!";
           } else {
             int pageNo = SetupServlet.getPaginationPageNum(request, orderList.size(), 10);
-    
+            
             String currentFullUrl = SetupServlet.getCurrentFullUrl(request);
             request.getSession().setAttribute("currentFullUrl", currentFullUrl);
-    
+            
             OrderBean orderBean = new OrderBean(orderList, pageNo);
             request.getSession().setAttribute("userOrderList", orderBean);
           }
@@ -182,55 +182,81 @@ public class AdminServlet extends HttpServlet {
       request.getSession().setAttribute("eMessage", errorMessage);
       nextPage = "adminUserOrderHistory.jsp";
     } else if (action.equals("viewremovedlistings")) {
-    if (!isLoggedIn(request)) {
-      response.sendRedirect("admin?action=login");
-      return;
-    }
-    
-    //View past orders
-    String errorMessage = "";
-    String qUserId = (request.getParameter("userid") == null || request.getParameter("userid").isEmpty()) ? null : new String( request.getParameter("userid").getBytes(), "UTF-8").trim();
-    Integer userId = null;
-    
-    if (qUserId != null) {
-      try {
-        userId = Integer.parseInt(qUserId);
-      } catch (NumberFormatException e) {}
-    }
-    
-    if (qUserId == null || userId == null) {
-      errorMessage = "Invalid user ID provided";
-    } else {
-      User u = db.GetUser(userId);
-      if (u == null) {
-        errorMessage = "No user exists with user id:" + userId;
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("admin?action=login");
+        return;
+      }
+      
+      //View past orders
+      String errorMessage = "";
+      String qUserId = (request.getParameter("userid") == null || request.getParameter("userid").isEmpty()) ? null : new String( request.getParameter("userid").getBytes(), "UTF-8").trim();
+      Integer userId = null;
+      
+      if (qUserId != null) {
+        try {
+          userId = Integer.parseInt(qUserId);
+        } catch (NumberFormatException e) {}
+      }
+      
+      if (qUserId == null || userId == null) {
+        errorMessage = "Invalid user ID provided";
       } else {
-        List<CartItem> removedCart = db.GetRemovedCartItems(userId);
-        List<Listing> removedListings = new ArrayList<Listing>();
-        
-        for (CartItem ci : removedCart)
-          removedListings.add(db.GetListing(ci.getListingid()));
-        
-        if(removedListings.isEmpty()){
-          errorMessage = "This user has not removed any listings from their shopping cart yet!";
+        User u = db.GetUser(userId);
+        if (u == null) {
+          errorMessage = "No user exists with user id:" + userId;
         } else {
-          int pageNo = SetupServlet.getPaginationPageNum(request, removedListings.size(), 10);
+          List<CartItem> removedCart = db.GetRemovedCartItems(userId);
+          List<Listing> removedListings = new ArrayList<Listing>();
           
-          String currentFullUrl = SetupServlet.getCurrentFullUrl(request);
-          request.getSession().setAttribute("currentFullUrl", currentFullUrl);
+          for (CartItem ci : removedCart)
+            removedListings.add(db.GetListing(ci.getListingid()));
           
-          ListingBean listingBean = new ListingBean(removedListings, pageNo);
-          request.getSession().setAttribute("userListings", listingBean);
+          if(removedListings.isEmpty()){
+            errorMessage = "This user has not removed any listings from their shopping cart yet!";
+          } else {
+            int pageNo = SetupServlet.getPaginationPageNum(request, removedListings.size(), 10);
+            
+            String currentFullUrl = SetupServlet.getCurrentFullUrl(request);
+            request.getSession().setAttribute("currentFullUrl", currentFullUrl);
+            
+            ListingBean listingBean = new ListingBean(removedListings, pageNo);
+            request.getSession().setAttribute("userListings", listingBean);
+          }
         }
       }
+      request.getSession().setAttribute("eMessage", errorMessage);
+      nextPage = "adminUserRemovedListings.jsp";
+    } else if (action.equals("viewuserdetails")) {
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("admin?action=login");
+        return;
+      }
+  
+      String qUserId = (request.getParameter("userid") == null || request.getParameter("userid").isEmpty()) ? null : new String( request.getParameter("userid").getBytes(), "UTF-8").trim();
+      Integer userId = null;
+  
+      if (qUserId != null) {
+        try {
+          userId = Integer.parseInt(qUserId);
+        } catch (NumberFormatException e) {}
+      }
+  
+      if (qUserId == null || userId == null) {
+        //error
+      } else {
+        User u = db.GetUser(userId);
+        if (u != null) {
+          request.setAttribute("myUser", u);
+        }
+      }
+  
+      nextPage = "adminUserDetails.jsp";
     }
-    request.getSession().setAttribute("eMessage", errorMessage);
-    nextPage = "adminUserRemovedListings.jsp";
-  }
     
     //Check redirect to other pages
     String userId = request.getParameter("userId");
     String listingId = request.getParameter("listingId");
+    
     if(userId != null) { //redirect to user details page
       User myUser = this.db.GetUser(Integer.parseInt(userId));
       List<Order> ListOfOrders = this.db.GetOrderHistory(Integer.parseInt(userId));

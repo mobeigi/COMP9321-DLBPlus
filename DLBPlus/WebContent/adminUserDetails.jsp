@@ -45,8 +45,8 @@
       <table class="left highlighted striped responsive-table">
         <thead>
         <tr>
-          <th> Key </th>
-          <th> Value </th>
+          <th class="centered">Field</th>
+          <th class="centered">Value</th>
         </tr>
         </thead>
         <tbody>
@@ -92,11 +92,11 @@
         </tr>
         <tr>
           <td>Status</td>
-          <td><c:out value="${myUser.acctstatus}" /></td>
+          <td><c:out value="${myUser.acctstatus ? 'Active' : 'Suspended'}" /></td>
         </tr>
         <tr>
           <td>Account Confirmed</td>
-          <td><c:out value="${myUser.acctconfrm}" /></td>
+          <td><c:out value="${myUser.acctconfrm ? 'Yes' : 'No'}" /></td>
         </tr>
         <tr>
           <td>Account Created</td>
@@ -107,90 +107,16 @@
       </table>
     </div>
   </div>
-</div>
 
-<div class="container">
-  <h2 class="header center orange-text">User's order history</h2>
-  <div class="col s10 offset-s1">
-    <%-- Display the user's order history --%>
-    <div class="card valign grey lighten-1" >
-      <table class="left highlighted striped responsive-table">
-        <thead>
-        <tr>
-          <th>Order ID</th>
-          <th>Seller ID</th>
-          <th>Seller Name</th>
-          <th>Publication Title</th>
-          <th>Order Date</th>
-          <th>Price</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="currOrder" items="${ListOfOrders}"
-                   varStatus="loop">
-          <tr>
-            <td><c:out value="${currOrder.id}" /></td>
-            <td><c:out value="${currOrder.sellerid}" /></td>
-            <td><c:out value="${SellerNames[loop.index]}" /></td>
-            <td><c:out value="${currOrder.pubTitle}" /></td>
-            <td><c:out value="${currOrder.order_date}" /></td>
-            <td><c:out value="${currOrder.price}" /></td>
-          </tr>
-        </c:forEach>
-        </tbody>
-      </table>
-    </div>
+  <br />
+  <%-- Back button --%>
+  <div class="col s2">
+    <a href="/admin?action=viewallusers">
+      <button type="submit" value="Back" class="btn">Back</button>
+    </a>
   </div>
-</div>
-<br>
-
-<div class="container">
-  <h4 class="header center orange-text"> </h4>
-  <h2 class="header center orange-text">User's removed cart items</h2>
-  <div class="col s10 offset-s1">
-    <%-- Display the user's removed cart items --%>
-    <div class="card valign grey lighten-1" >
-      <table class="left highlighted striped responsive-table">
-        <thead>
-        <tr>
-          <th>Listing ID</th>
-          <th>Time Added</th>
-          <th>Time Removed</th>
-          <th>Seller Name</th>
-          <th>publication Name</th>
-          <th>publication Type</th>
-          <th>Price</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="currItem" items="${ListOfRemovedCartItems}"
-                   varStatus="loop">
-          <tr>
-            <td><c:out value="${currItem.listingid}" /></td>
-            <td><c:out value="${currItem.addedts}" /></td>
-            <td><c:out value="${currItem.removedts}" /></td>
-            <td><c:out value="${currItem.sellerName}" /></td>
-            <td><c:out value="${currItem.publicationName}" /></td>
-            <td><c:out value="${currItem.publicationType}" /></td>
-            <td><c:out value="${currItem.price}" /></td>
-          </tr>
-        </c:forEach>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <br>
 
 
-  <div class="row">
-    <div class="col s10">
-      <form action="admin" method="POST">
-        <input type="hidden" name="action" value="viewAllUsers"/>
-        <button type="submit" value="Back To Manage Users" class="btn waves-effect waves-light">Back</button>
-        <br>
-      </form>
-    </div>
-  </div>
 </div>
 <br><br>
 

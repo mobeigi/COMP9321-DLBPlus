@@ -74,7 +74,7 @@
                        varStatus="loop">
               <tr>
                 <td><c:out value="${currUser.id}" /></td>
-                <td><a href=/admin?userId=${currUser.id}">${currUser.username}</a></td>
+                <td><a href="/admin?action=viewuserdetails&userid=${currUser.id}">${currUser.username}</a></td>
                 <td><a href="/admin?action=vieworderhistory&userid=${currUser.id}">View</a></td>
                 <td><a href="/admin?action=viewremovedlistings&userid=${currUser.id}">View</a></td>
                 <td>
@@ -105,7 +105,7 @@
 
   <%-- Back button --%>
   <div class="col s2">
-    <a href="/admin?action=portal">
+    <a href="/admin?action=viewallusers">
       <button type="submit" value="Back" class="btn">Back</button>
     </a>
   </div>
