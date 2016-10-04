@@ -34,6 +34,7 @@
     <br><br>
     <h1 class="header center orange-text">Bibliographic Library</h1>
     <br><br>
+    <h5 class="center header">Welcome to <strong>DBL+</strong>, the leading bibliographic library on the web!</h5>
   </div>
 </div>
 

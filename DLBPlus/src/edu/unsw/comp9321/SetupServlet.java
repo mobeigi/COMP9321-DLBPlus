@@ -92,7 +92,7 @@ public class SetupServlet extends HttpServlet {
         
         //Get all listings
         List<Listing> allListings = db.GetAllListings();
-  
+        
         //Filter out paused items and items with no quantity
         for (Iterator<Listing> iter = allListings.listIterator(); iter.hasNext(); ) {
           Listing l = iter.next();
@@ -302,18 +302,18 @@ public class SetupServlet extends HttpServlet {
       
       //Perform search
       List<Listing> results = db.SearchListings(query, minSellPrice, maxSellPrice, exactMatch, matchCase);
-  
+      
       //Filter out paused items and items with no quantity
       for (Iterator<Listing> iter = results.listIterator(); iter.hasNext(); ) {
         Listing l = iter.next();
-        if (l.getQuantity() <= 0 || l.getPaused())
+        if (l.getQuantity() <= 0 || l.getPaused() || (l.getEnddate().getTime() < new Timestamp(new Date().getTime()).getTime()))
           iter.remove();
       }
       
       int pageNo = getPaginationPageNum(request, results.size(), 10);
       String currentFullUrl = getCurrentFullUrl(request);
       request.getSession().setAttribute("currentFullUrl", currentFullUrl);
-  
+      
       ListingBean listingBean = new ListingBean(results, pageNo);
       request.getSession().setAttribute("searchFound", listingBean);
       
@@ -331,12 +331,12 @@ public class SetupServlet extends HttpServlet {
       
       for (CartItem ci : cartList)
         cartListAsListings.add(db.GetListing(ci.getListingid()));
-  
+      
       int pageNo = getPaginationPageNum(request, cartListAsListings.size(), 10);
-  
+      
       String currentFullUrl = getCurrentFullUrl(request);
       request.getSession().setAttribute("currentFullUrl", currentFullUrl);
-  
+      
       ListingBean listingBean = new ListingBean(cartListAsListings, pageNo);
       
       request.getSession().setAttribute("cartList", cartList);
@@ -364,7 +364,7 @@ public class SetupServlet extends HttpServlet {
             }
           }
         }
-  
+        
         if (flag) {
           request.getSession().setAttribute("isAlreadySelected", true);
         } else {
@@ -378,17 +378,17 @@ public class SetupServlet extends HttpServlet {
       
       
       cartList = db.GetActiveCartItems(currUser.getCartid());
-  
+      
       List<Listing> cartListAsListings = new ArrayList<Listing>();
-  
+      
       for (CartItem ci : cartList)
         cartListAsListings.add(db.GetListing(ci.getListingid()));
-  
+      
       int pageNo = getPaginationPageNum(request, cartListAsListings.size(), 10);
-  
+      
       String currentFullUrl = getCurrentFullUrl(request);
       request.getSession().setAttribute("currentFullUrl", currentFullUrl);
-  
+      
       ListingBean listingBean = new ListingBean(cartListAsListings, pageNo);
       
       request.getSession().setAttribute("cartList", cartList);
@@ -425,7 +425,7 @@ public class SetupServlet extends HttpServlet {
         e.printStackTrace();
       }
       if (db.DoesUserExist(userName)){
-    	System.out.println("Checking username ----- exists");
+        System.out.println("Checking username ----- exists");
         errorMessage = "Username already exists!";
         flag = 1;
         link = "register.jsp";
@@ -522,48 +522,84 @@ public class SetupServlet extends HttpServlet {
       request.getSession().setAttribute("eMessage",errorMessage);
       link = "register.jsp";
     } else if(req.equals("modifydetails")){
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/dblplus?action=login");
+        return;
+      }
+      
       User user = (User) request.getSession().getAttribute("user");
       request.getSession().setAttribute("user",user);
       link = "modifyDetails.jsp";
       String errorMessage = "";
       request.getSession().setAttribute("eMessage",errorMessage);
     } else if(req.equals("detailsAdded")){
+      String firstName = (request.getParameter("fname") == null || request.getParameter("fname").isEmpty()) ? null : new String( request.getParameter("fname").getBytes(), "UTF-8").trim();
+      String lastName = (request.getParameter("lname") == null || request.getParameter("lname").isEmpty()) ? null : new String( request.getParameter("lname").getBytes(), "UTF-8").trim();
+      String nickName = (request.getParameter("nickname") == null || request.getParameter("nickname").isEmpty()) ? null : new String( request.getParameter("nickname").getBytes(), "UTF-8").trim();
+      String email = (request.getParameter("email") == null || request.getParameter("email").isEmpty()) ? null : new String( request.getParameter("email").getBytes(), "UTF-8").trim();
+      String password = (request.getParameter("pass") == null || request.getParameter("pass").isEmpty()) ? null : new String( request.getParameter("pass").getBytes(), "UTF-8").trim();
+      String passConfirm = (request.getParameter("passConfirm") == null || request.getParameter("passConfirm").isEmpty()) ? null : new String( request.getParameter("passConfirm").getBytes(), "UTF-8").trim();
+      String currentPassword = (request.getParameter("currentPassword") == null || request.getParameter("currentPassword").isEmpty()) ? null : new String( request.getParameter("currentPassword").getBytes(), "UTF-8").trim();
+      String address = (request.getParameter("address") == null || request.getParameter("address").isEmpty()) ? null : new String( request.getParameter("address").getBytes(), "UTF-8").trim();
+      String creditCard = (request.getParameter("ccn") == null || request.getParameter("ccn").isEmpty()) ? null : new String( request.getParameter("ccn").getBytes(), "UTF-8").trim();
+      String stringDob = (request.getParameter("dob") == null || request.getParameter("dob").isEmpty()) ? null : new String( request.getParameter("dob").getBytes(), "UTF-8").trim();
       String errorMessage = "";
-      String firstName = request.getParameter("fname");
-      String lastName = request.getParameter("lname");
-      String nickName = request.getParameter("nickname");
-      String email = request.getParameter("email");
-      String password = request.getParameter("pass");
-      String address = request.getParameter("address");
-      String creditCard = request.getParameter("ccn");
-      String stringDob = request.getParameter("dob");
-      String passConfirm = request.getParameter("passConfirm");
-      String dp = "";
       
-      if (!passConfirm.equals(password)){
-        errorMessage = "Passwords do not match!";
-        link = "modifyDetails.jsp";
-        request.getSession().setAttribute("eMessage",errorMessage);
-      }
-      else {
-        User toChange = (User) request.getSession().getAttribute("user");
-        toChange.setFname(firstName);
-        toChange.setLname(lastName);
-        toChange.setNickname(nickName);
-        toChange.setEmail(email);
-        toChange.setAddress(address);
-        toChange.setCreditcard(creditCard);
-        db.ChangeUserPassword(toChange, password);
-        boolean success = db.ChangeUserDetails(toChange);
-        if (success){
-          System.out.println("acc details changed");
+      //Get user object
+      User toChange = (User) request.getSession().getAttribute("user");
+      if (toChange == null) {
+        errorMessage = "User does not exist!";
+      } else {
+        //Check to see if correct input password
+        if (currentPassword == null || currentPassword.isEmpty() || !db.VerifyUser(toChange.getUsername(), currentPassword)) {
+          System.out.println(passConfirm);
+          errorMessage = "Current Password is incorrect";
+        } else if (password != null && passConfirm != null && !password.equals(passConfirm)) {
+          errorMessage = "Passwords do not match!";
+        } else {
+          if (firstName != null)
+            toChange.setFname(firstName);
+          
+          if (lastName != null)
+            toChange.setLname(lastName);
+          
+          if (nickName != null)
+            toChange.setNickname(nickName);
+          
+          if (email != null)
+            toChange.setEmail(email);
+          
+          if (address != null)
+            toChange.setAddress(address);
+          
+          if (creditCard != null)
+            toChange.setCreditcard(creditCard);
+          
+          if (stringDob != null) {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Date dob = null;
+            try {
+              dob = df.parse(stringDob);
+            } catch (ParseException e) {
+              e.printStackTrace();
+            }
+            
+            if (dob != null)
+              toChange.setDob(dob);
+            
+          }
+          
+          if (password!= null && !password.isEmpty())
+            db.ChangeUserPassword(toChange, password);
+          
+          //Change details
+          db.ChangeUserDetails(toChange);
         }
-        
-        request.getSession().setAttribute("eMessage",errorMessage);
-        link = "userAccount.jsp";
       }
+      
       request.getSession().setAttribute("eMessage",errorMessage);
-      link = "userAccount.jsp";
+      link = "modifyDetails.jsp";
+      
     } else if(req.equals("login")){
       String errorMessage = "";
       request.getSession().setAttribute("eMessage",errorMessage);
@@ -591,10 +627,10 @@ public class SetupServlet extends HttpServlet {
         errorMessage = "You have not purchased anything yet!";
       } else {
         int pageNo = getPaginationPageNum(request, orderList.size(), 10);
-  
+        
         String currentFullUrl = getCurrentFullUrl(request);
         request.getSession().setAttribute("currentFullUrl", currentFullUrl);
-  
+        
         OrderBean orderBean = new OrderBean(orderList, pageNo);
         request.getSession().setAttribute("userOrderList", orderBean);
       }
@@ -616,14 +652,14 @@ public class SetupServlet extends HttpServlet {
         errorMessage = "Looks like you don't have any current listings";
       } else {
         int pageNo = getPaginationPageNum(request, userListings.size(), 10);
-  
+        
         String currentFullUrl = getCurrentFullUrl(request);
         request.getSession().setAttribute("currentFullUrl", currentFullUrl);
-  
+        
         ListingBean listingBean = new ListingBean(userListings, pageNo);
         request.getSession().setAttribute("userListings", listingBean);
       }
-  
+      
       request.getSession().setAttribute("eMessage", errorMessage);
       
       link = "userSellListings.jsp";
@@ -678,7 +714,7 @@ public class SetupServlet extends HttpServlet {
       //Create new listing
       link = "createListing.jsp";
     } else if(req.equals("registerItem")){
-  
+      
       User seller = (User) request.getSession().getAttribute("user");
       
       if (seller != null) {
@@ -766,9 +802,17 @@ public class SetupServlet extends HttpServlet {
         String errorMessage = "";
         if (userListings.isEmpty()) {
           errorMessage = "Looks like you don't have any current listings";
+        } else {
+          int pageNo = getPaginationPageNum(request, userListings.size(), 10);
+          
+          String currentFullUrl = getCurrentFullUrl(request);
+          request.getSession().setAttribute("currentFullUrl", currentFullUrl);
+          
+          ListingBean listingBean = new ListingBean(userListings, pageNo);
+          request.getSession().setAttribute("userListings", listingBean);
         }
+        
         request.getSession().setAttribute("eMessage", errorMessage);
-        request.getSession().setAttribute("userListings", userListings);
         link = "userSellListings.jsp";
       }
       else {
@@ -823,31 +867,31 @@ public class SetupServlet extends HttpServlet {
     
     // Case when user wants to query the visualisation
     else if (req.equals("queryVisualisation")) {
-    	
-    	// Obtain value of query (split based on newline)
-    	String qData = (request.getParameter("queryData") == null || request.getParameter("queryData").isEmpty()) ? null : new String( request.getParameter("queryData").getBytes(), "UTF-8").trim();
-    	String[] qDataList = new String[0];
-    	if (qData != null) qDataList = qData.trim().split("\\\r\n");
-    	
-    	// Obtain type of query
-    	String qType = new String( request.getParameter("queryType").getBytes(), "UTF-8").trim();	// this will never be null
-    	
-    	// Create the query object
-    	VisQuery query = new VisQuery();
-    	if (qData != null) {
-    		query.setQueryData(Arrays.asList(qDataList));
-    	}
-    	query.setQueryType(qType);
-        
-        // TODO: Remove duplicates in query fields for the lists
-       
-        // Obtain the node and relationship results based on query
-        VisResult result = this.db.SearchVis(query);
-        
-        // Bind visNodes and visRelationships from result to request
-        request.setAttribute("visNodes", result.getVisNodesResult());
-        request.setAttribute("visRelationships", result.getVisRelationshipResult());
-    	link = "visualise.jsp";
+      
+      // Obtain value of query (split based on newline)
+      String qData = (request.getParameter("queryData") == null || request.getParameter("queryData").isEmpty()) ? null : new String( request.getParameter("queryData").getBytes(), "UTF-8").trim();
+      String[] qDataList = new String[0];
+      if (qData != null) qDataList = qData.trim().split("\\\r\n");
+      
+      // Obtain type of query
+      String qType = new String( request.getParameter("queryType").getBytes(), "UTF-8").trim();	// this will never be null
+      
+      // Create the query object
+      VisQuery query = new VisQuery();
+      if (qData != null) {
+        query.setQueryData(Arrays.asList(qDataList));
+      }
+      query.setQueryType(qType);
+      
+      // TODO: Remove duplicates in query fields for the lists
+      
+      // Obtain the node and relationship results based on query
+      VisResult result = this.db.SearchVis(query);
+      
+      // Bind visNodes and visRelationships from result to request
+      request.setAttribute("visNodes", result.getVisNodesResult());
+      request.setAttribute("visRelationships", result.getVisRelationshipResult());
+      link = "visualise.jsp";
     }
     
     RequestDispatcher rd = request.getRequestDispatcher("/" + link);
@@ -969,18 +1013,18 @@ public class SetupServlet extends HttpServlet {
     }
     
     cartList = db.GetActiveCartItems(currUser.getCartid());
-  
+    
     List<Listing> cartListAsListings = new ArrayList<Listing>();
-  
+    
     for (CartItem ci : cartList)
       cartListAsListings.add(db.GetListing(ci.getListingid()));
-  
+    
     //Get page number for pagination
     int pageNo = getPaginationPageNum(request, cartListAsListings.size(), 10);
-  
+    
     String currentFullUrl = getCurrentFullUrl(request);
     request.getSession().setAttribute("currentFullUrl", currentFullUrl);
-  
+    
     ListingBean listingBean = new ListingBean(cartListAsListings, pageNo);
     
     request.getSession().setAttribute("cartList", cartList);
@@ -999,7 +1043,7 @@ public class SetupServlet extends HttpServlet {
     User u = (User)req.getSession().getAttribute("user");
     return (u != null);
   }
- 
+  
   public static String getCurrentFullUrl(HttpServletRequest request) {
     String currentFullUrl = request.getRequestURL().toString();
     //Ensure query string is not empty
@@ -1038,12 +1082,12 @@ public class SetupServlet extends HttpServlet {
       return pageNo;
     }
     int lastPage = (int) Math.ceil((double)size / resultsPerPage);
-  
+    
     try {
       pageNo = Integer.parseInt(qPageNo);
     } catch (NumberFormatException e) {
     }
-  
+    
     //Ensure pageNo is within range
     if (pageNo > lastPage)
       pageNo = lastPage;
