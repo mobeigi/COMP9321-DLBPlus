@@ -1000,7 +1000,7 @@ public class SetupServlet extends HttpServlet {
     return (u != null);
   }
  
-  private String getCurrentFullUrl(HttpServletRequest request) {
+  public static String getCurrentFullUrl(HttpServletRequest request) {
     String currentFullUrl = request.getRequestURL().toString();
     //Ensure query string is not empty
     if (request.getQueryString() != null && !request.getQueryString().isEmpty()) {
@@ -1027,7 +1027,7 @@ public class SetupServlet extends HttpServlet {
     return currentFullUrl;
   }
   
-  private int getPaginationPageNum(HttpServletRequest request, int size, int resultsPerPage) {
+  public static int getPaginationPageNum(HttpServletRequest request, int size, int resultsPerPage) {
     //Get page number for pagination
     String qPageNo = null;
     int pageNo = 1;

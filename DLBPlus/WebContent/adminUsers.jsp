@@ -62,9 +62,11 @@
           <table class="left highlighted striped responsive-table">
             <thead>
             <tr>
-              <th> ID </th>
-              <th> Username </th>
-              <th> Status </th>
+              <th class="centered">ID</th>
+              <th class="centered">Username</th>
+              <th class="centered">Order History</th>
+              <th class="centered">Removed Listings</th>
+              <th class="centered">Status</th>
             </tr>
             </thead>
             <tbody>
@@ -72,7 +74,9 @@
                        varStatus="loop">
               <tr>
                 <td><c:out value="${currUser.id}" /></td>
-                <td><a href="admin?userId=${currUser.id}">${currUser.username}</a></td>
+                <td><a href=/admin?userId=${currUser.id}">${currUser.username}</a></td>
+                <td><a href="/admin?action=vieworderhistory&userid=${currUser.id}">View</a></td>
+                <td><a href="/admin?action=viewremovedlistings&userid=${currUser.id}">View</a></td>
                 <td>
                   <select name="${currUser.id}">
                     <c:choose>
