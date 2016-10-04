@@ -465,7 +465,7 @@ public class SetupServlet extends HttpServlet {
         if(code.equals(emailCode)){
           request.getSession().setAttribute("user",newUser);
           this.db.SetAcctConfirmed(newUser, true);
-          response.sendRedirect("dblplus?action=myaccount");
+          response.sendRedirect("/dblplus?action=myaccount");
           return;
         } else {
           errorMessage = "Code is incorrect!";
@@ -478,24 +478,31 @@ public class SetupServlet extends HttpServlet {
       String errorMessage = "";
       String userName = request.getParameter("uname");
       String password = request.getParameter("pass");
-      
       boolean success = db.VerifyUser(userName, password);
-      System.out.println(success);
+      
       if(success){
         User user = db.GetUser(userName);
-        if (user.getAcctconfrm()){
-          request.getSession().setAttribute("user",user);
-          System.out.println(user.getUsername());
-          response.sendRedirect("dblplus?action=myaccount");
-          return;
+        
+        //Check if account suspended
+        if (!user.getAcctstatus()) {
+          errorMessage = "Your account is currently suspended";
+          request.getSession().setAttribute("eMessage",errorMessage);
+          link = "login.jsp";
         } else {
-          Random random = new Random();
-          int rand = random.nextInt(99999);
-          System.out.println("generating " + rand);
-          request.getSession().setAttribute("confirmationNumber", rand);
-          request.getSession().setAttribute("newUser",user);
-          SendConfirmEmail(userName, user.getEmail(),rand);
-          link = "confirmation.jsp";
+          if (user.getAcctconfrm()) {
+            request.getSession().setAttribute("user", user);
+            System.out.println(user.getUsername());
+            response.sendRedirect("/dblplus?action=myaccount");
+            return;
+          } else {
+            Random random = new Random();
+            int rand = random.nextInt(99999);
+            System.out.println("generating " + rand);
+            request.getSession().setAttribute("confirmationNumber", rand);
+            request.getSession().setAttribute("newUser", user);
+            SendConfirmEmail(userName, user.getEmail(), rand);
+            link = "confirmation.jsp";
+          }
         }
       } else {
         errorMessage = "Incorrect Username or Password";
@@ -993,7 +1000,7 @@ public class SetupServlet extends HttpServlet {
     return (u != null);
   }
  
-  private String getCurrentFullUrl(HttpServletRequest request) {
+  public static String getCurrentFullUrl(HttpServletRequest request) {
     String currentFullUrl = request.getRequestURL().toString();
     //Ensure query string is not empty
     if (request.getQueryString() != null && !request.getQueryString().isEmpty()) {
@@ -1020,7 +1027,7 @@ public class SetupServlet extends HttpServlet {
     return currentFullUrl;
   }
   
-  private int getPaginationPageNum(HttpServletRequest request, int size, int resultsPerPage) {
+  public static int getPaginationPageNum(HttpServletRequest request, int size, int resultsPerPage) {
     //Get page number for pagination
     String qPageNo = null;
     int pageNo = 1;
