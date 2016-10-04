@@ -306,7 +306,7 @@ public class SetupServlet extends HttpServlet {
       //Filter out paused items and items with no quantity
       for (Iterator<Listing> iter = results.listIterator(); iter.hasNext(); ) {
         Listing l = iter.next();
-        if (l.getQuantity() <= 0 || l.getPaused())
+        if (l.getQuantity() <= 0 || l.getPaused() || (l.getEnddate().getTime() < new Timestamp(new Date().getTime()).getTime()))
           iter.remove();
       }
       
