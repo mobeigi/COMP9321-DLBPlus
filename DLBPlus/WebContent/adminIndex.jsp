@@ -33,6 +33,8 @@
     <br><br>
     <h2 class="header center orange-text">Admin Portal</h2>
     <br><br>
+    
+    <center>You are logged in as: <strong>${currAdmin.username}</strong></center>
   </div>
 </div>
 

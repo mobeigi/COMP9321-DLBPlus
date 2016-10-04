@@ -69,7 +69,7 @@ public class AdminServlet extends HttpServlet {
   
       if (action.equals("portal")) {
         if (!isLoggedIn(request)) {
-          response.sendRedirect("/admin?action=login");
+          response.sendRedirect("/dblplus/admin?action=login");
           return;
         }
     
@@ -104,17 +104,17 @@ public class AdminServlet extends HttpServlet {
 		String nextPage = "adminIndex.jsp";
 		if (action == null) {
       if (!isLoggedIn(request)) {
-        response.sendRedirect("/admin?action=login");
+        response.sendRedirect("/dblplus/admin?action=login");
         return;
       }
       
 			// no action specified
-      response.sendRedirect("/dblplus?action=portal");
+      response.sendRedirect("/dblplus/admin?action=portal");
       return;
 
 		} else if (action.equals("viewallusers")) {
       if (!isLoggedIn(request)) {
-        response.sendRedirect("/admin?action=login");
+        response.sendRedirect("/dblplus/admin?action=login");
         return;
       }
       
@@ -123,7 +123,7 @@ public class AdminServlet extends HttpServlet {
 			nextPage = "adminUsers.jsp";
 		} else if (action.equals("viewalllistings")) {
       if (!isLoggedIn(request)) {
-        response.sendRedirect("/admin?action=login");
+        response.sendRedirect("/dblplus/admin?action=login");
         return;
       }
       
@@ -132,14 +132,14 @@ public class AdminServlet extends HttpServlet {
 			nextPage = "adminListings.jsp";
 		} else if (action.equals("adminLogout")) {
       if (!isLoggedIn(request)) {
-        response.sendRedirect("/admin?action=login");
+        response.sendRedirect("/dblplus/admin?action=login");
         return;
       }
       
 			System.out.println("Admin wants to log out...");
 			request.getSession().removeAttribute("currAdmin");
       
-      response.sendRedirect("/admin?action=login");
+      response.sendRedirect("/dblplus/admin?action=login");
       return;
 		}
 		
@@ -172,7 +172,7 @@ public class AdminServlet extends HttpServlet {
 			nextPage = "adminListingDetails.jsp";
 		} else if (action != null && action.equals("UpdateUsersStatus")) { //update status of users
       if (!isLoggedIn(request)) {
-        response.sendRedirect("/admin?action=login");
+        response.sendRedirect("/dblplus/admin?action=login");
         return;
       }
       
@@ -200,12 +200,12 @@ public class AdminServlet extends HttpServlet {
 			request.setAttribute("ListOfUsers", listOfUsers);
 			nextPage = "adminUsers.jsp";
       
-      response.sendRedirect("/admin?action=viewallusers");
+      response.sendRedirect("/dblplus/admin?action=viewallusers");
       return;
       
 		} else if(action != null && action.equals("removeListing")) { //remove a listing
       if (!isLoggedIn(request)) {
-        response.sendRedirect("/admin?action=login");
+        response.sendRedirect("/dblplus/admin?action=login");
         return;
       }
       
