@@ -80,7 +80,7 @@
                     <td><img src="${searchFound.results[loop.index].imageOrDefault}" class="listingImageThumbnail" /></td>
                     <td><a href="/dblplus?action=viewlistingdetails&id=${searchFound.results[loop.index].id}">${searchFound.results[loop.index].title}</a></td>
                     <td><i>${searchFound.results[loop.index].arrayAuthors}</i></td>
-                    <td>${searchFound.results[loop.index].year}</td>
+                    <td>${searchFound.results[loop.index].yearString}</td>
                     <td>${searchFound.results[loop.index].typeString}</td>
                     <td>${searchFound.results[loop.index].listDateString}</td>
                     <td>${searchFound.results[loop.index].endDateString}</td>

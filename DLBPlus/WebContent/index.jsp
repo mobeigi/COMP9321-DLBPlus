@@ -129,7 +129,7 @@
                     <tr>
                       <td><a href="/?action=viewlistingdetails&id=${listing.id}">${listing.title}</a></td>
                       <td><i>${listing.arrayAuthors}</i></td>
-                      <td>${listing.year}</td>
+                      <td>${listing.yearString}</td>
                       <td>${listing.typeString}</td>
                       <td>${listing.listDateString}</td>
                       <td>${listing.endDateString}</td>

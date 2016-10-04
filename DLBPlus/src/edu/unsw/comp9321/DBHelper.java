@@ -1385,8 +1385,8 @@ public class DBHelper implements DLBPlusDBInterface {
 
 				String title = rs.getString("title");
 				String pages = rs.getString("pages");
-				Integer year = rs.getInt("year");
-				String address = rs.getString("address");
+				Integer year = (rs.getInt("year") == 0 ? null : rs.getInt("year"));
+        String address = rs.getString("address");
 				String volume = rs.getString("volume");
 				String number = rs.getString("number");
 				String month = rs.getString("month");

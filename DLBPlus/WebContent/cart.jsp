@@ -84,7 +84,7 @@
                     <td><img src="${item.imageOrDefault}" class="listingImageThumbnail" /></td>
                     <td><a href="/dblplus?action=viewlistingdetails&id=${item.id}">${item.title}</a></td>
                     <td><i>${item.arrayAuthors}</i></td>
-                    <td>${item.year}</td>
+                    <td>${item.yearString}</td>
                     <td>${item.typeString}</td>
                     <td>${item.listDateString}</td>
                     <td>${item.endDateString}</td>

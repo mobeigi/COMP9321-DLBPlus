@@ -360,6 +360,13 @@ public class Listing{
     return result.trim().substring(0, result.length()-2);
   }
   
+  public String getYearString() {
+    if (this.getYear() != null) {
+      return this.getYear().toString();
+    }
+    return "N/A";
+  }
+  
   public String getTypeString() {
     String typeStr = "";
     Listing.Type type = this.getType();
