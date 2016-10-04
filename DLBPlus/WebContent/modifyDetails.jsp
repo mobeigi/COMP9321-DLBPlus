@@ -53,13 +53,13 @@
 	          </div>
 	          <div class="col s6">
 	          	<label>Current Password</label>
-	          	<input name="currentPassword" type="text"/>
+	          	<input class="validate" name="currentPassword" type="password"/>
 	          </div>
 	      </div>
 	      <div class="row">
 	        <div class="col s6">
 	       	  <label>New Password</label>
-	          <input name="pass" type="password" />
+	          <input class="validate" name="pass" type="password" />
 	        </div>
 	        <div class="col s6">
 	          <label>Retype New Password</label>
@@ -92,6 +92,10 @@
 	        <label>Credit Card Number</label>
 	        <input class="validate" value="${user.creditcard}" name="ccn" type="text" />
 	      </div>
+        <div class="col s6">
+          <label>Date of Birth</label>
+          <input class="datepicker validate" value="${user.dobString}" required="" aria-required="" name="dob" type="date"/>
+        </div>
 	    </div>
 	    <div class="row">
 	      <div class="col s12 center">

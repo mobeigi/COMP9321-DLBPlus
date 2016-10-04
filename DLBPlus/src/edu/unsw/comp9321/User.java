@@ -1,5 +1,7 @@
 package edu.unsw.comp9321;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class User {
@@ -132,5 +134,10 @@ public class User {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
+  
+  public String getDobString() {
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    return df.format(this.dob);
+  }
 	
 }
