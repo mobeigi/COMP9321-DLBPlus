@@ -47,7 +47,7 @@
           <form action="dblplus" method="get">
             <div class="row">
               <div class="input-field col s6">
-                <input placeholder="Title" name="title" type="text" class="validate" />
+                <input Placeholder="Search for a listing" name="title" type="text" class="validate" />
               </div>
               <div class="input-field col s3">
                 <select name="type">

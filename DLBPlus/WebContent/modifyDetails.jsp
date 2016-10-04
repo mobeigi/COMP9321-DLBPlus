@@ -35,7 +35,7 @@
     <br><br>
   </div>
 </div>
-
+ 
 <div class="row">
   <div class="col s6 offset-s3">
 
@@ -43,58 +43,69 @@
       <p class="red-text">${eMessage}</p>
     </c:if>
 
-    <div class="card white">
-      <div class="card-content black-text">
-        <form action="dblplus" method="post">
-          <div class="col s6">
-            <input placeholder="Nickname" required="" aria-required="" name="nickname" type="text" />
-          </div>
-      </div>
-      <div class="row">
-        <div class="col s6">
-          <input placeholder="Password" required="" aria-required="" name="pass" type="password" />
-        </div>
-        <div class="col s6">
-          <input class="validate" placeholder="Retype Password" required="" aria-required="" name="passConfirm" type="password" />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col s6">
-          <input placeholder="First Name" required="" aria-required="" name="fname" type="text" />
-        </div>
-        <div class="col s6">
-          <input placeholder="Last Name" required="" aria-required="" name="lname" type="text" />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col s12">
-          <input class="validate" placeholder="Email" required="" aria-required="" name="email" type="text" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"/>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col s12">
-          <input placeholder="Address" name="address" type="text" />
-        </div>
-      </div>
-      <div class="col s6">
-        <input class="validate" placeholder="Credit Card Number" required="" aria-required="" name="ccn" type="text" />
-      </div>
-    </div>
-    <div class="row">
-
-      <div class="col s12 center">
-        <br>
-        <input type="hidden" name="action" value="detailsAdded"/>
-        <button class="btn waves-effect waves-light" type="submit" value="register">Modify Details
-          <i class="material-icons right">send</i>
-        </button>
-        <br><br>
-      </div>
-    </div>
-    </form>
+	<div class="card white">
+      <form action="dblplus" method="post">
+	  	<div class="card-content black-text">
+	      <div class="row">
+	          <div class="col s6">
+	          	<label>Nickname</label>
+	            <input value="${user.username}" name="nickname" type="text" />
+	          </div>
+	          <div class="col s6">
+	          	<label>Current Password</label>
+	          	<input name="currentPassword" type="text"/>
+	          </div>
+	      </div>
+	      <div class="row">
+	        <div class="col s6">
+	       	  <label>New Password</label>
+	          <input name="pass" type="password" />
+	        </div>
+	        <div class="col s6">
+	          <label>Retype New Password</label>
+	          <input class="validate" name="passConfirm" type="password" />
+	        </div>
+	      </div>
+	      <div class="row">
+	        <div class="col s6">
+	          <label>First Name</label>
+	          <input value="${user.fname}" name="fname" type="text" />
+	        </div>
+	        <div class="col s6">
+	          <label>Last Name</label>
+	          <input value="${user.lname}" name="lname" type="text" />
+	        </div>
+	      </div>
+	      <div class="row">
+	        <div class="col s12">
+	          <label>Email</label>
+	          <input class="validate" value="${user.email}" name="email" type="text" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"/>
+	        </div>
+	      </div>
+	      <div class="row">
+	        <div class="col s12">
+	          <label>Address</label>
+	          <input value="${user.address}" name="address" type="text" />
+	        </div>
+	      </div>
+	      <div class="col s6">
+	        <label>Credit Card Number</label>
+	        <input class="validate" value="${user.creditcard}" name="ccn" type="text" />
+	      </div>
+	    </div>
+	    <div class="row">
+	      <div class="col s12 center">
+	        <br>
+	        <input type="hidden" name="action" value="detailsAdded"/>
+	        <button class="btn waves-effect waves-light" type="submit" value="register">Modify Details
+	          <i class="material-icons right">send</i>
+	        </button>
+	        <br><br>
+	      </div>
+	    </div>
+     </form>
+	</div>
   </div>
-</div>
-</div>
 </div>
 <br>
 
