@@ -672,6 +672,11 @@ public class SetupServlet extends HttpServlet {
       response.sendRedirect("/dblplus?action=viewlistings");
       return;
     } else if(req.equals("createlisting")){
+      if (!isLoggedIn(request)) {
+        response.sendRedirect("/dblplus?action=login");
+        return;
+      }
+      
       //Create new listing
       link = "createListing.jsp";
     } else if(req.equals("registerItem")){

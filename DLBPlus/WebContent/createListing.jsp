@@ -56,14 +56,14 @@
         <form action="dblplus" method="post">
           <div class="row">
             <div class="col s12">
-              <input placeholder="Title" name="title" type="text" />
+              <input placeholder="Title" name="title" type="text" aria-required="true" required="" />
             </div>
           </div>
           <div class="row">
             <div class="col s12">
               <label>Publication Type</label>
-              <select name="type">
-                <option value="" selected>Any</option>
+              <select required aria-required="true" name="type">
+                <option value="">Select</option>
                 <option value="article">Article</option>
                 <option value="inproceedings">Inproceedings</option>
                 <option value="proceedings">Proceedings</option>

@@ -91,7 +91,6 @@
   <div class="container">
     <br><br>
     <h2 class="center orange-text">Featured Listings</h2>
-    <br><br>
   </div>
 </div>
 
@@ -103,38 +102,47 @@
           <p class="red-text center">${eMessage}</p>
         </c:when>
         <c:otherwise>
-          <div class="card valign grey lighten-1" >
-            <table class="left highlighted striped responsive-table">
-              <thead>
-              <tr>
-                <th class="centered">Title</th>
-                <th class="centered">Author</th>
-                <th class="centered">Year</th>
-                <th class="centered">Type</th>
-                <th class="centered">List Date</th>
-                <th class="centered">End Date</th>
-                <th class="centered">Quantity</th>
-                <th class="centered">Price</th>
-                <th class="centered">Seller</th>
-              </tr>
-              </thead>
-              <tbody>
-              <c:forEach var="listing" items="${randomListings}">
-                <tr>
-                  <td><a href="/?action=viewlistingdetails&id=${listing.id}">${listing.title}</a></td>
-                  <td><i>${listing.arrayAuthors}</i></td>
-                  <td>${listing.year}</td>
-                  <td>${listing.typeString}</td>
-                  <td>${listing.listDateString}</td>
-                  <td>${listing.endDateString}</td>
-                  <td>${listing.quantity}</td>
-                  <td>${listing.sellpriceString}</td>
-                  <td>${listing.sellerUsername}</td>
-                </tr>
-              </c:forEach>
-              </tbody>
-            </table>
-          </div>
+
+          <c:choose>
+            <c:when test="${empty randomListings}">
+              <p class="red-text center">No featured listings are available.</p>
+            </c:when>
+            <c:otherwise>
+              <br><br>
+              <div class="card valign grey lighten-1" >
+                <table class="left highlighted striped responsive-table">
+                  <thead>
+                  <tr>
+                    <th class="centered">Title</th>
+                    <th class="centered">Author</th>
+                    <th class="centered">Year</th>
+                    <th class="centered">Type</th>
+                    <th class="centered">List Date</th>
+                    <th class="centered">End Date</th>
+                    <th class="centered">Quantity</th>
+                    <th class="centered">Price</th>
+                    <th class="centered">Seller</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <c:forEach var="listing" items="${randomListings}">
+                    <tr>
+                      <td><a href="/?action=viewlistingdetails&id=${listing.id}">${listing.title}</a></td>
+                      <td><i>${listing.arrayAuthors}</i></td>
+                      <td>${listing.year}</td>
+                      <td>${listing.typeString}</td>
+                      <td>${listing.listDateString}</td>
+                      <td>${listing.endDateString}</td>
+                      <td>${listing.quantity}</td>
+                      <td>${listing.sellpriceString}</td>
+                      <td>${listing.sellerUsername}</td>
+                    </tr>
+                  </c:forEach>
+                  </tbody>
+                </table>
+              </div>
+            </c:otherwise>
+          </c:choose>
         </c:otherwise>
       </c:choose>
     </div>
