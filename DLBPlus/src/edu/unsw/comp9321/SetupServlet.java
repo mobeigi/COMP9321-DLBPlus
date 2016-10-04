@@ -132,34 +132,34 @@ public class SetupServlet extends HttpServlet {
     } else if(req.equals("advancedsearch")){
       link = "search.jsp";
     } else if (req.equals("search")){
-      String qTitle = (request.getParameter("title") == null || request.getParameter("title").isEmpty()) ? null : new String( request.getParameter("title").getBytes(), "UTF-8").trim();
-      String qSellerUsername = (request.getParameter("sellerusername") == null || request.getParameter("sellerusername").isEmpty()) ? null : new String( request.getParameter("sellerusername").getBytes(), "UTF-8").trim();
-      String qQuantity = (request.getParameter("quantity") == null || request.getParameter("quantity").isEmpty()) ? null : new String( request.getParameter("quantity").getBytes(), "UTF-8").trim();
-      String qStartdate = (request.getParameter("startdate") == null || request.getParameter("startdate").isEmpty()) ? null : new String( request.getParameter("startdate").getBytes(), "UTF-8").trim();
-      String qEnddate = (request.getParameter("enddate") == null || request.getParameter("enddate").isEmpty()) ? null : new String( request.getParameter("enddate").getBytes(), "UTF-8").trim();
-      String qMinprice = (request.getParameter("minprice") == null || request.getParameter("minprice").isEmpty()) ? null : new String( request.getParameter("minprice").getBytes(), "UTF-8").trim();
-      String qMaxprice = (request.getParameter("maxprice") == null || request.getParameter("maxprice").isEmpty()) ? null : new String( request.getParameter("maxprice").getBytes(), "UTF-8").trim();
-      String qAuthors = (request.getParameter("author") == null || request.getParameter("author").isEmpty()) ? null : new String( request.getParameter("author").getBytes(), "UTF-8").trim();
-      String qEditors = (request.getParameter("editor") == null || request.getParameter("editor").isEmpty()) ? null : new String( request.getParameter("editor").getBytes(), "UTF-8").trim();
-      String qVolume = (request.getParameter("volume") == null || request.getParameter("volume").isEmpty()) ? null : new String( request.getParameter("volume").getBytes(), "UTF-8").trim();
-      String qChapter = (request.getParameter("chapter") == null || request.getParameter("chapter").isEmpty()) ? null : new String( request.getParameter("chapter").getBytes(), "UTF-8").trim();
-      String qNumber = (request.getParameter("number") == null || request.getParameter("number").isEmpty()) ? null : new String( request.getParameter("number").getBytes(), "UTF-8").trim();
-      String qCdrom = (request.getParameter("cdrom") == null || request.getParameter("cdrom").isEmpty()) ? null : new String( request.getParameter("cdrom").getBytes(), "UTF-8").trim();
-      String qPages = (request.getParameter("pages") == null || request.getParameter("pages").isEmpty()) ? null : new String( request.getParameter("pages").getBytes(), "UTF-8").trim();
-      String qPublisher = (request.getParameter("publisher") == null || request.getParameter("publisher").isEmpty()) ? null : new String( request.getParameter("publisher").getBytes(), "UTF-8").trim();
-      String qMonth = (request.getParameter("month") == null || request.getParameter("month").isEmpty()) ? null : new String( request.getParameter("month").getBytes(), "UTF-8").trim();
-      String qYear = (request.getParameter("year") == null || request.getParameter("year").isEmpty()) ? null : new String( request.getParameter("year").getBytes(), "UTF-8").trim();
-      String qAddress = (request.getParameter("address") == null || request.getParameter("address").isEmpty()) ? null : new String( request.getParameter("address").getBytes(), "UTF-8").trim();
-      String qVenues = (request.getParameter("venues") == null || request.getParameter("venues").isEmpty()) ? null : new String( request.getParameter("venues").getBytes(), "UTF-8").trim();
-      String qUrls = (request.getParameter("urls") == null || request.getParameter("urls").isEmpty()) ? null : new String( request.getParameter("urls").getBytes(), "UTF-8").trim();
-      String qEes = (request.getParameter("ees") == null || request.getParameter("ees").isEmpty()) ? null : new String( request.getParameter("ees").getBytes(), "UTF-8").trim();
-      String qCites = (request.getParameter("cites") == null || request.getParameter("cites").isEmpty()) ? null : new String( request.getParameter("cites").getBytes(), "UTF-8").trim();
-      String qCrossref = (request.getParameter("crossref") == null || request.getParameter("crossref").isEmpty()) ? null : new String( request.getParameter("crossref").getBytes(), "UTF-8").trim();
-      String qIsbns = (request.getParameter("isbns") == null || request.getParameter("isbns").isEmpty()) ? null : new String( request.getParameter("isbns").getBytes(), "UTF-8").trim();
-      String qNote = (request.getParameter("note") == null || request.getParameter("note").isEmpty()) ? null : new String( request.getParameter("note").getBytes(), "UTF-8").trim();
-      String qSeries = (request.getParameter("series") == null || request.getParameter("series").isEmpty()) ? null : new String( request.getParameter("series").getBytes(), "UTF-8").trim();
-      String qRatings = (request.getParameter("ratings") == null || request.getParameter("ratings").isEmpty()) ? null : new String( request.getParameter("ratings").getBytes(), "UTF-8").trim();
-      String qType = (request.getParameter("type") == null || request.getParameter("type").isEmpty()) ? null : new String( request.getParameter("type").getBytes(), "UTF-8").trim();
+      String qTitle = (request.getParameter("title") == null || request.getParameter("title").isEmpty()) ? null : new String( request.getParameter("title").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qSellerUsername = (request.getParameter("sellerusername") == null || request.getParameter("sellerusername").isEmpty()) ? null : new String( request.getParameter("sellerusername").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qQuantity = (request.getParameter("quantity") == null || request.getParameter("quantity").isEmpty()) ? null : new String( request.getParameter("quantity").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qStartdate = (request.getParameter("startdate") == null || request.getParameter("startdate").isEmpty()) ? null : new String( request.getParameter("startdate").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qEnddate = (request.getParameter("enddate") == null || request.getParameter("enddate").isEmpty()) ? null : new String( request.getParameter("enddate").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qMinprice = (request.getParameter("minprice") == null || request.getParameter("minprice").isEmpty()) ? null : new String( request.getParameter("minprice").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qMaxprice = (request.getParameter("maxprice") == null || request.getParameter("maxprice").isEmpty()) ? null : new String( request.getParameter("maxprice").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qAuthors = (request.getParameter("author") == null || request.getParameter("author").isEmpty()) ? null : new String( request.getParameter("author").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qEditors = (request.getParameter("editor") == null || request.getParameter("editor").isEmpty()) ? null : new String( request.getParameter("editor").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qVolume = (request.getParameter("volume") == null || request.getParameter("volume").isEmpty()) ? null : new String( request.getParameter("volume").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qChapter = (request.getParameter("chapter") == null || request.getParameter("chapter").isEmpty()) ? null : new String( request.getParameter("chapter").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qNumber = (request.getParameter("number") == null || request.getParameter("number").isEmpty()) ? null : new String( request.getParameter("number").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qCdrom = (request.getParameter("cdrom") == null || request.getParameter("cdrom").isEmpty()) ? null : new String( request.getParameter("cdrom").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qPages = (request.getParameter("pages") == null || request.getParameter("pages").isEmpty()) ? null : new String( request.getParameter("pages").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qPublisher = (request.getParameter("publisher") == null || request.getParameter("publisher").isEmpty()) ? null : new String( request.getParameter("publisher").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qMonth = (request.getParameter("month") == null || request.getParameter("month").isEmpty()) ? null : new String( request.getParameter("month").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qYear = (request.getParameter("year") == null || request.getParameter("year").isEmpty()) ? null : new String( request.getParameter("year").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qAddress = (request.getParameter("address") == null || request.getParameter("address").isEmpty()) ? null : new String( request.getParameter("address").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qVenues = (request.getParameter("venues") == null || request.getParameter("venues").isEmpty()) ? null : new String( request.getParameter("venues").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qUrls = (request.getParameter("urls") == null || request.getParameter("urls").isEmpty()) ? null : new String( request.getParameter("urls").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qEes = (request.getParameter("ees") == null || request.getParameter("ees").isEmpty()) ? null : new String( request.getParameter("ees").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qCites = (request.getParameter("cites") == null || request.getParameter("cites").isEmpty()) ? null : new String( request.getParameter("cites").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qCrossref = (request.getParameter("crossref") == null || request.getParameter("crossref").isEmpty()) ? null : new String( request.getParameter("crossref").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qIsbns = (request.getParameter("isbns") == null || request.getParameter("isbns").isEmpty()) ? null : new String( request.getParameter("isbns").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qNote = (request.getParameter("note") == null || request.getParameter("note").isEmpty()) ? null : new String( request.getParameter("note").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qSeries = (request.getParameter("series") == null || request.getParameter("series").isEmpty()) ? null : new String( request.getParameter("series").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qRatings = (request.getParameter("ratings") == null || request.getParameter("ratings").isEmpty()) ? null : new String( request.getParameter("ratings").getBytes(), "UTF-8").trim().replace("'", "''");
+      String qType = (request.getParameter("type") == null || request.getParameter("type").isEmpty()) ? null : new String( request.getParameter("type").getBytes(), "UTF-8").trim().replace("'", "''");
       
       //Handle separated multiple items
       //We also trim any whitespace around entries

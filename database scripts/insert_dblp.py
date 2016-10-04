@@ -131,7 +131,7 @@ class SaxPublicationHandler(SAX.ContentHandler):
 		numPublicationsParsed = 0	# Keep track of how many publications were parsed
 		db_cursor = None			# Cursor used to insert publications into db
 		seller_ids = []
-		parseLimit = 100
+		parseLimit = 20
 		
 		# Constructor
 		def __init__(self, cursor):
