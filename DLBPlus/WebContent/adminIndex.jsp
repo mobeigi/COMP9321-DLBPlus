@@ -34,7 +34,33 @@
     <h2 class="header center orange-text">Admin Portal</h2>
     <br><br>
     
-    <center>You are logged in as: <strong>${currAdmin.username}</strong></center>
+<div class="row">
+  <div class="col s4 offset-s4">
+    <div class="card white">
+      <div class="card-content black-text">
+        <div class="row">
+          <div class="col s12 center">
+            <p class="flow-text center">You are logged in as: <strong>${currAdmin.username}</strong></p>
+            <form action="dblplus" method="post">
+              <br>
+              <input type="hidden" name="action" value="viewallusers"/>
+              <button class="btn waves-effect waves-light" type="submit" value="viewallusers">Manage Users</button>
+              <br><br>
+            </form>
+          </div>
+        </div>
+        <div class="center-align">
+          <form action="dblplus" method="POST">
+            <input type="hidden" name="action" value="viewAllListings"/>
+            <button class="btn waves-effect waves-light" type="submit" value="viewAllListings">Manage listings</button>
+            <br>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
   </div>
 </div>
 
