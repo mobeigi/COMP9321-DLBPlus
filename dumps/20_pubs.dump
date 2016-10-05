@@ -1,0 +1,1096 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: activecartitems; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE activecartitems (
+    cartid integer NOT NULL,
+    listingid integer NOT NULL,
+    addedts timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE activecartitems OWNER TO postgres;
+
+--
+-- Name: activecartitems_cartid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE activecartitems_cartid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE activecartitems_cartid_seq OWNER TO postgres;
+
+--
+-- Name: activecartitems_cartid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE activecartitems_cartid_seq OWNED BY activecartitems.cartid;
+
+
+--
+-- Name: activecartitems_listingid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE activecartitems_listingid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE activecartitems_listingid_seq OWNER TO postgres;
+
+--
+-- Name: activecartitems_listingid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE activecartitems_listingid_seq OWNED BY activecartitems.listingid;
+
+
+--
+-- Name: admins; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE admins (
+    id integer NOT NULL,
+    username text NOT NULL,
+    salt text NOT NULL,
+    password text NOT NULL
+);
+
+
+ALTER TABLE admins OWNER TO postgres;
+
+--
+-- Name: admins_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE admins_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE admins_id_seq OWNER TO postgres;
+
+--
+-- Name: admins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE admins_id_seq OWNED BY admins.id;
+
+
+--
+-- Name: listings; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE listings (
+    id integer NOT NULL,
+    sellerid integer NOT NULL,
+    quantity integer NOT NULL,
+    listdate timestamp with time zone NOT NULL,
+    enddate timestamp with time zone NOT NULL,
+    sellprice double precision NOT NULL,
+    image text,
+    paused boolean DEFAULT false,
+    numviews integer DEFAULT 0,
+    type text NOT NULL,
+    authors text,
+    editors text,
+    title text NOT NULL,
+    venues text,
+    pages text,
+    year integer,
+    address text,
+    volume text,
+    number text,
+    month text,
+    urls text,
+    ees text,
+    cdrom text,
+    cites text,
+    publisher text,
+    note text,
+    crossref text,
+    isbns text,
+    series text,
+    chapter text,
+    rating text
+);
+
+
+ALTER TABLE listings OWNER TO postgres;
+
+--
+-- Name: listings_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE listings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE listings_id_seq OWNER TO postgres;
+
+--
+-- Name: listings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE listings_id_seq OWNED BY listings.id;
+
+
+--
+-- Name: listings_sellerid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE listings_sellerid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE listings_sellerid_seq OWNER TO postgres;
+
+--
+-- Name: listings_sellerid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE listings_sellerid_seq OWNED BY listings.sellerid;
+
+
+--
+-- Name: orders; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE orders (
+    id integer NOT NULL,
+    buyerid integer NOT NULL,
+    sellerid integer NOT NULL,
+    pubtitle text,
+    order_date timestamp with time zone NOT NULL,
+    price double precision NOT NULL
+);
+
+
+ALTER TABLE orders OWNER TO postgres;
+
+--
+-- Name: orders_buyerid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE orders_buyerid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE orders_buyerid_seq OWNER TO postgres;
+
+--
+-- Name: orders_buyerid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE orders_buyerid_seq OWNED BY orders.buyerid;
+
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE orders_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE orders_id_seq OWNER TO postgres;
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE orders_id_seq OWNED BY orders.id;
+
+
+--
+-- Name: orders_sellerid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE orders_sellerid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE orders_sellerid_seq OWNER TO postgres;
+
+--
+-- Name: orders_sellerid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE orders_sellerid_seq OWNED BY orders.sellerid;
+
+
+--
+-- Name: removedcartitems; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE removedcartitems (
+    cartid integer NOT NULL,
+    listingid integer NOT NULL,
+    addedts timestamp with time zone NOT NULL,
+    removedts timestamp with time zone
+);
+
+
+ALTER TABLE removedcartitems OWNER TO postgres;
+
+--
+-- Name: removedcartitems_cartid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE removedcartitems_cartid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE removedcartitems_cartid_seq OWNER TO postgres;
+
+--
+-- Name: removedcartitems_cartid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE removedcartitems_cartid_seq OWNED BY removedcartitems.cartid;
+
+
+--
+-- Name: removedcartitems_listingid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE removedcartitems_listingid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE removedcartitems_listingid_seq OWNER TO postgres;
+
+--
+-- Name: removedcartitems_listingid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE removedcartitems_listingid_seq OWNED BY removedcartitems.listingid;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE users (
+    id integer NOT NULL,
+    username text NOT NULL,
+    salt text NOT NULL,
+    password text NOT NULL,
+    fname text NOT NULL,
+    lname text NOT NULL,
+    nickname text,
+    email text NOT NULL,
+    address text NOT NULL,
+    dob date NOT NULL,
+    creditcard text NOT NULL,
+    cartid integer NOT NULL,
+    dp text,
+    acctstatus boolean DEFAULT true,
+    acctconfrm boolean DEFAULT false,
+    acctcreated date NOT NULL
+);
+
+
+ALTER TABLE users OWNER TO postgres;
+
+--
+-- Name: users_cartid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE users_cartid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE users_cartid_seq OWNER TO postgres;
+
+--
+-- Name: users_cartid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE users_cartid_seq OWNED BY users.cartid;
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE users_id_seq OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+
+--
+-- Name: vis_nodes; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE vis_nodes (
+    id integer NOT NULL,
+    attrtype text NOT NULL,
+    value text NOT NULL
+);
+
+
+ALTER TABLE vis_nodes OWNER TO postgres;
+
+--
+-- Name: vis_nodes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE vis_nodes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE vis_nodes_id_seq OWNER TO postgres;
+
+--
+-- Name: vis_nodes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE vis_nodes_id_seq OWNED BY vis_nodes.id;
+
+
+--
+-- Name: vis_relationships; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE vis_relationships (
+    firstnode integer NOT NULL,
+    reltype text NOT NULL,
+    secondnode integer NOT NULL
+);
+
+
+ALTER TABLE vis_relationships OWNER TO postgres;
+
+--
+-- Name: vis_relationships_firstnode_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE vis_relationships_firstnode_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE vis_relationships_firstnode_seq OWNER TO postgres;
+
+--
+-- Name: vis_relationships_firstnode_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE vis_relationships_firstnode_seq OWNED BY vis_relationships.firstnode;
+
+
+--
+-- Name: vis_relationships_secondnode_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE vis_relationships_secondnode_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE vis_relationships_secondnode_seq OWNER TO postgres;
+
+--
+-- Name: vis_relationships_secondnode_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE vis_relationships_secondnode_seq OWNED BY vis_relationships.secondnode;
+
+
+--
+-- Name: cartid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY activecartitems ALTER COLUMN cartid SET DEFAULT nextval('activecartitems_cartid_seq'::regclass);
+
+
+--
+-- Name: listingid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY activecartitems ALTER COLUMN listingid SET DEFAULT nextval('activecartitems_listingid_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY admins ALTER COLUMN id SET DEFAULT nextval('admins_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY listings ALTER COLUMN id SET DEFAULT nextval('listings_id_seq'::regclass);
+
+
+--
+-- Name: sellerid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY listings ALTER COLUMN sellerid SET DEFAULT nextval('listings_sellerid_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY orders ALTER COLUMN id SET DEFAULT nextval('orders_id_seq'::regclass);
+
+
+--
+-- Name: buyerid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY orders ALTER COLUMN buyerid SET DEFAULT nextval('orders_buyerid_seq'::regclass);
+
+
+--
+-- Name: sellerid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY orders ALTER COLUMN sellerid SET DEFAULT nextval('orders_sellerid_seq'::regclass);
+
+
+--
+-- Name: cartid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY removedcartitems ALTER COLUMN cartid SET DEFAULT nextval('removedcartitems_cartid_seq'::regclass);
+
+
+--
+-- Name: listingid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY removedcartitems ALTER COLUMN listingid SET DEFAULT nextval('removedcartitems_listingid_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: cartid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY users ALTER COLUMN cartid SET DEFAULT nextval('users_cartid_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY vis_nodes ALTER COLUMN id SET DEFAULT nextval('vis_nodes_id_seq'::regclass);
+
+
+--
+-- Name: firstnode; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY vis_relationships ALTER COLUMN firstnode SET DEFAULT nextval('vis_relationships_firstnode_seq'::regclass);
+
+
+--
+-- Name: secondnode; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY vis_relationships ALTER COLUMN secondnode SET DEFAULT nextval('vis_relationships_secondnode_seq'::regclass);
+
+
+--
+-- Data for Name: activecartitems; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY activecartitems (cartid, listingid, addedts) FROM stdin;
+\.
+
+
+--
+-- Name: activecartitems_cartid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('activecartitems_cartid_seq', 1, false);
+
+
+--
+-- Name: activecartitems_listingid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('activecartitems_listingid_seq', 1, false);
+
+
+--
+-- Data for Name: admins; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY admins (id, username, salt, password) FROM stdin;
+1	admin	w5dNhgBbQJtdp8Oprd5yRdhPFaOxd8UwUtTjaQbf7qY=	e8951dc256818ba6f8281f6cdebf29926a9a05ff
+\.
+
+
+--
+-- Name: admins_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('admins_id_seq', 1, true);
+
+
+--
+-- Data for Name: listings; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY listings (id, sellerid, quantity, listdate, enddate, sellprice, image, paused, numviews, type, authors, editors, title, venues, pages, year, address, volume, number, month, urls, ees, cdrom, cites, publisher, note, crossref, isbns, series, chapter, rating) FROM stdin;
+2	2	99	2016-09-18 00:00:00+10	2016-10-10 00:00:00+11	722.74000000000001		t	65953	article	Jun-Ming Su|Chih-Fang Huang		An easy-to-use 3D visualization system for planning context-aware applications in smart buildings.	 Computer Standards & Interfaces	312-326	2014		36	2		db/journals/csi/csi36.html#SuH14	http://dx.doi.org/10.1016/j.csi.2012.07.004									
+3	1	52	2016-09-26 00:00:00+10	2016-10-24 00:00:00+11	678.25		f	898897	article	Sourour Karmani|Ridha Djemal|Rached Tourki		Efficient hardware architecture of 2D-scan-based wavelet watermarking for image and video.	 Computer Standards & Interfaces	801-811	2009		31	4		db/journals/csi/csi31.html#KarmaniDT09	http://dx.doi.org/10.1016/j.csi.2008.09.015									
+4	5	24	2016-09-23 00:00:00+10	2016-10-22 00:00:00+11	928.35000000000002		f	515154	article	Marta Rey-López|Rebeca P. Díaz Redondo|Ana Fernández Vilas|JoséJ. Pazos Arias|Jorge García Duque|Alberto Gil-Solla|Manuel Ramos Cabrer		An extension to the ADL SCORM standard to support adaptivity: The t-learning case-study.	 Computer Standards & Interfaces	309-318	2009		31	2		db/journals/csi/csi31.html#Rey-LopezRVADGC09	http://dx.doi.org/10.1016/j.csi.2008.02.006									
+5	1	73	2016-09-22 00:00:00+10	2016-10-17 00:00:00+11	113.76000000000001		f	554810	article	Fabio Massacci|Marco Prest|Nicola Zannone		Using a security requirements engineering methodology in practice: The compliance with the Italian data protection legislation.	 Computer Standards & Interfaces	445-455	2005		27	5		db/journals/csi/csi27.html#MassacciPZ05	http://dx.doi.org/10.1016/j.csi.2005.01.003									
+6	2	17	2016-09-24 00:00:00+10	2016-10-12 00:00:00+11	686.72000000000003		t	840159	article	Gianluca Cena|Ivan Cibrario Bertolotti|Tingting Hu|Adriano Valenzano		On a family of run length limited, block decodable codes to prevent payload-induced jitter in Controller Area Networks.	 Computer Standards & Interfaces	536-548	2013		35	5		db/journals/csi/csi35.html#CenaBHV13	http://dx.doi.org/10.1016/j.csi.2013.02.003									
+7	3	83	2016-09-27 00:00:00+10	2016-10-20 00:00:00+11	385.94		t	449531	article	Zuhua Shao		Improvement of digital signature with message recovery and its variants based on elliptic curve discrete logarithm problem.	 Computer Standards & Interfaces	61-69	2004		27	1		db/journals/csi/csi27.html#Shao04b	http://dx.doi.org/10.1016/j.csi.2004.03.011									
+8	2	45	2016-09-19 00:00:00+10	2016-10-11 00:00:00+11	771.57000000000005		f	400682	article	Latifur Khan		Standards for image annotation using Semantic Web.	 Computer Standards & Interfaces	196-204	2007		29	2		db/journals/csi/csi29.html#Khan07	http://dx.doi.org/10.1016/j.csi.2006.03.006									
+9	4	12	2016-09-20 00:00:00+10	2016-10-10 00:00:00+11	784.21000000000004		t	898300	article	Jan Jacobson		Validation of software in measuring instruments.	 Computer Standards & Interfaces	277-285	2006		28	3		db/journals/csi/csi28.html#Jacobson06	http://dx.doi.org/10.1016/j.csi.2005.07.006									
+10	3	11	2016-09-19 00:00:00+10	2016-10-25 00:00:00+11	875.26999999999998		f	147023	article	Kyung-Ah Shim		Vulnerabilities of generalized MQV key agreement protocol without using one-way hash functions.	 Computer Standards & Interfaces	467-470	2007		29	4		db/journals/csi/csi29.html#Shim07	http://dx.doi.org/10.1016/j.csi.2006.11.002									
+11	4	34	2016-10-05 00:00:00+11	2016-10-15 00:00:00+11	986.23000000000002		f	395637	article	Yunho Lee|Sangjoon Park|Masahiro Mambo|Seungjoo Kim|Dongho Won		Towards trustworthy e-voting using paper receipts.	 Computer Standards & Interfaces	305-311	2010		32	5-6		db/journals/csi/csi32.html#LeePMKW10	http://dx.doi.org/10.1016/j.csi.2010.03.001									
+12	3	68	2016-09-25 00:00:00+10	2016-10-13 00:00:00+11	914.19000000000005		t	63952	article	Andrzej Pacut|Konrad Hejn		Reference properties of uniform quantizers - comparison of Widrow's and direct approaches.	 Computer Standards & Interfaces	3-13	2003		25	1		db/journals/csi/csi25.html#PacutH03	http://dx.doi.org/10.1016/S0920-5489(02)00073-9									
+13	1	42	2016-10-02 00:00:00+10	2016-10-10 00:00:00+11	725		f	842130	article	Yung-Wei Kao|Shyan-Ming Yuan		User-configurable semantic home automation.	 Computer Standards & Interfaces	171-188	2012		34	1		db/journals/csi/csi34.html#KaoY12	http://dx.doi.org/10.1016/j.csi.2011.08.002									
+14	5	46	2016-09-30 00:00:00+10	2016-10-16 00:00:00+11	948.24000000000001		t	656039	article	Daniel Belega|Dominique Dallet		Choice of the acquisition parameters for frequency estimation of a sine wave by interpolated DFT method.	 Computer Standards & Interfaces	962-968	2009		31	5		db/journals/csi/csi31.html#BelegaD09	http://dx.doi.org/10.1016/j.csi.2008.09.028									
+15	2	69	2016-09-17 00:00:00+10	2016-10-22 00:00:00+11	556.24000000000001		f	597410	article	Cheng-Huang Tung|En-Yih Jean		A modified phoneme-based Chinese input method for minimizing conflict code rate.	 Computer Standards & Interfaces	292-299	2009		31	2		db/journals/csi/csi31.html#TungJ09	http://dx.doi.org/10.1016/j.csi.2008.02.005									
+16	1	42	2016-09-29 00:00:00+10	2016-10-16 00:00:00+11	307.94		t	399517	article	Shing-Han Li|Shi-Ming Huang|David C. Yen|Dong-Her Shih|Hsiang-Yuan Hsueh		Business-to-government application integration framework: A case study of the high technology industry in Taiwan.	 Computer Standards & Interfaces	582-595	2013		35	6		db/journals/csi/csi35.html#LiHYSH13	http://dx.doi.org/10.1016/j.csi.2013.04.005									
+17	4	56	2016-09-22 00:00:00+10	2016-10-19 00:00:00+11	360.42000000000002		t	415290	article	Chu-Hsing Lin|Yi-Yi Lai		A flexible biometrics remote user authentication scheme.	 Computer Standards & Interfaces	19-23	2004		27	1		db/journals/csi/csi27.html#LinL04	http://dx.doi.org/10.1016/j.csi.2004.03.003									
+18	5	98	2016-09-19 00:00:00+10	2016-10-17 00:00:00+11	572.53999999999996		t	707156	article	Tokihiro Fukatsu|Takuji Kiura|Masayuki Hirafuji		A web-based sensor network system with distributed data processing approach via web application.	 Computer Standards & Interfaces	565-573	2011		33	6		db/journals/csi/csi33.html#FukatsuKH11	http://dx.doi.org/10.1016/j.csi.2011.03.002									
+19	5	70	2016-10-05 00:00:00+11	2016-10-14 00:00:00+11	433.37		t	658907	article	Mafruz Zaman Ashrafi|See-Kiong Ng		Privacy-preserving e-payments using one-time payment details.	 Computer Standards & Interfaces	321-328	2009		31	2		db/journals/csi/csi31.html#AshrafiN09	http://dx.doi.org/10.1016/j.csi.2008.04.001									
+20	2	61	2016-09-20 00:00:00+10	2016-10-14 00:00:00+11	547.25999999999999		t	863505	article	Qiang Tang 0001|Chris J. Mitchell		Comments on a cryptographic key assignment scheme.	 Computer Standards & Interfaces	323-326	2005		27	3		db/journals/csi/csi27.html#TangM05	http://dx.doi.org/10.1016/j.csi.2004.07.001									
+21	2	5	2016-09-23 00:00:00+10	2016-10-15 00:00:00+11	471.87		t	558974	article	Javier Garzás|Francisco J. Pino|Mario Piattini|Carlos Manuel Fernández		A maturity model for the Spanish software industry based on ISO standards.	 Computer Standards & Interfaces	616-628	2013		35	6		db/journals/csi/csi35.html#GarzasPPF13	http://dx.doi.org/10.1016/j.csi.2013.04.002									
+\.
+
+
+--
+-- Name: listings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('listings_id_seq', 21, true);
+
+
+--
+-- Name: listings_sellerid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('listings_sellerid_seq', 1, false);
+
+
+--
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY orders (id, buyerid, sellerid, pubtitle, order_date, price) FROM stdin;
+\.
+
+
+--
+-- Name: orders_buyerid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('orders_buyerid_seq', 1, false);
+
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('orders_id_seq', 1, false);
+
+
+--
+-- Name: orders_sellerid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('orders_sellerid_seq', 1, false);
+
+
+--
+-- Data for Name: removedcartitems; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY removedcartitems (cartid, listingid, addedts, removedts) FROM stdin;
+\.
+
+
+--
+-- Name: removedcartitems_cartid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('removedcartitems_cartid_seq', 1, false);
+
+
+--
+-- Name: removedcartitems_listingid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('removedcartitems_listingid_seq', 1, false);
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY users (id, username, salt, password, fname, lname, nickname, email, address, dob, creditcard, cartid, dp, acctstatus, acctconfrm, acctcreated) FROM stdin;
+1	joe1	vUyhETbtN4T9BJMtct0rbfcAptukjAwjN/5lAtmkkTQ=	195d486056b9a4d980c7db6dcffab06c190cfe01	joe	1	Joe-boy	joe@joe.com	10 Joe St, Joetown	1990-01-01	00000000	20	\N	t	t	2016-09-29
+2	Intellect	T8BpJ7dq0fQG2AlWgexbJDq2fJCW39R/5lAtmkkTQ=	20d1d58ad733eb772dfac1ff06adbc36b3a4cb61	Boosted	Animal	Mahammad	intellect@boostedanimal.com	69 Boosted St, Animal, Elohell	1997-09-27	99999999	21	\N	t	t	2016-09-30
+3	comp9321	mCWY0a7R+zK7X9bslkvAkCgwKDeoBlYz5D9NAPf6SzU=	5d85d0e75ef96f62509cad0b3ab1c11ae446ecb2	comp	9321	Web apps	comp9321@comp9321.com	webapps, UNSW	2016-07-01	11111111	22	\N	t	t	2016-10-01
+4	userX	tYgMN8gbgyHSUBcFknbpI5G1wEH94GHj/26Buvtt4i4=	f28ced829560d4f8ffd87299749771357b9ff72e	John	Smith	Johno	john@smith.com	9,U st, V	1994-05-19	22222222	23	\N	t	t	2016-10-01
+5	userY	KlthVvsHyCBNC3mGWzEytg/kO2cyXEu9Pa5M1Qvnfjk=	2a15fc0becd79279720c3c458685d43d0407662b	Sam	Smith	Sammo	sam@smith.com	9,U st, V	1994-05-19	33333333	24	\N	t	t	2016-10-01
+6	isellstuff	ofq+FUksns/ScT2go5GHgwdyOxWmdxVp08xktImq4lA=	8bf3a8133d566feb8bc0cf6d50b0a39bab11e66e	Drug	Dealer	Sello	drug@drugs.com	99, Suss Ave, Drugsville	1100-01-01	12345678	25	\N	t	t	2016-10-01
+\.
+
+
+--
+-- Name: users_cartid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('users_cartid_seq', 1, false);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('users_id_seq', 1, false);
+
+
+--
+-- Data for Name: vis_nodes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY vis_nodes (id, attrtype, value) FROM stdin;
+1	title	An easy-to-use 3D visualization system for planning context-aware applications in smart buildings.
+2	author	Jun-Ming Su
+3	author	Chih-Fang Huang
+4	venue	 Computer Standards & Interfaces
+5	title	Efficient hardware architecture of 2D-scan-based wavelet watermarking for image and video.
+6	author	Sourour Karmani
+7	author	Ridha Djemal
+8	author	Rached Tourki
+9	title	An extension to the ADL SCORM standard to support adaptivity: The t-learning case-study.
+10	author	Marta Rey-López
+11	author	Rebeca P. Díaz Redondo
+12	author	Ana Fernández Vilas
+13	author	JoséJ. Pazos Arias
+14	author	Jorge García Duque
+15	author	Alberto Gil-Solla
+16	author	Manuel Ramos Cabrer
+17	title	Using a security requirements engineering methodology in practice: The compliance with the Italian data protection legislation.
+18	author	Fabio Massacci
+19	author	Marco Prest
+20	author	Nicola Zannone
+21	title	On a family of run length limited, block decodable codes to prevent payload-induced jitter in Controller Area Networks.
+22	author	Gianluca Cena
+23	author	Ivan Cibrario Bertolotti
+24	author	Tingting Hu
+25	author	Adriano Valenzano
+26	title	Improvement of digital signature with message recovery and its variants based on elliptic curve discrete logarithm problem.
+27	author	Zuhua Shao
+28	title	Standards for image annotation using Semantic Web.
+29	author	Latifur Khan
+30	title	Validation of software in measuring instruments.
+31	author	Jan Jacobson
+32	title	Vulnerabilities of generalized MQV key agreement protocol without using one-way hash functions.
+33	author	Kyung-Ah Shim
+34	title	Towards trustworthy e-voting using paper receipts.
+35	author	Yunho Lee
+36	author	Sangjoon Park
+37	author	Masahiro Mambo
+38	author	Seungjoo Kim
+39	author	Dongho Won
+40	title	Reference properties of uniform quantizers - comparison of Widrow's and direct approaches.
+41	author	Andrzej Pacut
+42	author	Konrad Hejn
+43	title	User-configurable semantic home automation.
+44	author	Yung-Wei Kao
+45	author	Shyan-Ming Yuan
+46	title	Choice of the acquisition parameters for frequency estimation of a sine wave by interpolated DFT method.
+47	author	Daniel Belega
+48	author	Dominique Dallet
+49	title	A modified phoneme-based Chinese input method for minimizing conflict code rate.
+50	author	Cheng-Huang Tung
+51	author	En-Yih Jean
+52	title	Business-to-government application integration framework: A case study of the high technology industry in Taiwan.
+53	author	Shing-Han Li
+54	author	Shi-Ming Huang
+55	author	David C. Yen
+56	author	Dong-Her Shih
+57	author	Hsiang-Yuan Hsueh
+58	title	A flexible biometrics remote user authentication scheme.
+59	author	Chu-Hsing Lin
+60	author	Yi-Yi Lai
+61	title	A web-based sensor network system with distributed data processing approach via web application.
+62	author	Tokihiro Fukatsu
+63	author	Takuji Kiura
+64	author	Masayuki Hirafuji
+65	title	Privacy-preserving e-payments using one-time payment details.
+66	author	Mafruz Zaman Ashrafi
+67	author	See-Kiong Ng
+68	title	Comments on a cryptographic key assignment scheme.
+69	author	Qiang Tang 0001
+70	author	Chris J. Mitchell
+71	title	A maturity model for the Spanish software industry based on ISO standards.
+72	author	Javier Garzás
+73	author	Francisco J. Pino
+74	author	Mario Piattini
+75	author	Carlos Manuel Fernández
+\.
+
+
+--
+-- Name: vis_nodes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('vis_nodes_id_seq', 75, true);
+
+
+--
+-- Data for Name: vis_relationships; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY vis_relationships (firstnode, reltype, secondnode) FROM stdin;
+1	authoredBy	2
+1	authoredBy	3
+1	editedBy	4
+5	authoredBy	6
+5	authoredBy	7
+5	authoredBy	8
+5	editedBy	4
+9	authoredBy	10
+9	authoredBy	11
+9	authoredBy	12
+9	authoredBy	13
+9	authoredBy	14
+9	authoredBy	15
+9	authoredBy	16
+9	editedBy	4
+17	authoredBy	18
+17	authoredBy	19
+17	authoredBy	20
+17	editedBy	4
+21	authoredBy	22
+21	authoredBy	23
+21	authoredBy	24
+21	authoredBy	25
+21	editedBy	4
+26	authoredBy	27
+26	editedBy	4
+28	authoredBy	29
+28	editedBy	4
+30	authoredBy	31
+30	editedBy	4
+32	authoredBy	33
+32	editedBy	4
+34	authoredBy	35
+34	authoredBy	36
+34	authoredBy	37
+34	authoredBy	38
+34	authoredBy	39
+34	editedBy	4
+40	authoredBy	41
+40	authoredBy	42
+40	editedBy	4
+43	authoredBy	44
+43	authoredBy	45
+43	editedBy	4
+46	authoredBy	47
+46	authoredBy	48
+46	editedBy	4
+49	authoredBy	50
+49	authoredBy	51
+49	editedBy	4
+52	authoredBy	53
+52	authoredBy	54
+52	authoredBy	55
+52	authoredBy	56
+52	authoredBy	57
+52	editedBy	4
+58	authoredBy	59
+58	authoredBy	60
+58	editedBy	4
+61	authoredBy	62
+61	authoredBy	63
+61	authoredBy	64
+61	editedBy	4
+65	authoredBy	66
+65	authoredBy	67
+65	editedBy	4
+68	authoredBy	69
+68	authoredBy	70
+68	editedBy	4
+71	authoredBy	72
+71	authoredBy	73
+71	authoredBy	74
+71	authoredBy	75
+71	editedBy	4
+\.
+
+
+--
+-- Name: vis_relationships_firstnode_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('vis_relationships_firstnode_seq', 1, false);
+
+
+--
+-- Name: vis_relationships_secondnode_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('vis_relationships_secondnode_seq', 1, false);
+
+
+--
+-- Name: admins_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY admins
+    ADD CONSTRAINT admins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: admins_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY admins
+    ADD CONSTRAINT admins_username_key UNIQUE (username);
+
+
+--
+-- Name: listings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY listings
+    ADD CONSTRAINT listings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: orders_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY orders
+    ADD CONSTRAINT orders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_cartid_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_cartid_key UNIQUE (cartid);
+
+
+--
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- Name: vis_nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY vis_nodes
+    ADD CONSTRAINT vis_nodes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: activecartitems_cartid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY activecartitems
+    ADD CONSTRAINT activecartitems_cartid_fkey FOREIGN KEY (cartid) REFERENCES users(cartid);
+
+
+--
+-- Name: activecartitems_listingid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY activecartitems
+    ADD CONSTRAINT activecartitems_listingid_fkey FOREIGN KEY (listingid) REFERENCES listings(id);
+
+
+--
+-- Name: listings_sellerid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY listings
+    ADD CONSTRAINT listings_sellerid_fkey FOREIGN KEY (sellerid) REFERENCES users(id);
+
+
+--
+-- Name: orders_buyerid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY orders
+    ADD CONSTRAINT orders_buyerid_fkey FOREIGN KEY (buyerid) REFERENCES users(id);
+
+
+--
+-- Name: orders_sellerid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY orders
+    ADD CONSTRAINT orders_sellerid_fkey FOREIGN KEY (sellerid) REFERENCES users(id);
+
+
+--
+-- Name: removedcartitems_cartid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY removedcartitems
+    ADD CONSTRAINT removedcartitems_cartid_fkey FOREIGN KEY (cartid) REFERENCES users(cartid);
+
+
+--
+-- Name: removedcartitems_listingid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY removedcartitems
+    ADD CONSTRAINT removedcartitems_listingid_fkey FOREIGN KEY (listingid) REFERENCES listings(id);
+
+
+--
+-- Name: vis_relationships_firstnode_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY vis_relationships
+    ADD CONSTRAINT vis_relationships_firstnode_fkey FOREIGN KEY (firstnode) REFERENCES vis_nodes(id);
+
+
+--
+-- Name: vis_relationships_secondnode_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY vis_relationships
+    ADD CONSTRAINT vis_relationships_secondnode_fkey FOREIGN KEY (secondnode) REFERENCES vis_nodes(id);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
