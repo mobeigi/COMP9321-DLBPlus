@@ -144,7 +144,10 @@
     		
     		// label
     		arrayVisNodes += ", label: '" + visNode.getValue() + "'";
-    		
+
+    		// popup message
+    		arrayVisNodes += ", title: '" + visNode.getNodeType() + ": " + visNode.getValue() + "'";
+
     		// type
     		arrayVisNodes += ", type: '" + visNode.getNodeType().toString().toLowerCase() + "'";
     		
@@ -228,7 +231,7 @@
       nodes: nodes,
       edges: edges
     };
-    var options = {};
+    var options = {interaction:{hover:true}};
     var network = new vis.Network(container, data, options);
     
     // Set double click function
