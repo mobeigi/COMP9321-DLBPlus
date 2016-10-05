@@ -103,9 +103,10 @@ public class SetupServlet extends HttpServlet {
         // Obtain a unique list of random listings
         if (allListings.size() <= 10) {
           randListings = allListings;
+          Collections.shuffle(randListings, new Random(System.currentTimeMillis()));
         }
         else {
-          Random rand = new Random();
+          Random rand = new Random(System.currentTimeMillis());
           int randIndex = rand.nextInt(allListings.size() - 1);
           
           Listing listingToAdd = allListings.get(randIndex);
@@ -121,7 +122,7 @@ public class SetupServlet extends HttpServlet {
         }
         
         // Set random publication list to session
-        request.getSession().setAttribute("eMessage", errorMessage);
+        request.setAttribute("eMessage", errorMessage);
         request.setAttribute("randomListings", randListings);
         
       } else {
