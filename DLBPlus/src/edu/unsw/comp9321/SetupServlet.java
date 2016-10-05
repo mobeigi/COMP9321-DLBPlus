@@ -327,7 +327,7 @@ public class SetupServlet extends HttpServlet {
       }
       
       User currUser = (User) request.getSession().getAttribute("user");
-      List<CartItem> cartList = db.GetActiveCartItems(currUser.getId());
+      List<CartItem> cartList = db.GetActiveCartItems(currUser.getCartid());
       List<Listing> cartListAsListings = new ArrayList<Listing>();
       
       for (CartItem ci : cartList)
@@ -441,8 +441,11 @@ public class SetupServlet extends HttpServlet {
       else {
         if (flag == 0){
           errorMessage = "";
-          User newUser = new User();
-          newUser = db.CreateUser(userName, password, firstName, lastName, nickName, email, address, dob, creditCard, dp);
+          User newUser = null;
+
+          while (newUser == null) //to fix id increment issue
+            newUser = db.CreateUser(userName, password, firstName, lastName, nickName, email, address, dob, creditCard, dp);
+
           Random random = new Random();
           int rand = random.nextInt(99999);
           System.out.println("generating " + rand);
@@ -459,12 +462,14 @@ public class SetupServlet extends HttpServlet {
       String code = request.getParameter("code");
       String emailCode = request.getSession().getAttribute("confirmationNumber").toString();
       User newUser = (User) request.getSession().getAttribute("newUser");
-      System.out.println("code is" + emailCode);
+      System.out.println("code is " + emailCode);
+      System.out.println("input code is: " + code);
+
       if(code == null){
         link = "confirmation.jsp";
       } else {
         if(code.equals(emailCode)){
-          request.getSession().setAttribute("user",newUser);
+          request.getSession().setAttribute("user", newUser);
           this.db.SetAcctConfirmed(newUser, true);
           response.sendRedirect("/dblplus?action=myaccount");
           return;
@@ -781,12 +786,12 @@ public class SetupServlet extends HttpServlet {
         try {
           year = Integer.parseInt(qYear);
         } catch (NumberFormatException e) {}
-        
-        int duration = Integer.parseInt(qDuration) * 24 * 60 * 60; //convert duration into seconds (from days)
+
+        long duration = Integer.parseInt(qDuration) * 24 * 60 * 60; //convert duration into seconds (from days)
         Type listType = Listing.stringToType(qType);
         
         Timestamp listdate = new Timestamp(new Date().getTime()); //now
-        Timestamp enddate = new Timestamp(new Date().getTime() + duration); //now + duration
+        Timestamp enddate = new Timestamp(new Date().getTime() + (duration * 1000)); //now + duration
         
         Listing newListing = db.CreateListing(seller, quantity, listdate, enddate, sellprice, qImage, listType, qAuthorList,
           qEditorList, qTitle, qVenueList, qPages, year, qAddress, qVolume, qNumber,
@@ -888,6 +893,8 @@ public class SetupServlet extends HttpServlet {
       
       // Obtain the node and relationship results based on query
       VisResult result = this.db.SearchVis(query);
+
+      System.out.print("Size: " + result.getVisNodesResult().size());
       
       // Bind visNodes and visRelationships from result to request
       request.setAttribute("visNodes", result.getVisNodesResult());

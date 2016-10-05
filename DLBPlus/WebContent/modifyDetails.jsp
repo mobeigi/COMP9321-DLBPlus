@@ -49,7 +49,7 @@
 	      <div class="row">
 	          <div class="col s6">
 	          	<label>Nickname</label>
-	            <input value="${user.username}" name="nickname" type="text" />
+	            <input value="${user.nickname}" name="nickname" type="text" />
 	          </div>
 	          <div class="col s6">
 	          	<label>Current Password</label>

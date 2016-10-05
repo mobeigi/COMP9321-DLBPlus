@@ -220,7 +220,9 @@
 
   // Check if there are nodes and relationships to display
   var container = document.getElementById("visualisation");
-  if (nodes.length > 0 && edges.length > 0) {
+  if (nodes.length == 0 && edges.length == 0) {
+		container.innerHTML = "No listings to visualise!";
+	} else {
     // Display the graph-visuaslisation
     var data = {
       nodes: nodes,
@@ -249,11 +251,6 @@
         }
     });
     
-  }
-
-  // Case when nothing to display
-  else {
-    container.innerHTML = "No listings to visualise!";
   }
 
 </script>
