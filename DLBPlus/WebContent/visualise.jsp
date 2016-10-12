@@ -26,7 +26,6 @@
 
   <style type="text/css">
   	#visualisationArea {
-  		position: relative;
   		width: 800px;
   		height: 800px;
   	}
@@ -36,15 +35,14 @@
   		top: 10px;
   		left: 10px;
   		z-index: 99;
-  		border: 1px solid #00BFFF;
+  		border: 1px solid lightgray;
   		border-radius: 5px;
   	}
     
     #visualisation {
-      width: 800px;
+      width: 840px;
       height: 800px;
-      border: 1px solid lightgray;
-    }
+ 	    }
     p {
       max-width: 1000px;
     }
@@ -84,12 +82,12 @@
       <div class="row">
         <form action="dblplus" method="get">
         
-          <div class="col s6">
+          <div class="input-field col s6">
           	<label for="queryBox">Query Data:</label>
-            <textarea id="queryBox" name="queryData" class="materialize-textarea"></textarea>
+            <textarea id="queryBox" name="queryData" class="materialize-textarea" style="padding:0px"></textarea>
           </div>
           
-          <div class="col s3">
+          <div class="input-field col s3">
 		  	<select name="queryType">
 		      	<option value="title" selected>Titles</option>
 		      	<option value="author">Authors</option>
@@ -99,7 +97,7 @@
 		    </select>
 	 	  </div>
 			
-		  <div>
+		  <div class="input-field col s3" style="vertical-align: middle">
 	          <input type="hidden" name="action" value="queryVisualisation">
 	          <button class="btn waves-effect waves-light" type="submit">Query</button>
           </div>
@@ -146,7 +144,10 @@
     		
     		// label
     		arrayVisNodes += ", label: '" + visNode.getValue() + "'";
-    		
+
+    		// popup message
+    		arrayVisNodes += ", title: '" + visNode.getNodeType() + ": " + visNode.getValue() + "'";
+
     		// type
     		arrayVisNodes += ", type: '" + visNode.getNodeType().toString().toLowerCase() + "'";
     		
@@ -222,13 +223,15 @@
 
   // Check if there are nodes and relationships to display
   var container = document.getElementById("visualisation");
-  if (nodes.length > 0 && edges.length > 0) {
+  if (nodes.length == 0 && edges.length == 0) {
+		container.innerHTML = "No listings to visualise!";
+	} else {
     // Display the graph-visuaslisation
     var data = {
       nodes: nodes,
       edges: edges
     };
-    var options = {};
+    var options = {interaction:{hover:true}};
     var network = new vis.Network(container, data, options);
     
     // Set double click function
@@ -251,11 +254,6 @@
         }
     });
     
-  }
-
-  // Case when nothing to display
-  else {
-    container.innerHTML = "No listings to visualise!";
   }
 
 </script>

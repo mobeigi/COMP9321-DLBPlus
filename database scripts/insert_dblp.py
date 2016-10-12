@@ -6,6 +6,7 @@ import sys
 import xml.sax as SAX
 import psycopg2
 import random
+import datetime
 
 # ----------------------------
 # This class represents a publication and its information
@@ -78,7 +79,6 @@ class Listing():
 		self.isbns = []
 		self.series = ""
 		self.chapter = ""
-		self.price = 0
 		self.rating = ""
 		
 	# Finalises the publication object
@@ -105,7 +105,19 @@ class Listing():
 		joinedCites = "|".join(self.cites)
 		self.cites = joinedCites
 		
+	def showDetails(self):
+		print "Authors: ", self.authors
+		
 # ----------------------------
+# This class is an exception
+class ParseLimitReached(SAX.ErrorHandler):
+	def __init__(self):
+		pass
+		
+	def error(self, exception):
+		print "lol maximum pubs reached"
+		return
+
 # This class is responsible for the semantic parsing of the publication
 # XML file
 class SaxPublicationHandler(SAX.ContentHandler):
@@ -119,6 +131,7 @@ class SaxPublicationHandler(SAX.ContentHandler):
 		numPublicationsParsed = 0	# Keep track of how many publications were parsed
 		db_cursor = None			# Cursor used to insert publications into db
 		seller_ids = []
+		parseLimit = 20
 		
 		# Constructor
 		def __init__(self, cursor):
@@ -148,23 +161,28 @@ class SaxPublicationHandler(SAX.ContentHandler):
 			
 		# Handles start tags
 		def startElement(self, tagname, attrs):
+		
+			if self.numPublicationsParsed >= self.parseLimit:
+				return
 			
 			# Initiate publication object for a publication type start tag
 			if tagname in self.publication_types:
-				self.currPublication = Publication()
+				self.currListing = Listing()
 				
 				# Set the type
-				self.currPublication.type = tagname
+				self.currListing.type = tagname
 				
 				# Obtain and set rating (if exists)
 				if "rating" in attrs.keys():
-					self.currPublication.rating = attrs['rating']
+					self.currListing.rating = attrs['rating']
 			
 			# Push start tag
 			self.tag_stack.append(tagname)
 			
 		# Handles end tags
 		def endElement(self, tagname):
+			if self.numPublicationsParsed >= self.parseLimit:
+					return
 		
 			# Add publications if closing tagname is a publication type
 			if tagname in self.publication_types:
@@ -189,20 +207,54 @@ class SaxPublicationHandler(SAX.ContentHandler):
 					self.currListing.finalise()
 					
 					# Insert listing into database
-					#self.currPublication.showDetails()
+					#self.currListing.showDetails()
 					query = """
 								INSERT INTO
-									publications(type,title,authors,editors,pages,year,address,volume,number,month,urls,ees,cdrom,cites,publisher,note,crossref,isbns,series,venues,chapter,recprice,rating)
+									listings(sellerid,quantity,listdate,enddate,sellprice,image,paused,numviews,type,title,authors,editors,pages,year,address,volume,number,month,urls,ees,cdrom,cites,publisher,note,crossref,isbns,series,venues,chapter,rating)
 								VALUES
-									(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);
+									(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
 							"""
-					publication_fields = (self.currPublication.type,self.currPublication.title,self.currPublication.authors,self.currPublication.editors,self.currPublication.pages,self.currPublication.year,self.currPublication.address,self.currPublication.volume,self.currPublication.number,self.currPublication.month,self.currPublication.urls,self.currPublication.ees,self.currPublication.cdrom,self.currPublication.cites,self.currPublication.publisher,self.currPublication.note,self.currPublication.crossref,self.currPublication.isbns,self.currPublication.series,self.currPublication.venues,self.currPublication.chapter,self.currPublication.price,self.currPublication.rating)
-					self.db_cursor.execute(query, publication_fields)
+					listings_fields = (self.currListing.sellerid,self.currListing.quantity,self.currListing.listdate,self.currListing.enddate,self.currListing.sellprice,self.currListing.image,self.currListing.paused,self.currListing.numviews,self.currListing.type,self.currListing.title,self.currListing.authors,self.currListing.editors,self.currListing.pages,self.currListing.year,self.currListing.address,self.currListing.volume,self.currListing.number,self.currListing.month,self.currListing.urls,self.currListing.ees,self.currListing.cdrom,self.currListing.cites,self.currListing.publisher,self.currListing.note,self.currListing.crossref,self.currListing.isbns,self.currListing.series,self.currListing.venues,self.currListing.chapter,self.currListing.rating)
+					self.db_cursor.execute(query, listings_fields)
+					
+					# PARSE LISTING INTO VISNODE AND VISRELATIONSHIP				
+					# Insert title (only insert when it does not already exist in database)
+					if not self.visNodeExists('title',self.currListing.title):
+						self.createVisNode('title', self.currListing.title)
+					visNodeTitleID = self.getVisNodeID('title', self.currListing.title)
+					
+					# Insert authors (only insert when it does not already exist in database)
+					for author in self.currListing.authors.split('|'):
+						if author: 
+							if not self.visNodeExists('author', author):
+								self.createVisNode('author', author)
+							visNodeAuthorID = self.getVisNodeID('author', author)
+							if not self.visRelationshipExists(visNodeTitleID, 'authoredBy', visNodeAuthorID):
+								self.createVisRelationship(visNodeTitleID, 'authoredBy', visNodeAuthorID)
+					
+					# Insert editors (only insert when it does not already exist in database)
+					for editor in self.currListing.editors.split('|'):
+						if editor:
+							if not self.visNodeExists('editor', editor):
+								self.createVisNode('editor', editor)
+							visNodeEditorID = self.getVisNodeID('editor', editor)
+							if not self.visRelationshipExists(visNodeTitleID, 'editedBy', visNodeEditorID):
+								self.createVisRelationship(visNodeTitleID, 'editedBy', visNodeEditorID)
+							
+					# Insert venues (only insert when it does not already exist in database)
+					for venue in self.currListing.venues.split('|'):
+						if venue:
+							if not self.visNodeExists('venue', venue):
+								self.createVisNode('venue', venue)
+							visNodeVenueID = self.getVisNodeID('venue', venue)
+							if not self.visRelationshipExists(visNodeTitleID, 'editedBy', visNodeVenueID):
+								self.createVisRelationship(visNodeTitleID, 'editedBy', visNodeVenueID)
 					
 					self.numPublicationsParsed += 1
+					print "Num pubs parsed so far: ", self.numPublicationsParsed
 				
 				# Reset publication to none
-				self.currPublication = None
+				self.currListing = None
 				
 			# Consider other end tags
 			else:
@@ -210,17 +262,17 @@ class SaxPublicationHandler(SAX.ContentHandler):
 				# Tags that may involve content splitting on different lines
 				# Add current author
 				if tagname == 'author':
-					self.currPublication.authors.append(self.currString)
+					self.currListing.authors.append(self.currString)
 					self.currString = ""
 				
 				# Add current editor
 				elif tagname == 'editor':
-					self.currPublication.editors.append(self.currString)
+					self.currListing.editors.append(self.currString)
 					self.currString = ""
 				
 				# Add current venue
 				elif tagname in self.venue_list:
-					self.currPublication.venues.append(self.currString)
+					self.currListing.venues.append(self.currString)
 					self.currString = ""
 				
 			# Pop tag
@@ -228,7 +280,10 @@ class SaxPublicationHandler(SAX.ContentHandler):
 			
 		# Handles all the characters between start and end tags
 		# ie element values
-		def characters(self, contentStr):			
+		def characters(self, contentStr):
+			if self.numPublicationsParsed >= self.parseLimit:
+				return
+		
 			# Remove whitespaces
 			content = contentStr.strip().encode("utf-8")
 			
@@ -243,17 +298,17 @@ class SaxPublicationHandler(SAX.ContentHandler):
 			# == GENERAL PUBLICATION FIELDS
 			# Case title
 			if tagname == 'title':
-				self.currPublication.title += content
+				self.currListing.title += content
 			
 			# HTML formatting tags for title
 			if tagname == 'sup':
-				self.currPublication.title += "<sup>%s</sup>" % content			
+				self.currListing.title += "<sup>%s</sup>" % content			
 			if tagname == 'sub':
-				self.currPublication.title += "<sub>%s</sub>" % content
+				self.currListing.title += "<sub>%s</sub>" % content
 			if tagname == 'i':
-				self.currPublication.title += "<i>%s</i>" % content
+				self.currListing.title += "<i>%s</i>" % content
 			if tagname == 'tt':
-				self.currPublication.title += "<tt>%s</tt>" % content
+				self.currListing.title += "<tt>%s</tt>" % content
 				
 			# Case author
 			if tagname == 'author':
@@ -265,51 +320,51 @@ class SaxPublicationHandler(SAX.ContentHandler):
 			
 			# Case pages
 			if tagname == 'pages':
-				self.currPublication.pages = content 
+				self.currListing.pages = content 
 			
 			# Case year
 			if tagname == 'year':
-				self.currPublication.year = int(content)
+				self.currListing.year = int(content)
 				
 			# Case address
 			if tagname == 'address':
-				self.currPublication.address = content
+				self.currListing.address = content
 				
 			# Case volume
 			if tagname == 'volume':
-				self.currPublication.volume = content
+				self.currListing.volume = content
 			
 			# Case number
 			if tagname == 'number':
-				self.currPublication.number = content
+				self.currListing.number = content
 			
 			# Case month
 			if tagname == 'month':
-				self.currPublication.month = content
+				self.currListing.month = content
 			
 			# Case url
 			if tagname == 'url':
-				self.currPublication.urls.append(content)
+				self.currListing.urls.append(content)
 				
 			# Case ee
 			if tagname == 'ee':
-				self.currPublication.ees.append(content)
+				self.currListing.ees.append(content)
 				
 			# Case cdrom
 			if tagname == 'cdrom':
-				self.currPublication.cdrom = content
+				self.currListing.cdrom = content
 				
 			# Case crossref
 			if tagname == 'crossref':
-				self.currPublication.crossref = content
+				self.currListing.crossref = content
 				
 			# Case isbn
 			if tagname == 'isbn':
-				self.currPublication.isbns.append(content)
+				self.currListing.isbns.append(content)
 				
 			# Case series
 			if tagname == 'series':
-				self.currPublication.series = content
+				self.currListing.series = content
 				
 			# Case venue
 			if tagname in self.venue_list:
@@ -318,8 +373,90 @@ class SaxPublicationHandler(SAX.ContentHandler):
 				
 			# Case chapter
 			if tagname == 'chapter':
-				self.currPublication.chapter = content
-				
+				self.currListing.chapter = content
+		
+		# Generates random listing overhead info
+		def generateListingInfo(self):
+			# Generate random seller ID
+			# Based on number of users
+			numUsers = 6;
+			sellerID = random.randint(1,numUsers)
+			
+			# Generate random quantity
+			quantity = random.randint(1,100)
+			
+			# Generate random listing and end date
+			listdate = datetime.date.fromordinal(datetime.date.today().toordinal() - random.randint(0,20)).strftime("%Y-%m-%d %H:%M:%S")
+			enddate = datetime.date.fromordinal(datetime.date.today().toordinal() + random.randint(5,20)).strftime("%Y-%m-%d %H:%M:%S")
+			
+			# Generate random sellprice
+			minPrice = 499.0
+			maxPrice = 99999.0
+			sellprice = random.randint(minPrice, maxPrice) / 100.0
+			
+			# Image string
+			image = ""
+			
+			# Paused status
+			paused = bool(random.getrandbits(1))
+			
+			# Numviews
+			numviews = random.randint(0,999999)
+			
+			return (sellerID, quantity, listdate, enddate, sellprice, image, paused, numviews)
+		
+		def insertDestiny(self):
+			return True
+			
+		# Determine if a visNode exists
+		def visNodeExists(self, attrtype, value):
+			query = """
+						SELECT * FROM vis_nodes WHERE (attrtype = %s AND value = %s);
+					"""
+			query_values = (attrtype, value)
+			self.db_cursor.execute(query,query_values)
+			return self.db_cursor.fetchone() is not None
+		
+		# Create a vis node entry
+		def createVisNode(self, nodeType, nodeValue):
+			query = """
+						INSERT INTO vis_nodes(attrtype,value) VALUES (%s,%s);
+					"""
+			node_values = (nodeType, nodeValue)
+			self.db_cursor.execute(query, node_values)
+		
+		# Obtain the id of a particular visNode
+		def getVisNodeID(self, nodeType, nodeValue):
+			query = """
+						SELECT * FROM vis_nodes WHERE (attrtype = %s AND value = %s);
+					"""
+			query_values = (nodeType, nodeValue)
+			self.db_cursor.execute(query,query_values)
+			result = self.db_cursor.fetchone()
+			if (result is None):
+				return None
+			(id, _, _) = result
+			return id
+		
+		# Determine if a visRelationship exists
+		def visRelationshipExists(self, firstnodeid, reltype, secondnodeid):
+			query = """
+						SELECT * FROM vis_relationships 
+						WHERE (firstnode = %s AND reltype = %s AND secondnode = %s);
+					"""
+			query_values = (firstnodeid, reltype, secondnodeid)
+			self.db_cursor.execute(query,query_values)
+			return self.db_cursor.fetchone() is not None
+		
+		# Create a vis relationship entry
+		def createVisRelationship(self, firstnodeid, reltype, secondnodeid):
+			query = """
+						INSERT INTO vis_relationships(firstnode,reltype, secondnode)
+						VALUES (%s,%s,%s);
+					"""
+			relationship_values = (firstnodeid, reltype, secondnodeid)
+			self.db_cursor.execute(query, relationship_values)
+			
 # ----------------------------
 # parses an XML Publications file, and inserts each publication
 # into the database
@@ -348,6 +485,8 @@ def insertPublications(xmlFilename):
 	# Set the content handler
 	saxPublicationHandler = SaxPublicationHandler(cursor)
 	xmlParser.setContentHandler(saxPublicationHandler)
+	parseLimitHandler = ParseLimitReached()
+	xmlParser.setErrorHandler(parseLimitHandler)
 
 	# Parse the XML file (will also insert into database)
 	print "Parsing XML file..."

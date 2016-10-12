@@ -2316,6 +2316,9 @@ public class DBHelper implements DLBPlusDBInterface {
 	    		String attrtype = rs.getString("attrtype");
 	    		String value = rs.getString("value");
 	    		
+	    		// Encode quotation marks
+	    		value = value.replace("'", "\\'");
+	    		
 	    		// Set vis node fields
 	    		vn.setID(id);
 	    		vn.setValue(value);

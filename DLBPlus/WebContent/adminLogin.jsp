@@ -43,12 +43,14 @@
         <form action="admin" method="post">
           <div class="row">
             <div class="col s12">
-              <input placeholder="Username" required="" aria-required="" id="textbox" name="username" type="text" />
+              <label>User Name</label>
+              <input required="" aria-required="" id="textbox" name="username" type="text" />
             </div>
           </div>
           <div class="row">
             <div class="col s12">
-              <input placeholder="Password" required="" aria-required="" id="textbox" name="password" type="password" />
+              <label>Password</label>
+              <input required="" aria-required="" id="textbox" name="password" type="password" />
             </div>
           </div>
 

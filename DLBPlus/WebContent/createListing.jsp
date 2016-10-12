@@ -56,7 +56,8 @@
         <form action="dblplus" method="post">
           <div class="row">
             <div class="col s12">
-              <input placeholder="Title" name="title" type="text" aria-required="true" required="" />
+              <label>Title</label>
+              <input name="title" type="text" aria-required="true" required="" />
             </div>
           </div>
           <div class="row">
@@ -78,40 +79,49 @@
 
           <div class="row">
             <div class="input-field col s6">
-              <textarea placeholder="Author" name="author" class="materialize-textarea"></textarea>
+              <label>Author</label>
+              <textarea name="author" class="materialize-textarea"></textarea>
             </div>
             <div class="input-field col s6">
-              <textarea placeholder="Editors" name="editor" class="materialize-textarea"></textarea>
+              <label>Editors</label>
+              <textarea name="editor" class="materialize-textarea"></textarea>
             </div>
           </div>
           <div class="row">
             <div class="col s6">
-              <input placeholder="Volume" name="volume" type="text" />
+              <label>Volume</label>
+              <input name="volume" type="text" />
             </div>
             <div class="col s6">
-              <input placeholder="Chapter" name="chapter" type="text" />
+              <label>Chapter</label>
+              <input name="chapter" type="text" />
             </div>
           </div>
           <div class="row">
             <div class="col s6">
-              <input placeholder="Number" name="number" type="text" />
+              <label>Number</label>
+              <input name="number" type="text" />
             </div>
             <div class="col s6">
-              <input placeholder="CDROM" name="cdrom" type="text" />
+              <label>CDrom</label>
+              <input name="cdrom" type="text" />
             </div>
           </div>
 
           <div class="row">
 
             <div class="col s6">
-              <input placeholder="Pages" name="pages" type="text" />
+              <label>Pages</label>
+              <input name="pages" type="text" />
             </div>
             <div class="col s6">
-              <input placeholder="Publisher" name="publisher" type="text" />
+              <label>Publisher</label>
+              <input name="publisher" type="text" />
             </div>
           </div>
           <div class="row">
             <div class="col s6">
+              <label>Month</label>
               <select name="month">
                 <option value="" disabled selected>Month</option>
                 <option value="January">January</option>
@@ -129,56 +139,68 @@
               </select>
             </div>
             <div class="col s6">
-              <input placeholder="Year" name="year" type="text" maxlength="4" pattern="\d{4}" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
+              <label>Year</label>
+              <input name="year" type="text" maxlength="4" pattern="\d{4}" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
             </div>
           </div>
           <div class="row">
-            <div class="col s6" style="margin-top: 50px;">
-              <input placeholder="Address"  name="address" type="text" />
+            <div class="col s6" style="margin-top: 33px;">
+              <label>Address</label>
+              <input name="address" type="text" />
             </div>
             <div class="input-field col s6">
-              <textarea placeholder="Venues" name="venues" class="materialize-textarea"></textarea>
+              <label>Venues</label>
+              <textarea name="venues" class="materialize-textarea"></textarea>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s6">
-              <textarea placeholder="URLs" name="urls" class="materialize-textarea"></textarea>
+              <label>URLs</label>
+              <textarea name="urls" class="materialize-textarea"></textarea>
             </div>
             <div class="input-field col s6">
-              <textarea placeholder="EEs" name="ees" class="materialize-textarea"></textarea>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="input-field col s6">
-              <textarea placeholder="Cites" name="cites" class="materialize-textarea"></textarea>
-            </div>
-            <div class="col s6" style="margin-top: 50px;">
-              <input placeholder="Cross References"  name="crossref" type="text" />
+              <label>EEs</label>
+              <textarea name="ees" class="materialize-textarea"></textarea>
             </div>
           </div>
 
           <div class="row">
             <div class="input-field col s6">
-              <textarea placeholder="ISBNs" name="isbns" class="materialize-textarea"></textarea>
+              <label>Cites</label>
+              <textarea name="cites" class="materialize-textarea"></textarea>
             </div>
-            <div class="col s6" style="margin-top: 50px;">
-              <input placeholder="Note"  name="note" type="text" />
+            <div class="col s6" style="margin-top: 33px;">
+              <label>Cross References</label>
+              <input name="crossref" type="text" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s6">
+              <label>ISBNs</label>
+              <textarea name="isbns" class="materialize-textarea"></textarea>
+            </div>
+            <div class="col s6" style="margin-top: 33px;">
+              <label>Note</label>
+              <input name="note" type="text" />
             </div>
           </div>
 
           <div class="row">
             <div class="col s6">
-              <input placeholder="Series"  name="series" type="text" />
+              <label>Series</label>
+              <input name="series" type="text" />
             </div>
             <div class="col s6">
-              <input placeholder="Ratings"  name="ratings" type="text" />
+              <label>Ratings</label>
+              <input name="ratings" type="text" />
             </div>
           </div>
 
 
           <div class="row">
             <div class="col s12">
+              <label>Display Picture</label>
               <div class="file-field input-field">
                 <div class="btn">
                   <span>Add Photo</span>

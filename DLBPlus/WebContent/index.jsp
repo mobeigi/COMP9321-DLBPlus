@@ -34,6 +34,7 @@
     <br><br>
     <h1 class="header center orange-text">Bibliographic Library</h1>
     <br><br>
+    <h5 class="center header">Welcome to <strong>DBL+</strong>, the leading bibliographic library on the web!</h5>
   </div>
 </div>
 
@@ -47,7 +48,7 @@
           <form action="dblplus" method="get">
             <div class="row">
               <div class="input-field col s6">
-                <input placeholder="Title" name="title" type="text" class="validate" />
+                <input Placeholder="Search for a listing" name="title" type="text" class="validate" />
               </div>
               <div class="input-field col s3">
                 <select name="type">

@@ -48,44 +48,54 @@
         <form action="dblplus" method="post">
           <div class="row">
             <div class="col s6">
-              <input class="validate" placeholder="Username" required="" aria-required="" name="uname" type="text" />
+              <label>User Name</label>
+              <input class="validate" required="" aria-required="" name="uname" type="text" />
             </div>
             <div class="col s6">
-              <input placeholder="Nickname" required="" aria-required="" name="nickname" type="text" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col s6">
-              <input placeholder="Password" required="" aria-required="" name="pass" type="password" />
-            </div>
-            <div class="col s6">
-              <input class="validate" placeholder="Retype Password" required="" aria-required="" name="passConfirm" type="password" />
+              <label>Nick Name</label>
+              <input required="" aria-required="" name="nickname" type="text" />
             </div>
           </div>
           <div class="row">
             <div class="col s6">
-              <input placeholder="First Name" required="" aria-required="" name="fname" type="text" />
+              <label>Password</label>
+              <input  required="" aria-required="" name="pass" type="password" />
             </div>
             <div class="col s6">
-              <input placeholder="Last Name" required="" aria-required="" name="lname" type="text" />
+              <label>Retype Password</label>
+              <input class="validate" required="" aria-required="" name="passConfirm" type="password" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s6">
+              <label>First Name</label>
+              <input required="" aria-required="" name="fname" type="text" />
+            </div>
+            <div class="col s6">
+              <label>Last Name</label>
+              <input required="" aria-required="" name="lname" type="text" />
             </div>
           </div>
           <div class="row">
             <div class="col s12">
-              <input class="validate" placeholder="Email" required="" aria-required="" name="email" type="text" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"/>
+              <label>Email</labeL>
+              <input class="validate" required="" aria-required="" name="email" type="text" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"/>
             </div>
           </div>
           <div class="row">
             <div class="col s12">
-              <input placeholder="Address" name="address" type="text" />
+              <label>Address</label>
+              <input name="address" type="text" />
             </div>
           </div>
           <div class="row">
             <div class="col s6">
-              <input class="datepicker validate" placeholder="Date of Birth" required="" aria-required="" name="dob" type="date"/>
+              <label>Date of Birth</label>
+              <input class="datepicker validate" required="" aria-required="" name="dob" type="date"/>
             </div>
             <div class="col s6">
-              <input class="validate" placeholder="Credit Card Number" required="" aria-required="" name="ccn" type="text" />
+              <label>Credit Card Number</label>
+              <input class="validate" required="" aria-required="" name="ccn" type="text" />
             </div>
           </div>
           <div class="row">

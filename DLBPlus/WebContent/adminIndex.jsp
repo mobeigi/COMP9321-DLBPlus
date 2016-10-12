@@ -33,8 +33,30 @@
     <br><br>
     <h2 class="header center orange-text">Admin Portal</h2>
     <br><br>
-    
-    <center>You are logged in as: <strong>${currAdmin.username}</strong></center>
+
+    <div class="row">
+      <div class="col s4 offset-s4">
+        <div class="card white">
+          <div class="card-content black-text">
+            <div class="row">
+              <div class="col s12 center">
+                <p class="flow-text center">You are logged in as: <strong>${currAdmin.username}</strong></p>
+                <br />
+                <a href="/admin?action=viewallusers">
+                  <button class="btn waves-effect waves-light">Manage Users</button>
+                </a>
+              </div>
+            </div>
+            <div class="center-align">
+              <a href="/admin?action=viewalllistings">
+                <button class="btn waves-effect waves-light">Manage Listings</button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
   </div>
 </div>
 
