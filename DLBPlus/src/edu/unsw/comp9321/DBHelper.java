@@ -133,13 +133,16 @@ public class DBHelper implements DLBPlusDBInterface {
 				System.out.println("count: " + count);
 				if (count == 0)
 					return false;
-				else
+				else {
+					System.out.println("User with username '" + username + "' already exists!");
 					return true;
+				}
 			}
-
+			System.out.println("This should not be returned");
 			return true; //this should never be returned
 		}
 		catch (SQLException e) {
+			System.out.println(e);
 			return true; //this should never be returned
 		}
 
